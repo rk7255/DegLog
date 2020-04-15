@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/diaryFragment"
+        android:icon="@drawable/nav_ic_diary"
+        android:title="@string/bottom_nav_diary" />
+
+    <item
+        android:id="@+id/chartFragment"
+        android:icon="@drawable/nav_ic_chart"
+        android:title="@string/bottom_nav_chart"/>
+
+    <item
+        android:id="@+id/reminderFragment"
+        android:icon="@drawable/nav_ic_notify"
+        android:title="@string/bottom_nav_notify"/>
+</menu>

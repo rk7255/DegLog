@@ -1,0 +1,31 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryDark">@color/primaryDarkColor</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="android:textColorPrimary">@color/primaryTextColor</item>
+        <item name="android:textColorSecondary">@color/secondaryTextColor</item>
+    </style>
+
+    <style name="Widget.Deglog.Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">?attr/colorPrimary</item>
+        <item name="android:theme">?theme</item>
+        <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="titleTextAppearance">@style/TextAppearance.Deglog.Toolbar</item>
+    </style>
+
+    <style name="TextAppearance.Deglog.Toolbar" parent="TextAppearance.MaterialComponents.Button">
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Widget.Deglog.Backdrop" parent="">
+        <item name="android:background">?attr/colorPrimary</item>
+    </style>
+
+    <style name="Widget.Deglog.EditText" parent='Widget.MaterialComponents.TextInputLayout.OutlinedBox'>
+    </style>
+
+    <style name="Widget.Deglog.EditText_DropDown" parent='Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu'/>
+
+</resources>

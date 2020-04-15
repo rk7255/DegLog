@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">DegLog</string>
+
+    <string name="bottom_nav_diary">Diary</string>
+    <string name="bottom_nav_chart">Chart</string>
+    <string name="bottom_nav_notify">reminder</string>
+    <string name="toolbar_filter">Filter</string>
+
+    <string name="title_diary">Diary</string>
+    <string name="title_chart">Chart</string>
+    <string name="title_reminder">Reminder</string>
+
+    <string name="new_diary_title">New Diary</string>
+    <string name="name_empty_error_string">name must not be empty.</string>
+    <string name="other_empty_error_string">enter one or more items.</string>
+
+
+    <string name="suffixText_weight">g</string>
+    <string name="suffixText_length">mm</string>
+
+</resources>
