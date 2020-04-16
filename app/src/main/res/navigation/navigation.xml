@@ -9,14 +9,14 @@
         android:id="@+id/diaryFragment"
         android:name="jp.ryuk.deglog.ui.diary.DiaryFragment"
         android:label="fragment_diary"
-        tools:layout="@layout/fragment_diary" >
+        tools:layout="@layout/fragment_diary">
         <action
             android:id="@+id/action_diaryFragment_to_newDiaryFragment"
             app:destination="@id/newDiaryFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right" />
+            app:enterAnim="@anim/spread_in"
+            app:exitAnim="@anim/spread_out"
+            app:popEnterAnim="@anim/spread_pop_out"
+            app:popExitAnim="@anim/spread_pop_in" />
     </fragment>
     <fragment
         android:id="@+id/chartFragment"
@@ -32,15 +32,18 @@
         android:id="@+id/newDiaryFragment"
         android:name="jp.ryuk.deglog.ui.newdiary.NewDiaryFragment"
         android:label="fragment_new_diary"
-        tools:layout="@layout/fragment_new_diary" >
+        tools:layout="@layout/fragment_new_diary">
         <action
             android:id="@+id/action_newDiaryFragment_to_diaryFragment"
             app:destination="@id/diaryFragment"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_right"
-            app:popEnterAnim="@anim/slide_in_right"
-            app:popExitAnim="@anim/slide_out_left"
             app:popUpTo="@id/diaryFragment"
+            app:enterAnim="@anim/spread_pop_out"
+            app:exitAnim="@anim/spread_pop_in"
+            app:popEnterAnim="@anim/spread_in"
+            app:popExitAnim="@anim/spread_out"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_back_to_diaryFragment"
+            app:popUpTo="@id/diaryFragment" />
     </fragment>
 </navigation>
