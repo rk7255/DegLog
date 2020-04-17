@@ -4,22 +4,20 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import androidx.fragment.app.Fragment
+import android.view.animation.Animation
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.adapters.DiaryAdapter
 import jp.ryuk.deglog.adapters.DiaryListener
 import jp.ryuk.deglog.data.DiaryRepository
 import jp.ryuk.deglog.databinding.FragmentDiaryBinding
-import kotlin.math.log
 
 class DiaryFragment : Fragment() {
 
@@ -45,38 +43,45 @@ class DiaryFragment : Fragment() {
         binding.diaryViewModel = diaryViewModel
         binding.lifecycleOwner = this
 
-        /**
-         * RecyclerView
-         */
-        val adapter = DiaryAdapter(DiaryListener { /* click listener */ })
-        binding.recyclerViewDiary.adapter = adapter
-        diaryViewModel.diaries.observe(viewLifecycleOwner, Observer {
-            setupChipGroup(diaryViewModel.names, binding.filterChipGroup)
-        })
-
-        diaryViewModel.filteredDiaries.observe(viewLifecycleOwner, Observer {
-            it?.let { adapter.submitList(it) }
+        diaryViewModel.initialized.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                setupChipGroup(diaryViewModel.names, binding.filterChipGroup)
+                diaryViewModel.changeFilterNames(selectedFilter, 0)
+                diaryViewModel.doneInitialized()
+            }
         })
 
         binding.filterChipGroup.setOnCheckedChangeListener { _, checkedId ->
             diaryViewModel.changeFilterNames(selectedFilter, checkedId)
         }
 
+        /**
+         * RecyclerView
+         */
+        val adapter = DiaryAdapter(DiaryListener { /* click listener */ })
+        binding.recyclerViewDiary.adapter = adapter
+        diaryViewModel.filteredDiaries.observe(viewLifecycleOwner, Observer {
+            it?.let { adapter.submitList(it) }
+        })
 
         return binding.root
     }
 
+
     @SuppressLint("InflateParams")
     private fun setupChipGroup(items: List<String>, chipGroup: ChipGroup) {
         val chipInflater = LayoutInflater.from(activity!!)
-        items.forEach {
+        items.forEachIndexed { index, item ->
             val chip = chipInflater.inflate(R.layout.chip_item_filter, null, false) as Chip
-            chip.text = it
+            chip.text = item
+            chip.id = View.generateViewId()
+            chip.isChecked = index == 0
             chip.setOnCheckedChangeListener { buttonView, isChecked ->
                 if (isChecked) selectedFilter = buttonView.text.toString()
             }
             chipGroup.addView(chip)
         }
+        selectedFilter = items[0]
     }
 
     private fun createViewModel(): DiaryViewModel {

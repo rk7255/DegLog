@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="toolbar_height">40dp</dimen>
-    <dimen name="toolbar_icon_height">16dp</dimen>
+    <dimen name="toolbar_height">48dp</dimen>
+    <dimen name="toolbar_icon_height">40dp</dimen>
     <dimen name="bottom_nav_height">40dp</dimen>
     <dimen name="bottom_nav_icon_height">16dp</dimen>
 

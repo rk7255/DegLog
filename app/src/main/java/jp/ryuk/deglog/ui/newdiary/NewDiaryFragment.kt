@@ -20,6 +20,11 @@ import jp.ryuk.deglog.databinding.FragmentNewDiaryBinding
 
 class NewDiaryFragment : Fragment() {
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(false)
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

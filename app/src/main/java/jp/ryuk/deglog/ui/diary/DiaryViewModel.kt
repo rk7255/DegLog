@@ -3,7 +3,9 @@ package jp.ryuk.deglog.ui.diary
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
 import kotlinx.coroutines.*
@@ -16,7 +18,7 @@ class DiaryViewModel(
     private var viewModelJob = Job()
     private var uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    var diaries = MediatorLiveData<List<Diary>>()
+    private var diaries = MediatorLiveData<List<Diary>>()
     var names = listOf<String>()
     var filteredDiaries = MediatorLiveData<List<Diary>>()
 
@@ -29,7 +31,7 @@ class DiaryViewModel(
             names = getNames()
             Log.d("DEBUG", "$names")
             diaries.value = getDiaries()
-            filteredDiaries.value = diaries.value
+            _initialized.value = true
         }
     }
 
@@ -41,6 +43,13 @@ class DiaryViewModel(
                 filteredDiaries.value = diaries.value?.filter { it.name == name }
             }
         }
+    }
+
+    private var _initialized = MutableLiveData<Boolean>()
+    val initialized: LiveData<Boolean>
+        get() = _initialized
+    fun doneInitialized() {
+        _initialized.value = false
     }
 
     /**

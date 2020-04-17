@@ -7,23 +7,43 @@
 
     </data>
 
-    <LinearLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.reminder.ReminderFragment">
+        android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="@dimen/toolbar_height"
+            app:elevation="0dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/app_bar_reminder"
                 style="@style/Widget.Deglog.Toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="@dimen/toolbar_height"
+                app:layout_scrollFlags="scroll|enterAlways"
                 app:title="@string/title_reminder" />
-
         </com.google.android.material.appbar.AppBarLayout>
 
-    </LinearLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/title_reminder" />
+
+            </androidx.core.widget.NestedScrollView>
+        </FrameLayout>
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

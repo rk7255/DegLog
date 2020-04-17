@@ -15,7 +15,7 @@
             app:destination="@id/newDiaryFragment"
             app:enterAnim="@anim/spread_in"
             app:exitAnim="@anim/spread_out"
-            app:popEnterAnim="@anim/spread_out"
+            app:popEnterAnim="@anim/spread_pop_out"
             app:popExitAnim="@anim/spread_pop_in" />
     </fragment>
     <fragment
