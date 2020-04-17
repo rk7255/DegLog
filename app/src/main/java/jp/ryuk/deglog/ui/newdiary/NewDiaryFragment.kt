@@ -20,6 +20,9 @@ import jp.ryuk.deglog.databinding.FragmentNewDiaryBinding
 
 class NewDiaryFragment : Fragment() {
 
+    private lateinit var binding: FragmentNewDiaryBinding
+    private lateinit var newDiaryViewModel: NewDiaryViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(false)
@@ -30,10 +33,9 @@ class NewDiaryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentNewDiaryBinding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_new_diary, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_diary, container, false)
 
-        val newDiaryViewModel = createViewModel()
+        newDiaryViewModel = createViewModel()
         binding.newDiaryViewModel = newDiaryViewModel
         binding.lifecycleOwner = this
 

@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.databinding.DiaryItemBinding
 
-class DiaryAdapter(val clickListener: DiaryListener) : androidx.recyclerview.widget.ListAdapter<Diary, DiaryAdapter.ViewHolder>(DiaryDiffCallback()) {
+class DiaryAdapter(private val clickListener: DiaryListener) : androidx.recyclerview.widget.ListAdapter<Diary, DiaryAdapter.ViewHolder>(DiaryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
@@ -17,7 +17,7 @@ class DiaryAdapter(val clickListener: DiaryListener) : androidx.recyclerview.wid
         holder.bind(getItem(position)!!, clickListener)
     }
 
-    class ViewHolder private constructor(val binding: DiaryItemBinding): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder private constructor(private val binding: DiaryItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Diary, clickListener: DiaryListener) {
             binding.diary = item
             binding.clickListener = clickListener

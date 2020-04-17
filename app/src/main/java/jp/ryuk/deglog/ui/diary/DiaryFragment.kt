@@ -23,8 +23,7 @@ class DiaryFragment : Fragment() {
 
     private lateinit var binding: FragmentDiaryBinding
     private lateinit var diaryViewModel: DiaryViewModel
-
-    private var selectedFilter = "all"
+    private var selectedFilter = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +35,6 @@ class DiaryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_diary, container, false)
-
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarDiary)
 
         diaryViewModel = createViewModel()

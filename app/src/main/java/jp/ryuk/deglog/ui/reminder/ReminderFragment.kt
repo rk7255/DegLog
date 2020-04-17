@@ -1,38 +1,29 @@
 package jp.ryuk.deglog.ui.reminder
 
 import android.os.Bundle
-import android.view.*
-import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import jp.ryuk.deglog.R
-import kotlinx.android.synthetic.main.fragment_chart.view.*
-import kotlinx.android.synthetic.main.fragment_reminder.view.*
+import jp.ryuk.deglog.databinding.FragmentReminderBinding
 
-/**
- * A simple [Fragment] subclass.
- */
+
 class ReminderFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
+    private lateinit var binding: FragmentReminderBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_reminder, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_reminder, container, false)
+        (activity as AppCompatActivity).setSupportActionBar(binding.appBarReminder)
 
-        (activity as AppCompatActivity).setSupportActionBar(view.app_bar_reminder)
 
-        return view
+        return binding.root
     }
-
-    override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.toolbar_menu, menu)
-        super.onCreateOptionsMenu(menu, menuInflater)
-    }
-
 }
