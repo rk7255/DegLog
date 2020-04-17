@@ -29,9 +29,9 @@ class DiaryViewModel(
     private fun initialize() {
         uiScope.launch {
             names = getNames()
-            Log.d("DEBUG", "$names")
             diaries.value = getDiaries()
             _initialized.value = true
+            Log.d("DEBUG", "success initialize")
         }
     }
 
@@ -72,7 +72,6 @@ class DiaryViewModel(
             diaryDatabase.getNames()
         }
     }
-
 
     override fun onCleared() {
         super.onCleared()

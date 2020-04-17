@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.view.animation.Animation
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -18,11 +17,14 @@ import jp.ryuk.deglog.adapters.DiaryAdapter
 import jp.ryuk.deglog.adapters.DiaryListener
 import jp.ryuk.deglog.data.DiaryRepository
 import jp.ryuk.deglog.databinding.FragmentDiaryBinding
+import java.lang.Exception
 
 class DiaryFragment : Fragment() {
 
+    private lateinit var binding: FragmentDiaryBinding
     private lateinit var diaryViewModel: DiaryViewModel
-    private var selectedFilter = ""
+
+    private var selectedFilter = "all"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +35,7 @@ class DiaryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: FragmentDiaryBinding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_diary, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_diary, container, false)
 
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarDiary)
 
@@ -51,6 +52,10 @@ class DiaryFragment : Fragment() {
             }
         })
 
+        if (diaryViewModel.names.isNotEmpty()) {
+            setupChipGroup(diaryViewModel.names, binding.filterChipGroup)
+        }
+
         binding.filterChipGroup.setOnCheckedChangeListener { _, checkedId ->
             diaryViewModel.changeFilterNames(selectedFilter, checkedId)
         }
@@ -63,10 +68,10 @@ class DiaryFragment : Fragment() {
         diaryViewModel.filteredDiaries.observe(viewLifecycleOwner, Observer {
             it?.let { adapter.submitList(it) }
         })
+        Log.d("DEBUG", "success createView")
 
         return binding.root
     }
-
 
     @SuppressLint("InflateParams")
     private fun setupChipGroup(items: List<String>, chipGroup: ChipGroup) {
@@ -82,6 +87,7 @@ class DiaryFragment : Fragment() {
             chipGroup.addView(chip)
         }
         selectedFilter = items[0]
+        Log.d("DEBUG", "success setup ChipGroup")
     }
 
     private fun createViewModel(): DiaryViewModel {

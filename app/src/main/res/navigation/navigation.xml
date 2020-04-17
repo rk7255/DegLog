@@ -42,8 +42,5 @@
             app:popEnterAnim="@anim/spread_in"
             app:popExitAnim="@anim/spread_out"
             app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_back_to_diaryFragment"
-            app:popUpTo="@id/diaryFragment" />
     </fragment>
 </navigation>

@@ -51,7 +51,7 @@ class NewDiaryViewModel(
     }
 
     fun onCancel() {
-        _backToDiary.value = true
+        _navigateToDiary.value = true
     }
 
     fun onClear() {

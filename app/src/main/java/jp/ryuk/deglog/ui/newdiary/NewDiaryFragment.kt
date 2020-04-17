@@ -61,18 +61,8 @@ class NewDiaryFragment : Fragment() {
         newDiaryViewModel.navigateToDiary.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 this.findNavController().navigate(
-                    NewDiaryFragmentDirections.actionNewDiaryFragmentToDiaryFragment()
-                )
+                    NewDiaryFragmentDirections.actionNewDiaryFragmentToDiaryFragment())
                 newDiaryViewModel.doneNavigateToDiary()
-            }
-        })
-
-        newDiaryViewModel.backToDiary.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                this.findNavController().navigate(
-                    NewDiaryFragmentDirections.actionBackToDiaryFragment()
-                )
-                newDiaryViewModel.doneBackToDiary()
             }
         })
 
@@ -84,6 +74,4 @@ class NewDiaryFragment : Fragment() {
             }
         })
     }
-
-
 }
