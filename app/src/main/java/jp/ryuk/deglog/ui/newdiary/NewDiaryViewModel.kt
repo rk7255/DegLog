@@ -71,14 +71,6 @@ class NewDiaryViewModel(
         _navigateToDiary.value = false
     }
 
-    private var _backToDiary = MutableLiveData<Boolean>()
-    val backToDiary: LiveData<Boolean>
-        get() = _backToDiary
-    fun doneBackToDiary() {
-        _backToDiary.value = false
-    }
-
-
     private var _submitError = MutableLiveData<Boolean>()
     val submitError: LiveData<Boolean>
         get() = _submitError

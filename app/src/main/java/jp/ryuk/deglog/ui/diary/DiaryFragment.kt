@@ -72,19 +72,21 @@ class DiaryFragment : Fragment() {
     }
 
     @SuppressLint("InflateParams")
-    private fun setupChipGroup(items: List<String>, chipGroup: ChipGroup) {
-        val chipInflater = LayoutInflater.from(activity!!)
-        items.forEachIndexed { index, item ->
-            val chip = chipInflater.inflate(R.layout.chip_item_filter, null, false) as Chip
-            chip.text = item
-            chip.id = View.generateViewId()
-            chip.isChecked = index == 0
-            chip.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (isChecked) selectedFilter = buttonView.text.toString()
+    private fun setupChipGroup(items: List<String?>, chipGroup: ChipGroup) {
+        if (items.isNotEmpty()) {
+            val chipInflater = LayoutInflater.from(activity!!)
+            items.forEachIndexed { index, item ->
+                val chip = chipInflater.inflate(R.layout.chip_item_filter, null, false) as Chip
+                chip.text = item
+                chip.id = View.generateViewId()
+                chip.isChecked = index == 0
+                chip.setOnCheckedChangeListener { buttonView, isChecked ->
+                    if (isChecked) selectedFilter = buttonView.text.toString()
+                }
+                chipGroup.addView(chip)
             }
-            chipGroup.addView(chip)
+            selectedFilter = items[0].toString()
         }
-        selectedFilter = items[0]
         Log.d("DEBUG", "success setup ChipGroup")
     }
 
