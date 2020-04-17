@@ -21,7 +21,6 @@
                 style="@style/Widget.Deglog.Toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:navigationIcon="@drawable/ic_menu"
                 app:title="@string/title_reminder" />
 
         </com.google.android.material.appbar.AppBarLayout>

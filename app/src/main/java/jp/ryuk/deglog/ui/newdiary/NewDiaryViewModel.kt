@@ -54,6 +54,13 @@ class NewDiaryViewModel(
         _backToDiary.value = true
     }
 
+    fun onClear() {
+        uiScope.launch {
+            clear()
+            _navigateToDiary.value = true
+        }
+    }
+
     /**
      *  LiveData
      */
@@ -96,6 +103,11 @@ class NewDiaryViewModel(
             Log.d("DEBUG", "Insert New Diary -> $newDiary")
             insert(newDiary)
             _navigateToDiary.value = true
+        }
+    }
+    private suspend fun clear() {
+        withContext(Dispatchers.IO) {
+            diaryDatabase.clear()
         }
     }
 

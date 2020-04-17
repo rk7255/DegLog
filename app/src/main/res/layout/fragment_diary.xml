@@ -10,98 +10,77 @@
             type="jp.ryuk.deglog.ui.diary.DiaryViewModel" />
     </data>
 
-    <FrameLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".ui.diary.DiaryFragment">
-
-        <LinearLayout
-            style="@style/Widget.Deglog.Backdrop"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingTop="100dp"
-            app:elevation="0dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hello!"
-                android:textSize="24sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="This is"
-                android:textSize="24sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Backdrop!"
-                android:textSize="24sp" />
-        </LinearLayout>
+        android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/toolbar_height"
             app:elevation="0dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/app_bar_diary"
                 style="@style/Widget.Deglog.Toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:navigationIcon="@drawable/ic_filter"
+                android:layout_height="@dimen/toolbar_height"
+                app:layout_scrollFlags="scroll|enterAlways"
                 app:title="@string/title_diary" />
+
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/diary_list"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="56dp"
-            android:background="@color/colorBackground"
-            app:elevation="8dp"
+            android:fitsSystemWindows="true"
+            android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_view_diary"
+
+            <HorizontalScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/diary_item" />
+                android:background="?attr/colorPrimary"
+                android:scrollbars="none"
+                android:layout_height="wrap_content">
 
-        </androidx.core.widget.NestedScrollView>
+                <com.google.android.material.chip.ChipGroup
+                    android:layout_width="wrap_content"
+                    android:id="@+id/filter_chip_group"
+                    android:layout_height="wrap_content"
+                    app:singleSelection="true"
+                    android:paddingTop="@dimen/padding_small"
+                    android:paddingBottom="@dimen/padding_small"
+                    android:paddingStart="@dimen/padding_medium"
+                    android:paddingEnd="@dimen/padding_medium"
+                    app:chipSpacingHorizontal="@dimen/margin_medium"
+                    app:singleLine="true">
 
-        <Button
-            android:id="@+id/button_add_new_diary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="16dp"
-            android:layout_marginBottom="100dp"
-            android:onClick="@{() -> diaryViewModel.onAddDiary()}"
-            android:text="ADD ITEM (DEBUG)"
-            android:textColor="@color/primaryTextColor"
-            app:elevation="8dp" />
+                </com.google.android.material.chip.ChipGroup>
+            </HorizontalScrollView>
 
-        <Button
-            android:id="@+id/button_clear_diary"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|start"
-            android:layout_margin="16dp"
-            android:layout_marginBottom="100dp"
-            android:onClick="@{() -> diaryViewModel.onClear()}"
-            android:text="CLR ITEM (DEBUG)"
-            android:textColor="@color/primaryTextColor"
-            app:elevation="8dp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/secondaryColor"/>
 
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/diary_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/colorBackground"
+                app:elevation="8dp"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    </FrameLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_diary"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/diary_item" />
+            </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
 
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

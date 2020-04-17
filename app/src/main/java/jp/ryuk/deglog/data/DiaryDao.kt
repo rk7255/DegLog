@@ -25,7 +25,7 @@ interface DiaryDao {
     @Query("SELECT * FROM diary_table WHERE name = :name ORDER BY id DESC LIMIT 1")
     fun getDiaryAtNameLatest(name: String) : Diary
 
-    @Query("SELECT DISTINCT name FROM diary_table ")
+    @Query("SELECT DISTINCT name FROM diary_table ORDER BY name")
     fun getNames() : List<String>
 
     @Query("DELETE FROM diary_table")

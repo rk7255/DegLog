@@ -1,29 +1,30 @@
 package jp.ryuk.deglog.ui.diary
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.adapters.DiaryAdapter
 import jp.ryuk.deglog.adapters.DiaryListener
 import jp.ryuk.deglog.data.DiaryRepository
 import jp.ryuk.deglog.databinding.FragmentDiaryBinding
-import jp.ryuk.deglog.navigation.NavigationIconClickListener
-import kotlinx.android.synthetic.main.fragment_diary.*
-import kotlinx.android.synthetic.main.fragment_diary.view.*
-import kotlin.random.Random
+import kotlin.math.log
 
 class DiaryFragment : Fragment() {
+
+    private lateinit var diaryViewModel: DiaryViewModel
+    private var selectedFilter = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,27 +39,51 @@ class DiaryFragment : Fragment() {
             inflater, R.layout.fragment_diary, container, false)
 
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarDiary)
-        binding.appBarDiary.setNavigationOnClickListener(
-            NavigationIconClickListener(activity!!, binding.diaryList, AccelerateDecelerateInterpolator())
-        )
-        val application = requireNotNull(this.activity).application
-        val diaryDatabase = DiaryRepository.getInstance(application).diaryDao
-        val viewModelFactory = DiaryViewModelFactory(diaryDatabase, application)
-        val diaryViewModel = ViewModelProvider(this, viewModelFactory).get(DiaryViewModel::class.java)
+
+        diaryViewModel = createViewModel()
+
         binding.diaryViewModel = diaryViewModel
         binding.lifecycleOwner = this
 
         /**
          * RecyclerView
          */
-        val adapter = DiaryAdapter(DiaryListener {  })
+        val adapter = DiaryAdapter(DiaryListener { /* click listener */ })
         binding.recyclerViewDiary.adapter = adapter
         diaryViewModel.diaries.observe(viewLifecycleOwner, Observer {
+            setupChipGroup(diaryViewModel.names, binding.filterChipGroup)
+        })
+
+        diaryViewModel.filteredDiaries.observe(viewLifecycleOwner, Observer {
             it?.let { adapter.submitList(it) }
         })
 
+        binding.filterChipGroup.setOnCheckedChangeListener { _, checkedId ->
+            diaryViewModel.changeFilterNames(selectedFilter, checkedId)
+        }
+
 
         return binding.root
+    }
+
+    @SuppressLint("InflateParams")
+    private fun setupChipGroup(items: List<String>, chipGroup: ChipGroup) {
+        val chipInflater = LayoutInflater.from(activity!!)
+        items.forEach {
+            val chip = chipInflater.inflate(R.layout.chip_item_filter, null, false) as Chip
+            chip.text = it
+            chip.setOnCheckedChangeListener { buttonView, isChecked ->
+                if (isChecked) selectedFilter = buttonView.text.toString()
+            }
+            chipGroup.addView(chip)
+        }
+    }
+
+    private fun createViewModel(): DiaryViewModel {
+        val application = requireNotNull(this.activity).application
+        val diaryDatabase = DiaryRepository.getInstance(application).diaryDao
+        val viewModelFactory = DiaryViewModelFactory(diaryDatabase, application)
+        return ViewModelProvider(this, viewModelFactory).get(DiaryViewModel::class.java)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {

@@ -16,19 +16,28 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:defaultNavHost="true"
-            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_bar"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_border"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/navigation"/>
 
+        <View
+            android:id="@+id/bottom_navigation_border"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/secondaryColor"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_bar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation_bar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/bottom_nav_height"
             android:background="?attr/colorPrimary"
             app:itemHorizontalTranslationEnabled="false"
-            app:itemIconSize="20dp"
+            app:itemIconSize="@dimen/bottom_nav_icon_height"
             app:itemIconTint="@color/primaryTextColor"
             app:labelVisibilityMode="unlabeled"
             app:layout_constraintBottom_toBottomOf="parent"
