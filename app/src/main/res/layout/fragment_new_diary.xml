@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="newDiaryViewModel"
             type="jp.ryuk.deglog.ui.newdiary.NewDiaryViewModel" />
@@ -12,31 +13,31 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:background="@color/colorBackground"
         android:layout_height="match_parent"
+        android:background="@color/colorBackground"
         android:fitsSystemWindows="true">
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/diary_list"
+            android:id="@+id/new_diary_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorBackground"
+            android:focusable="true"
             app:elevation="8dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:fitsSystemWindows="true"
                 android:background="@color/colorBackground"
+                android:fitsSystemWindows="true"
+                android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:focusable="true"
                     android:layout_marginBottom="24dp"
                     android:text="@string/new_diary_title"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3" />
@@ -67,7 +68,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_small"
                     android:hint="weight"
-                    app:endIconMode="clear_text"
                     app:errorEnabled="true"
                     app:startIconDrawable="@drawable/ic_weight"
                     app:suffixText="@string/suffixText_weight">
@@ -87,7 +87,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_small"
                     android:hint="length"
-                    app:endIconMode="clear_text"
                     app:errorEnabled="true"
                     app:startIconDrawable="@drawable/ic_length"
                     app:suffixText="@string/suffixText_length">
@@ -144,11 +143,11 @@
                 </LinearLayout>
 
                 <com.google.android.material.button.MaterialButton
-                    android:layout_marginTop="100dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="100dp"
                     android:onClick="@{() -> newDiaryViewModel.onClear()}"
-                    android:text="[DEBUG] DB Clear"/>
+                    android:text="[DEBUG] DB Clear" />
 
             </LinearLayout>
 

@@ -1,18 +1,19 @@
 package jp.ryuk.deglog.ui.newdiary
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.data.DiaryRepository
 import jp.ryuk.deglog.data.ProfileRepository
@@ -48,12 +49,18 @@ class NewDiaryFragment : Fragment() {
                 val adapter = ArrayAdapter(
                     requireContext(),
                     R.layout.support_simple_spinner_dropdown_item,
-                    newDiaryViewModel.names)
+                    newDiaryViewModel.names
+                )
                 (binding.newDiaryEditName.editText as? AutoCompleteTextView)?.setAdapter(adapter)
                 newDiaryViewModel.doneInitialized()
             }
         })
 
+        binding.newDiaryContainer.setOnTouchListener { v, event ->
+            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(v.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            v?.onTouchEvent(event) ?: true
+        }
 
         return binding.root
     }
@@ -62,7 +69,8 @@ class NewDiaryFragment : Fragment() {
         val application = requireNotNull(this.activity).application
         val dataSourceDiary = DiaryRepository.getInstance(application).diaryDao
         val dataSourceProfile = ProfileRepository.getInstance(application).profileDao
-        val viewModelFactory = NewDiaryViewModelFactory(selectedName, dataSourceDiary, dataSourceProfile)
+        val viewModelFactory =
+            NewDiaryViewModelFactory(selectedName, dataSourceDiary, dataSourceProfile)
         return ViewModelProvider(this, viewModelFactory).get(NewDiaryViewModel::class.java)
     }
 
@@ -73,7 +81,8 @@ class NewDiaryFragment : Fragment() {
         newDiaryViewModel.navigateToDiary.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 this.findNavController().navigate(
-                    NewDiaryFragmentDirections.actionNewDiaryFragmentToDiaryFragment())
+                    NewDiaryFragmentDirections.actionNewDiaryFragmentToDiaryFragment()
+                )
                 newDiaryViewModel.doneNavigateToDiary()
             }
         })

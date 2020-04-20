@@ -23,9 +23,9 @@
         <item name="android:background">?attr/colorPrimary</item>
     </style>
 
-    <style name="Widget.Deglog.EditText" parent='Widget.MaterialComponents.TextInputLayout.OutlinedBox'>
+    <style name="Widget.Deglog.EditText" parent='Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense'>
     </style>
 
-    <style name="Widget.Deglog.EditText_DropDown" parent='Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu'/>
+    <style name="Widget.Deglog.EditText_DropDown" parent='Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu'/>
 
 </resources>

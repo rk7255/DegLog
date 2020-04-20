@@ -149,8 +149,6 @@ class DiaryViewModel(
         }
     }
 
-
-
     /**
      * Chart
      */
