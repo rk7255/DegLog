@@ -35,24 +35,34 @@ class NewDiaryFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_diary, container, false)
 
-        newDiaryViewModel = createViewModel()
+        val arguments = NewDiaryFragmentArgs.fromBundle(arguments!!)
+
+        newDiaryViewModel = createViewModel(arguments.selectedName)
         binding.newDiaryViewModel = newDiaryViewModel
         binding.lifecycleOwner = this
 
         setObserve(newDiaryViewModel, binding)
 
-        val items = listOf("Natsu", "Coco", "Taro", "Kojiro")
-        val adapter = ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, items)
-        (binding.newDiaryEditName.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+        newDiaryViewModel.initialized.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                val adapter = ArrayAdapter(
+                    requireContext(),
+                    R.layout.support_simple_spinner_dropdown_item,
+                    newDiaryViewModel.names)
+                (binding.newDiaryEditName.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+                newDiaryViewModel.doneInitialized()
+            }
+        })
+
 
         return binding.root
     }
 
-    private fun createViewModel(): NewDiaryViewModel {
+    private fun createViewModel(selectedName: String): NewDiaryViewModel {
         val application = requireNotNull(this.activity).application
         val dataSourceDiary = DiaryRepository.getInstance(application).diaryDao
         val dataSourceProfile = ProfileRepository.getInstance(application).profileDao
-        val viewModelFactory = NewDiaryViewModelFactory(dataSourceDiary, dataSourceProfile)
+        val viewModelFactory = NewDiaryViewModelFactory(selectedName, dataSourceDiary, dataSourceProfile)
         return ViewModelProvider(this, viewModelFactory).get(NewDiaryViewModel::class.java)
     }
 

@@ -33,6 +33,9 @@
         android:name="jp.ryuk.deglog.ui.newdiary.NewDiaryFragment"
         android:label="fragment_new_diary"
         tools:layout="@layout/fragment_new_diary">
+        <argument
+            android:name="selectedName"
+            app:argType="string" />
         <action
             android:id="@+id/action_newDiaryFragment_to_diaryFragment"
             app:destination="@id/diaryFragment"

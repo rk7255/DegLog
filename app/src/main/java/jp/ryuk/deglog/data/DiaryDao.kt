@@ -13,16 +13,16 @@ interface DiaryDao {
     @Delete
     fun delete(diary: Diary)
 
-    @Query("SELECT * FROM diary_table ORDER BY id DESC")
+    @Query("SELECT * FROM diary_table ORDER BY date DESC")
     fun getDiaries() : List<Diary>
 
     @Query("SELECT * FROM diary_table WHERE id = :key")
     fun getDiary(key: Long) : Diary
 
-    @Query("SELECT * FROM diary_table WHERE name = :name ORDER BY id DESC")
+    @Query("SELECT * FROM diary_table WHERE name = :name ORDER BY date DESC")
     fun getDiariesAtName(name: String) : List<Diary>
 
-    @Query("SELECT * FROM diary_table WHERE name = :name ORDER BY id DESC LIMIT 1")
+    @Query("SELECT * FROM diary_table WHERE name = :name ORDER BY date DESC LIMIT 1")
     fun getDiaryAtNameLatest(name: String) : Diary
 
     @Query("SELECT DISTINCT name FROM diary_table ORDER BY name")
@@ -30,4 +30,10 @@ interface DiaryDao {
 
     @Query("DELETE FROM diary_table")
     fun clear()
+
+    @Query("SELECT date FROM diary_table WHERE (name = :name AND weight IS NOT NULL) ORDER BY date DESC LIMIT 1")
+    fun getDateOfWeightLatest(name: String): Long
+
+    @Query("SELECT date FROM diary_table WHERE (name = :name AND length IS NOT NULL) ORDER BY date DESC LIMIT 1")
+    fun getDateOfLengthLatest(name: String): Long
 }

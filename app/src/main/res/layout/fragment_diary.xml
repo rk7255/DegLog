@@ -11,14 +11,15 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:background="@color/colorBackground"
+        android:background="@color/primaryColor"
+        android:elevation="0dp"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/toolbar_height"
-            app:elevation="0dp">
+            android:elevation="0dp"
+            android:layout_height="@dimen/toolbar_height">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/app_bar_diary"
@@ -30,56 +31,324 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:elevation="8dp"
             android:fitsSystemWindows="true"
             android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <HorizontalScrollView
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:background="?attr/colorPrimary"
-                android:scrollbars="none"
-                android:layout_height="wrap_content">
+                android:scrollbars="none">
 
                 <com.google.android.material.chip.ChipGroup
-                    android:layout_width="wrap_content"
                     android:id="@+id/filter_chip_group"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:singleSelection="true"
-                    app:selectionRequired="true"
-                    android:paddingTop="@dimen/padding_small"
-                    android:paddingBottom="@dimen/padding_small"
                     android:paddingStart="@dimen/padding_medium"
+                    android:paddingTop="@dimen/padding_small"
                     android:paddingEnd="@dimen/padding_medium"
+                    android:paddingBottom="@dimen/padding_small"
                     app:chipSpacingHorizontal="@dimen/margin_medium"
-                    app:singleLine="true">
+                    app:selectionRequired="true"
+                    app:singleLine="true"
+                    app:singleSelection="true">
 
                 </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/secondaryColor"/>
+<!--            <androidx.core.widget.NestedScrollView-->
+<!--                android:id="@+id/diary_list"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:background="@color/colorBackground"-->
+<!--                android:elevation="16dp"-->
+<!--                android:outlineProvider="bounds"-->
+<!--                android:visibility="gone"-->
+<!--                app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
+
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:id="@+id/recycler_view_diary"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="0dp"-->
+<!--                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--                    tools:listitem="@layout/diary_item" />-->
+<!--            </androidx.core.widget.NestedScrollView>-->
 
             <androidx.core.widget.NestedScrollView
-                android:id="@+id/diary_list"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/colorBackground"
-                app:elevation="8dp"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                android:layout_height="wrap_content">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_view_diary"
+                <LinearLayout
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/diary_item" />
+                    android:layout_height="wrap_content">
+
+                    <!-- Dashboard Weight Section Start -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/db_weight_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:elevation="4dp"
+                        android:layout_marginBottom="8dp"
+                        app:cardCornerRadius="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/text_diary_item_date">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/db_weight_date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:gravity="center"
+                                android:text="@{diaryViewModel.weightLatestDate}"
+                                tools:text="100日前"
+                                app:layout_constraintEnd_toEndOf="@+id/db_weight_icon"
+                                app:layout_constraintStart_toStartOf="@+id/db_weight_icon"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/db_weight_icon"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_marginStart="24dp"
+                                android:src="@drawable/ic_weight"
+                                app:layout_constraintBottom_toBottomOf="@+id/db_weight_latest_data"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/db_weight_latest" />
+
+                            <TextView
+                                android:id="@+id/db_weight_latest"
+                                android:layout_width="80dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="体重"
+                                app:layout_constraintEnd_toStartOf="@+id/db_weight_previous"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toEndOf="@+id/db_weight_date"
+                                app:layout_constraintTop_toTopOf="@+id/db_weight_date" />
+
+                            <TextView
+                                android:id="@+id/db_weight_latest_data"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{diaryViewModel.weightLatest}"
+                                android:textSize="32sp"
+                                app:layout_constraintEnd_toEndOf="@+id/db_weight_latest"
+                                app:layout_constraintStart_toStartOf="@+id/db_weight_latest"
+                                app:layout_constraintTop_toBottomOf="@+id/db_weight_latest"
+                                tools:text="300 g" />
+
+                            <TextView
+                                android:id="@+id/db_weight_previous_data"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{diaryViewModel.weightPrev}"
+                                android:textSize="24sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/db_weight_latest_data"
+                                app:layout_constraintEnd_toEndOf="@+id/db_weight_previous"
+                                app:layout_constraintStart_toStartOf="@+id/db_weight_previous"
+                                tools:text="+ 5 g" />
+
+                            <TextView
+                                android:id="@+id/db_weight_previous"
+                                android:layout_width="80dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="前回比"
+                                app:layout_constraintEnd_toStartOf="@+id/db_weight_dummy"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toEndOf="@+id/db_weight_latest"
+                                app:layout_constraintTop_toTopOf="@+id/db_weight_latest" />
+
+                            <ImageView
+                                android:id="@+id/db_weight_diff"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_marginEnd="24dp"
+                                app:layout_constraintBottom_toBottomOf="@+id/db_weight_latest_data"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/db_weight_latest"
+                                app:srcCompat="@drawable/ic_up" />
+
+                            <View
+                                android:id="@+id/db_weight_border"
+                                android:layout_width="0dp"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="16dp"
+                                android:background="@color/primaryColor"
+                                app:layout_constraintEnd_toEndOf="@+id/db_weight_diff"
+                                app:layout_constraintStart_toStartOf="@+id/db_weight_icon"
+                                app:layout_constraintTop_toBottomOf="@+id/db_weight_latest_data" />
+
+                            <com.github.mikephil.charting.charts.LineChart
+                                android:id="@+id/db_weight_chart"
+                                android:layout_width="match_parent"
+                                android:layout_height="80dp"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginTop="16dp"
+                                android:layout_marginEnd="24dp"
+                                android:layout_marginBottom="16dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/db_weight_border" />
+
+                            <TextView
+                                android:id="@+id/db_weight_dummy"
+                                android:layout_width="40dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                app:layout_constraintEnd_toEndOf="@+id/db_weight_diff"
+                                app:layout_constraintStart_toStartOf="@+id/db_weight_diff"
+                                app:layout_constraintTop_toTopOf="@+id/db_weight_previous" />
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                    <!-- Dashboard Weight Section End -->
+
+
+                    <!-- Dashboard Length Section Start -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/db_length_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:elevation="4dp"
+                        app:cardCornerRadius="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/text_diary_item_date">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:id="@+id/db_length_date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:gravity="center"
+                                android:text="@{diaryViewModel.lengthLatestDate}"
+                                tools:text="100日前"
+                                app:layout_constraintEnd_toEndOf="@+id/db_length_icon"
+                                app:layout_constraintStart_toStartOf="@+id/db_length_icon"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <ImageView
+                                android:id="@+id/db_length_icon"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_marginStart="24dp"
+                                android:src="@drawable/ic_length"
+                                app:layout_constraintBottom_toBottomOf="@+id/db_length_latest_data"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/db_length_latest" />
+
+                            <TextView
+                                android:id="@+id/db_length_latest"
+                                android:layout_width="80dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="体重"
+                                app:layout_constraintEnd_toStartOf="@+id/db_length_previous"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toEndOf="@+id/db_length_date"
+                                app:layout_constraintTop_toTopOf="@+id/db_length_date" />
+
+                            <TextView
+                                android:id="@+id/db_length_latest_data"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{diaryViewModel.lengthLatest}"
+                                android:textSize="32sp"
+                                app:layout_constraintEnd_toEndOf="@+id/db_length_latest"
+                                app:layout_constraintStart_toStartOf="@+id/db_length_latest"
+                                app:layout_constraintTop_toBottomOf="@+id/db_length_latest"
+                                tools:text="300 g" />
+
+                            <TextView
+                                android:id="@+id/db_length_previous_data"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{diaryViewModel.lengthPrev}"
+                                android:textSize="24sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/db_length_latest_data"
+                                app:layout_constraintEnd_toEndOf="@+id/db_length_previous"
+                                app:layout_constraintStart_toStartOf="@+id/db_length_previous"
+                                tools:text="+ 5 g" />
+
+                            <TextView
+                                android:id="@+id/db_length_previous"
+                                android:layout_width="80dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="前回比"
+                                app:layout_constraintEnd_toStartOf="@+id/db_length_dummy"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toEndOf="@+id/db_length_latest"
+                                app:layout_constraintTop_toTopOf="@+id/db_length_latest" />
+
+                            <ImageView
+                                android:id="@+id/db_length_diff"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_marginEnd="24dp"
+                                app:layout_constraintBottom_toBottomOf="@+id/db_length_latest_data"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/db_length_latest"
+                                app:srcCompat="@drawable/ic_up" />
+
+                            <View
+                                android:id="@+id/db_length_border"
+                                android:layout_width="0dp"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="16dp"
+                                android:background="@color/primaryColor"
+                                app:layout_constraintEnd_toEndOf="@+id/db_length_diff"
+                                app:layout_constraintStart_toStartOf="@+id/db_length_icon"
+                                app:layout_constraintTop_toBottomOf="@+id/db_length_latest_data" />
+
+                            <com.github.mikephil.charting.charts.LineChart
+                                android:id="@+id/db_length_chart"
+                                android:layout_width="match_parent"
+                                android:layout_height="80dp"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginTop="16dp"
+                                android:layout_marginEnd="24dp"
+                                android:layout_marginBottom="16dp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/db_length_border" />
+
+                            <TextView
+                                android:id="@+id/db_length_dummy"
+                                android:layout_width="40dp"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                app:layout_constraintEnd_toEndOf="@+id/db_length_diff"
+                                app:layout_constraintStart_toStartOf="@+id/db_length_diff"
+                                app:layout_constraintTop_toTopOf="@+id/db_length_previous" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+                    <!-- Dashboard Length Section End-->
+
+                </LinearLayout>
+
             </androidx.core.widget.NestedScrollView>
+
         </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

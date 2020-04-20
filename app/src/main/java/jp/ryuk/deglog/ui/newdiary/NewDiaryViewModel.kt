@@ -1,6 +1,7 @@
 package jp.ryuk.deglog.ui.newdiary
 
 import android.util.Log
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +13,7 @@ import kotlinx.coroutines.*
 
 
 class NewDiaryViewModel(
+    private val selectedName: String = "",
     private val diaryDatabase: DiaryDao,
     private val profileDatabase: ProfileDao
 ) : ViewModel() {
@@ -19,7 +21,9 @@ class NewDiaryViewModel(
     private val viewModelJob = Job()
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    var name: String = ""
+    var names = listOf<String>()
+
+    var name: String = selectedName
     var weight: String? = null
     var length: String? = null
     var memo: String? = null
@@ -33,7 +37,8 @@ class NewDiaryViewModel(
 
     private fun initialize() {
         uiScope.launch {
-
+            names = getNames()
+            _initialized.value = true
         }
     }
 
@@ -75,6 +80,12 @@ class NewDiaryViewModel(
     val submitError: LiveData<Boolean>
         get() = _submitError
 
+    private var _initialized = MutableLiveData<Boolean>()
+    val initialized: LiveData<Boolean>
+        get() = _initialized
+    fun doneInitialized() {
+        _initialized.value = false
+    }
 
     /**
      * Database
@@ -97,6 +108,13 @@ class NewDiaryViewModel(
             _navigateToDiary.value = true
         }
     }
+
+    private suspend fun getNames(): List<String> {
+        return withContext(Dispatchers.IO) {
+            diaryDatabase.getNames()
+        }
+    }
+
     private suspend fun clear() {
         withContext(Dispatchers.IO) {
             diaryDatabase.clear()
