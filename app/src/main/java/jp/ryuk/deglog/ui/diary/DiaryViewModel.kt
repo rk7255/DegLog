@@ -23,7 +23,7 @@ class DiaryViewModel(
     private var viewModelJob = Job()
     private var uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private var diaries = MediatorLiveData<List<Diary>>()
+    private var diaries = listOf<Diary>()
     var names = listOf<String>()
     var filteredDiaries = MediatorLiveData<List<Diary>>()
 
@@ -41,7 +41,7 @@ class DiaryViewModel(
     private fun initialize() {
         uiScope.launch {
             names = getNames()
-            diaries.value = getDiaries()
+            diaries = getDiaries()
             _initialized.value = true
         }
     }
@@ -59,7 +59,7 @@ class DiaryViewModel(
     fun changeFilterNames(name: String, id: Int) {
         uiScope.launch {
             if (id >= 0) {
-                filteredDiaries.value = diaries.value?.filter { it.name == name }
+                filteredDiaries.value = diaries.filter { it.name == name }
 
                 val weightList = filteredDiaries.value!!.mapNotNull(Diary::weight)
                 val lengthList = filteredDiaries.value!!.mapNotNull(Diary::length)
@@ -187,6 +187,19 @@ class DiaryViewModel(
             axisLeft.isEnabled = false
             axisRight. isEnabled = false
         }
+    }
+
+    /**
+     * onClick
+     */
+    private var _navigateToDetail = MutableLiveData<Int?>()
+    val navigateToDetail: LiveData<Int?>
+        get() = _navigateToDetail
+    fun navigateToDetail(key: Int) {
+        _navigateToDetail.value = key
+    }
+    fun doneNavigateToDetail() {
+        _navigateToDetail.value = null
     }
 
     /**

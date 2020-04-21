@@ -5,8 +5,11 @@
 
     <data>
         <variable
-            name="diaryViewModel"
+            name="viewModel"
             type="jp.ryuk.deglog.ui.diary.DiaryViewModel" />
+        <variable
+            name="key"
+            type="jp.ryuk.deglog.ui.diarydetail.DetailKey" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -61,24 +64,6 @@
                 </com.google.android.material.chip.ChipGroup>
             </HorizontalScrollView>
 
-<!--            <androidx.core.widget.NestedScrollView-->
-<!--                android:id="@+id/diary_list"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:background="@color/colorBackground"-->
-<!--                android:elevation="16dp"-->
-<!--                android:outlineProvider="bounds"-->
-<!--                android:visibility="gone"-->
-<!--                app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
-
-<!--                <androidx.recyclerview.widget.RecyclerView-->
-<!--                    android:id="@+id/recycler_view_diary"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="0dp"-->
-<!--                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-<!--                    tools:listitem="@layout/diary_item" />-->
-<!--            </androidx.core.widget.NestedScrollView>-->
-
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -94,6 +79,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:elevation="4dp"
+                        android:onClick="@{() -> viewModel.navigateToDetail(key.FROM_WEIGHT)}"
                         android:layout_marginBottom="8dp"
                         app:cardCornerRadius="8dp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -110,7 +96,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="16dp"
                                 android:gravity="center"
-                                android:text="@{diaryViewModel.weightLatestDate}"
+                                android:text="@{viewModel.weightLatestDate}"
                                 tools:text="100日前"
                                 app:layout_constraintEnd_toEndOf="@+id/db_weight_icon"
                                 app:layout_constraintStart_toStartOf="@+id/db_weight_icon"
@@ -141,7 +127,7 @@
                                 android:id="@+id/db_weight_latest_data"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{diaryViewModel.weightLatest}"
+                                android:text="@{viewModel.weightLatest}"
                                 android:textSize="32sp"
                                 app:layout_constraintEnd_toEndOf="@+id/db_weight_latest"
                                 app:layout_constraintStart_toStartOf="@+id/db_weight_latest"
@@ -152,7 +138,7 @@
                                 android:id="@+id/db_weight_previous_data"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{diaryViewModel.weightPrev}"
+                                android:text="@{viewModel.weightPrev}"
                                 android:textSize="24sp"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_weight_latest_data"
                                 app:layout_constraintEnd_toEndOf="@+id/db_weight_previous"
@@ -222,6 +208,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
+                        android:onClick="@{() -> viewModel.navigateToDetail(key.FROM_LENGTH)}"
                         android:elevation="4dp"
                         app:cardCornerRadius="8dp"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -238,7 +225,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="16dp"
                                 android:gravity="center"
-                                android:text="@{diaryViewModel.lengthLatestDate}"
+                                android:text="@{viewModel.lengthLatestDate}"
                                 tools:text="100日前"
                                 app:layout_constraintEnd_toEndOf="@+id/db_length_icon"
                                 app:layout_constraintStart_toStartOf="@+id/db_length_icon"
@@ -269,7 +256,7 @@
                                 android:id="@+id/db_length_latest_data"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{diaryViewModel.lengthLatest}"
+                                android:text="@{viewModel.lengthLatest}"
                                 android:textSize="32sp"
                                 app:layout_constraintEnd_toEndOf="@+id/db_length_latest"
                                 app:layout_constraintStart_toStartOf="@+id/db_length_latest"
@@ -280,7 +267,7 @@
                                 android:id="@+id/db_length_previous_data"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{diaryViewModel.lengthPrev}"
+                                android:text="@{viewModel.lengthPrev}"
                                 android:textSize="24sp"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_length_latest_data"
                                 app:layout_constraintEnd_toEndOf="@+id/db_length_previous"

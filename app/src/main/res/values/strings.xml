@@ -3,12 +3,15 @@
 
     <string name="bottom_nav_diary">Diary</string>
     <string name="bottom_nav_chart">Chart</string>
-    <string name="bottom_nav_notify">reminder</string>
+    <string name="bottom_nav_profiles">Profile</string>
     <string name="toolbar_filter">Filter</string>
 
     <string name="title_diary">DashBoard</string>
+    <string name="title_diary_detail">Detail</string>
     <string name="title_chart">Chart</string>
-    <string name="title_reminder">Reminder</string>
+    <string name="title_profiles">Profiles</string>
+    <string name="title_weight">Weight</string>
+    <string name="title_length">Length</string>
 
     <string name="new_diary_title">New Diary</string>
     <string name="name_empty_error_string">name must not be empty.</string>
@@ -17,5 +20,15 @@
 
     <string name="suffixText_weight">g</string>
     <string name="suffixText_length">mm</string>
+
+    <string-array name="labels">
+        <item>None</item>
+        <item>Red</item>
+        <item>Blue</item>
+        <item>Green</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

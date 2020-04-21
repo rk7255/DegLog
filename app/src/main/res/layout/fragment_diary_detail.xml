@@ -4,28 +4,65 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-
+        <variable
+            name="viewModel"
+            type="jp.ryuk.deglog.ui.diarydetail.details.WeightViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorBackground"
         android:fitsSystemWindows="true">
 
-        <FrameLayout
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/diary_detail_view_pager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_height="match_parent"/>
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:elevation="0dp"
             android:fitsSystemWindows="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            app:layout_scrollFlags="scroll|snap"
+            android:layout_height="wrap_content">
 
-            <androidx.core.widget.NestedScrollView
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/app_bar_diary_detail"
+                style="@style/Widget.Deglog.Toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="@dimen/toolbar_height"
+                app:layout_scrollFlags="noScroll"
+                app:title="@string/title_diary_detail" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/diary_detail_tab"
+                android:layout_width="match_parent"
+                style="@style/Widget.MaterialComponents.TabLayout.Colored"
+                android:layout_height="@dimen/toolbar_height" />
+
+        </com.google.android.material.appbar.AppBarLayout>
 
 
-            </androidx.core.widget.NestedScrollView>
 
-        </FrameLayout>
+
+
+<!--                <androidx.core.widget.NestedScrollView-->
+<!--                    android:id="@+id/diary_detail_list"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:elevation="16dp"-->
+<!--                    app:layout_behavior="@string/appbar_scrolling_view_behavior">-->
+
+<!--                    <androidx.recyclerview.widget.RecyclerView-->
+<!--                        android:id="@+id/recycler_view_diary_detail"-->
+<!--                        android:layout_width="match_parent"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
+<!--                        tools:listitem="@layout/diary_item" />-->
+<!--                </androidx.core.widget.NestedScrollView>-->
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

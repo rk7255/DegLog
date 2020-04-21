@@ -13,5 +13,5 @@
     <item
         android:id="@+id/reminderFragment"
         android:icon="@drawable/nav_ic_notify"
-        android:title="@string/bottom_nav_notify"/>
+        android:title="@string/bottom_nav_profiles"/>
 </menu>

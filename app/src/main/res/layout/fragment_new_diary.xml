@@ -6,7 +6,7 @@
     <data>
 
         <variable
-            name="newDiaryViewModel"
+            name="viewModel"
             type="jp.ryuk.deglog.ui.newdiary.NewDiaryViewModel" />
     </data>
 
@@ -57,7 +57,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="none"
                         android:singleLine="true"
-                        android:text="@={newDiaryViewModel.name}" />
+                        android:text="@={viewModel.name}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -76,7 +76,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
-                        android:text="@={newDiaryViewModel.weight}" />
+                        android:text="@={viewModel.weight}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -95,7 +95,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
-                        android:text="@={newDiaryViewModel.length}" />
+                        android:text="@={viewModel.length}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -114,7 +114,7 @@
                         android:layout_height="wrap_content"
                         android:lines="2"
                         android:maxLines="2"
-                        android:text="@={newDiaryViewModel.memo}" />
+                        android:text="@={viewModel.memo}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
@@ -130,7 +130,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/margin_large"
-                        android:onClick="@{() -> newDiaryViewModel.onCancel()}"
+                        android:onClick="@{() -> viewModel.onCancel()}"
                         android:text="Cancel" />
 
                     <com.google.android.material.button.MaterialButton
@@ -138,7 +138,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_large"
-                        android:onClick="@{() -> newDiaryViewModel.onSubmit()}"
+                        android:onClick="@{() -> viewModel.onSubmit()}"
                         android:text="Submit" />
                 </LinearLayout>
 
@@ -146,7 +146,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="100dp"
-                    android:onClick="@{() -> newDiaryViewModel.onClear()}"
+                    android:onClick="@{() -> viewModel.onClear()}"
                     android:text="[DEBUG] DB Clear" />
 
             </LinearLayout>

@@ -39,7 +39,7 @@ class NewDiaryFragment : Fragment() {
         val arguments = NewDiaryFragmentArgs.fromBundle(arguments!!)
 
         newDiaryViewModel = createViewModel(arguments.selectedName)
-        binding.newDiaryViewModel = newDiaryViewModel
+        binding.viewModel = newDiaryViewModel
         binding.lifecycleOwner = this
 
         setObserve(newDiaryViewModel, binding)

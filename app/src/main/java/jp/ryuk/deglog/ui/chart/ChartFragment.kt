@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.databinding.FragmentChartBinding
+import kotlin.random.Random
 
 
 class ChartFragment : Fragment() {
@@ -23,6 +24,7 @@ class ChartFragment : Fragment() {
             inflater, R.layout.fragment_chart, container, false)
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarChart)
 
+        binding.testText.text = Random.nextInt().toString()
 
         return binding.root
     }

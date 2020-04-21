@@ -27,5 +27,4 @@
     </style>
 
     <style name="Widget.Deglog.EditText_DropDown" parent='Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu'/>
-
 </resources>

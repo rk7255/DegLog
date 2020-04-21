@@ -7,18 +7,15 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import jp.ryuk.deglog.R
-import jp.ryuk.deglog.adapters.DiaryAdapter
-import jp.ryuk.deglog.adapters.DiaryListener
 import jp.ryuk.deglog.data.DiaryRepository
 import jp.ryuk.deglog.databinding.FragmentDiaryBinding
-import kotlinx.android.synthetic.main.diary_item.*
-import java.lang.Exception
 
 /**
  *  TODO 名前変更 : Diary -> DashBoard
@@ -43,7 +40,7 @@ class DiaryFragment : Fragment() {
 
         diaryViewModel = createViewModel()
 
-        binding.diaryViewModel = diaryViewModel
+        binding.viewModel = diaryViewModel
         binding.lifecycleOwner = this
 
         diaryViewModel.weightChart = binding.dbWeightChart
@@ -60,6 +57,14 @@ class DiaryFragment : Fragment() {
             setupChipGroup()
 
         }
+
+        diaryViewModel.navigateToDetail.observe(viewLifecycleOwner, Observer { key ->
+            if (key != null) {
+                this.findNavController().navigate(
+                    DiaryFragmentDirections.actionDiaryFragmentToDiaryDetailFragment(key, diaryViewModel.selectedFilter))
+                diaryViewModel.doneNavigateToDetail()
+            }
+        })
 
         /**
          *  DashBoard
@@ -83,15 +88,6 @@ class DiaryFragment : Fragment() {
                 diaryViewModel.doneChangeDashboard()
             }
         })
-
-//        /**
-//         * RecyclerView
-//         */
-//        val adapter = DiaryAdapter(DiaryListener { /* click listener */ })
-//        binding.recyclerViewDiary.adapter = adapter
-//        diaryViewModel.filteredDiaries.observe(viewLifecycleOwner, Observer {
-//            it?.let { adapter.submitList(it) }
-//        })
 
         return binding.root
     }
