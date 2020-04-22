@@ -15,6 +15,13 @@
         <item name="titleTextAppearance">@style/TextAppearance.Deglog.Toolbar</item>
     </style>
 
+
+<style name="Widget.Deglog.Toolbar.InRecyclerView" parent="Widget.Deglog.Toolbar">
+        <item name="android:background">@color/primaryLightColor</item>
+    </style>
+
+
+
     <style name="TextAppearance.Deglog.Toolbar" parent="TextAppearance.MaterialComponents.Button">
         <item name="android:textSize">18sp</item>
     </style>

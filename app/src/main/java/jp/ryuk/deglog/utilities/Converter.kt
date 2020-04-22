@@ -28,14 +28,31 @@ fun convertLongToDateStringInTime(systemTime: Long): String {
 }
 
 @SuppressLint("SimpleDateFormat")
+fun convertLongToDateStringOutYear(systemTime: Long): String {
+    return SimpleDateFormat("dd日 HH:mm")
+        .format(systemTime).toString()
+}
+
+@SuppressLint("SimpleDateFormat")
+fun getLongToMonth(systemTime: Long): String {
+    return SimpleDateFormat("M")
+        .format(systemTime).toString()
+}
+
+
+
+@SuppressLint("SimpleDateFormat")
 fun convertLongToDateStringRelative(systemTime: Long): String {
     val diff = System.currentTimeMillis() - systemTime
-    val minute = 60 * 1000
+    val second = 1000
+    val minute = second * 60
     val hour = minute * 60
     val day = 24 * 60 * 60 * 1000
     val days = day * 2
 
     return when {
+        diff < 0 -> "0秒前"
+        diff < second -> "${diff / minute}秒前"
         diff < hour -> "${diff / minute}分前"
         diff < day -> "${diff / hour}時間前"
         diff < days -> "昨日"

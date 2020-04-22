@@ -146,8 +146,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="100dp"
+                    android:onClick="@{() -> viewModel.onAddDummy()}"
+                    android:text="[DEBUG] Add Dummy" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:onClick="@{() -> viewModel.onClear()}"
                     android:text="[DEBUG] DB Clear" />
+
 
             </LinearLayout>
 

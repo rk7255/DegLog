@@ -5,6 +5,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import jp.ryuk.deglog.utilities.convertLength
 import jp.ryuk.deglog.utilities.convertLongToDateStringInTime
+import jp.ryuk.deglog.utilities.convertLongToDateStringOutYear
 import jp.ryuk.deglog.utilities.convertWeight
 
 @BindingAdapter("isGone")
@@ -30,6 +31,16 @@ fun TextView.setDiaryDateFormatted(item: Long?){
         text = convertLongToDateStringInTime(item)
     }
 }
+
+// 日付
+@BindingAdapter("weightDateFormatted")
+fun TextView.setWeightDateFormatted(item: Long?){
+    item?.let {
+        text = convertLongToDateStringOutYear(item)
+    }
+}
+
+
 
 // 体重
 @BindingAdapter("diaryWeightFormatted")

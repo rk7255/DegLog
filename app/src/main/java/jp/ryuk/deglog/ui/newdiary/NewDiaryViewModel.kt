@@ -9,7 +9,9 @@ import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.ProfileDao
 import jp.ryuk.deglog.utilities.convertStringToInt
+import jp.ryuk.deglog.utilities.convertYMDToLong
 import kotlinx.coroutines.*
+import kotlin.random.Random
 
 
 class NewDiaryViewModel(
@@ -66,6 +68,26 @@ class NewDiaryViewModel(
         }
     }
 
+    fun onAddDummy() {
+        uiScope.launch {
+
+            for (m in 4..6) {
+                for (d in 1..5) {
+                    val loop = Random.nextInt(0, 3)
+                    for (i in 0..loop) {
+                        val newDiary = Diary()
+                        newDiary.date = convertYMDToLong(2020, m, d)
+                        newDiary.name = name
+                        newDiary.weight = 250 + loop * Random.nextInt(1, 5)
+                        newDiary.length = 150 + loop * Random.nextInt(1, 5)
+                        insert(newDiary)
+                    }
+                }
+            }
+            _navigateToDiary.value = true
+        }
+    }
+
     /**
      *  LiveData
      */
@@ -82,8 +104,6 @@ class NewDiaryViewModel(
     fun doneBackToDiary() {
         _backToDiary.value = false
     }
-
-
 
     private var _submitError = MutableLiveData<Boolean>()
     val submitError: LiveData<Boolean>

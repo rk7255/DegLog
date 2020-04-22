@@ -6,8 +6,7 @@ import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
 import kotlinx.coroutines.*
 
-
-class WeightViewModel(
+class LengthViewModel(
     private val selectedName: String,
     private val diaryDatabase: DiaryDao
 ) : ViewModel() {

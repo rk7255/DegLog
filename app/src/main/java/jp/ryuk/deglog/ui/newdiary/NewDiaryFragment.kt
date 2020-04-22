@@ -68,7 +68,7 @@ class NewDiaryFragment : Fragment() {
                 this.findNavController().navigate(
                     NewDiaryFragmentDirections.actionNewDiaryFragmentPop()
                 )
-                newDiaryViewModel.doneNavigateToDiary()
+                newDiaryViewModel.doneBackToDiary()
             }
         })
 
