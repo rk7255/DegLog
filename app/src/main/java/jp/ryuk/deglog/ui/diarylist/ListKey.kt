@@ -1,6 +1,6 @@
-package jp.ryuk.deglog.ui.diarydetail
+package jp.ryuk.deglog.ui.diarylist
 
-class DetailKey {
+class ListKey {
 
     companion object {
         const val FROM_WEIGHT = 0

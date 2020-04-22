@@ -5,15 +5,18 @@
 
     <data>
         <variable
+            name="diary"
+            type="jp.ryuk.deglog.data.Diary" />
+        <variable
             name="viewModel"
-            type="jp.ryuk.deglog.ui.diarydetail.details.WeightViewModel" />
+            type="jp.ryuk.deglog.ui.diarydetail.DiaryDetailViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
         android:background="@color/colorBackground"
-        android:fitsSystemWindows="true">
+        android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -29,26 +32,59 @@
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:title="@string/title_diary_detail" />
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/diary_detail_tab"
-                android:layout_width="match_parent"
-                app:layout_scrollFlags="scroll|enterAlways"
-                style="@style/Widget.MaterialComponents.TabLayout.Colored"
-                android:layout_height="@dimen/toolbar_height" />
-
         </com.google.android.material.appbar.AppBarLayout>
 
-        <FrameLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:fitsSystemWindows="true"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:layout_height="match_parent">
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/diary_detail_view_pager"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-        </FrameLayout>
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                tools:context=".ui.diarydetail.DiaryDetailFragment">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="40sp"
+                    android:text="@{String.valueOf(diary.id)}"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="40sp"
+                    diaryDateFormatted="@{diary.date}"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="40sp"
+                    diaryName="@{diary.name}"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="40sp"
+                    diaryWeightFormatted="@{diary.weight}"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="40sp"
+                    diaryLengthFormatted="@{diary.length}"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="40sp"
+                    diaryMemoFormatted="@{diary.memo}"/>
+
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

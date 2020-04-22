@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="jp.ryuk.deglog.ui.diarydetail.details.LengthViewModel" />
+            type="jp.ryuk.deglog.ui.diarylist.lists.LengthViewModel" />
     </data>
 
     <FrameLayout

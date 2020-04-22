@@ -1,22 +1,27 @@
 package jp.ryuk.deglog.ui.diarydetail
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import com.google.android.material.tabs.TabLayoutMediator
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+
 import jp.ryuk.deglog.R
-import jp.ryuk.deglog.adapters.LENGTH_PAGE_INDEX
-import jp.ryuk.deglog.adapters.PagerAdapter
-import jp.ryuk.deglog.adapters.WEIGHT_PAGE_INDEX
+import jp.ryuk.deglog.data.DiaryRepository
 import jp.ryuk.deglog.databinding.FragmentDiaryDetailBinding
+import jp.ryuk.deglog.ui.diarylist.lists.WeightViewModel
+import jp.ryuk.deglog.ui.diarylist.lists.WeightViewModelFactory
 
-
+/**
+ * A simple [Fragment] subclass.
+ */
 class DiaryDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentDiaryDetailBinding
+    private lateinit var diaryDetailViewModel: DiaryDetailViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,26 +29,24 @@ class DiaryDetailFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_diary_detail, container, false)
-
         val arguments = DiaryDetailFragmentArgs.fromBundle(arguments!!)
-        val tabLayout = binding.diaryDetailTab
-        val viewPager = binding.diaryDetailViewPager
 
-        viewPager.adapter = PagerAdapter(this, arguments.selectedName)
-        viewPager.setCurrentItem(arguments.fromKey, false)
+        diaryDetailViewModel = createViewModel(arguments.diaryKey)
+        binding.lifecycleOwner = this
 
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = getTabTitle(position)
-        }.attach()
+        diaryDetailViewModel.diary.observe(viewLifecycleOwner, Observer {
+            binding.diary = diaryDetailViewModel.diary.value
+        })
 
         return binding.root
     }
 
-    private fun getTabTitle(position: Int): String? {
-        return when (position) {
-            WEIGHT_PAGE_INDEX -> getString(R.string.title_weight)
-            LENGTH_PAGE_INDEX -> getString(R.string.title_length)
-            else -> null
-        }
+    private fun createViewModel(diaryKey: Long): DiaryDetailViewModel {
+        val application = requireNotNull(this.activity).application
+        val dataSourceDiary = DiaryRepository.getInstance(application).diaryDao
+        val viewModelFactory =
+            DiaryDetailViewModelFactory(diaryKey, dataSourceDiary)
+        return ViewModelProvider(this, viewModelFactory).get(DiaryDetailViewModel::class.java)
     }
+
 }

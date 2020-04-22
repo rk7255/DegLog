@@ -9,7 +9,7 @@
             type="jp.ryuk.deglog.ui.diary.DiaryViewModel" />
         <variable
             name="key"
-            type="jp.ryuk.deglog.ui.diarydetail.DetailKey" />
+            type="jp.ryuk.deglog.ui.diarylist.ListKey" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

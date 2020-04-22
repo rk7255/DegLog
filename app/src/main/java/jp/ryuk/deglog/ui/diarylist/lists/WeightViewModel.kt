@@ -1,12 +1,15 @@
-package jp.ryuk.deglog.ui.diarydetail.details
+package jp.ryuk.deglog.ui.diarylist.lists
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
 import kotlinx.coroutines.*
 
-class LengthViewModel(
+
+class WeightViewModel(
     private val selectedName: String,
     private val diaryDatabase: DiaryDao
 ) : ViewModel() {
@@ -20,6 +23,23 @@ class LengthViewModel(
         uiScope.launch {
             diaries.value = getDiariesAtName(selectedName)
         }
+    }
+
+    /**
+     * onClick
+     */
+    fun onClickDiary(key: Long) {
+        _navigateToDiaryDetail.value = key
+    }
+
+    /**
+     * LiveData
+     */
+    private var _navigateToDiaryDetail = MutableLiveData<Long?>()
+    val navigateToDiaryDetail: LiveData<Long?>
+        get() = _navigateToDiaryDetail
+    fun doneNavigateToDiary() {
+        _navigateToDiaryDetail.value = null
     }
 
     /**

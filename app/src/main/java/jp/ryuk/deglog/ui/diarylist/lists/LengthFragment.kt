@@ -1,4 +1,4 @@
-package jp.ryuk.deglog.ui.diarydetail.details
+package jp.ryuk.deglog.ui.diarylist.lists
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,11 +8,13 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.adapters.*
 import jp.ryuk.deglog.data.DiaryRepository
 import jp.ryuk.deglog.databinding.FragmentLengthBinding
+import jp.ryuk.deglog.ui.diarylist.DiaryListFragmentDirections
 
 class LengthFragment(private val selectedName: String) : Fragment() {
 
@@ -29,11 +31,21 @@ class LengthFragment(private val selectedName: String) : Fragment() {
         binding.viewModel = lengthViewModel
         binding.lifecycleOwner = this
 
+        lengthViewModel.navigateToDiaryDetail.observe(viewLifecycleOwner, Observer { key ->
+            if (key != null) {
+                this.findNavController().navigate(
+                    DiaryListFragmentDirections.actionDiaryListFragmentToDiaryDetailFragment(key))
+                lengthViewModel.doneNavigateToDiary()
+            }
+        })
+
         /**
          * RecyclerView
          */
         val recyclerView = binding.recyclerViewLength
-        val adapter = LengthAdapter(LengthListener { /* click listener */ })
+        val adapter = LengthAdapter(LengthListener { key ->
+            lengthViewModel.onClickDiary(key)
+        })
         recyclerView.adapter = adapter
 
         lengthViewModel.diaries.observe(viewLifecycleOwner, Observer {

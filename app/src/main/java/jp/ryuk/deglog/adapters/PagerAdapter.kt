@@ -2,13 +2,13 @@ package jp.ryuk.deglog.adapters
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import jp.ryuk.deglog.ui.diarydetail.DetailKey
-import jp.ryuk.deglog.ui.diarydetail.details.LengthFragment
-import jp.ryuk.deglog.ui.diarydetail.details.WeightFragment
+import jp.ryuk.deglog.ui.diarylist.ListKey
+import jp.ryuk.deglog.ui.diarylist.lists.LengthFragment
+import jp.ryuk.deglog.ui.diarylist.lists.WeightFragment
 
 
-const val WEIGHT_PAGE_INDEX = DetailKey.FROM_WEIGHT
-const val LENGTH_PAGE_INDEX = DetailKey.FROM_LENGTH
+const val WEIGHT_PAGE_INDEX = ListKey.FROM_WEIGHT
+const val LENGTH_PAGE_INDEX = ListKey.FROM_LENGTH
 
 class PagerAdapter(fragment: Fragment, selectedName: String) : FragmentStateAdapter(fragment) {
 

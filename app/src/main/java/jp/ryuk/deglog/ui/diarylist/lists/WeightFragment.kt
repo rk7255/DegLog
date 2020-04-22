@@ -1,17 +1,20 @@
-package jp.ryuk.deglog.ui.diarydetail.details
+package jp.ryuk.deglog.ui.diarylist.lists
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.adapters.*
 import jp.ryuk.deglog.data.DiaryRepository
 import jp.ryuk.deglog.databinding.FragmentWeightBinding
+import jp.ryuk.deglog.ui.diarylist.DiaryListFragmentDirections
 
 class WeightFragment(private val selectedName: String) : Fragment() {
 
@@ -28,11 +31,21 @@ class WeightFragment(private val selectedName: String) : Fragment() {
         binding.viewModel = weightViewModel
         binding.lifecycleOwner = this
 
+        weightViewModel.navigateToDiaryDetail.observe(viewLifecycleOwner, Observer { key ->
+            if (key != null) {
+                this.findNavController().navigate(
+                    DiaryListFragmentDirections.actionDiaryListFragmentToDiaryDetailFragment(key))
+                weightViewModel.doneNavigateToDiary()
+            }
+        })
+
         /**
          * RecyclerView
          */
         val recyclerView = binding.recyclerViewWeight
-        val adapter = WeightAdapter(WeightListener { /* click listener */ })
+        val adapter = WeightAdapter(WeightListener { id ->
+            weightViewModel.onClickDiary(id)
+        })
         recyclerView.adapter = adapter
 
         weightViewModel.diaries.observe(viewLifecycleOwner, Observer {
