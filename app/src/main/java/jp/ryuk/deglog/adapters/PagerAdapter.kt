@@ -10,11 +10,11 @@ import jp.ryuk.deglog.ui.diarydetail.details.WeightFragment
 const val WEIGHT_PAGE_INDEX = DetailKey.FROM_WEIGHT
 const val LENGTH_PAGE_INDEX = DetailKey.FROM_LENGTH
 
-class PagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+class PagerAdapter(fragment: Fragment, selectedName: String) : FragmentStateAdapter(fragment) {
 
     private val tabFragmentsCreators: Map<Int, () -> Fragment> = mapOf(
-        WEIGHT_PAGE_INDEX to { WeightFragment() },
-        LENGTH_PAGE_INDEX to { LengthFragment() }
+        WEIGHT_PAGE_INDEX to { WeightFragment(selectedName) },
+        LENGTH_PAGE_INDEX to { LengthFragment(selectedName) }
     )
     override fun getItemCount(): Int = tabFragmentsCreators.size
 

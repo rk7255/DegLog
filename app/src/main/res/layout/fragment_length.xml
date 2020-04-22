@@ -6,16 +6,26 @@
 
     </data>
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         tools:context=".ui.diarydetail.details.LengthFragment">
 
         <TextView
             android:layout_width="match_parent"
             android:textSize="40sp"
-            android:layout_height="match_parent"
-            android:text="length fragment" />
+            android:layout_height="wrap_content"
+            android:text="LENGTH" />
 
-    </FrameLayout>
+
+        <TextView
+            android:id="@+id/length_from"
+            android:layout_width="match_parent"
+            android:textSize="40sp"
+            android:layout_height="wrap_content"
+            android:text="from *" />
+
+
+    </LinearLayout>
 </layout>

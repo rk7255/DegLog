@@ -53,6 +53,10 @@
             app:popEnterAnim="@anim/spread_in"
             app:popExitAnim="@anim/spread_out"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_newDiaryFragment_pop"
+            app:popUpTo="@id/newDiaryFragment"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/diaryDetailFragment"

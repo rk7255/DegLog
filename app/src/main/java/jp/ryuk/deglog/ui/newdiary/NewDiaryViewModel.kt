@@ -56,7 +56,7 @@ class NewDiaryViewModel(
     }
 
     fun onCancel() {
-        _navigateToDiary.value = true
+        _backToDiary.value = true
     }
 
     fun onClear() {
@@ -75,6 +75,15 @@ class NewDiaryViewModel(
     fun doneNavigateToDiary() {
         _navigateToDiary.value = false
     }
+
+    private var _backToDiary = MutableLiveData<Boolean>()
+    val backToDiary: LiveData<Boolean>
+        get() = _backToDiary
+    fun doneBackToDiary() {
+        _backToDiary.value = false
+    }
+
+
 
     private var _submitError = MutableLiveData<Boolean>()
     val submitError: LiveData<Boolean>

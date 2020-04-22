@@ -10,7 +10,7 @@ import androidx.databinding.DataBindingUtil
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.databinding.FragmentLengthBinding
 
-class LengthFragment : Fragment() {
+class LengthFragment(private val selectedName: String) : Fragment() {
 
     private lateinit var binding: FragmentLengthBinding
 
@@ -20,6 +20,9 @@ class LengthFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_length, container, false)
+
+        val str = "FROM $selectedName"
+        binding.lengthFrom.text = str
 
         /**
          * RecyclerView

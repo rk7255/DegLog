@@ -42,8 +42,6 @@ class NewDiaryFragment : Fragment() {
         binding.viewModel = newDiaryViewModel
         binding.lifecycleOwner = this
 
-        setObserve(newDiaryViewModel, binding)
-
         newDiaryViewModel.initialized.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 val adapter = ArrayAdapter(
@@ -53,6 +51,32 @@ class NewDiaryFragment : Fragment() {
                 )
                 (binding.newDiaryEditName.editText as? AutoCompleteTextView)?.setAdapter(adapter)
                 newDiaryViewModel.doneInitialized()
+            }
+        })
+
+        newDiaryViewModel.navigateToDiary.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                this.findNavController().navigate(
+                    NewDiaryFragmentDirections.actionNewDiaryFragmentToDiaryFragment()
+                )
+                newDiaryViewModel.doneNavigateToDiary()
+            }
+        })
+
+        newDiaryViewModel.backToDiary.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                this.findNavController().navigate(
+                    NewDiaryFragmentDirections.actionNewDiaryFragmentPop()
+                )
+                newDiaryViewModel.doneNavigateToDiary()
+            }
+        })
+
+        newDiaryViewModel.submitError.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                binding.newDiaryEditName.error = getString(R.string.name_empty_error_string)
+            } else {
+                binding.newDiaryEditName.error = null
             }
         })
 
@@ -72,27 +96,5 @@ class NewDiaryFragment : Fragment() {
         val viewModelFactory =
             NewDiaryViewModelFactory(selectedName, dataSourceDiary, dataSourceProfile)
         return ViewModelProvider(this, viewModelFactory).get(NewDiaryViewModel::class.java)
-    }
-
-    private fun setObserve(
-        newDiaryViewModel: NewDiaryViewModel,
-        binding: FragmentNewDiaryBinding
-    ) {
-        newDiaryViewModel.navigateToDiary.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                this.findNavController().navigate(
-                    NewDiaryFragmentDirections.actionNewDiaryFragmentToDiaryFragment()
-                )
-                newDiaryViewModel.doneNavigateToDiary()
-            }
-        })
-
-        newDiaryViewModel.submitError.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                binding.newDiaryEditName.error = getString(R.string.name_empty_error_string)
-            } else {
-                binding.newDiaryEditName.error = null
-            }
-        })
     }
 }

@@ -54,8 +54,8 @@ class DiaryFragment : Fragment() {
         })
 
         if (diaryViewModel.names.isNotEmpty()) {
-            setupChipGroup()
-
+            Log.d("DEBUG", diaryViewModel.selectedFilter)
+            setupChipGroup(diaryViewModel.selectedFilter)
         }
 
         diaryViewModel.navigateToDetail.observe(viewLifecycleOwner, Observer { key ->
@@ -92,8 +92,8 @@ class DiaryFragment : Fragment() {
         return binding.root
     }
 
-    private fun setupChipGroup() {
-        initChipGroup(diaryViewModel.names, binding.filterChipGroup)
+    private fun setupChipGroup(select: String = "") {
+        initChipGroup(diaryViewModel.names, binding.filterChipGroup, select)
         binding.filterChipGroup.setOnCheckedChangeListener { _, _ ->
             diaryViewModel.changeFilterNames(diaryViewModel.selectedFilter, 0)
         }
@@ -101,21 +101,20 @@ class DiaryFragment : Fragment() {
     }
 
     @SuppressLint("InflateParams")
-    private fun initChipGroup(items: List<String?>, chipGroup: ChipGroup) {
+    private fun initChipGroup(items: List<String?>, chipGroup: ChipGroup, select: String) {
         if (items.isNotEmpty()) {
             val chipInflater = LayoutInflater.from(activity!!)
             items.forEachIndexed { index, item ->
                 val chip = chipInflater.inflate(R.layout.chip_item_filter, null, false) as Chip
                 chip.id = View.generateViewId()
                 chip.text = item
-                chip.isChecked = index == 0
+                chip.isChecked = if (item == select) true else index == 0
                 chip.setOnCheckedChangeListener { buttonView, isChecked ->
                     if (isChecked) diaryViewModel.selectedFilter = buttonView.text.toString()
                 }
                 chipGroup.addView(chip)
             }
-            if (diaryViewModel.selectedFilter.isEmpty()) items[0].toString()
-            diaryViewModel.selectedFilter = items[0].toString()
+            if (diaryViewModel.selectedFilter.isEmpty()) diaryViewModel.selectedFilter = items[0].toString()
         }
     }
 
