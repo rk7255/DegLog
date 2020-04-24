@@ -6,7 +6,13 @@
     <data>
         <variable
             name="viewModel"
-            type="jp.ryuk.deglog.ui.diary.DiaryViewModel" />
+            type="jp.ryuk.deglog.ui.dashboard.DashboardViewModel" />
+        <variable
+            name="weight"
+            type="jp.ryuk.deglog.data.Dashboard" />
+        <variable
+            name="length"
+            type="jp.ryuk.deglog.data.Dashboard" />
         <variable
             name="key"
             type="jp.ryuk.deglog.ui.diarylist.ListKey" />
@@ -69,18 +75,18 @@
                 android:layout_height="wrap_content">
 
                 <LinearLayout
-                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                     <!-- Dashboard Weight Section Start -->
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/db_weight_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
                         android:elevation="4dp"
                         android:onClick="@{() -> viewModel.navigateToDetail(key.FROM_WEIGHT)}"
-                        android:layout_marginBottom="8dp"
                         app:cardCornerRadius="8dp">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -93,11 +99,11 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="16dp"
                                 android:gravity="center"
-                                android:text="@{viewModel.weightLatestDate}"
-                                tools:text="100日前"
+                                android:text="@{weight.date}"
                                 app:layout_constraintEnd_toEndOf="@+id/db_weight_icon"
                                 app:layout_constraintStart_toStartOf="@+id/db_weight_icon"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:text="100日前" />
 
                             <ImageView
                                 android:id="@+id/db_weight_icon"
@@ -124,7 +130,7 @@
                                 android:id="@+id/db_weight_latest_data"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.weightLatest}"
+                                android:text="@{weight.latest}"
                                 android:textSize="32sp"
                                 app:layout_constraintEnd_toEndOf="@+id/db_weight_latest"
                                 app:layout_constraintStart_toStartOf="@+id/db_weight_latest"
@@ -135,7 +141,7 @@
                                 android:id="@+id/db_weight_previous_data"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.weightPrev}"
+                                android:text="@{weight.prev}"
                                 android:textSize="24sp"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_weight_latest_data"
                                 app:layout_constraintEnd_toEndOf="@+id/db_weight_previous"
@@ -205,8 +211,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:onClick="@{() -> viewModel.navigateToDetail(key.FROM_LENGTH)}"
                         android:elevation="4dp"
+                        android:onClick="@{() -> viewModel.navigateToDetail(key.FROM_LENGTH)}"
                         app:cardCornerRadius="8dp">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
@@ -219,11 +225,11 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="16dp"
                                 android:gravity="center"
-                                android:text="@{viewModel.lengthLatestDate}"
-                                tools:text="100日前"
+                                android:text="@{length.date}"
                                 app:layout_constraintEnd_toEndOf="@+id/db_length_icon"
                                 app:layout_constraintStart_toStartOf="@+id/db_length_icon"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                tools:text="100日前" />
 
                             <ImageView
                                 android:id="@+id/db_length_icon"
@@ -250,7 +256,7 @@
                                 android:id="@+id/db_length_latest_data"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.lengthLatest}"
+                                android:text="@{length.latest}"
                                 android:textSize="32sp"
                                 app:layout_constraintEnd_toEndOf="@+id/db_length_latest"
                                 app:layout_constraintStart_toStartOf="@+id/db_length_latest"
@@ -261,7 +267,7 @@
                                 android:id="@+id/db_length_previous_data"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.lengthPrev}"
+                                android:text="@{length.prev}"
                                 android:textSize="24sp"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_length_latest_data"
                                 app:layout_constraintEnd_toEndOf="@+id/db_length_previous"
@@ -325,6 +331,116 @@
 
                     </com.google.android.material.card.MaterialCardView>
                     <!-- Dashboard Length Section End-->
+
+                    <!-- Dashboard Memo Section Start -->
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/db_memo_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:elevation="4dp"
+                        android:onClick="@{() -> viewModel.navigateToDetail(key.FROM_MEMO)}"
+                        app:cardCornerRadius="8dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <ImageView
+                                android:id="@+id/db_memo_icon"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginTop="16dp"
+                                android:layout_marginBottom="24dp"
+                                android:src="@drawable/ic_memo"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/db_memo_recent"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="最新のメモ"
+                                app:layout_constraintStart_toEndOf="@id/db_memo_icon"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/db_memo_icon" />
+
+                            <TextView
+                                android:id="@+id/db_memo_recent_first"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="24dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:text="新しいメモはありません"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toStartOf="@+id/db_memo_recent_first_date"
+                                app:layout_constraintStart_toEndOf="@+id/db_memo_icon"
+                                app:layout_constraintTop_toBottomOf="@+id/db_memo_recent" />
+
+                            <TextView
+                                android:id="@+id/db_memo_recent_first_date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="16dp"
+                                android:text="*分前"
+                                android:textSize="14sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/db_memo_recent_first"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/db_memo_recent_first" />
+
+                            <TextView
+                                android:id="@+id/db_memo_recent_second"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:text="（未着手）"
+                                android:textSize="18sp"
+                                app:layout_constraintEnd_toStartOf="@+id/db_memo_recent_second_date"
+                                app:layout_constraintStart_toStartOf="@+id/db_memo_recent_first"
+                                app:layout_constraintTop_toBottomOf="@+id/db_memo_recent_first" />
+
+                            <TextView
+                                android:id="@+id/db_memo_recent_second_date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                tools:text="2日前"
+                                android:textSize="14sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/db_memo_recent_second"
+                                app:layout_constraintEnd_toEndOf="@+id/db_memo_recent_first_date"
+                                app:layout_constraintTop_toTopOf="@+id/db_memo_recent_second" />
+
+                            <TextView
+                                android:id="@+id/db_memo_recent_third"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="16dp"
+                                tools:text="TextView"
+                                android:textSize="18sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/db_memo_recent_third_date"
+                                app:layout_constraintStart_toStartOf="@+id/db_memo_recent_second"
+                                app:layout_constraintTop_toBottomOf="@+id/db_memo_recent_second" />
+
+                            <TextView
+                                android:id="@+id/db_memo_recent_third_date"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="16dp"
+                                tools:text="10時間前"
+                                android:textSize="14sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/db_memo_recent_third"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/db_memo_recent_third" />
+
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+                    <!-- Dashboard Memo Section End-->
 
                 </LinearLayout>
 

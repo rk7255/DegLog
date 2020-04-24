@@ -8,9 +8,9 @@
 
     <fragment
         android:id="@+id/diaryFragment"
-        android:name="jp.ryuk.deglog.ui.diary.DiaryFragment"
+        android:name="jp.ryuk.deglog.ui.dashboard.DashboardFragment"
         android:label="fragment_diary"
-        tools:layout="@layout/fragment_diary">
+        tools:layout="@layout/fragment_dashboard">
         <action
             android:id="@+id/action_diaryFragment_to_newDiaryFragment"
             app:destination="@id/newDiaryFragment"

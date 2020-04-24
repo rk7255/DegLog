@@ -1,21 +1,19 @@
-package jp.ryuk.deglog.ui.diary
+package jp.ryuk.deglog.ui.dashboard
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import jp.ryuk.deglog.data.Dashboard
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
-import jp.ryuk.deglog.utilities.convertLongToDateString
 import jp.ryuk.deglog.utilities.convertLongToDateStringRelative
 import kotlinx.coroutines.*
 import kotlin.math.absoluteValue
 
-class DiaryViewModel(
+class DashboardViewModel(
     private val diaryDatabase: DiaryDao,
     application: Application
 ) : AndroidViewModel(application) {
@@ -54,42 +52,12 @@ class DiaryViewModel(
     }
 
     /**
-     * Chips Click Event
-     */
-    fun changeFilterNames(name: String, id: Int) {
-        uiScope.launch {
-            if (id >= 0) {
-                filteredDiaries.value = diaries.filter { it.name == name }
-
-                val weightList = filteredDiaries.value!!.mapNotNull(Diary::weight)
-                val lengthList = filteredDiaries.value!!.mapNotNull(Diary::length)
-                weights = if (weightList.size >= 7) weightList.subList(0, 7) else weightList
-                lengths = if (lengthList.size >= 7) lengthList.subList(0, 7) else lengthList
-
-                val dateOfWeight = getDateOfWeightLatest(name)
-                val dateOfLength = getDateOfLengthLatest(name)
-
-                createLineChart(weightChart, weights.reversed())
-                createLineChart(lengthChart, lengths.reversed())
-                changeDashboard(weights, dateOfWeight, lengths, dateOfLength)
-            }
-        }
-    }
-
-    /**
      * Dashboard
      */
     private var weights = listOf<Int>()
-    var weightLatest = MediatorLiveData<String>()
-    var weightLatestDate = MediatorLiveData<String>()
-    var weightPrev = MediatorLiveData<String>()
-    var weightDiff = MutableLiveData<String>()
-
     private var lengths = listOf<Int>()
-    var lengthLatest = MediatorLiveData<String>()
-    var lengthLatestDate = MediatorLiveData<String>()
-    var lengthPrev = MediatorLiveData<String>()
-    var lengthDiff = MutableLiveData<String>()
+    var weight = MediatorLiveData<Dashboard>()
+    var length = MediatorLiveData<Dashboard>()
 
     private var _changeDashboard = MutableLiveData<Boolean>()
     val changeDashboard: LiveData<Boolean>
@@ -98,21 +66,26 @@ class DiaryViewModel(
         _changeDashboard.value = false
     }
 
-    private fun changeDashboard(listOfWeight: List<Int>, dateOfWeight: Long, listOfLength: List<Int>, dateOfLength: Long) {
+    private fun changeDashboard(
+        listOfWeight: List<Int>, dateOfWeight: Long,
+        listOfLength: List<Int>, dateOfLength: Long) {
+
         val wgt = listEmptyCheck(listOfWeight)
         val len = listEmptyCheck(listOfLength)
 
-        weightLatest.value = latest(wgt, "g")
-        weightLatestDate.value = dateFormatter(dateOfWeight)
-        weightPrev.value = previous(wgt, "g")
-        weightDiff.value = difference(wgt)
-
-        lengthLatest.value = latest(len, "mm")
-        lengthLatestDate.value = dateFormatter(dateOfLength)
-        lengthPrev.value = previous(len, "mm")
-        lengthDiff.value = difference(len)
+        weight.value = newDashboard(wgt, dateOfWeight, "g")
+        length.value = newDashboard(len, dateOfLength, "mm")
 
         _changeDashboard.value = true
+    }
+
+    private fun newDashboard(dataList: List<Int>, date: Long, suffix: String): Dashboard {
+        val dashboard = Dashboard()
+        dashboard.latest = latest(dataList, suffix)
+        dashboard.date = dateFormatter(date)
+        dashboard.prev = previous(dataList, suffix)
+        dashboard.diff = difference(dataList)
+        return dashboard
     }
 
     private fun listEmptyCheck(dataList: List<Int>): List<Int> {
@@ -122,7 +95,6 @@ class DiaryViewModel(
             else -> dataList
         }
     }
-
     private fun dateFormatter(date: Long): String {
         return if (date == 0L) "no data" else convertLongToDateStringRelative(date)
     }
@@ -154,6 +126,33 @@ class DiaryViewModel(
     private fun diffPercent(first: Int, last: Int): Double {
         return (first.toDouble() / last.toDouble()) - 1
     }
+
+    /**
+     * Chips Click Event
+     */
+    fun changeFilterNames(name: String, id: Int) {
+        uiScope.launch {
+            if (id >= 0) {
+                filteredDiaries.value = diaries.filter { it.name == name }
+
+                val weightList = filteredDiaries.value!!.mapNotNull(Diary::weight)
+                val lengthList = filteredDiaries.value!!.mapNotNull(Diary::length)
+                weights = if (weightList.size >= 7) weightList.subList(0, 7) else weightList
+                lengths = if (lengthList.size >= 7) lengthList.subList(0, 7) else lengthList
+
+                val dateOfWeight = getDateOfWeightLatest(name)
+                val dateOfLength = getDateOfLengthLatest(name)
+                createLineChart(weightChart, weights.reversed())
+                createLineChart(lengthChart, lengths.reversed())
+
+                changeDashboard(
+                    weights, dateOfWeight,
+                    lengths, dateOfLength)
+            }
+        }
+    }
+
+
 
     /**
      * Chart

@@ -1,4 +1,4 @@
-package jp.ryuk.deglog.ui.diary
+package jp.ryuk.deglog.ui.dashboard
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -7,7 +7,6 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -15,17 +14,14 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.data.DiaryRepository
-import jp.ryuk.deglog.databinding.FragmentDiaryBinding
+import jp.ryuk.deglog.databinding.FragmentDashboardBinding
 import jp.ryuk.deglog.ui.diarylist.ListKey
 
-/**
- *  TODO 名前変更 : Diary -> DashBoard
- */
 
-class DiaryFragment : Fragment() {
+class DashboardFragment : Fragment() {
 
-    private lateinit var binding: FragmentDiaryBinding
-    private lateinit var diaryViewModel: DiaryViewModel
+    private lateinit var binding: FragmentDashboardBinding
+    private lateinit var dashboardViewModel: DashboardViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,69 +32,76 @@ class DiaryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_diary, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard, container, false)
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarDiary)
 
-        diaryViewModel = createViewModel()
+        dashboardViewModel = createViewModel()
 
-        binding.viewModel = diaryViewModel
+        binding.viewModel = dashboardViewModel
+        binding.weight = dashboardViewModel.weight.value
+        binding.length = dashboardViewModel.length.value
+
         binding.lifecycleOwner = this
 
-        diaryViewModel.weightChart = binding.dbWeightChart
-        diaryViewModel.lengthChart = binding.dbLengthChart
+        dashboardViewModel.weightChart = binding.dbWeightChart
+        dashboardViewModel.lengthChart = binding.dbLengthChart
 
-        diaryViewModel.initialized.observe(viewLifecycleOwner, Observer {
+        dashboardViewModel.initialized.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 setupChipGroup()
-                diaryViewModel.doneInitialized()
+                dashboardViewModel.doneInitialized()
             }
         })
 
-        if (diaryViewModel.names.isNotEmpty()) {
-            Log.d("DEBUG", diaryViewModel.selectedFilter)
-            setupChipGroup(diaryViewModel.selectedFilter)
+        if (dashboardViewModel.names.isNotEmpty()) {
+            Log.d("DEBUG", dashboardViewModel.selectedFilter)
+            setupChipGroup(dashboardViewModel.selectedFilter)
         }
 
-        diaryViewModel.navigateToDetail.observe(viewLifecycleOwner, Observer { key ->
+        dashboardViewModel.navigateToDetail.observe(viewLifecycleOwner, Observer { key ->
             if (key != null) {
                 this.findNavController().navigate(
-                    DiaryFragmentDirections.actionDiaryFragmentToDiaryDetailFragment(key, diaryViewModel.selectedFilter))
-                diaryViewModel.doneNavigateToDetail()
+                    DashboardFragmentDirections.actionDiaryFragmentToDiaryDetailFragment(key, dashboardViewModel.selectedFilter))
+                dashboardViewModel.doneNavigateToDetail()
             }
         })
 
         /**
          *  DashBoard
          */
-        diaryViewModel.changeDashboard.observe(viewLifecycleOwner, Observer {
+        dashboardViewModel.changeDashboard.observe(viewLifecycleOwner, Observer {
             if (it == true) {
+                binding.weight = dashboardViewModel.weight.value
+                binding.length = dashboardViewModel.length.value
+
                 binding.dbWeightDiff.setImageResource(
-                    when (diaryViewModel.weightDiff.value) {
+                    when (dashboardViewModel.weight.value!!.diff) {
                         "up" -> R.drawable.ic_up
                         "down" -> R.drawable.ic_down
                         else -> R.drawable.ic_flat
                     }
                 )
                 binding.dbLengthDiff.setImageResource(
-                    when (diaryViewModel.lengthDiff.value) {
+                    when (dashboardViewModel.length.value!!.diff) {
                         "up" -> R.drawable.ic_up
                         "down" -> R.drawable.ic_down
                         else -> R.drawable.ic_flat
                     }
                 )
-                diaryViewModel.doneChangeDashboard()
+                dashboardViewModel.doneChangeDashboard()
             }
         })
+
 
         return binding.root
     }
 
     private fun setupChipGroup(select: String = "") {
-        initChipGroup(diaryViewModel.names, binding.filterChipGroup, select)
+        initChipGroup(dashboardViewModel.names, binding.filterChipGroup, select)
         binding.filterChipGroup.setOnCheckedChangeListener { _, _ ->
-            diaryViewModel.changeFilterNames(diaryViewModel.selectedFilter, 0)
+            dashboardViewModel.changeFilterNames(dashboardViewModel.selectedFilter, 0)
         }
-        diaryViewModel.changeFilterNames(diaryViewModel.selectedFilter, 0)
+        dashboardViewModel.changeFilterNames(dashboardViewModel.selectedFilter, 0)
     }
 
     @SuppressLint("InflateParams")
@@ -111,19 +114,19 @@ class DiaryFragment : Fragment() {
                 chip.text = item
                 chip.isChecked = if (item == select) true else index == 0
                 chip.setOnCheckedChangeListener { buttonView, isChecked ->
-                    if (isChecked) diaryViewModel.selectedFilter = buttonView.text.toString()
+                    if (isChecked) dashboardViewModel.selectedFilter = buttonView.text.toString()
                 }
                 chipGroup.addView(chip)
             }
-            if (diaryViewModel.selectedFilter.isEmpty()) diaryViewModel.selectedFilter = items[0].toString()
+            if (dashboardViewModel.selectedFilter.isEmpty()) dashboardViewModel.selectedFilter = items[0].toString()
         }
     }
 
-    private fun createViewModel(): DiaryViewModel {
+    private fun createViewModel(): DashboardViewModel {
         val application = requireNotNull(this.activity).application
         val diaryDatabase = DiaryRepository.getInstance(application).diaryDao
-        val viewModelFactory = DiaryViewModelFactory(diaryDatabase, application)
-        return ViewModelProvider(this, viewModelFactory).get(DiaryViewModel::class.java)
+        val viewModelFactory = DashboardViewModelFactory(diaryDatabase, application)
+        return ViewModelProvider(this, viewModelFactory).get(DashboardViewModel::class.java)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -135,9 +138,9 @@ class DiaryFragment : Fragment() {
         when (item.itemId) {
             R.id.toolbar_add -> {
                 this.findNavController().navigate(
-                    DiaryFragmentDirections
+                    DashboardFragmentDirections
                         .actionDiaryFragmentToNewDiaryFragment(
-                            ListKey.FROM_UNKNOWN, -1 ,diaryViewModel.selectedFilter))
+                            ListKey.FROM_UNKNOWN, -1 ,dashboardViewModel.selectedFilter))
             }
         }
         return super.onOptionsItemSelected(item)
