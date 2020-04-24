@@ -1,4 +1,4 @@
-package jp.ryuk.deglog.ui.diarylist.lists
+package jp.ryuk.deglog.ui.diarylist.lists.length
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -8,20 +8,20 @@ import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
 import kotlinx.coroutines.*
 
-
-class WeightViewModel(
+class LengthViewModel(
     private val selectedName: String,
     private val diaryDatabase: DiaryDao
 ) : ViewModel() {
     private var viewModelJob = Job()
     private var uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
+    private var _diaries = listOf<Diary>()
     var diaries = MediatorLiveData<List<Diary>>()
-
 
     init {
         uiScope.launch {
-            diaries.value = getDiariesAtName(selectedName)
+            _diaries = getDiariesAtName(selectedName)
+            diaries.value = _diaries.filter { it.length != null }
         }
     }
 

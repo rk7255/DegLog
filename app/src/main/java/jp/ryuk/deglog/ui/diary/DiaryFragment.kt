@@ -16,6 +16,7 @@ import com.google.android.material.chip.ChipGroup
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.data.DiaryRepository
 import jp.ryuk.deglog.databinding.FragmentDiaryBinding
+import jp.ryuk.deglog.ui.diarylist.ListKey
 
 /**
  *  TODO 名前変更 : Diary -> DashBoard
@@ -135,7 +136,8 @@ class DiaryFragment : Fragment() {
             R.id.toolbar_add -> {
                 this.findNavController().navigate(
                     DiaryFragmentDirections
-                        .actionDiaryFragmentToNewDiaryFragment(diaryViewModel.selectedFilter))
+                        .actionDiaryFragmentToNewDiaryFragment(
+                            ListKey.FROM_UNKNOWN, -1 ,diaryViewModel.selectedFilter))
             }
         }
         return super.onOptionsItemSelected(item)

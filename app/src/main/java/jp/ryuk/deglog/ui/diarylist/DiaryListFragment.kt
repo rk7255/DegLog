@@ -11,6 +11,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.adapters.DiaryListPagerAdapter
 import jp.ryuk.deglog.adapters.LENGTH_PAGE_INDEX
+import jp.ryuk.deglog.adapters.MEMO_PAGE_INDEX
 import jp.ryuk.deglog.adapters.WEIGHT_PAGE_INDEX
 import jp.ryuk.deglog.databinding.FragmentDiaryListBinding
 
@@ -18,6 +19,7 @@ import jp.ryuk.deglog.databinding.FragmentDiaryListBinding
 class DiaryListFragment : Fragment() {
 
     private lateinit var binding: FragmentDiaryListBinding
+    private lateinit var args: DiaryListFragmentArgs
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,24 +28,33 @@ class DiaryListFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_diary_list, container, false)
 
-        val arguments = DiaryListFragmentArgs.fromBundle(arguments!!)
+        args = DiaryListFragmentArgs.fromBundle(arguments!!)
 
-        var fromKey = arguments.fromKey
+        var fromKey = args.fromKey
         when (fromKey) {
             ListKey.FROM_DETAIL_WEIGHT -> {
-                Snackbar.make(binding.root, "削除しました", Snackbar.LENGTH_LONG).show()
+                makeSnackBar(getString(R.string.delete_success))
                 fromKey = ListKey.FROM_WEIGHT
             }
             ListKey.FROM_DETAIL_LENGTH -> {
-                Snackbar.make(binding.root, "削除しました", Snackbar.LENGTH_LONG).show()
+                makeSnackBar(getString(R.string.delete_success))
+                fromKey = ListKey.FROM_LENGTH
+            }
+            ListKey.FROM_EDIT_WEIGHT -> {
+                makeSnackBar(getString(R.string.save_success))
+                fromKey = ListKey.FROM_WEIGHT
+            }
+            ListKey.FROM_EDIT_LENGTH -> {
+                makeSnackBar(getString(R.string.save_success))
                 fromKey = ListKey.FROM_LENGTH
             }
         }
+        binding.appBarDiaryList.title = args.selectedName + getString(R.string.title_diary_detail_at_name)
 
         val tabLayout = binding.diaryListTab
         val viewPager = binding.diaryListViewPager
 
-        viewPager.adapter = DiaryListPagerAdapter(this, arguments.selectedName)
+        viewPager.adapter = DiaryListPagerAdapter(this, args.selectedName)
         viewPager.setCurrentItem(fromKey, false)
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
@@ -53,10 +64,15 @@ class DiaryListFragment : Fragment() {
         return binding.root
     }
 
+    private fun makeSnackBar(text: String) {
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_LONG).show()
+    }
+
     private fun getTabTitle(position: Int): String? {
         return when (position) {
             WEIGHT_PAGE_INDEX -> getString(R.string.title_weight)
             LENGTH_PAGE_INDEX -> getString(R.string.title_length)
+            MEMO_PAGE_INDEX -> getString(R.string.title_memo)
             else -> null
         }
     }

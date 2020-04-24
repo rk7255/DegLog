@@ -1,25 +1,42 @@
 <resources>
     <string name="app_name">DegLog</string>
 
-    <string name="bottom_nav_diary">Diary</string>
-    <string name="bottom_nav_chart">Chart</string>
-    <string name="bottom_nav_profiles">Profile</string>
-    <string name="toolbar_filter">Filter</string>
+    <!-- Navigation -->
+    <string name="bottom_nav_diary">日誌</string>
+    <string name="bottom_nav_chart">グラフ</string>
+    <string name="bottom_nav_profiles">情報</string>
+    <string name="title_delete">削除</string>
+    <string name="title_edit">編集</string>
 
-    <string name="title_diary">DashBoard</string>
-    <string name="title_diary_detail">Detail</string>
-    <string name="title_chart">Chart</string>
-    <string name="title_profiles">Profiles</string>
-    <string name="title_weight">Weight</string>
-    <string name="title_length">Length</string>
+    <!-- Fragment Title -->
+    <string name="title_diary">ダッシュボード</string>
+    <string name="title_diary_detail">詳細</string>
+    <string name="title_diary_detail_at_name">の詳細</string>
+    <string name="title_chart">グラフ</string>
+    <string name="title_profiles">ペット情報</string>
+    <string name="title_weight">体重</string>
+    <string name="title_length">体長</string>
+    <string name="title_memo">メモ</string>
 
-    <string name="new_diary_title">New Diary</string>
-    <string name="name_empty_error_string">name must not be empty.</string>
-    <string name="other_empty_error_string">enter one or more items.</string>
+    <!-- New Diary -->
+    <string name="new_diary_title">日誌の追加</string>
+    <string name="edit_diary_title">日誌の編集</string>
+    <string name="name_empty_error_string">名前は入力必須項目です</string>
 
-
+    <!-- Data Suffix -->
     <string name="suffixText_weight">g</string>
     <string name="suffixText_length">mm</string>
+
+    <!-- Dialog -->
+    <string name="dialog_yes">はい</string>
+    <string name="dialog_no">いいえ</string>
+    <string name="dialog_cancel">キャンセル</string>
+    <string name="delete_title">削除しますか？</string>
+    <string name="delete_message">データは永久的に削除されます</string>
+    <string name="delete_success">削除しました</string>
+    <string name="save_title">上書きしますか？</string>
+    <string name="save_message">データを上書き保存します</string>
+    <string name="save_success">上書き保存しました</string>
 
     <string-array name="labels">
         <item>None</item>
@@ -30,7 +47,5 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_delete">Delete</string>
-    <string name="title_save">Save</string>
 
 </resources>

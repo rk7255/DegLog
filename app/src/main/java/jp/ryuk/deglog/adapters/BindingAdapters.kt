@@ -63,3 +63,14 @@ fun TextView.setDiaryMemoFormatted(memo: String?) {
         text = memo
     }
 }
+
+// メモ
+@BindingAdapter("detailMemoFormatted")
+fun TextView.setDetailMemoFormatted(memo: String?) {
+    text = if (memo.isNullOrEmpty()) {
+        "メモがありません"
+    } else {
+        memo
+    }
+}
+

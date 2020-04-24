@@ -33,12 +33,9 @@ class DiaryDetailViewModel(
     /**
      * onClick
      */
-    fun saveDiary(position: Int) {
+    fun editDiary(position: Int): Long {
         val diary = diaries.value!![position]
-        val newDiary = Diary()
-        newDiary.id = diary.id
-
-        updateDiary(newDiary)
+        return diary.id
     }
 
     fun deleteDiary(position: Int): String {

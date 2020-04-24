@@ -35,11 +35,12 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/new_diary_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
                     android:layout_marginBottom="24dp"
-                    android:text="@string/new_diary_title"
+                    tools:text="@string/new_diary_title"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -73,6 +74,7 @@
                     app:suffixText="@string/suffixText_weight">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/new_diary_edit_weight_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
@@ -92,6 +94,7 @@
                     app:suffixText="@string/suffixText_length">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/new_diary_edit_length_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
@@ -110,6 +113,7 @@
                     app:startIconDrawable="@drawable/ic_memo">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/new_diary_edit_memo_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:lines="2"

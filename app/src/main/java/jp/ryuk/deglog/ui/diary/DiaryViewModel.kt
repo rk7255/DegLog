@@ -141,12 +141,18 @@ class DiaryViewModel(
     }
 
     private fun difference(dataList: List<Int>): String {
-        val diff = dataList.first() - dataList.last()
+        val percent = diffPercent(dataList.first(), dataList.last())
+
         return when {
-            diff > 0 -> "up"
-            diff < 0 -> "down"
+            percent.absoluteValue < 0.02 -> "flat"
+            percent > 0 -> "up"
+            percent < 0 -> "down"
             else -> "flat"
         }
+    }
+
+    private fun diffPercent(first: Int, last: Int): Double {
+        return (first.toDouble() / last.toDouble()) - 1
     }
 
     /**

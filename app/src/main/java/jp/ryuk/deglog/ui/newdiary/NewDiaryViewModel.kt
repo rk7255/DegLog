@@ -3,6 +3,7 @@ package jp.ryuk.deglog.ui.newdiary
 import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.ryuk.deglog.data.Diary
@@ -15,6 +16,7 @@ import kotlin.random.Random
 
 
 class NewDiaryViewModel(
+    private val diaryId: Long,
     private val selectedName: String = "",
     private val diaryDatabase: DiaryDao,
     private val profileDatabase: ProfileDao
@@ -25,8 +27,10 @@ class NewDiaryViewModel(
 
     var names = listOf<String>()
 
+    var id: Long = -1L
+    var date: Long = 0L
     var name: String = selectedName
-    var weight: String? = null
+    var weight: String?= null
     var length: String? = null
     var memo: String? = null
 
@@ -34,7 +38,8 @@ class NewDiaryViewModel(
      * Initialize
      */
     init {
-        initialize()
+        id = diaryId
+        if (id == -1L) initialize() else initializeEdit()
     }
 
     private fun initialize() {
@@ -44,11 +49,29 @@ class NewDiaryViewModel(
         }
     }
 
+    private fun initializeEdit() {
+        uiScope.launch {
+            val diary = getDiary(id)
+            name = diary.name
+            date = diary.date
+            weight = diary.weight?.toString()
+            length = diary.length?.toString()
+            memo = diary.memo
+            _initialized.value = true
+        }
+    }
+
+
     /**
      * onClick
     */
     fun onSubmit() {
-        if (isInputDataValid()) insertNewDiary()
+        if (id == -1L) {
+            if (isInputDataValid()) insertNewDiary()
+        } else {
+            if (isInputDataValid()) updateDiary()
+        }
+
     }
 
     private fun isInputDataValid(): Boolean {
@@ -71,7 +94,7 @@ class NewDiaryViewModel(
     fun onAddDummy() {
         uiScope.launch {
 
-            for (m in 4..6) {
+            for (m in 1..3) {
                 for (d in 1..5) {
                     val loop = Random.nextInt(0, 3)
                     for (i in 0..loop) {
@@ -97,6 +120,15 @@ class NewDiaryViewModel(
     fun doneNavigateToDiary() {
         _navigateToDiary.value = false
     }
+
+    private var _navigateToDiaryDetail = MutableLiveData<Boolean>()
+    val navigateToDiaryDetail: LiveData<Boolean>
+        get() = _navigateToDiaryDetail
+    fun doneNavigateToDiaryDetail() {
+        _navigateToDiaryDetail.value = false
+    }
+
+
 
     private var _backToDiary = MutableLiveData<Boolean>()
     val backToDiary: LiveData<Boolean>
@@ -138,9 +170,38 @@ class NewDiaryViewModel(
         }
     }
 
+    private suspend fun update(diary: Diary) {
+        withContext(Dispatchers.IO) {
+            diaryDatabase.update(diary)
+        }
+    }
+
+    private fun updateDiary() {
+        uiScope.launch {
+            Log.d("DEBUG", "$id $name $weight $length $memo")
+
+            val newDiary = Diary()
+            newDiary.id = id
+            newDiary.name = name
+            newDiary.date = date
+            newDiary.weight = convertStringToInt(weight)
+            newDiary.length = convertStringToInt(length)
+            newDiary.memo = if (memo.isNullOrEmpty()) null else memo
+            Log.d("DEBUG", "Update Diary -> $newDiary")
+            update(newDiary)
+            _navigateToDiaryDetail.value = true
+        }
+    }
+
     private suspend fun getNames(): List<String> {
         return withContext(Dispatchers.IO) {
             diaryDatabase.getNames()
+        }
+    }
+
+    private suspend fun getDiary(id: Long): Diary {
+        return withContext(Dispatchers.IO) {
+            diaryDatabase.getDiary(id)
         }
     }
 

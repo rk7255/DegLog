@@ -1,8 +1,8 @@
 package jp.ryuk.deglog.ui.diarydetail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -19,8 +18,6 @@ import jp.ryuk.deglog.adapters.DiaryDetailPagerAdapter
 import jp.ryuk.deglog.data.DiaryRepository
 import jp.ryuk.deglog.databinding.FragmentDiaryDetailBinding
 import jp.ryuk.deglog.ui.diarylist.ListKey
-import jp.ryuk.deglog.ui.diarylist.lists.WeightViewModel
-import jp.ryuk.deglog.ui.diarylist.lists.WeightViewModelFactory
 import jp.ryuk.deglog.utilities.convertLongToDateStringOutYear
 
 
@@ -44,10 +41,11 @@ class DiaryDetailFragment : Fragment() {
             inflater, R.layout.fragment_diary_detail, container, false)
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarDiaryDetail)
         args = DiaryDetailFragmentArgs.fromBundle(arguments!!)
+        Log.d("DEBUG", "${args.fromKey}")
 
         diaryDetailViewModel = createViewModel(args.diaryKey, args.selectedName)
         binding.lifecycleOwner = this
-
+        binding.appBarDiaryDetail.title = args.selectedName + getString(R.string.title_diary_detail_at_name)
 
         val viewPager = binding.diaryListViewPager
         tabLayout = binding.diaryDetailTab
@@ -92,36 +90,31 @@ class DiaryDetailFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val fromKey = when (args.fromKey) {
+            ListKey.FROM_WEIGHT -> ListKey.FROM_DETAIL_WEIGHT
+            ListKey.FROM_LENGTH -> ListKey.FROM_DETAIL_LENGTH
+            else -> ListKey.FROM_UNKNOWN
+        }
+
         when (item.itemId) {
             R.id.toolbar_delete -> {
                 MaterialAlertDialogBuilder(context)
-                    .setTitle("削除しますか？")
-                    .setMessage("データは永久に削除されます")
-                    .setNeutralButton("キャンセル") { _, _ -> }
-                    .setPositiveButton("はい") { _, _ ->
+                    .setTitle(getString(R.string.delete_title))
+                    .setMessage(getString(R.string.delete_message))
+                    .setNeutralButton(getString(R.string.dialog_cancel)) { _, _ -> }
+                    .setPositiveButton(getString(R.string.dialog_yes)) { _, _ ->
                         val deleteName = diaryDetailViewModel.deleteDiary(getTabPos())
-                        val fromKey = when (args.fromKey) {
-                            ListKey.FROM_WEIGHT -> ListKey.FROM_DETAIL_WEIGHT
-                            ListKey.FROM_LENGTH -> ListKey.FROM_DETAIL_LENGTH
-                            else -> ListKey.FROM_UNKNOWN
-                        }
-
                         this.findNavController().navigate(
                             DiaryDetailFragmentDirections
-                                .actionDiaryDetailFragmentToDiaryListFragment(fromKey, deleteName)
-                        )
+                                .actionDiaryDetailFragmentToDiaryListFragment(fromKey, deleteName))
                     }
                     .show()
             }
-            R.id.toolbar_save -> {
-                MaterialAlertDialogBuilder(context)
-                    .setTitle("上書き保存しますか？")
-                    .setNeutralButton("キャンセル") { _, _ -> }
-                    .setPositiveButton("はい") { _, _ ->
-                        diaryDetailViewModel.deleteDiary(getTabPos())
-                        Snackbar.make(binding.root, "上書きしました", Snackbar.LENGTH_LONG).show()
-                    }
-                    .show()
+            R.id.toolbar_edit -> {
+                this.findNavController().navigate(
+                    DiaryDetailFragmentDirections.actionDiaryDetailFragmentToNewDiaryFragment(
+                        fromKey, diaryDetailViewModel.editDiary(getTabPos()), args.selectedName)
+                )
             }
         }
         return super.onOptionsItemSelected(item)

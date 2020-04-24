@@ -5,7 +5,7 @@
     <data>
         <variable
             name="viewModel"
-            type="jp.ryuk.deglog.ui.diarylist.lists.length.LengthViewModel" />
+            type="jp.ryuk.deglog.ui.diarylist.lists.memo.MemoViewModel" />
     </data>
 
     <FrameLayout
@@ -14,7 +14,7 @@
         android:orientation="vertical">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_length"
+            android:id="@+id/recycler_view_memo"
             android:layout_width="match_parent"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:orientation="vertical"

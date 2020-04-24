@@ -11,7 +11,7 @@
 
         <variable
             name="clickListener"
-            type="jp.ryuk.deglog.adapters.WeightListener" />
+            type="jp.ryuk.deglog.adapters.MemoListener" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -38,7 +38,7 @@
 
             <TextView
                 android:id="@+id/weight_data"
-                diaryWeightFormatted="@{diary.weight}"
+                diaryMemoFormatted="@{diary.memo}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -47,7 +47,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/weight_date"
                 app:layout_constraintTop_toTopOf="@+id/weight_date"
-                tools:text="300 g" />
+                tools:text="メモメモ" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 

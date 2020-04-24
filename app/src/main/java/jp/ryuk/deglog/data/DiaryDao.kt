@@ -36,4 +36,5 @@ interface DiaryDao {
 
     @Query("SELECT date FROM diary_table WHERE (name = :name AND length IS NOT NULL) ORDER BY date DESC LIMIT 1")
     fun getDateOfLengthLatest(name: String): Long
+
 }
