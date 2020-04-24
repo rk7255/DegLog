@@ -15,6 +15,7 @@ import jp.ryuk.deglog.adapters.*
 import jp.ryuk.deglog.data.DiaryRepository
 import jp.ryuk.deglog.databinding.FragmentLengthBinding
 import jp.ryuk.deglog.ui.diarylist.DiaryListFragmentDirections
+import jp.ryuk.deglog.ui.diarylist.ListKey
 
 class LengthFragment(private val selectedName: String) : Fragment() {
 
@@ -34,7 +35,7 @@ class LengthFragment(private val selectedName: String) : Fragment() {
         lengthViewModel.navigateToDiaryDetail.observe(viewLifecycleOwner, Observer { key ->
             if (key != null) {
                 this.findNavController().navigate(
-                    DiaryListFragmentDirections.actionDiaryListFragmentToDiaryDetailFragment(key))
+                    DiaryListFragmentDirections.actionDiaryListFragmentToDiaryDetailFragment(ListKey.FROM_WEIGHT, key, selectedName))
                 lengthViewModel.doneNavigateToDiary()
             }
         })

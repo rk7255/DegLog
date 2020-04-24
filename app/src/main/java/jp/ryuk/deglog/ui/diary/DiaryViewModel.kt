@@ -171,7 +171,7 @@ class DiaryViewModel(
         valuesSet.apply {
             lineWidth = 4f
             setDrawValues(false)
-            circleRadius = 2f
+            circleRadius = 6f
         }
 
         chart.apply {

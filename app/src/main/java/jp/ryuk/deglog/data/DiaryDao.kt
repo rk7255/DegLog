@@ -10,8 +10,8 @@ interface DiaryDao {
     @Update
     fun update(diary: Diary)
 
-    @Delete
-    fun delete(diary: Diary)
+    @Query("DELETE FROM diary_table WHERE id = :id")
+    fun deleteById(id: Long)
 
     @Query("SELECT * FROM diary_table ORDER BY date DESC")
     fun getDiaries() : List<Diary>

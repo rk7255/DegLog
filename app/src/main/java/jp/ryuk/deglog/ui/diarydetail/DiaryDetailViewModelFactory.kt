@@ -6,12 +6,13 @@ import jp.ryuk.deglog.data.DiaryDao
 
 class DiaryDetailViewModelFactory (
     private val diaryKey: Long,
+    private val selectedName: String,
     private val diaryDatabase: DiaryDao
 ) : ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(DiaryDetailViewModel::class.java)) {
-            return DiaryDetailViewModel(diaryKey, diaryDatabase) as T
+            return DiaryDetailViewModel(diaryKey, selectedName, diaryDatabase) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }

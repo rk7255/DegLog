@@ -21,7 +21,7 @@
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/app_bar_diary_detail"
+                android:id="@+id/app_bar_diary_list"
                 style="@style/Widget.Deglog.Toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height"
@@ -29,9 +29,11 @@
                 app:title="@string/title_diary_detail" />
 
             <com.google.android.material.tabs.TabLayout
-                android:id="@+id/diary_detail_tab"
+                android:id="@+id/diary_list_tab"
                 android:layout_width="match_parent"
                 app:layout_scrollFlags="scroll|enterAlways"
+                app:tabTextColor="@color/primaryTextColor"
+                app:tabIndicatorColor="@color/primaryTextColor"
                 style="@style/Widget.MaterialComponents.TabLayout.Colored"
                 android:layout_height="@dimen/toolbar_height" />
 
@@ -44,7 +46,7 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/diary_detail_view_pager"
+                android:id="@+id/diary_list_view_pager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
         </FrameLayout>

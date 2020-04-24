@@ -10,7 +10,7 @@ import jp.ryuk.deglog.ui.diarylist.lists.WeightFragment
 const val WEIGHT_PAGE_INDEX = ListKey.FROM_WEIGHT
 const val LENGTH_PAGE_INDEX = ListKey.FROM_LENGTH
 
-class PagerAdapter(fragment: Fragment, selectedName: String) : FragmentStateAdapter(fragment) {
+class DiaryListPagerAdapter(fragment: Fragment, selectedName: String) : FragmentStateAdapter(fragment) {
 
     private val tabFragmentsCreators: Map<Int, () -> Fragment> = mapOf(
         WEIGHT_PAGE_INDEX to { WeightFragment(selectedName) },
