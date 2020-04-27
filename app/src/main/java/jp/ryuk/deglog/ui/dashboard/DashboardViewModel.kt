@@ -54,8 +54,8 @@ class DashboardViewModel(
     /**
      * Dashboard
      */
-    private var weights = listOf<Int>()
-    private var lengths = listOf<Int>()
+    private var weights = listOf<Float>()
+    private var lengths = listOf<Float>()
     var weight = MediatorLiveData<Dashboard>()
     var length = MediatorLiveData<Dashboard>()
 
@@ -67,8 +67,8 @@ class DashboardViewModel(
     }
 
     private fun changeDashboard(
-        listOfWeight: List<Int>, dateOfWeight: Long,
-        listOfLength: List<Int>, dateOfLength: Long) {
+        listOfWeight: List<Float>, dateOfWeight: Long,
+        listOfLength: List<Float>, dateOfLength: Long) {
 
         val wgt = listEmptyCheck(listOfWeight)
         val len = listEmptyCheck(listOfLength)
@@ -79,7 +79,7 @@ class DashboardViewModel(
         _changeDashboard.value = true
     }
 
-    private fun newDashboard(dataList: List<Int>, date: Long, suffix: String): Dashboard {
+    private fun newDashboard(dataList: List<Float>, date: Long, suffix: String): Dashboard {
         val dashboard = Dashboard()
         dashboard.latest = latest(dataList, suffix)
         dashboard.date = dateFormatter(date)
@@ -88,9 +88,9 @@ class DashboardViewModel(
         return dashboard
     }
 
-    private fun listEmptyCheck(dataList: List<Int>): List<Int> {
+    private fun listEmptyCheck(dataList: List<Float>): List<Float> {
         return when {
-            dataList.isEmpty() -> listOf(0, 0)
+            dataList.isEmpty() -> listOf(0f, 0f)
             dataList.size == 1 -> dataList.plus(dataList)
             else -> dataList
         }
@@ -99,11 +99,11 @@ class DashboardViewModel(
         return if (date == 0L) "no data" else convertLongToDateStringRelative(date)
     }
 
-    private fun latest(dataList: List<Int>, suffix: String): String {
+    private fun latest(dataList: List<Float>, suffix: String): String {
         return "${dataList[0]} $suffix"
     }
 
-    private fun previous(dataList: List<Int>, suffix: String): String {
+    private fun previous(dataList: List<Float>, suffix: String): String {
         val diff = (dataList[0] - dataList[1])
         return when {
             diff > 0 -> "+ ${diff.absoluteValue} $suffix"
@@ -112,7 +112,7 @@ class DashboardViewModel(
         }
     }
 
-    private fun difference(dataList: List<Int>): String {
+    private fun difference(dataList: List<Float>): String {
         val percent = diffPercent(dataList.first(), dataList.last())
 
         return when {
@@ -123,7 +123,7 @@ class DashboardViewModel(
         }
     }
 
-    private fun diffPercent(first: Int, last: Int): Double {
+    private fun diffPercent(first: Float, last: Float): Double {
         return (first.toDouble() / last.toDouble()) - 1
     }
 
@@ -157,13 +157,12 @@ class DashboardViewModel(
     /**
      * Chart
      */
-    private fun createLineChart(chart: LineChart, data: List<Int>) {
-        chart.setNoDataText("データがありません")
+    private fun createLineChart(chart: LineChart, data: List<Float>) {
         chart.description.text = ""
 
         val values = arrayListOf<Entry>()
         data.forEachIndexed { index, value ->
-            val entry = Entry(index.toFloat(), value.toFloat())
+            val entry = Entry(index.toFloat(), value)
             values.add(entry)
         }
         val valuesSet = LineDataSet(values, "")

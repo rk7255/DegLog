@@ -11,7 +11,7 @@
         android:title="@string/bottom_nav_chart"/>
 
     <item
-        android:id="@+id/reminderFragment"
-        android:icon="@drawable/nav_ic_notify"
+        android:id="@+id/profilesFragment"
+        android:icon="@drawable/nav_ic_profile"
         android:title="@string/bottom_nav_profiles"/>
 </menu>

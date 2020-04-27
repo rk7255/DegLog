@@ -44,14 +44,14 @@ fun TextView.setWeightDateFormatted(item: Long?){
 
 // 体重
 @BindingAdapter("diaryWeightFormatted")
-fun TextView.setDiaryWeightFormatted(weight: Int?) {
+fun TextView.setDiaryWeightFormatted(weight: Float?) {
     weight?.let {
         text = convertWeight(weight)
     }
 }
 // 体長
 @BindingAdapter("diaryLengthFormatted")
-fun TextView.setDiaryLengthFormatted(length: Int?) {
+fun TextView.setDiaryLengthFormatted(length: Float?) {
     length?.let {
         text = convertLength(length)
     }

@@ -18,19 +18,20 @@
         android:fitsSystemWindows="true">
 
         <androidx.core.widget.NestedScrollView
-            android:id="@+id/new_diary_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/colorBackground"
-            android:focusable="true"
             app:elevation="8dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <LinearLayout
+                android:id="@+id/new_diary_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/colorBackground"
                 android:fitsSystemWindows="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:gravity="center"
                 android:orientation="vertical">
 
@@ -39,9 +40,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="32dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginBottom="32dp"
                     tools:text="@string/new_diary_title"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3" />
+                    android:textAppearance="@style/Deglog.PageTitle" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/new_diary_edit_date"
+                    style="@style/Widget.Deglog.EditText"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    app:hintAnimationEnabled="false"
+                    android:layout_marginBottom="@dimen/margin_small"
+                    app:errorEnabled="true"
+                    app:startIconDrawable="@drawable/ic_calendar">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/new_diary_edit_date_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_date"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:onClick="@{() -> viewModel.onDate()}"
+                        android:inputType="datetime"
+                        android:text="@={viewModel.dateOfString}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/new_diary_edit_name"
@@ -49,7 +73,6 @@
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_small"
-                    android:hint="name*"
                     app:errorEnabled="true"
                     app:startIconDrawable="@drawable/nav_ic_diary">
 
@@ -57,6 +80,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="none"
+                        android:hint="@string/hint_name"
                         android:singleLine="true"
                         android:text="@={viewModel.name}" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -68,16 +92,16 @@
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_small"
-                    android:hint="weight"
                     app:errorEnabled="true"
                     app:startIconDrawable="@drawable/ic_weight"
-                    app:suffixText="@string/suffixText_weight">
+                    app:suffixText="@string/suffixText_weight_g">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/new_diary_edit_weight_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="number"
+                        android:hint="@string/hint_weight"
                         android:text="@={viewModel.weight}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -88,15 +112,15 @@
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_small"
-                    android:hint="length"
                     app:errorEnabled="true"
                     app:startIconDrawable="@drawable/ic_length"
-                    app:suffixText="@string/suffixText_length">
+                    app:suffixText="@string/suffixText_length_mm">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/new_diary_edit_length_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="@string/hint_length"
                         android:inputType="number"
                         android:text="@={viewModel.length}" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -108,7 +132,6 @@
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_small"
-                    android:hint="memo"
                     app:errorEnabled="true"
                     app:startIconDrawable="@drawable/ic_memo">
 
@@ -116,6 +139,7 @@
                         android:id="@+id/new_diary_edit_memo_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:hint="@string/hint_memo"
                         android:lines="2"
                         android:maxLines="2"
                         android:text="@={viewModel.memo}" />
@@ -146,19 +170,19 @@
                         android:text="Submit" />
                 </LinearLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="100dp"
-                    android:onClick="@{() -> viewModel.onAddDummy()}"
-                    android:text="[DEBUG] Add Dummy" />
+<!--                <com.google.android.material.button.MaterialButton-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="100dp"-->
+<!--                    android:onClick="@{() -> viewModel.onAddDummy()}"-->
+<!--                    android:text="[DEBUG] Add Dummy" />-->
 
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:onClick="@{() -> viewModel.onClear()}"
-                    android:text="[DEBUG] DB Clear" />
+<!--                <com.google.android.material.button.MaterialButton-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="8dp"-->
+<!--                    android:onClick="@{() -> viewModel.onClear()}"-->
+<!--                    android:text="[DEBUG] DB Clear" />-->
 
 
             </LinearLayout>

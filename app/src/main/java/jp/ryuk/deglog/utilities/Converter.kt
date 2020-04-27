@@ -16,6 +16,20 @@ fun convertYMDToLong(y: Int, m: Int, d: Int) : Long {
 }
 
 @SuppressLint("SimpleDateFormat")
+fun Long.getYear(): Int {
+    return SimpleDateFormat("yyyy").format(this).toInt()
+}
+@SuppressLint("SimpleDateFormat")
+fun Long.getMonth(): Int {
+    return SimpleDateFormat("M").format(this).toInt()
+}
+@SuppressLint("SimpleDateFormat")
+fun Long.getDayOfMonth(): Int {
+    return SimpleDateFormat("d").format(this).toInt()
+}
+
+
+@SuppressLint("SimpleDateFormat")
 fun convertLongToDateString(systemTime: Long): String {
     return SimpleDateFormat("yyyy/MM/dd")
         .format(systemTime).toString()
@@ -23,7 +37,7 @@ fun convertLongToDateString(systemTime: Long): String {
 
 @SuppressLint("SimpleDateFormat")
 fun convertLongToDateStringInTime(systemTime: Long): String {
-    return SimpleDateFormat("yyyy/MM/dd - HH:mm")
+    return SimpleDateFormat("yyyy/MM/dd HH:mm")
         .format(systemTime).toString()
 }
 
@@ -51,7 +65,7 @@ fun convertLongToDateStringRelative(systemTime: Long): String {
     val days = day * 2
 
     return when {
-        diff < 0 -> "0秒前"
+//        diff < 0 -> "0秒前"
         diff < second -> "${diff / minute}秒前"
         diff < hour -> "${diff / minute}分前"
         diff < day -> "${diff / hour}時間前"
@@ -70,17 +84,17 @@ fun convertIntToString(num: Int?): String {
     return num?.toString() ?: ""
 }
 
-fun convertStringToInt(str: String?): Int? {
-    return if (str.isNullOrEmpty()) null else str.toInt()
+fun convertStringToInt(str: String?): Float? {
+    return if (str.isNullOrEmpty()) null else str.toFloat()
 }
 
 /**
  * 体重と体長の単位付与
  */
-fun convertWeight(weight: Int?): String? {
+fun convertWeight(weight: Float?): String? {
     return if (weight == null) { null } else { "$weight g" }
 }
 
-fun convertLength(length: Int?): String? {
+fun convertLength(length: Float?): String? {
     return if (length == null) { null } else { "$length mm" }
 }

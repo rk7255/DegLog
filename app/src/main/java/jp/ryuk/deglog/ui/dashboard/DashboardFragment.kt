@@ -45,6 +45,8 @@ class DashboardFragment : Fragment() {
 
         dashboardViewModel.weightChart = binding.dbWeightChart
         dashboardViewModel.lengthChart = binding.dbLengthChart
+        binding.dbWeightChart.setNoDataText("")
+        binding.dbLengthChart.setNoDataText("")
 
         dashboardViewModel.initialized.observe(viewLifecycleOwner, Observer {
             if (it == true) {

@@ -27,16 +27,6 @@
             app:popExitAnim="@anim/spread_pop_in" />
     </fragment>
     <fragment
-        android:id="@+id/chartFragment"
-        android:name="jp.ryuk.deglog.ui.chart.ChartFragment"
-        android:label="fragment_chart"
-        tools:layout="@layout/fragment_chart" />
-    <fragment
-        android:id="@+id/reminderFragment"
-        android:name="jp.ryuk.deglog.ui.profile.ProfilesFragment"
-        android:label="fragment_reminder"
-        tools:layout="@layout/fragment_profiles" />
-    <fragment
         android:id="@+id/newDiaryFragment"
         android:name="jp.ryuk.deglog.ui.newdiary.NewDiaryFragment"
         android:label="fragment_new_diary"
@@ -124,4 +114,30 @@
             app:popEnterAnim="@anim/spread_pop_out"
             app:popExitAnim="@anim/spread_pop_in"/>
     </fragment>
+
+
+    <fragment
+        android:id="@+id/chartFragment"
+        android:name="jp.ryuk.deglog.ui.chart.ChartFragment"
+        android:label="fragment_chart"
+        tools:layout="@layout/fragment_chart" />
+
+
+    <fragment
+        android:id="@+id/profilesFragment"
+        android:name="jp.ryuk.deglog.ui.profile.profiles.ProfilesFragment"
+        android:label="fragment_profiles"
+        tools:layout="@layout/fragment_profiles" >
+        <action
+            android:id="@+id/action_profileFragment_to_newProfileFragment"
+            app:destination="@id/newProfileFragment"
+            app:enterAnim="@anim/spread_in"
+            app:exitAnim="@anim/spread_out"
+            app:popEnterAnim="@anim/spread_pop_out"
+            app:popExitAnim="@anim/spread_pop_in"/>
+    </fragment>
+    <fragment
+        android:id="@+id/newProfileFragment"
+        android:name="jp.ryuk.deglog.ui.profile.newprofile.NewProfileFragment"
+        android:label="NewProfileFragment" />
 </navigation>

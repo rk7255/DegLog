@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">DegLog</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- Navigation -->
     <string name="bottom_nav_diary">日誌</string>
@@ -22,10 +23,29 @@
     <string name="new_diary_title">日誌の追加</string>
     <string name="edit_diary_title">日誌の編集</string>
     <string name="name_empty_error_string">名前は入力必須項目です</string>
+    <string name="hint_date">日付</string>
+    <string name="hint_name">名前*</string>
+    <string name="hint_weight">体重</string>
+    <string name="hint_length">体長</string>
+    <string name="hint_memo">メモ</string>
+
+    <!-- New Profile -->
+    <string name="new_profile_title">ペット情報の登録</string>
+    <string name="edit_profile_title">ペット情報の編集</string>
+    <string name="hint_type">種類</string>
+    <string name="hint_gender">性別</string>
+    <string name="hint_gender_male">♂ オス</string>
+    <string name="hint_gender_female">♀ メス</string>
+    <string name="hint_gender_unknown">不明</string>
+    <string name="hint_birthday">誕生日</string>
+    <string name="hint_weight_unit">体重の単位</string>
+    <string name="hint_length_unit">体長の単位</string>
 
     <!-- Data Suffix -->
-    <string name="suffixText_weight">g</string>
-    <string name="suffixText_length">mm</string>
+    <string name="suffixText_weight_g">g</string>
+    <string name="suffixText_weight_kg">kg</string>
+    <string name="suffixText_length_mm">mm</string>
+    <string name="suffixText_length_m">m</string>
 
     <!-- Dialog -->
     <string name="dialog_yes">はい</string>
@@ -38,11 +58,32 @@
     <string name="save_message">データを上書き保存します</string>
     <string name="save_success">上書き保存しました</string>
 
-    <string-array name="labels">
-        <item>None</item>
-        <item>Red</item>
-        <item>Blue</item>
-        <item>Green</item>
+    <string-array name="types_big">
+        <item>牛</item>
+        <item>馬</item>
+    </string-array>
+
+    <string-array name="types_medium">
+        <item>犬</item>
+        <item>猫</item>
+    </string-array>
+
+    <string-array name="types_small">
+        <item>うさぎ</item>
+        <item>デグー</item>
+        <item>チンチラ</item>
+    </string-array>
+
+    <string-array name="weight_unit">
+        <item>g</item>
+        <item>kg</item>
+        <item>lbs</item>
+    </string-array>
+
+    <string-array name="length_unit">
+        <item>mm</item>
+        <item>m</item>
+        <item>ft</item>
     </string-array>
 
 </resources>

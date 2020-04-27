@@ -33,70 +33,16 @@
             android:fitsSystemWindows="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:orientation="horizontal"
-                android:layout_margin="16dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Filter: "/>
-
-<!--                <com.google.android.material.textfield.TextInputLayout-->
-<!--                    android:id="@+id/profiles_edit_label"-->
-<!--                    style="@style/Widget.Deglog.EditText_DropDown"-->
-<!--                    android:layout_width="160dp"-->
-<!--                    android:layout_marginEnd="16dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginBottom="@dimen/margin_small"-->
-<!--                    app:errorEnabled="true">-->
-
-<!--                    <AutoCompleteTextView-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:inputType="none"-->
-<!--                        android:hint="Label"-->
-<!--                        android:focusable="false"-->
-<!--                        android:focusableInTouchMode="false"-->
-<!--                        android:singleLine="true"-->
-<!--                        android:text=""/>-->
-<!--                </com.google.android.material.textfield.TextInputLayout>-->
-
-<!--                <com.google.android.material.textfield.TextInputLayout-->
-<!--                    android:id="@+id/profiles_edit_type"-->
-<!--                    style="@style/Widget.Deglog.EditText_DropDown"-->
-<!--                    android:layout_width="160dp"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:hint=""-->
-<!--                    android:layout_marginBottom="@dimen/margin_small"-->
-<!--                    app:errorEnabled="true">-->
-
-<!--                    <AutoCompleteTextView-->
-<!--                        android:layout_width="match_parent"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:inputType="none"-->
-<!--                        android:focusable="false"-->
-<!--                        android:hint="Type"-->
-<!--                        android:focusableInTouchMode="false"-->
-<!--                        android:singleLine="true"-->
-<!--                        android:text="" />-->
-<!--                </com.google.android.material.textfield.TextInputLayout>-->
-
-                <Spinner
-                    android:layout_width="wrap_content"
-                    android:entries="@array/labels"
-                    android:layout_height="wrap_content"/>
-
-            </LinearLayout>
-
-
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
+                <Button
+                    android:id="@+id/newProfileButton"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="new profile"/>
 
 
 

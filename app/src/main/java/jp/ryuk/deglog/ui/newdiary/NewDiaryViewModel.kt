@@ -9,9 +9,12 @@ import androidx.lifecycle.ViewModel
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.ProfileDao
+import jp.ryuk.deglog.utilities.convertLongToDateString
+import jp.ryuk.deglog.utilities.convertLongToDateStringInTime
 import jp.ryuk.deglog.utilities.convertStringToInt
 import jp.ryuk.deglog.utilities.convertYMDToLong
 import kotlinx.coroutines.*
+import java.util.*
 import kotlin.random.Random
 
 
@@ -26,13 +29,14 @@ class NewDiaryViewModel(
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     var names = listOf<String>()
-
     var id: Long = -1L
     var date: Long = 0L
+    var dateOfString = ""
     var name: String = selectedName
     var weight: String?= null
     var length: String? = null
     var memo: String? = null
+
 
     /**
      * Initialize
@@ -45,6 +49,8 @@ class NewDiaryViewModel(
     private fun initialize() {
         uiScope.launch {
             names = getNames()
+            date = Calendar.getInstance().timeInMillis
+            dateOfString = convertLongToDateStringInTime(date)
             _initialized.value = true
         }
     }
@@ -54,6 +60,7 @@ class NewDiaryViewModel(
             val diary = getDiary(id)
             name = diary.name
             date = diary.date
+            dateOfString = convertLongToDateStringInTime(date)
             weight = diary.weight?.toString()
             length = diary.length?.toString()
             memo = diary.memo
@@ -84,6 +91,7 @@ class NewDiaryViewModel(
         _backToDiary.value = true
     }
 
+    // DEBUG用
     fun onClear() {
         uiScope.launch {
             clear()
@@ -101,14 +109,18 @@ class NewDiaryViewModel(
                         val newDiary = Diary()
                         newDiary.date = convertYMDToLong(2020, m, d)
                         newDiary.name = name
-                        newDiary.weight = 250 + loop * Random.nextInt(1, 5)
-                        newDiary.length = 150 + loop * Random.nextInt(1, 5)
+                        newDiary.weight = 250f + loop * Random.nextInt(1, 5)
+                        newDiary.length = 150f + loop * Random.nextInt(1, 5)
                         insert(newDiary)
                     }
                 }
             }
             _navigateToDiary.value = true
         }
+    }
+
+    fun onDate() {
+        _getCalendar.value = true
     }
 
     /**
@@ -128,8 +140,6 @@ class NewDiaryViewModel(
         _navigateToDiaryDetail.value = false
     }
 
-
-
     private var _backToDiary = MutableLiveData<Boolean>()
     val backToDiary: LiveData<Boolean>
         get() = _backToDiary
@@ -148,6 +158,16 @@ class NewDiaryViewModel(
         _initialized.value = false
     }
 
+    private var _getCalendar = MutableLiveData<Boolean>()
+    val getCalendar: LiveData<Boolean>
+        get() = _getCalendar
+    fun doneGetCalendar(time: Long) {
+        date = time
+        dateOfString = convertLongToDateStringInTime(date)
+        _initialized.value = true
+        _getCalendar.value = false
+    }
+
     /**
      * Database
      */
@@ -161,6 +181,7 @@ class NewDiaryViewModel(
         uiScope.launch {
             val newDiary = Diary()
             newDiary.name = name
+            newDiary.date = date
             newDiary.weight = convertStringToInt(weight)
             newDiary.length = convertStringToInt(length)
             newDiary.memo = if (memo.isNullOrEmpty()) null else memo

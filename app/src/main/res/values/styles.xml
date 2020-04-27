@@ -6,6 +6,7 @@
         <item name="colorSecondary">@color/secondaryColor</item>
         <item name="android:textColorPrimary">@color/primaryTextColor</item>
         <item name="android:textColorSecondary">@color/secondaryTextColor</item>
+        <item name="android:timePickerDialogTheme">@style/MyTimePickerDialogStyle</item>
     </style>
 
     <style name="Widget.Deglog.Toolbar" parent="Widget.AppCompat.Toolbar">
@@ -15,23 +16,26 @@
         <item name="titleTextAppearance">@style/TextAppearance.Deglog.Toolbar</item>
     </style>
 
-
-<style name="Widget.Deglog.Toolbar.InRecyclerView" parent="Widget.Deglog.Toolbar">
-        <item name="android:background">@color/primaryLightColor</item>
-    </style>
-
-
-
     <style name="TextAppearance.Deglog.Toolbar" parent="TextAppearance.MaterialComponents.Button">
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="Widget.Deglog.Backdrop" parent="">
-        <item name="android:background">?attr/colorPrimary</item>
+    <style name="Widget.Deglog.EditText"
+        parent='Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense'/>
+
+    <style name="Widget.Deglog.EditText_DropDown"
+        parent='Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu'/>
+
+    <style name="MyTimePickerDialogStyle" parent="@style/ThemeOverlay.MaterialComponents.MaterialCalendar">
+        <item name="colorControlActivated">@color/primaryColor</item>
+        <item name="colorAccent">@color/primaryColor</item>
+        <item name="android:textColorPrimary">@color/primaryTextColor</item>
+        <item name="android:textColorSecondary">@color/primaryTextColor</item>
     </style>
 
-    <style name="Widget.Deglog.EditText" parent='Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense'>
+    <style name="Deglog.PageTitle" parent="@style/TextAppearance.MaterialComponents.Headline3">
+        <item name="android:textSize">40sp</item>
     </style>
 
-    <style name="Widget.Deglog.EditText_DropDown" parent='Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu'/>
+
 </resources>
