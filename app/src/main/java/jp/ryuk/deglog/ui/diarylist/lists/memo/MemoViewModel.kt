@@ -51,4 +51,9 @@ class MemoViewModel(
         }
     }
 
+
+    override fun onCleared() {
+        super.onCleared()
+        viewModelJob.cancel()
+    }
 }

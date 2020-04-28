@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="profile"
+            type="jp.ryuk.deglog.data.Profile" />
+        <variable
+            name="clickListener"
+            type="jp.ryuk.deglog.adapters.ProfileListener" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:onClick="@{() -> clickListener.onClick(profile)}"
+        android:layout_height="wrap_content">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@{profile.name}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/profile_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@{profile.type}"
+                app:layout_constraintStart_toEndOf="@+id/profile_name"
+                app:layout_constraintTop_toTopOf="@+id/profile_name" />
+
+            <TextView
+                android:id="@+id/profile_gender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@{profile.gender}"
+                app:layout_constraintStart_toEndOf="@id/profile_type"
+                app:layout_constraintTop_toTopOf="@id/profile_type" />
+
+            <TextView
+                android:id="@+id/profile_age"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@{String.valueOf(profile.birthday)}"
+                app:layout_constraintStart_toEndOf="@id/profile_gender"
+                app:layout_constraintTop_toTopOf="@id/profile_gender" />
+
+            <TextView
+                android:id="@+id/profile_unit_w"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@{profile.weightUnit}"
+                app:layout_constraintStart_toEndOf="@+id/profile_age"
+                app:layout_constraintTop_toTopOf="@+id/profile_age" />
+
+            <TextView
+                android:id="@+id/profile_unit_l"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@{profile.lengthUnit}"
+                app:layout_constraintStart_toEndOf="@+id/profile_unit_w"
+                app:layout_constraintTop_toTopOf="@+id/profile_unit_w" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</layout>

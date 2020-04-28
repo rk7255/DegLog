@@ -140,6 +140,9 @@
         android:id="@+id/newProfileFragment"
         android:name="jp.ryuk.deglog.ui.profile.newprofile.NewProfileFragment"
         android:label="NewProfileFragment" >
+        <argument
+            android:name="selectedName"
+            app:argType="string" />
         <action
             android:id="@+id/action_newProfileFragment_to_profilesFragment"
             app:destination="@id/profilesFragment"

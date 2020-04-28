@@ -2,16 +2,14 @@ package jp.ryuk.deglog.ui.profile.newprofile
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
@@ -28,6 +26,7 @@ class NewProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentNewProfileBinding
     private lateinit var newProfileViewModel: NewProfileViewModel
+    private lateinit var args: NewProfileFragmentArgs
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
@@ -37,13 +36,43 @@ class NewProfileFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_new_profile, container, false
         )
-        newProfileViewModel = createViewModel()
+        args = NewProfileFragmentArgs.fromBundle(arguments!!)
+        newProfileViewModel = createViewModel(args.selectedName)
 
         binding.lifecycleOwner = this
         binding.viewModel = newProfileViewModel
 
+        binding.newProfileTitle.text =
+            if (args.selectedName.isEmpty()) {
+                getString(R.string.new_profile_title)
+            } else {
+                getString(R.string.edit_profile_title)
+            }
+
+
         // キーボードの非表示
         binding.newProfileContainer.setOnTouchListener { view, event -> hideKeyboard(activity!!, view, event) }
+
+        // 更新
+        newProfileViewModel.initialized.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                binding.apply {
+                    newProfileEditNameText.setText(newProfileViewModel.name)
+                    newProfileEditTypeText.setText(newProfileViewModel.type)
+                    newProfileEditBirthdayText.setText(newProfileViewModel.birthdayString)
+                    newProfileEditWeightUnitText.setText(newProfileViewModel.unitWeight)
+                    newProfileEditLengthUnitText.setText(newProfileViewModel.unitLength)
+                    when (newProfileViewModel.gender) {
+                        "オス" -> genderMale.isChecked = true
+                        "メス" -> genderFemale.isChecked = true
+                        else -> genderUnknown.isChecked = true
+                    }
+                }
+                newProfileViewModel.doneInitialize()
+            }
+        })
+
+
 
         // 性別
         binding.newProfileToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
@@ -167,11 +196,11 @@ class NewProfileFragment : Fragment() {
             }
     }
 
-    private fun createViewModel(): NewProfileViewModel {
+    private fun createViewModel(selectedName: String): NewProfileViewModel {
         val application = requireNotNull(this.activity).application
         val dataSourceProfile = ProfileRepository.getInstance(application).profileDao
         val viewModelFactory =
-            NewProfileViewModelFactory(dataSourceProfile)
+            NewProfileViewModelFactory(selectedName, dataSourceProfile)
         return ViewModelProvider(this, viewModelFactory).get(NewProfileViewModel::class.java)
     }
 

@@ -32,8 +32,8 @@
     <string name="hint_memo">メモ</string>
 
     <!-- New Profile -->
-    <string name="new_profile_title">ペット情報の登録</string>
-    <string name="edit_profile_title">ペット情報の編集</string>
+    <string name="new_profile_title">情報の登録</string>
+    <string name="edit_profile_title">情報の更新</string>
     <string name="hint_type">種類</string>
     <string name="hint_gender">性別</string>
     <string name="hint_gender_male">オス</string>
