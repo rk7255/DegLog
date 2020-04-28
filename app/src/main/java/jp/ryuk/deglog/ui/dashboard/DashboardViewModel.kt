@@ -8,12 +8,15 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
+import jp.ryuk.deglog.data.Profile
+import jp.ryuk.deglog.data.ProfileDao
 import jp.ryuk.deglog.utilities.convertLongToDateStringRelative
 import kotlinx.coroutines.*
 import kotlin.math.absoluteValue
 
 class DashboardViewModel(
     private val diaryDatabase: DiaryDao,
+    private val profileDatabase: ProfileDao,
     application: Application
 ) : AndroidViewModel(application) {
 
@@ -23,7 +26,7 @@ class DashboardViewModel(
     private var diaries = listOf<Diary>()
     var names = listOf<String>()
     private var filteredDiaries = MediatorLiveData<List<Diary>>()
-    var isEmpty = MediatorLiveData<Boolean>()
+
 
     var selectedFilter = ""
     lateinit var weightChart: LineChart
@@ -40,7 +43,6 @@ class DashboardViewModel(
         uiScope.launch {
             names = getNames()
             diaries = getDiaries()
-            isEmpty.value = diaries.isEmpty()
             _initialized.value = true
         }
     }
@@ -68,24 +70,31 @@ class DashboardViewModel(
     }
 
     private fun changeDashboard(
-        listOfWeight: List<Float>, dateOfWeight: Long,
-        listOfLength: List<Float>, dateOfLength: Long) {
+        listOfWeight: List<Float>, dateOfWeight: Long, weightUnit: String,
+        listOfLength: List<Float>, dateOfLength: Long, lengthUnit: String) {
 
         val wgt = listEmptyCheck(listOfWeight)
         val len = listEmptyCheck(listOfLength)
 
-        weight.value = newDashboard(wgt, dateOfWeight, "g")
-        length.value = newDashboard(len, dateOfLength, "mm")
+        weight.value = newDashboard(wgt, dateOfWeight, weightUnit)
+        length.value = newDashboard(len, dateOfLength, lengthUnit)
 
         _changeDashboard.value = true
     }
 
     private fun newDashboard(dataList: List<Float>, date: Long, suffix: String): Dashboard {
         val dashboard = Dashboard()
-        dashboard.latest = latest(dataList, suffix)
+
+        val list = if (suffix == "kg" || suffix == "m") {
+            dataList
+        } else {
+            dataList
+        }
+
+        dashboard.latest = latest(list, suffix)
         dashboard.date = dateFormatter(date)
-        dashboard.prev = previous(dataList, suffix)
-        dashboard.diff = difference(dataList)
+        dashboard.prev = previous(list, suffix)
+        dashboard.diff = difference(list)
         return dashboard
     }
 
@@ -101,16 +110,30 @@ class DashboardViewModel(
     }
 
     private fun latest(dataList: List<Float>, suffix: String): String {
-        return "${dataList[0]} $suffix"
+        return when (suffix) {
+            "g" -> "${dataList[0]} g"
+            "kg" -> "${dataList[0] / 1000} kg"
+            "mm" -> "${dataList[0]} mm"
+            "m" -> "${dataList[0] / 1000} m"
+            else -> ""
+        }
     }
 
     private fun previous(dataList: List<Float>, suffix: String): String {
-        val diff = (dataList[0] - dataList[1])
+        val diff = when (suffix) {
+            "g" -> (dataList[0] - dataList[1])
+            "kg" -> (dataList[0] - dataList[1]) / 1000
+            "mm" -> (dataList[0] - dataList[1])
+            "m" -> (dataList[0] - dataList[1]) / 1000
+            else -> (dataList[0] - dataList[1])
+        }
+
         return when {
             diff > 0 -> "+ ${diff.absoluteValue} $suffix"
             diff < 0 -> "- ${diff.absoluteValue} $suffix"
             else -> "0 $suffix"
         }
+
     }
 
     private fun difference(dataList: List<Float>): String {
@@ -146,9 +169,11 @@ class DashboardViewModel(
                 createLineChart(weightChart, weights.reversed())
                 createLineChart(lengthChart, lengths.reversed())
 
+                val profile = getProfile(name)
+
                 changeDashboard(
-                    weights, dateOfWeight,
-                    lengths, dateOfLength)
+                    weights, dateOfWeight, profile.weightUnit,
+                    lengths, dateOfLength, profile.lengthUnit)
             }
         }
     }
@@ -237,6 +262,12 @@ class DashboardViewModel(
     private suspend fun getNames(): List<String> {
         return withContext(Dispatchers.IO) {
             diaryDatabase.getNames()
+        }
+    }
+
+    private suspend fun getProfile(name: String): Profile {
+        return withContext(Dispatchers.IO) {
+            profileDatabase.getProfile(name)
         }
     }
 

@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
+import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
 import jp.ryuk.deglog.utilities.tag
 import kotlinx.coroutines.*
@@ -37,7 +38,7 @@ class DiaryDetailViewModel(
     private fun initialize() {
         uiScope.launch {
             diaries = getDiaries(selectedName).reversed()
-            val birthday = getBirthday(selectedName)
+            val profile = getProfile(selectedName)
             val detailList = mutableListOf<Detail>()
 
             diaries.forEach { diary ->
@@ -45,10 +46,22 @@ class DiaryDetailViewModel(
                 detail.id = diary.id
                 detail.date = diary.date
                 detail.name = diary.name
-                detail.weight = diary.weight
-                detail.length = diary.length
+                diary.weight?.let {
+                    detail.weight = when (profile.weightUnit) {
+                        "g" -> "$it g"
+                        "kg" -> "${it / 1000} kg"
+                        else -> "$it"
+                    }
+                }
+                diary.length?.let {
+                    detail.length = when (profile.lengthUnit) {
+                        "mm" -> "$it mm"
+                        "m" -> "${it / 1000} m"
+                        else -> "$it"
+                    }
+                }
                 detail.memo = diary.memo
-                birthday?.let { detail.age = getAge(birthday, diary.date) }
+                profile.birthday?.let { detail.age = getAge(it, diary.date) }
                 detailList.add(detail)
             }
 
@@ -127,9 +140,9 @@ class DiaryDetailViewModel(
         }
     }
 
-    private suspend fun getBirthday(name: String): Long? {
+    private suspend fun getProfile(name: String): Profile {
         return withContext(Dispatchers.IO) {
-            profileDatabase.getBirthday(name)
+            profileDatabase.getProfile(name)
         }
     }
 

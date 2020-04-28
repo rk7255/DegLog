@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.adapters.*
 import jp.ryuk.deglog.data.DiaryRepository
+import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentLengthBinding
 import jp.ryuk.deglog.ui.diarylist.DiaryListFragmentDirections
 import jp.ryuk.deglog.ui.diarylist.ListKey
@@ -64,10 +65,12 @@ class LengthFragment(private val selectedName: String) : Fragment() {
     private fun createViewModel(selectedName: String): LengthViewModel {
         val application = requireNotNull(this.activity).application
         val dataSourceDiary = DiaryRepository.getInstance(application).diaryDao
+        val dataSourceProfile = ProfileRepository.getInstance(application).profileDao
         val viewModelFactory =
             LengthViewModelFactory(
                 selectedName,
-                dataSourceDiary
+                dataSourceDiary,
+                dataSourceProfile
             )
         return ViewModelProvider(this, viewModelFactory).get(LengthViewModel::class.java)
     }

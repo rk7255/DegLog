@@ -14,6 +14,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.data.DiaryRepository
+import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentDashboardBinding
 import jp.ryuk.deglog.ui.diarylist.ListKey
 
@@ -127,7 +128,8 @@ class DashboardFragment : Fragment() {
     private fun createViewModel(): DashboardViewModel {
         val application = requireNotNull(this.activity).application
         val diaryDatabase = DiaryRepository.getInstance(application).diaryDao
-        val viewModelFactory = DashboardViewModelFactory(diaryDatabase, application)
+        val profileDatabase = ProfileRepository.getInstance(application).profileDao
+        val viewModelFactory = DashboardViewModelFactory(diaryDatabase, profileDatabase, application)
         return ViewModelProvider(this, viewModelFactory).get(DashboardViewModel::class.java)
     }
 

@@ -6,11 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
+import jp.ryuk.deglog.data.Profile
+import jp.ryuk.deglog.data.ProfileDao
 import kotlinx.coroutines.*
 
 class LengthViewModel(
     private val selectedName: String,
-    private val diaryDatabase: DiaryDao
+    private val diaryDatabase: DiaryDao,
+    private val profileDatabase: ProfileDao
 ) : ViewModel() {
     private var viewModelJob = Job()
     private var uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
@@ -51,6 +54,11 @@ class LengthViewModel(
         }
     }
 
+    private suspend fun getProfile(name: String): Profile {
+        return withContext(Dispatchers.IO) {
+            profileDatabase.getProfile(name)
+        }
+    }
 
     override fun onCleared() {
         super.onCleared()

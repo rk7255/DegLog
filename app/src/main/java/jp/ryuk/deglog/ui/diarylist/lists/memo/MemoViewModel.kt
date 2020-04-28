@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
+import jp.ryuk.deglog.data.Profile
+import jp.ryuk.deglog.data.ProfileDao
 import kotlinx.coroutines.*
 
 class MemoViewModel(
@@ -50,7 +52,6 @@ class MemoViewModel(
             diaryDatabase.getDiariesAtName(name)
         }
     }
-
 
     override fun onCleared() {
         super.onCleared()

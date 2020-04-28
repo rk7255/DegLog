@@ -3,6 +3,7 @@ package jp.ryuk.deglog.ui.diarylist.lists.memo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import jp.ryuk.deglog.data.DiaryDao
+import jp.ryuk.deglog.data.ProfileDao
 
 class MemoViewModelFactory(
     private val selectedName: String = "",

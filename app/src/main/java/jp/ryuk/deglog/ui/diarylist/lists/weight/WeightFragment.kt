@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.adapters.*
 import jp.ryuk.deglog.data.DiaryRepository
+import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentWeightBinding
 import jp.ryuk.deglog.ui.diarylist.DiaryListFragmentDirections
 import jp.ryuk.deglog.ui.diarylist.ListKey
@@ -62,10 +63,12 @@ class WeightFragment(private val selectedName: String) : Fragment() {
     private fun createViewModel(selectedName: String): WeightViewModel {
         val application = requireNotNull(this.activity).application
         val dataSourceDiary = DiaryRepository.getInstance(application).diaryDao
+        val dataSourceProfile = ProfileRepository.getInstance(application).profileDao
         val viewModelFactory =
             WeightViewModelFactory(
                 selectedName,
-                dataSourceDiary
+                dataSourceDiary,
+                dataSourceProfile
             )
         return ViewModelProvider(this, viewModelFactory).get(WeightViewModel::class.java)
     }

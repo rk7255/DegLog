@@ -6,12 +6,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
+import jp.ryuk.deglog.data.Profile
+import jp.ryuk.deglog.data.ProfileDao
+import jp.ryuk.deglog.ui.diarydetail.Detail
 import kotlinx.coroutines.*
 
 
 class WeightViewModel(
     private val selectedName: String,
-    private val diaryDatabase: DiaryDao
+    private val diaryDatabase: DiaryDao,
+    private val profileDatabase: ProfileDao
 ) : ViewModel() {
     private var viewModelJob = Job()
     private var uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
@@ -49,6 +53,12 @@ class WeightViewModel(
     private suspend fun getDiariesAtName(name: String): List<Diary> {
         return withContext(Dispatchers.IO) {
             diaryDatabase.getDiariesAtName(name)
+        }
+    }
+
+    private suspend fun getProfile(name: String): Profile {
+        return withContext(Dispatchers.IO) {
+            profileDatabase.getProfile(name)
         }
     }
 
