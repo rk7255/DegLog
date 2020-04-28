@@ -6,9 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.databinding.DetailViewPagerBinding
+import jp.ryuk.deglog.ui.diarydetail.Detail
 
 class DiaryDetailPagerAdapter()
-    : androidx.recyclerview.widget.ListAdapter<Diary, DiaryDetailPagerAdapter.ViewHolder>(DetailDiffCallback()) {
+    : androidx.recyclerview.widget.ListAdapter<Detail, DiaryDetailPagerAdapter.ViewHolder>(DetailDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
@@ -21,7 +22,7 @@ class DiaryDetailPagerAdapter()
     class ViewHolder private constructor(private val binding: DetailViewPagerBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Diary) {
+        fun bind(item: Detail) {
             binding.diary = item
             binding.executePendingBindings()
         }
@@ -36,12 +37,12 @@ class DiaryDetailPagerAdapter()
     }
 }
 
-class DetailDiffCallback : DiffUtil.ItemCallback<Diary>() {
-    override fun areItemsTheSame(oldItem: Diary, newItem: Diary): Boolean {
+class DetailDiffCallback : DiffUtil.ItemCallback<Detail>() {
+    override fun areItemsTheSame(oldItem: Detail, newItem: Detail): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: Diary, newItem: Diary): Boolean {
+    override fun areContentsTheSame(oldItem: Detail, newItem: Detail): Boolean {
         return oldItem == newItem
     }
 }

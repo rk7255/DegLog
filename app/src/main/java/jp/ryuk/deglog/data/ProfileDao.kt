@@ -20,6 +20,9 @@ interface ProfileDao {
     @Query("SELECT * FROM profile_table WHERE name = :key")
     fun getProfile(key: String) : Profile
 
+    @Query("SELECT birthday FROM profile_table WHERE name = :name")
+    fun getBirthday(name: String): Long?
+
     @Query("SELECT name FROM profile_table")
     fun getNames() : List<String>
 

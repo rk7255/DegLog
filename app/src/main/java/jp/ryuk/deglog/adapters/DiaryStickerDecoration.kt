@@ -14,7 +14,7 @@ import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.data.Diary
-import jp.ryuk.deglog.utilities.getLongToMonth
+import jp.ryuk.deglog.utilities.getMonth
 import java.util.*
 import kotlin.math.min
 
@@ -46,7 +46,7 @@ class DiaryStickerDecoration(context: Context, val list: List<Diary>) : Recycler
         super.getItemOffsets(outRect, view, parent, state)
         val pos = parent.getChildAdapterPosition(view)
 
-        if (pos == 0 || getLongToMonth(list[pos].date) != getLongToMonth(list[pos - 1].date)) {
+        if (pos == 0 || list[pos].date.getMonth() != list[pos - 1].date.getMonth()) {
             outRect.top = sizeRect.toInt()
         }
     }
@@ -57,10 +57,10 @@ class DiaryStickerDecoration(context: Context, val list: List<Diary>) : Recycler
         for (i in 0 until parent.childCount) {
             val view = parent[i]
             val pos = parent.getChildAdapterPosition(view)
-            val month = "${getLongToMonth(list[pos].date)}月"
+            val month = "${list[pos].date.getMonth()}月"
 
             if (view.top > sizeRect) {
-                if (pos == 0 || getLongToMonth(list[pos].date) != getLongToMonth(list[pos - 1].date)) {
+                if (pos == 0 || list[pos].date.getMonth() != list[pos - 1].date.getMonth()) {
                     c.drawRect(
                         view.left.toFloat(),
                         view.top - sizeRect,
@@ -76,7 +76,7 @@ class DiaryStickerDecoration(context: Context, val list: List<Diary>) : Recycler
                     )
                 }
             } else {
-                if (pos + 1 < list.size && getLongToMonth(list[pos].date) != getLongToMonth(list[pos + 1].date)) {
+                if (pos + 1 < list.size && list[pos].date.getMonth() != list[pos + 1].date.getMonth()) {
 
                     val stickY = min(view.bottom.toFloat(), sizeRect)
 

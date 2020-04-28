@@ -8,14 +8,26 @@ import jp.ryuk.deglog.utilities.convertLongToDateStringInTime
 import jp.ryuk.deglog.utilities.convertLongToDateStringOutYear
 import jp.ryuk.deglog.utilities.convertWeight
 
+//@BindingAdapter("isGone")
+//fun bindIsGone(view: View, isGone: Boolean) {
+//    view.visibility = if (isGone) {
+//        View.GONE
+//    } else {
+//        View.VISIBLE
+//    }
+//}
+
 @BindingAdapter("isGone")
-fun bindIsGone(view: View, isGone: Boolean) {
-    view.visibility = if (isGone) {
+fun View.setVisibility(isGone: Boolean) {
+    visibility = if (isGone) {
         View.GONE
     } else {
         View.VISIBLE
     }
 }
+
+
+
 
 // 名前
 @BindingAdapter("diaryName")

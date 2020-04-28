@@ -216,7 +216,7 @@ class NewDiaryViewModel(
 
     private suspend fun getNames(): List<String> {
         return withContext(Dispatchers.IO) {
-            diaryDatabase.getNames()
+            profileDatabase.getNames()
         }
     }
 

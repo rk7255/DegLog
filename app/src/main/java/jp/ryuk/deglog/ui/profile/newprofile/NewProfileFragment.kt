@@ -156,7 +156,7 @@ class NewProfileFragment : Fragment() {
             .build()
             .apply {
                 addOnPositiveButtonClickListener { date ->
-                    selected.set(date.getYear(), date.getMonth() - 1, date.getDayOfMonth())
+                    selected.set(date.getYear(), date.getMonth()-1, date.getDayOfMonth(), 0, 0, 0)
                     editText.setText(convertLongToDateString(selected.timeInMillis))
                     newProfileViewModel.birthday = selected.timeInMillis
                 }

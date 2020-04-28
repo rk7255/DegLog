@@ -16,6 +16,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.adapters.DiaryDetailPagerAdapter
 import jp.ryuk.deglog.data.DiaryRepository
+import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentDiaryDetailBinding
 import jp.ryuk.deglog.ui.diarylist.ListKey
 import jp.ryuk.deglog.utilities.convertLongToDateStringOutYear
@@ -52,7 +53,7 @@ class DiaryDetailFragment : Fragment() {
         val adapter = DiaryDetailPagerAdapter()
         viewPager.adapter = adapter
 
-        diaryDetailViewModel.diaries.observe(viewLifecycleOwner, Observer {
+        diaryDetailViewModel.details.observe(viewLifecycleOwner, Observer {
             adapter.submitList(it)
         })
 
@@ -67,7 +68,7 @@ class DiaryDetailFragment : Fragment() {
 }
 
     private fun getTitle(position: Int): String? {
-        return diaryDetailViewModel.diaries.value?.get(position)?.date?.let {
+        return diaryDetailViewModel.details.value?.get(position)?.date?.let {
             convertLongToDateStringOutYear(it)
         }
     }
@@ -75,8 +76,9 @@ class DiaryDetailFragment : Fragment() {
     private fun createViewModel(diaryKey: Long, selectedName: String): DiaryDetailViewModel {
         val application = requireNotNull(this.activity).application
         val dataSourceDiary = DiaryRepository.getInstance(application).diaryDao
+        val dataSourceProfile = ProfileRepository.getInstance(application).profileDao
         val viewModelFactory =
-            DiaryDetailViewModelFactory(diaryKey, selectedName, dataSourceDiary)
+            DiaryDetailViewModelFactory(diaryKey, selectedName, dataSourceDiary, dataSourceProfile)
         return ViewModelProvider(this, viewModelFactory).get(DiaryDetailViewModel::class.java)
     }
 

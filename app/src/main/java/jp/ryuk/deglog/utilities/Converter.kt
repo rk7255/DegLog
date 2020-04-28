@@ -2,6 +2,8 @@ package jp.ryuk.deglog.utilities
 
 import android.annotation.SuppressLint
 import java.text.SimpleDateFormat
+import java.time.LocalTime
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 
@@ -48,12 +50,11 @@ fun convertLongToDateStringOutYear(systemTime: Long): String {
 }
 
 @SuppressLint("SimpleDateFormat")
-fun getLongToMonth(systemTime: Long): String {
-    return SimpleDateFormat("M")
+fun c(systemTime: Long): SimpleDateFormat {
+    val t = SimpleDateFormat("yyyy/MM/dd")
         .format(systemTime).toString()
+    return SimpleDateFormat(t, Locale.JAPAN)
 }
-
-
 
 @SuppressLint("SimpleDateFormat")
 fun convertLongToDateStringRelative(systemTime: Long): String {
@@ -65,17 +66,14 @@ fun convertLongToDateStringRelative(systemTime: Long): String {
     val days = day * 2
 
     return when {
-//        diff < 0 -> "0秒前"
+        diff < 0 -> "0秒前"
         diff < second -> "${diff / minute}秒前"
         diff < hour -> "${diff / minute}分前"
         diff < day -> "${diff / hour}時間前"
         diff < days -> "昨日"
         else -> "${diff / day}日前"
     }
-
 }
-
-
 
 /**
  * 型変換

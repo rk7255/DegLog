@@ -1,48 +1,82 @@
 package jp.ryuk.deglog.ui.diarydetail
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
+import jp.ryuk.deglog.data.ProfileDao
+import jp.ryuk.deglog.utilities.tag
 import kotlinx.coroutines.*
+import java.time.chrono.ChronoPeriod
+import java.time.temporal.ChronoUnit
+import java.util.*
 
 class DiaryDetailViewModel(
     private val diaryKey: Long,
     private val selectedName: String,
-    private val diaryDatabase: DiaryDao
+    private val diaryDatabase: DiaryDao,
+    private val profileDatabase: ProfileDao
 ) : ViewModel() {
     private var viewModelJob = Job()
     private var uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    var diaries = MediatorLiveData<List<Diary>>()
+    private var diaries = listOf<Diary>()
     private var _diaryPosition = MediatorLiveData<Int>()
     val diaryPosition: LiveData<Int>
         get() = _diaryPosition
+    var details = MediatorLiveData<List<Detail>>()
+
 
     init {
+        initialize()
+    }
+
+    private fun initialize() {
         uiScope.launch {
-            diaries.value = getDiaries(selectedName).reversed()
-            val ids = diaries.value!!.map(Diary::id)
+            diaries = getDiaries(selectedName).reversed()
+            val birthday = getBirthday(selectedName)
+            val detailList = mutableListOf<Detail>()
+
+            diaries.forEach { diary ->
+                val detail = Detail()
+                detail.id = diary.id
+                detail.date = diary.date
+                detail.name = diary.name
+                detail.weight = diary.weight
+                detail.length = diary.length
+                detail.memo = diary.memo
+                birthday?.let { detail.age = getAge(birthday, diary.date) }
+                detailList.add(detail)
+            }
+
+            details.value = detailList
+
+            val ids = diaries.map(Diary::id)
             _diaryPosition.value = ids.indexOf(diaryKey)
         }
+    }
+
+    private fun getAge(birthday: Long, date: Long): String {
+        val diffDays = (date - birthday) / (1000 * 60 * 60 * 24)
+
+        return "$diffDays 日"
     }
 
     /**
      * onClick
      */
     fun editDiary(position: Int): Long {
-        val diary = diaries.value!![position]
-        return diary.id
+        return details.value!![position].id
     }
 
     fun deleteDiary(position: Int): String {
-        val diary = diaries.value!![position]
-        val id = diary.id
+        val detail = details.value!![position]
+        val id = detail.id
         deleteById(id)
-        return diary.name
+        return detail.name
     }
 
     /**
@@ -93,10 +127,14 @@ class DiaryDetailViewModel(
         }
     }
 
+    private suspend fun getBirthday(name: String): Long? {
+        return withContext(Dispatchers.IO) {
+            profileDatabase.getBirthday(name)
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
         viewModelJob.cancel()
     }
-
-
 }

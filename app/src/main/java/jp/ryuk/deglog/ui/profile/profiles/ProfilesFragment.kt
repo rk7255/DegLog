@@ -40,6 +40,7 @@ class ProfilesFragment : Fragment() {
             inflater, R.layout.fragment_profiles, container, false)
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarProfiles)
         profilesViewModel = createViewModel()
+        binding.viewModel = profilesViewModel
 
 
         val recyclerView = binding.profilesRecyclerView

@@ -22,7 +22,8 @@ class DashboardViewModel(
 
     private var diaries = listOf<Diary>()
     var names = listOf<String>()
-    var filteredDiaries = MediatorLiveData<List<Diary>>()
+    private var filteredDiaries = MediatorLiveData<List<Diary>>()
+    var isEmpty = MediatorLiveData<Boolean>()
 
     var selectedFilter = ""
     lateinit var weightChart: LineChart
@@ -39,6 +40,7 @@ class DashboardViewModel(
         uiScope.launch {
             names = getNames()
             diaries = getDiaries()
+            isEmpty.value = diaries.isEmpty()
             _initialized.value = true
         }
     }

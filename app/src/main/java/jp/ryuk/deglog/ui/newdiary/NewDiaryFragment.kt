@@ -145,7 +145,7 @@ class NewDiaryFragment : Fragment() {
                     TimePickerDialog(
                         context,
                         TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-                            selected.set(date.getYear(), date.getMonth() - 1, date.getDayOfMonth(), hourOfDay, minute)
+                            selected.set(date.getYear(), date.getMonth()-1, date.getDayOfMonth(), hourOfDay, minute)
                             newDiaryViewModel.doneGetCalendar(selected.timeInMillis)
                         },
                         today.get(Calendar.HOUR_OF_DAY),

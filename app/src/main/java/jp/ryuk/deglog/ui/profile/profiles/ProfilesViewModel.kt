@@ -21,6 +21,10 @@ class ProfilesViewModel(
     var profiles = MediatorLiveData<List<Profile>>()
 
     init {
+        initialize()
+    }
+
+    private fun initialize() {
         uiScope.launch {
             _profiles = getProfiles()
             profiles.value = _profiles
@@ -32,6 +36,13 @@ class ProfilesViewModel(
      */
     fun onClickProfile(name: String) {
         _navigateToNewProfile.value = name
+    }
+
+    fun onClear() {
+        uiScope.launch {
+            clear()
+            initialize()
+        }
     }
 
     /**
@@ -50,6 +61,12 @@ class ProfilesViewModel(
     private suspend fun getProfiles(): List<Profile> {
         return withContext(Dispatchers.IO) {
             profileDatabase.getProfiles()
+        }
+    }
+
+    private suspend fun clear() {
+        withContext(Dispatchers.IO) {
+            profileDatabase.clear()
         }
     }
 

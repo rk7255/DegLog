@@ -21,6 +21,7 @@
 
     <!-- Error Message -->
     <string name="name_empty_error_string">名前は入力必須項目です</string>
+    <string name="dashboard_empty">データがありません\n右上の＋マークから追加できます！</string>
 
     <!-- New Diary -->
     <string name="new_diary_title">日誌の追加</string>

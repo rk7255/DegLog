@@ -56,7 +56,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="@{String.valueOf(profile.birthday)}"
+                diaryDateFormatted="@{profile.birthday}"
                 app:layout_constraintStart_toEndOf="@id/profile_gender"
                 app:layout_constraintTop_toTopOf="@id/profile_gender" />
 
