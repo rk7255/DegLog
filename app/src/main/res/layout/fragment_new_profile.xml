@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="viewModel"
+            type="jp.ryuk.deglog.ui.profile.newprofile.NewProfileViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -52,7 +54,7 @@
                         android:hint="@string/hint_name"
                         android:inputType="none"
                         android:singleLine="true"
-                        android:text="" />
+                        android:text="@={viewModel.name}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
@@ -71,7 +73,7 @@
                     android:gravity="center"
                     app:singleSelection="true">
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/gender_male"
                         style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="0dp"
@@ -79,7 +81,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/hint_gender_male" />
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/gender_female"
                         style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="0dp"
@@ -87,7 +89,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/hint_gender_female" />
 
-                    <Button
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/gender_unknown"
                         style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="0dp"
@@ -114,7 +116,7 @@
                             android:layout_height="wrap_content"
                             android:inputType="none"
                             android:singleLine="true"
-                            android:text="" />
+                            android:text="@={viewModel.type}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -137,77 +139,83 @@
                         android:focusableInTouchMode="false"
                         android:focusable="false"
                         android:inputType="datetime"
-                        android:text="" />
+                        android:text="@={viewModel.birthdayString}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="300dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_horizontal"
+                    android:layout_marginBottom="16dp"
                     android:layout_height="wrap_content">
+                    <TextView
+                        android:layout_width="140dp"
+                        android:id="@+id/unit_weight"
+                        android:gravity="center_horizontal"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        android:text="@string/hint_weight_unit"/>
 
                     <TextView
-                        android:layout_width="100dp"
+                        android:layout_width="140dp"
+                        android:id="@+id/unit_length"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        android:gravity="center_horizontal"
                         android:layout_height="wrap_content"
-                        android:text="体重の単位"/>
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:text="@string/hint_length_unit"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/new_profile_edit_weight_unit"
                         style="@style/Widget.Deglog.EditText"
-                        android:layout_width="200dp"
+                        android:layout_width="140dp"
                         android:layout_height="wrap_content"
                         app:endIconDrawable="@drawable/ic_picker"
                         app:endIconMode="custom"
-                        android:layout_marginBottom="16dp">
+                        app:layout_constraintEnd_toEndOf="@id/unit_weight"
+                        app:layout_constraintStart_toStartOf="@id/unit_weight"
+                        app:layout_constraintTop_toBottomOf="@+id/unit_weight">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/new_profile_edit_weight_unit_text"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="none"
-                            android:focusableInTouchMode="false"
                             android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:inputType="none"
+                            android:gravity="center_horizontal"
                             android:singleLine="true"
-                            android:text="" />
+                            android:text="@={viewModel.unitWeight}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="300dp"
-                    android:orientation="horizontal"
-                    android:gravity="center_horizontal"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:text="体長の単位"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/new_profile_edit_length_unit"
                         style="@style/Widget.Deglog.EditText"
-                        android:layout_width="200dp"
+                        android:layout_width="140dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        app:layout_constraintStart_toStartOf="@id/unit_length"
+                        app:layout_constraintEnd_toEndOf="@id/unit_length"
+                        app:layout_constraintTop_toBottomOf="@id/unit_length"
                         app:endIconDrawable="@drawable/ic_picker"
-                        app:endIconMode="custom"
-                        android:layout_marginBottom="16dp">
+                        app:endIconMode="custom">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/new_profile_edit_length_unit_text"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:inputType="none"
-                            android:focusableInTouchMode="false"
                             android:focusable="false"
+                            android:gravity="center_horizontal"
+                            android:focusableInTouchMode="false"
+                            android:inputType="none"
                             android:singleLine="true"
-                            android:text="" />
+                            android:text="@={viewModel.unitLength}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -221,6 +229,7 @@
                         style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:onClick="@{() -> viewModel.onCancel()}"
                         android:layout_marginEnd="@dimen/margin_large"
                         android:text="Cancel" />
 
@@ -228,6 +237,7 @@
                         android:id="@+id/new_profile_submit_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:onClick="@{() -> viewModel.onSubmit()}"
                         android:layout_marginStart="@dimen/margin_large"
                         android:text="Submit" />
                 </LinearLayout>

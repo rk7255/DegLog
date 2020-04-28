@@ -1,39 +1,30 @@
 package jp.ryuk.deglog.ui.newdiary
 
 import android.annotation.SuppressLint
-import android.app.Dialog
 import android.app.TimePickerDialog
-import android.content.Context
 import android.os.Bundle
-import android.text.format.DateFormat.is24HourFormat
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
-import android.widget.TimePicker
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.datepicker.MaterialStyledDatePickerDialog
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.data.DiaryRepository
 import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentNewDiaryBinding
 import jp.ryuk.deglog.ui.diarylist.ListKey
-import jp.ryuk.deglog.utilities.convertLongToDateStringInTime
 import jp.ryuk.deglog.utilities.getDayOfMonth
 import jp.ryuk.deglog.utilities.getMonth
 import jp.ryuk.deglog.utilities.getYear
-import java.text.DateFormat
+import jp.ryuk.deglog.utilities.hideKeyboard
 import java.util.*
 
 class NewDiaryFragment : Fragment() {
@@ -127,42 +118,44 @@ class NewDiaryFragment : Fragment() {
             }
         })
 
-        binding.newDiaryContainer.setOnTouchListener { v, event ->
-            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(v.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-            binding.newDiaryContainer.requestFocus()
-            v?.onTouchEvent(event) ?: true
-        }
+        // キーボードの非表示
+        binding.newDiaryContainer.setOnTouchListener { view, event -> hideKeyboard(activity!!, view, event) }
 
+        // 日付の選択
         newDiaryViewModel.getCalendar.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 val today = Calendar.getInstance()
                 val selected = Calendar.getInstance()
-                MaterialDatePicker.Builder.datePicker()
-                    .setSelection(today.timeInMillis)
-                    .setTitleText("日付の選択")
-                    .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
-                    .build()
-                    .apply {
-                    addOnPositiveButtonClickListener { time ->
-                        TimePickerDialog(
-                            context,
-                            TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-                                selected.set(time.getYear(), time.getMonth() - 1, time.getDayOfMonth(), hourOfDay, minute)
-                                Log.d("DEBUG", convertLongToDateStringInTime(selected.timeInMillis))
-                                newDiaryViewModel.doneGetCalendar(selected.timeInMillis)
-                            },
-                            today.get(Calendar.HOUR_OF_DAY),
-                            today.get(Calendar.MINUTE),
-                            true).show()
-                    }
-                }.show(parentFragmentManager,  "Tag")
+                showDateAndTimePicker(today, selected, parentFragmentManager)
             }
         })
 
 
         return binding.root
     }
+
+    private fun showDateAndTimePicker(today: Calendar, selected: Calendar, fm: FragmentManager) {
+        MaterialDatePicker.Builder.datePicker()
+            .setSelection(today.timeInMillis)
+            .setTitleText("日付の選択")
+            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+            .build()
+            .apply {
+                addOnPositiveButtonClickListener { date ->
+                    TimePickerDialog(
+                        context,
+                        TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+                            selected.set(date.getYear(), date.getMonth() - 1, date.getDayOfMonth(), hourOfDay, minute)
+                            newDiaryViewModel.doneGetCalendar(selected.timeInMillis)
+                        },
+                        today.get(Calendar.HOUR_OF_DAY),
+                        today.get(Calendar.MINUTE),
+                        true
+                    ).show()
+                }
+            }.show(fm, "Tag")
+    }
+
 
     private fun createViewModel(): NewDiaryViewModel {
         val application = requireNotNull(this.activity).application

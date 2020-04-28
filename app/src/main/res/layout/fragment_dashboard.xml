@@ -9,10 +9,10 @@
             type="jp.ryuk.deglog.ui.dashboard.DashboardViewModel" />
         <variable
             name="weight"
-            type="jp.ryuk.deglog.data.Dashboard" />
+            type="jp.ryuk.deglog.ui.dashboard.Dashboard" />
         <variable
             name="length"
-            type="jp.ryuk.deglog.data.Dashboard" />
+            type="jp.ryuk.deglog.ui.dashboard.Dashboard" />
         <variable
             name="key"
             type="jp.ryuk.deglog.ui.diarylist.ListKey" />

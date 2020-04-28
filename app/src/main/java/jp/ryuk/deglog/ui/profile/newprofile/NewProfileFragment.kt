@@ -1,30 +1,33 @@
 package jp.ryuk.deglog.ui.profile.newprofile
 
 import android.annotation.SuppressLint
-import android.app.TimePickerDialog
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-
 import jp.ryuk.deglog.R
+import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentNewProfileBinding
 import jp.ryuk.deglog.utilities.*
-import java.lang.StringBuilder
 import java.util.*
 
 
 class NewProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentNewProfileBinding
+    private lateinit var newProfileViewModel: NewProfileViewModel
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
@@ -32,114 +35,144 @@ class NewProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_new_profile, container, false)
+            inflater, R.layout.fragment_new_profile, container, false
+        )
+        newProfileViewModel = createViewModel()
 
-        binding.newProfileContainer.setOnTouchListener { v, event ->
-            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(v.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
-            binding.newProfileContainer.requestFocus()
-            v?.onTouchEvent(event) ?: true
+        binding.lifecycleOwner = this
+        binding.viewModel = newProfileViewModel
+
+        // キーボードの非表示
+        binding.newProfileContainer.setOnTouchListener { view, event -> hideKeyboard(activity!!, view, event) }
+
+        // 性別
+        binding.newProfileToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            if (isChecked) {
+                val select = group.findViewById<MaterialButton>(checkedId).text.toString()
+                newProfileViewModel.gender = select
+            }
         }
 
+        // 種類
+        val dialogType = typeDialogBuilder(binding.newProfileEditTypeText)
+        binding.newProfileEditType.setEndIconOnClickListener { dialogType.show() }
 
-        val types = arrayOf("小型", "中型", "大型")
+        // 誕生日
+        val etBirthday = binding.newProfileEditBirthdayText
+        etBirthday.setOnClickListener {
+            showDatePicker(etBirthday, parentFragmentManager)
+        }
+
+        // 単位
+        val dialogWeightUnit = unitDialogBuilder(
+            binding.newProfileEditWeightUnitText,
+            resources.getStringArray(R.array.weight_unit))
+        val dialogLengthUnit = unitDialogBuilder(
+            binding.newProfileEditLengthUnitText,
+            resources.getStringArray(R.array.length_unit))
+        binding.newProfileEditWeightUnit.setEndIconOnClickListener { dialogWeightUnit.show() }
+        binding.newProfileEditLengthUnit.setEndIconOnClickListener { dialogLengthUnit.show() }
+
+        // エラー
+        newProfileViewModel.submitError.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                binding.newProfileEditName.error = getString(R.string.name_empty_error_string)
+            } else {
+                binding.newProfileEditName.error = null
+            }
+        })
+
+        // ナビゲーション
+        newProfileViewModel.navigateToProfiles.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                this.findNavController().navigate(
+                    NewProfileFragmentDirections.actionNewProfileFragmentToProfilesFragment()
+                )
+                newProfileViewModel.doneNavigateToProfiles()
+            }
+        })
+
+        newProfileViewModel.backToProfiles.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                this.findNavController().navigate(
+                    NewProfileFragmentDirections.actionNewProfileFragmentPop()
+                )
+                newProfileViewModel.doneBackToProfiles()
+            }
+        })
+
+        return binding.root
+    }
+
+    private fun unitDialogBuilder(editText: EditText, units: Array<String>): MaterialAlertDialogBuilder {
+        return MaterialAlertDialogBuilder(context)
+            .setTitle(getString(R.string.choice_unit))
+            .setItems(units) { _, unit ->
+                when (unit) {
+                    0 -> editText.setText(units[0])
+                    1 -> editText.setText(units[1])
+                    2 -> editText.setText(units[2])
+                }
+            }
+    }
+
+    private fun showDatePicker(editText: EditText, fm: FragmentManager) {
+        val today = Calendar.getInstance()
+        val selected = Calendar.getInstance()
+
+        MaterialDatePicker.Builder.datePicker()
+            .setSelection(today.timeInMillis)
+            .setTitleText(getString(R.string.choice_date))
+            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
+            .build()
+            .apply {
+                addOnPositiveButtonClickListener { date ->
+                    selected.set(date.getYear(), date.getMonth() - 1, date.getDayOfMonth())
+                    editText.setText(convertLongToDateString(selected.timeInMillis))
+                    newProfileViewModel.birthday = selected.timeInMillis
+                }
+            }.show(fm, getString(R.string.dialog_tag))
+    }
+
+
+    private fun typeDialogBuilder(editText: EditText): MaterialAlertDialogBuilder {
+        val types = resources.getStringArray(R.array.types)
         val typesBig = resources.getStringArray(R.array.types_big)
         val typesMedium = resources.getStringArray(R.array.types_medium)
         val typesSmall = resources.getStringArray(R.array.types_small)
 
-        val dialogType = MaterialAlertDialogBuilder(context)
-            .setTitle("種類")
+        return MaterialAlertDialogBuilder(context)
+            .setTitle(getString(R.string.choice_type))
             .setItems(types) { _, size ->
-                val dialogType = MaterialAlertDialogBuilder(context)
                 when (size) {
                     0 -> {
-                        dialogType
-                            .setTitle("小型")
-                            .setItems(typesSmall) { _, type ->
-                            binding.newProfileEditTypeText.setText(typesSmall[type])
-                        }.show()
+                        MaterialAlertDialogBuilder(context)
+                            .setTitle(R.string.choice_type_small)
+                            .setItems(typesSmall) { _, type -> editText.setText(typesSmall[type]) }
+                            .show()
                     }
                     1 -> {
-                        dialogType
-                            .setTitle("中型")
-                            .setItems(typesMedium) { _, type ->
-                            binding.newProfileEditTypeText.setText(typesMedium[type])
-                        }.show()
+                        MaterialAlertDialogBuilder(context)
+                            .setTitle(R.string.choice_type_medium)
+                            .setItems(typesMedium) { _, type -> editText.setText(typesMedium[type]) }
+                            .show()
                     }
                     2 -> {
-                        dialogType
-                            .setTitle("大型")
-                            .setItems(typesBig) { _, type ->
-                            binding.newProfileEditTypeText.setText(typesBig[type])
-                        }.show()
+                        MaterialAlertDialogBuilder(context)
+                            .setTitle(R.string.choice_type_big)
+                            .setItems(typesBig) { _, type -> editText.setText(typesBig[type]) }
+                            .show()
                     }
                 }
             }
+    }
 
-        binding.newProfileEditType.setEndIconOnClickListener{ dialogType.show() }
-
-        // Birthday
-        binding.newProfileEditBirthdayText.setOnClickListener {
-            val today = Calendar.getInstance()
-            val selected = Calendar.getInstance()
-            MaterialDatePicker.Builder.datePicker()
-                .setSelection(today.timeInMillis)
-                .setTitleText("日付の選択")
-                .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
-                .build()
-                .apply {
-                    addOnPositiveButtonClickListener { time ->
-                        selected.set(time.getYear(), time.getMonth() - 1, time.getDayOfMonth())
-                        binding.newProfileEditBirthdayText.setText(convertLongToDateString(selected.timeInMillis))
-                    }
-                }.show(parentFragmentManager,  "Tag")
-        }
-
-        // Unit
-        val weightUnit = resources.getStringArray(R.array.weight_unit)
-        val lengthUnit = resources.getStringArray(R.array.length_unit)
-
-        val dialogWeightUnit = MaterialAlertDialogBuilder(context)
-            .setTitle("体重の単位")
-            .setItems(weightUnit) { _, unit ->
-                when (unit) {
-                    0 -> binding.newProfileEditWeightUnitText.setText(weightUnit[0])
-                    1 -> binding.newProfileEditWeightUnitText.setText(weightUnit[1])
-                    2 -> binding.newProfileEditWeightUnitText.setText(weightUnit[2])
-                }
-            }
-        val dialogLengthUnit = MaterialAlertDialogBuilder(context)
-            .setTitle("体重の単位")
-            .setItems(lengthUnit) { _, unit ->
-                when (unit) {
-                    0 -> binding.newProfileEditLengthUnitText.setText(lengthUnit[0])
-                    1 -> binding.newProfileEditLengthUnitText.setText(lengthUnit[1])
-                    2 -> binding.newProfileEditLengthUnitText.setText(lengthUnit[2])
-                }
-            }
-
-        binding.newProfileEditWeightUnit.setEndIconOnClickListener { dialogWeightUnit.show() }
-        binding.newProfileEditLengthUnit.setEndIconOnClickListener { dialogLengthUnit.show() }
-
-
-        // button
-        binding.newProfileSubmitButton.setOnClickListener {
-            val str = StringBuilder()
-            str.append("名前: ${binding.newProfileEditNameText.text}\n")
-            when (binding.newProfileToggleGroup.checkedButtonId) {
-                R.id.gender_male -> str.append("性別: オス\n")
-                R.id.gender_female -> str.append("性別: メス\n")
-                R.id.gender_unknown -> str.append("性別: 不明\n")
-            }
-            str.append("種類: ${binding.newProfileEditTypeText.text}\n")
-            str.append("誕生日: ${binding.newProfileEditBirthdayText.text}\n")
-            str.append("体重の単位: ${binding.newProfileEditWeightUnitText.text}\n")
-            str.append("体長の単位: ${binding.newProfileEditLengthUnitText.text}")
-
-            Toast.makeText(context, str, Toast.LENGTH_LONG).show()
-        }
-
-        return binding.root
+    private fun createViewModel(): NewProfileViewModel {
+        val application = requireNotNull(this.activity).application
+        val dataSourceProfile = ProfileRepository.getInstance(application).profileDao
+        val viewModelFactory =
+            NewProfileViewModelFactory(dataSourceProfile)
+        return ViewModelProvider(this, viewModelFactory).get(NewProfileViewModel::class.java)
     }
 
 }

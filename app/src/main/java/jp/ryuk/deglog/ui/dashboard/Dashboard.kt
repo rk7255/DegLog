@@ -1,4 +1,4 @@
-package jp.ryuk.deglog.data
+package jp.ryuk.deglog.ui.dashboard
 
 data class Dashboard(
     var latest: String = "",

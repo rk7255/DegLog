@@ -19,10 +19,12 @@
     <string name="title_length">体長</string>
     <string name="title_memo">メモ</string>
 
+    <!-- Error Message -->
+    <string name="name_empty_error_string">名前は入力必須項目です</string>
+
     <!-- New Diary -->
     <string name="new_diary_title">日誌の追加</string>
     <string name="edit_diary_title">日誌の編集</string>
-    <string name="name_empty_error_string">名前は入力必須項目です</string>
     <string name="hint_date">日付</string>
     <string name="hint_name">名前*</string>
     <string name="hint_weight">体重</string>
@@ -34,8 +36,8 @@
     <string name="edit_profile_title">ペット情報の編集</string>
     <string name="hint_type">種類</string>
     <string name="hint_gender">性別</string>
-    <string name="hint_gender_male">♂ オス</string>
-    <string name="hint_gender_female">♀ メス</string>
+    <string name="hint_gender_male">オス</string>
+    <string name="hint_gender_female">メス</string>
     <string name="hint_gender_unknown">不明</string>
     <string name="hint_birthday">誕生日</string>
     <string name="hint_weight_unit">体重の単位</string>
@@ -48,6 +50,7 @@
     <string name="suffixText_length_m">m</string>
 
     <!-- Dialog -->
+    <string name="dialog_tag">Tag</string>
     <string name="dialog_yes">はい</string>
     <string name="dialog_no">いいえ</string>
     <string name="dialog_cancel">キャンセル</string>
@@ -57,6 +60,18 @@
     <string name="save_title">上書きしますか？</string>
     <string name="save_message">データを上書き保存します</string>
     <string name="save_success">上書き保存しました</string>
+    <string name="choice_unit">単位の選択</string>
+    <string name="choice_date">単位の選択</string>
+    <string name="choice_type">種類の選択</string>
+    <string name="choice_type_small">小型</string>
+    <string name="choice_type_medium">中型</string>
+    <string name="choice_type_big">大型</string>
+
+    <string-array name="types">
+        <item>小型</item>
+        <item>中型</item>
+        <item>大型</item>
+    </string-array>
 
     <string-array name="types_big">
         <item>牛</item>
