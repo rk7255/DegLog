@@ -8,9 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import jp.ryuk.deglog.R
-import jp.ryuk.deglog.adapters.DiaryStickerDecoration
-import jp.ryuk.deglog.adapters.LengthAdapter
-import jp.ryuk.deglog.adapters.LengthListener
+import jp.ryuk.deglog.adapters.*
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.databinding.FragmentLengthBinding
 import jp.ryuk.deglog.ui.diarylist.DiaryListFragmentDirections
@@ -18,7 +16,8 @@ import jp.ryuk.deglog.ui.diarylist.ListKey
 
 class LengthFragment(
     private val selectedName: String,
-    private val diaries: List<Diary>) : Fragment() {
+    private val diaries: List<Diary>,
+    private val suffix: String) : Fragment() {
 
     private lateinit var binding: FragmentLengthBinding
 
@@ -31,7 +30,7 @@ class LengthFragment(
         binding.lifecycleOwner = this
 
         val recyclerView = binding.recyclerViewLength
-        val adapter = LengthAdapter(LengthListener { id -> onClick(id) })
+        val adapter = LengthAdapter(LengthListener { id -> onClick(id) }, suffix)
         recyclerView.adapter = adapter
 
         adapter.submitList(diaries)

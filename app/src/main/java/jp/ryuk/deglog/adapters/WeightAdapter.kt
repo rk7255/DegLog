@@ -3,27 +3,35 @@ package jp.ryuk.deglog.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.databinding.WeightItemBinding
 
-class WeightAdapter(private val clickListener: WeightListener)
-    : androidx.recyclerview.widget.ListAdapter<Diary, WeightAdapter.ViewHolder>(WeightDiffCallback()) {
+class WeightAdapter(
+    private val clickListener: WeightListener,
+    private val suffix: String
+) : ListAdapter<Diary, WeightAdapter.ViewHolder>(DiaryListDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position)!!, clickListener)
+        holder.bind(getItem(position)!!, clickListener, suffix)
     }
 
-    class ViewHolder private constructor(private val binding: WeightItemBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Diary, clickListener: WeightListener) {
+    class ViewHolder private constructor(
+        private val binding: WeightItemBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: Diary, clickListener: WeightListener, suffix: String) {
             binding.diary = item
+            binding.suffix = suffix
             binding.clickListener = clickListener
             binding.executePendingBindings()
         }
+
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
@@ -35,7 +43,7 @@ class WeightAdapter(private val clickListener: WeightListener)
     }
 }
 
-class WeightDiffCallback : DiffUtil.ItemCallback<Diary>() {
+class DiaryListDiffCallback : DiffUtil.ItemCallback<Diary>() {
     override fun areItemsTheSame(oldItem: Diary, newItem: Diary): Boolean {
         return oldItem.id == newItem.id
     }

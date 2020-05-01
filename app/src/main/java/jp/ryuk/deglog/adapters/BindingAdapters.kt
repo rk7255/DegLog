@@ -3,19 +3,7 @@ package jp.ryuk.deglog.adapters
 import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import jp.ryuk.deglog.utilities.convertLength
-import jp.ryuk.deglog.utilities.convertLongToDateStringInTime
-import jp.ryuk.deglog.utilities.convertLongToDateStringOutYear
-import jp.ryuk.deglog.utilities.convertWeight
-
-//@BindingAdapter("isGone")
-//fun bindIsGone(view: View, isGone: Boolean) {
-//    view.visibility = if (isGone) {
-//        View.GONE
-//    } else {
-//        View.VISIBLE
-//    }
-//}
+import jp.ryuk.deglog.utilities.*
 
 @BindingAdapter("isGone")
 fun View.setVisibility(isGone: Boolean) {
@@ -26,6 +14,14 @@ fun View.setVisibility(isGone: Boolean) {
     }
 }
 
+
+/**
+ * DiaryDetailList
+ */
+@BindingAdapter("number", "suffix")
+fun TextView.setDetailList(number: Float, suffix: String) {
+    text = convertUnit(number, suffix)
+}
 
 
 

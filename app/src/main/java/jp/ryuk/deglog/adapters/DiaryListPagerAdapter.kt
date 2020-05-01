@@ -13,19 +13,27 @@ const val WEIGHT_PAGE_INDEX = ListKey.FROM_WEIGHT
 const val LENGTH_PAGE_INDEX = ListKey.FROM_LENGTH
 const val MEMO_PAGE_INDEX = ListKey.FROM_MEMO
 
-class DiaryListPagerAdapter(fragment: Fragment, selectedName:String, list: List<Diary>) :
+class DiaryListPagerAdapter(
+    fragment: Fragment,
+    selectedName:String,
+    list: List<Diary>,
+    suffixWeight: String,
+    suffixLength: String
+) :
     FragmentStateAdapter(fragment) {
 
     private val tabFragmentsCreators: Map<Int, () -> Fragment> = mapOf(
         WEIGHT_PAGE_INDEX to {
             WeightFragment(
                 selectedName,
-                list.filter { it.weight != null })
+                list.filter { it.weight != null },
+                suffixWeight)
         },
         LENGTH_PAGE_INDEX to {
             LengthFragment(
                 selectedName,
-                list.filter { it.length != null })
+                list.filter { it.length != null },
+                suffixLength)
         },
         MEMO_PAGE_INDEX to {
             MemoFragment(

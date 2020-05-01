@@ -42,7 +42,6 @@ class DiaryDetailFragment : Fragment() {
             inflater, R.layout.fragment_diary_detail, container, false)
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarDiaryDetail)
         args = DiaryDetailFragmentArgs.fromBundle(arguments!!)
-        Log.d("DEBUG", "${args.fromKey}")
 
         diaryDetailViewModel = createViewModel(args.diaryKey, args.selectedName)
         binding.lifecycleOwner = this

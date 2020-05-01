@@ -18,7 +18,8 @@ import jp.ryuk.deglog.ui.diarylist.ListKey
 
 class WeightFragment(
     private val selectedName: String,
-    private val diaries: List<Diary>) : Fragment() {
+    private val diaries: List<Diary>,
+    private val suffix: String) : Fragment() {
 
     private lateinit var binding: FragmentWeightBinding
 
@@ -31,7 +32,7 @@ class WeightFragment(
         binding.lifecycleOwner = this
 
         val recyclerView = binding.recyclerViewWeight
-        val adapter = WeightAdapter(WeightListener { id -> onClick(id) })
+        val adapter = WeightAdapter(WeightListener { id -> onClick(id) }, suffix)
         recyclerView.adapter = adapter
 
         adapter.submitList(diaries)

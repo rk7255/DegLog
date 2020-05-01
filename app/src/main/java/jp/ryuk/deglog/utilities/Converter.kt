@@ -103,13 +103,16 @@ fun convertLength(length: Float?): String? {
  */
 fun convertUnit(number: Float, suffix: String): String {
     return when (suffix) {
-        "g" -> "${number.toInt()} g"
+        "g" -> "${roundDown(number)} g"
         "kg" -> "${roundUp(number)} kg"
-        "mm" -> "${number.toInt()} mm"
+        "mm" -> "${roundDown(number)} mm"
         "m" -> "${roundUp(number)} m"
         else -> "$number"
     }
 }
+
+private fun roundDown(number: Float): BigDecimal =
+    BigDecimal(number.toString()).setScale(0, RoundingMode.HALF_UP)
 
 private fun roundUp(number: Float): BigDecimal =
     BigDecimal((number / 1000).toString()).setScale(2, RoundingMode.HALF_UP)

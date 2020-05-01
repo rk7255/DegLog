@@ -3,27 +3,35 @@ package jp.ryuk.deglog.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.databinding.LengthItemBinding
 
-class LengthAdapter(private val clickListener: LengthListener)
-    : androidx.recyclerview.widget.ListAdapter<Diary, LengthAdapter.ViewHolder>(LengthDiffCallback()) {
+class LengthAdapter(
+    private val clickListener: LengthListener,
+    private val suffix: String
+) : ListAdapter<Diary, LengthAdapter.ViewHolder>(DiaryListDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position)!!, clickListener)
+        holder.bind(getItem(position)!!, clickListener, suffix)
     }
 
-    class ViewHolder private constructor(private val binding: LengthItemBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Diary, clickListener: LengthListener) {
+    class ViewHolder private constructor(
+        private val binding: LengthItemBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: Diary, clickListener: LengthListener, suffix: String) {
             binding.diary = item
+            binding.suffix = suffix
             binding.clickListener = clickListener
             binding.executePendingBindings()
         }
+
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)

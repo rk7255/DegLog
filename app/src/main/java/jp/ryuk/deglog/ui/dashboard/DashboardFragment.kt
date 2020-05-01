@@ -57,7 +57,6 @@ class DashboardFragment : Fragment() {
         })
 
         if (dashboardViewModel.names.isNotEmpty()) {
-            Log.d("DEBUG", dashboardViewModel.selectedFilter)
             setupChipGroup(dashboardViewModel.selectedFilter)
         }
 

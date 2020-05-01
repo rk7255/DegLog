@@ -10,6 +10,9 @@
         <variable
             name="clickListener"
             type="jp.ryuk.deglog.adapters.LengthListener" />
+        <variable
+            name="suffix"
+            type="String" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -24,7 +27,7 @@
 
 
             <TextView
-                android:id="@+id/weight_date"
+                android:id="@+id/length_date"
                 weightDateFormatted="@{diary.date}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -35,16 +38,17 @@
                 tools:text="10日 12:30" />
 
             <TextView
-                android:id="@+id/weight_data"
-                diaryLengthFormatted="@{diary.length}"
+                android:id="@+id/length_data"
+                number="@{diary.length}"
+                suffix="@{suffix}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginBottom="8dp"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/weight_date"
-                app:layout_constraintTop_toTopOf="@+id/weight_date"
+                app:layout_constraintStart_toEndOf="@+id/length_date"
+                app:layout_constraintTop_toTopOf="@+id/length_date"
                 tools:text="150 mm" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -26,7 +26,7 @@
 
 
             <TextView
-                android:id="@+id/weight_date"
+                android:id="@+id/memo_date"
                 weightDateFormatted="@{diary.date}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
                 tools:text="10日 12:30" />
 
             <TextView
-                android:id="@+id/weight_data"
+                android:id="@+id/memo_data"
                 diaryMemoFormatted="@{diary.memo}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -45,8 +45,8 @@
                 android:layout_marginBottom="8dp"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/weight_date"
-                app:layout_constraintTop_toTopOf="@+id/weight_date"
+                app:layout_constraintStart_toEndOf="@+id/memo_date"
+                app:layout_constraintTop_toTopOf="@+id/memo_date"
                 tools:text="メモメモ" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

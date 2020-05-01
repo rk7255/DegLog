@@ -1,6 +1,7 @@
 package jp.ryuk.deglog.ui.diarylist
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import jp.ryuk.deglog.R
@@ -18,6 +20,7 @@ import jp.ryuk.deglog.adapters.WEIGHT_PAGE_INDEX
 import jp.ryuk.deglog.data.DiaryRepository
 import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentDiaryListBinding
+import jp.ryuk.deglog.utilities.tag
 
 
 class DiaryListFragment : Fragment() {
@@ -35,9 +38,10 @@ class DiaryListFragment : Fragment() {
 
         args = DiaryListFragmentArgs.fromBundle(arguments!!)
         diaryListViewModel = createViewModel(args.selectedName)
+        binding.appBarDiaryList.title = args.selectedName + getString(R.string.title_diary_detail_at_name)
 
         var fromKey = args.fromKey
-        when (fromKey) {
+        when (args.fromKey) {
             ListKey.FROM_DETAIL_WEIGHT -> {
                 makeSnackBar(getString(R.string.delete_success))
                 fromKey = ListKey.FROM_WEIGHT
@@ -55,19 +59,34 @@ class DiaryListFragment : Fragment() {
                 fromKey = ListKey.FROM_LENGTH
             }
         }
-        binding.appBarDiaryList.title = args.selectedName + getString(R.string.title_diary_detail_at_name)
 
-        diaryListViewModel.diaries.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                val tabLayout = binding.diaryListTab
-                val viewPager = binding.diaryListViewPager
+        val tabLayout = binding.diaryListTab
+        val viewPager = binding.diaryListViewPager
 
-                viewPager.adapter = DiaryListPagerAdapter(this, args.selectedName , it)
-                viewPager.setCurrentItem(fromKey, false)
-                TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-                    tab.text = getTabTitle(position)
-                }.attach()
+        viewPager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                diaryListViewModel.position.value = position
             }
+        })
+
+        diaryListViewModel.initialized.observe(viewLifecycleOwner, Observer {
+            viewPager.adapter = DiaryListPagerAdapter(
+                this,
+                args.selectedName,
+                diaryListViewModel.diaries.value!!,
+                diaryListViewModel.suffixWeight.value!!,
+                diaryListViewModel.suffixLength.value!!
+            )
+            if (diaryListViewModel.position.value == null) {
+                viewPager.setCurrentItem(fromKey, false)
+            } else {
+                viewPager.setCurrentItem(diaryListViewModel.position.value!!, false)
+            }
+            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                tab.text = getTabTitle(position)
+            }.attach()
         })
 
 

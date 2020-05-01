@@ -6,7 +6,7 @@ import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.ProfileDao
 
 class DiaryListViewModelFactory(
-    private val selectedName: String = "",
+    private val selectedName: String,
     private val diaryDatabase: DiaryDao,
     private val profileDatabase: ProfileDao
 ) : ViewModelProvider.Factory {

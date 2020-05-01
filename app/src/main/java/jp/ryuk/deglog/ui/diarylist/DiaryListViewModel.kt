@@ -1,6 +1,8 @@
 package jp.ryuk.deglog.ui.diarylist
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
@@ -20,8 +22,14 @@ class DiaryListViewModel(
     private var viewModelJob = Job()
     private var uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private var _diaries = listOf<Diary>()
+    private var _initialized = MutableLiveData<Boolean>()
+    val initialized: LiveData<Boolean> get() = _initialized
+
     var diaries = MediatorLiveData<List<Diary>>()
+    var suffixWeight = MediatorLiveData<String>()
+    var suffixLength = MediatorLiveData<String>()
+
+    var position = MediatorLiveData<Int>()
 
     init {
         initialize()
@@ -29,8 +37,13 @@ class DiaryListViewModel(
 
     private fun initialize() {
         uiScope.launch {
-            _diaries = getDiariesAtName(selectedName)
-            diaries.value = _diaries
+            diaries.value = getDiariesAtName(selectedName)
+
+            val profile = getProfile(selectedName)
+            suffixWeight.value = profile.weightUnit
+            suffixLength.value = profile.lengthUnit
+
+            _initialized.value = true
         }
     }
 

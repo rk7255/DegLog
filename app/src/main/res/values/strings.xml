@@ -56,7 +56,7 @@
     <string name="dialog_no">いいえ</string>
     <string name="dialog_cancel">キャンセル</string>
     <string name="delete_title">削除しますか？</string>
-    <string name="delete_message">データは永久的に削除されます</string>
+    <string name="delete_message">この操作は取り消せません</string>
     <string name="delete_success">削除しました</string>
     <string name="save_title">上書きしますか？</string>
     <string name="save_message">データを上書き保存します</string>
