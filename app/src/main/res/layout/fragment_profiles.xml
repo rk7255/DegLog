@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="jp.ryuk.deglog.ui.profile.profiles.ProfilesViewModel" />
@@ -11,8 +12,8 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:background="@color/colorBackground"
         android:layout_height="match_parent"
+        android:background="@color/colorBackground"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -45,22 +46,22 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/profiles_recycler_view"
-                    android:layout_width="match_parent"
-                    tools:listitem="@layout/profiles_item"
-                    android:orientation="vertical"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:layout_height="match_parent"/>
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/profiles_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/profiles_item" />
 
-                <Button
-                    android:layout_gravity="center"
-                    android:layout_marginTop="100dp"
-                    android:layout_width="150dp"
-                    android:layout_height="wrap_content"
-                    android:text="[DEBUG] clear"
-                    android:onClick="@{() -> viewModel.onClear()}"
-                    tools:ignore="HardcodedText" />
+                    <Button
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="100dp"
+                        android:onClick="@{() -> viewModel.onClear()}"
+                        android:text="[DEBUG] clear"
+                        tools:ignore="HardcodedText" />
                 </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>

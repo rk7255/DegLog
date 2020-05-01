@@ -20,9 +20,9 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:elevation="0dp"
-        android:onClick="@{() -> clickListener.onClick(diary)}"
-        android:layout_height="wrap_content">
+        android:onClick="@{() -> clickListener.onClick(diary)}">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -34,8 +34,8 @@
                 weightDateFormatted="@{diary.date}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginStart="@dimen/margin_m"
+                android:layout_marginTop="@dimen/margin_m"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="10日 12:30" />
@@ -46,8 +46,8 @@
                 suffix="@{suffix}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginStart="@dimen/margin_l"
+                android:layout_marginBottom="@dimen/margin_m"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/weight_date"

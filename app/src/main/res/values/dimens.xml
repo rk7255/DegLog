@@ -7,18 +7,17 @@
     <dimen name="bottom_nav_icon_height">24dp</dimen>
 
     <dimen name="filter_height">48dp</dimen>
+    <dimen name="dashboard_icon_size">40dp</dimen>
+    <dimen name="dashboard_text_width">80dp</dimen>
+    <dimen name="dashboard_chart_height">80dp</dimen>
 
-    <dimen name="margin_small">4dp</dimen>
-    <dimen name="margin_medium">8dp</dimen>
-    <dimen name="margin_large">16dp</dimen>
-    <dimen name="margin_xlarge">32dp</dimen>
+    <dimen name="edit_text_width">300dp</dimen>
+    <dimen name="edit_text_width_half">140dp</dimen>
 
-    <dimen name="padding_small">4dp</dimen>
-    <dimen name="padding_medium">8dp</dimen>
-    <dimen name="padding_large">16dp</dimen>
-    <dimen name="padding_xlarge">32dp</dimen>
-
-
+    <dimen name="margin_s">4dp</dimen>
+    <dimen name="margin_m">8dp</dimen>
+    <dimen name="margin_l">16dp</dimen>
+    <dimen name="margin_xl">32dp</dimen>
 
     <dimen name="diary_item_date">18sp</dimen>
     <dimen name="diary_item_name">16sp</dimen>

@@ -36,8 +36,8 @@
                 app:tabIndicatorColor="@color/primaryTextColor"
                 app:tabIndicatorFullWidth="true"
                 app:tabMode="scrollable"
-                app:tabPaddingEnd="40sp"
-                app:tabPaddingStart="40dp"
+                app:tabPaddingEnd="@dimen/margin_xl"
+                app:tabPaddingStart="@dimen/margin_xl"
                 app:tabTextColor="@color/primaryTextColor" />
 
         </com.google.android.material.appbar.AppBarLayout>

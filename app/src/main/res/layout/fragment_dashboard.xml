@@ -4,15 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="jp.ryuk.deglog.ui.dashboard.DashboardViewModel" />
+
         <variable
             name="weight"
             type="jp.ryuk.deglog.ui.dashboard.Dashboard" />
+
         <variable
             name="length"
             type="jp.ryuk.deglog.ui.dashboard.Dashboard" />
+
         <variable
             name="key"
             type="jp.ryuk.deglog.ui.diarylist.ListKey" />
@@ -20,15 +24,15 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:background="@color/primaryColor"
         android:elevation="0dp"
-        android:layout_height="match_parent"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:elevation="0dp"
-            android:layout_height="@dimen/toolbar_height">
+            android:layout_height="@dimen/toolbar_height"
+            android:elevation="0dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/app_bar_diary"
@@ -44,7 +48,7 @@
             android:id="@+id/dashboard_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:elevation="8dp"
+            android:elevation="@dimen/margin_m"
             android:fitsSystemWindows="true"
             android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -59,11 +63,11 @@
                     android:id="@+id/filter_chip_group"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingStart="@dimen/padding_medium"
-                    android:paddingTop="@dimen/padding_small"
-                    android:paddingEnd="@dimen/padding_medium"
-                    android:paddingBottom="@dimen/padding_small"
-                    app:chipSpacingHorizontal="@dimen/margin_medium"
+                    android:paddingStart="@dimen/margin_m"
+                    android:paddingTop="@dimen/margin_s"
+                    android:paddingEnd="@dimen/margin_m"
+                    android:paddingBottom="@dimen/margin_s"
+                    app:chipSpacingHorizontal="@dimen/margin_m"
                     app:selectionRequired="true"
                     app:singleLine="true"
                     app:singleSelection="true">
@@ -85,10 +89,10 @@
                         android:id="@+id/db_weight_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="@dimen/margin_m"
                         android:elevation="4dp"
                         android:onClick="@{() -> viewModel.navigateToDetail(key.FROM_WEIGHT)}"
-                        app:cardCornerRadius="8dp">
+                        app:cardCornerRadius="@dimen/margin_m">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -98,7 +102,7 @@
                                 android:id="@+id/db_weight_date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="16dp"
+                                android:layout_marginTop="@dimen/margin_l"
                                 android:gravity="center"
                                 android:text="@{weight.date}"
                                 app:layout_constraintEnd_toEndOf="@+id/db_weight_icon"
@@ -108,18 +112,18 @@
 
                             <ImageView
                                 android:id="@+id/db_weight_icon"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="@dimen/dashboard_icon_size"
+                                android:layout_height="@dimen/dashboard_icon_size"
                                 android:layout_marginStart="24dp"
+                                android:contentDescription="@string/dummy_description"
                                 android:src="@drawable/ic_weight"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_weight_latest_data"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/db_weight_latest"
-                                android:contentDescription="@string/dummy_description" />
+                                app:layout_constraintTop_toBottomOf="@+id/db_weight_latest" />
 
                             <TextView
                                 android:id="@+id/db_weight_latest"
-                                android:layout_width="80dp"
+                                android:layout_width="@dimen/dashboard_icon_size"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:text="@string/hint_weight"
@@ -152,7 +156,7 @@
 
                             <TextView
                                 android:id="@+id/db_weight_previous"
-                                android:layout_width="80dp"
+                                android:layout_width="@dimen/dashboard_text_width"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:text="@string/hint_prev"
@@ -163,20 +167,20 @@
 
                             <ImageView
                                 android:id="@+id/db_weight_diff"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="@dimen/dashboard_icon_size"
+                                android:layout_height="@dimen/dashboard_icon_size"
                                 android:layout_marginEnd="24dp"
+                                android:contentDescription="@string/dummy_description"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_weight_latest_data"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/db_weight_latest"
-                                app:srcCompat="@drawable/ic_flat"
-                                android:contentDescription="@string/dummy_description" />
+                                app:srcCompat="@drawable/ic_flat" />
 
                             <View
                                 android:id="@+id/db_weight_border"
                                 android:layout_width="0dp"
                                 android:layout_height="1dp"
-                                android:layout_marginTop="16dp"
+                                android:layout_marginTop="@dimen/margin_l"
                                 android:background="@color/primaryColor"
                                 app:layout_constraintEnd_toEndOf="@+id/db_weight_diff"
                                 app:layout_constraintStart_toStartOf="@+id/db_weight_icon"
@@ -185,11 +189,11 @@
                             <com.github.mikephil.charting.charts.LineChart
                                 android:id="@+id/db_weight_chart"
                                 android:layout_width="match_parent"
-                                android:layout_height="80dp"
+                                android:layout_height="@dimen/dashboard_chart_height"
                                 android:layout_marginStart="24dp"
-                                android:layout_marginTop="16dp"
+                                android:layout_marginTop="@dimen/margin_l"
                                 android:layout_marginEnd="24dp"
-                                android:layout_marginBottom="16dp"
+                                android:layout_marginBottom="@dimen/margin_l"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -197,7 +201,7 @@
 
                             <TextView
                                 android:id="@+id/db_weight_dummy"
-                                android:layout_width="40dp"
+                                android:layout_width="@dimen/dashboard_icon_size"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:text="@string/hint_diff"
@@ -214,10 +218,10 @@
                         android:id="@+id/db_length_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="@dimen/margin_m"
                         android:elevation="4dp"
                         android:onClick="@{() -> viewModel.navigateToDetail(key.FROM_LENGTH)}"
-                        app:cardCornerRadius="8dp">
+                        app:cardCornerRadius="@dimen/margin_m">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -227,7 +231,7 @@
                                 android:id="@+id/db_length_date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="16dp"
+                                android:layout_marginTop="@dimen/margin_l"
                                 android:gravity="center"
                                 android:text="@{length.date}"
                                 app:layout_constraintEnd_toEndOf="@+id/db_length_icon"
@@ -237,18 +241,18 @@
 
                             <ImageView
                                 android:id="@+id/db_length_icon"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="@dimen/dashboard_icon_size"
+                                android:layout_height="@dimen/dashboard_icon_size"
                                 android:layout_marginStart="24dp"
+                                android:contentDescription="@string/dummy_description"
                                 android:src="@drawable/ic_length"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_length_latest_data"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/db_length_latest"
-                                android:contentDescription="@string/dummy_description" />
+                                app:layout_constraintTop_toBottomOf="@+id/db_length_latest" />
 
                             <TextView
                                 android:id="@+id/db_length_latest"
-                                android:layout_width="80dp"
+                                android:layout_width="@dimen/dashboard_icon_size"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:text="@string/hint_length"
@@ -281,7 +285,7 @@
 
                             <TextView
                                 android:id="@+id/db_length_previous"
-                                android:layout_width="80dp"
+                                android:layout_width="@dimen/dashboard_icon_size"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:text="@string/hint_prev"
@@ -292,20 +296,20 @@
 
                             <ImageView
                                 android:id="@+id/db_length_diff"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="@dimen/dashboard_icon_size"
+                                android:layout_height="@dimen/dashboard_icon_size"
                                 android:layout_marginEnd="24dp"
+                                android:contentDescription="@string/dummy_description"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_length_latest_data"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/db_length_latest"
-                                app:srcCompat="@drawable/ic_flat"
-                                android:contentDescription="@string/dummy_description" />
+                                app:srcCompat="@drawable/ic_flat" />
 
                             <View
                                 android:id="@+id/db_length_border"
                                 android:layout_width="0dp"
                                 android:layout_height="1dp"
-                                android:layout_marginTop="16dp"
+                                android:layout_marginTop="@dimen/margin_l"
                                 android:background="@color/primaryColor"
                                 app:layout_constraintEnd_toEndOf="@+id/db_length_diff"
                                 app:layout_constraintStart_toStartOf="@+id/db_length_icon"
@@ -314,11 +318,11 @@
                             <com.github.mikephil.charting.charts.LineChart
                                 android:id="@+id/db_length_chart"
                                 android:layout_width="match_parent"
-                                android:layout_height="80dp"
+                                android:layout_height="@dimen/dashboard_chart_height"
                                 android:layout_marginStart="24dp"
-                                android:layout_marginTop="16dp"
+                                android:layout_marginTop="@dimen/margin_l"
                                 android:layout_marginEnd="24dp"
-                                android:layout_marginBottom="16dp"
+                                android:layout_marginBottom="@dimen/margin_l"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -326,7 +330,7 @@
 
                             <TextView
                                 android:id="@+id/db_length_dummy"
-                                android:layout_width="40dp"
+                                android:layout_width="@dimen/dashboard_icon_size"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
                                 android:text="@string/hint_diff"
@@ -344,10 +348,10 @@
                         android:id="@+id/db_memo_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="@dimen/margin_m"
                         android:elevation="4dp"
                         android:onClick="@{() -> viewModel.navigateToDetail(key.FROM_MEMO)}"
-                        app:cardCornerRadius="8dp">
+                        app:cardCornerRadius="@dimen/margin_m">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -355,23 +359,23 @@
 
                             <ImageView
                                 android:id="@+id/db_memo_icon"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
+                                android:layout_width="@dimen/dashboard_icon_size"
+                                android:layout_height="@dimen/dashboard_icon_size"
                                 android:layout_marginStart="24dp"
-                                android:layout_marginTop="16dp"
+                                android:layout_marginTop="@dimen/margin_l"
                                 android:layout_marginBottom="24dp"
+                                android:contentDescription="@string/dummy_description"
                                 android:src="@drawable/ic_memo"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent"
-                                android:contentDescription="@string/dummy_description" />
+                                app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
                                 android:id="@+id/db_memo_recent"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/hint_recent_memo"
-                                app:layout_constraintStart_toEndOf="@id/db_memo_icon"
                                 app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toEndOf="@id/db_memo_icon"
                                 app:layout_constraintTop_toTopOf="@+id/db_memo_icon" />
 
                             <TextView
@@ -379,8 +383,8 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="24dp"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginEnd="8dp"
+                                android:layout_marginTop="@dimen/margin_m"
+                                android:layout_marginEnd="@dimen/margin_m"
                                 android:text="@string/hint_nothing_memo"
                                 android:textSize="18sp"
                                 app:layout_constraintEnd_toStartOf="@+id/db_memo_recent_first_date"
@@ -391,7 +395,7 @@
                                 android:id="@+id/db_memo_recent_first_date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="16dp"
+                                android:layout_marginEnd="@dimen/margin_l"
                                 android:text="@string/hint_dummy_en"
                                 android:textSize="14sp"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_memo_recent_first"
@@ -402,8 +406,8 @@
                                 android:id="@+id/db_memo_recent_second"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginEnd="8dp"
+                                android:layout_marginTop="@dimen/margin_m"
+                                android:layout_marginEnd="@dimen/margin_m"
                                 android:text="@string/hint_dummy_jp"
                                 android:textSize="18sp"
                                 app:layout_constraintEnd_toStartOf="@+id/db_memo_recent_second_date"
@@ -414,36 +418,35 @@
                                 android:id="@+id/db_memo_recent_second_date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                tools:text="2日前"
                                 android:textSize="14sp"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_memo_recent_second"
                                 app:layout_constraintEnd_toEndOf="@+id/db_memo_recent_first_date"
-                                app:layout_constraintTop_toTopOf="@+id/db_memo_recent_second" />
+                                app:layout_constraintTop_toTopOf="@+id/db_memo_recent_second"
+                                tools:text="2日前" />
 
                             <TextView
                                 android:id="@+id/db_memo_recent_third"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginBottom="16dp"
-                                tools:text="TextView"
+                                android:layout_marginTop="@dimen/margin_m"
+                                android:layout_marginBottom="@dimen/margin_l"
                                 android:textSize="18sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toStartOf="@+id/db_memo_recent_third_date"
                                 app:layout_constraintStart_toStartOf="@+id/db_memo_recent_second"
-                                app:layout_constraintTop_toBottomOf="@+id/db_memo_recent_second" />
+                                app:layout_constraintTop_toBottomOf="@+id/db_memo_recent_second"
+                                tools:text="TextView" />
 
                             <TextView
                                 android:id="@+id/db_memo_recent_third_date"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="16dp"
-                                tools:text="10時間前"
+                                android:layout_marginEnd="@dimen/margin_l"
                                 android:textSize="14sp"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_memo_recent_third"
                                 app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintTop_toTopOf="@+id/db_memo_recent_third" />
-
+                                app:layout_constraintTop_toTopOf="@+id/db_memo_recent_third"
+                                tools:text="10時間前" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -455,7 +458,6 @@
             </androidx.core.widget.NestedScrollView>
 
         </LinearLayout>
-
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

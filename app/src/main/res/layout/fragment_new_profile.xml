@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="viewModel"
             type="jp.ryuk.deglog.ui.profile.newprofile.NewProfileViewModel" />
@@ -33,15 +34,15 @@
                     android:id="@+id/new_profile_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginBottom="32dp"
-                    android:textAppearance="@style/Deglog.PageTitle"
-                    android:text="@string/new_profile_title" />
+                    android:layout_marginTop="@dimen/margin_xl"
+                    android:layout_marginBottom="@dimen/margin_xl"
+                    android:text="@string/new_profile_title"
+                    android:textAppearance="@style/Deglog.PageTitle" />
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/new_profile_edit_name"
                     style="@style/Widget.Deglog.EditText"
-                    android:layout_width="300dp"
+                    android:layout_width="@dimen/edit_text_width"
                     android:layout_height="wrap_content"
                     app:errorEnabled="true"
                     app:startIconDrawable="@drawable/nav_ic_diary">
@@ -63,111 +64,112 @@
                     android:textSize="14sp" />
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
                     android:id="@+id/new_profile_toggle_group"
+                    android:layout_width="@dimen/edit_text_width"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_l"
+                    android:gravity="center"
                     app:checkedButton="@id/gender_unknown"
                     app:selectionRequired="true"
-                    android:layout_marginBottom="16dp"
-                    android:gravity="center"
                     app:singleSelection="true">
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/gender_male"
                         style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/hint_gender_male" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/gender_female"
                         style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/hint_gender_female" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/gender_unknown"
                         style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:text="@string/hint_gender_unknown" />
 
                 </com.google.android.material.button.MaterialButtonToggleGroup>
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/new_profile_edit_type"
-                        style="@style/Widget.Deglog.EditText"
-                        android:layout_width="300dp"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/new_profile_edit_type"
+                    style="@style/Widget.Deglog.EditText"
+                    android:layout_width="@dimen/edit_text_width"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_l"
+                    android:hint="@string/hint_type"
+                    app:endIconDrawable="@drawable/ic_picker"
+                    app:endIconMode="custom"
+                    app:startIconDrawable="@drawable/nav_ic_diary">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/new_profile_edit_type_text"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:startIconDrawable="@drawable/nav_ic_diary"
-                        app:endIconDrawable="@drawable/ic_picker"
-                        app:endIconMode="custom"
-                        android:layout_marginBottom="16dp"
-                        android:hint="@string/hint_type">
+                        android:inputType="none"
+                        android:singleLine="true"
+                        android:text="@={viewModel.type}" />
 
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/new_profile_edit_type_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="none"
-                            android:singleLine="true"
-                            android:text="@={viewModel.type}" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/new_profile_edit_birthday"
                     style="@style/Widget.Deglog.EditText"
-                    android:layout_width="300dp"
-                    android:layout_marginBottom="16dp"
+                    android:layout_width="@dimen/edit_text_width"
                     android:layout_height="wrap_content"
-                    app:hintAnimationEnabled="false"
+                    android:layout_marginBottom="@dimen/margin_l"
                     app:errorEnabled="true"
+                    app:hintAnimationEnabled="false"
                     app:startIconDrawable="@drawable/ic_birthday">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/new_profile_edit_birthday_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_birthday"
-                        android:focusableInTouchMode="false"
                         android:focusable="false"
+                        android:focusableInTouchMode="false"
+                        android:hint="@string/hint_birthday"
                         android:inputType="datetime"
                         android:text="@={viewModel.birthdayString}" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="300dp"
-                    android:layout_marginBottom="16dp"
-                    android:layout_height="wrap_content">
-                    <TextView
-                        android:layout_width="140dp"
-                        android:id="@+id/unit_weight"
-                        android:gravity="center_horizontal"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:text="@string/hint_weight_unit"/>
+                    android:layout_width="@dimen/edit_text_width"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/margin_l">
 
                     <TextView
-                        android:layout_width="140dp"
-                        android:id="@+id/unit_length"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:gravity="center_horizontal"
+                        android:id="@+id/unit_weight"
+                        android:layout_width="@dimen/edit_text_width_half"
                         android:layout_height="wrap_content"
-                        app:layout_constraintTop_toTopOf="parent"
-                        android:text="@string/hint_length_unit"/>
+                        android:gravity="center_horizontal"
+                        android:text="@string/hint_weight_unit"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/unit_length"
+                        android:layout_width="@dimen/edit_text_width_half"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:text="@string/hint_length_unit"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/new_profile_edit_weight_unit"
                         style="@style/Widget.Deglog.EditText"
-                        android:layout_width="140dp"
+                        android:layout_width="@dimen/edit_text_width_half"
                         android:layout_height="wrap_content"
                         app:endIconDrawable="@drawable/ic_picker"
                         app:endIconMode="custom"
@@ -181,8 +183,8 @@
                             android:layout_height="wrap_content"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
-                            android:inputType="none"
                             android:gravity="center_horizontal"
+                            android:inputType="none"
                             android:singleLine="true"
                             android:text="@={viewModel.unitWeight}" />
 
@@ -191,22 +193,22 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/new_profile_edit_length_unit"
                         style="@style/Widget.Deglog.EditText"
-                        android:layout_width="140dp"
+                        android:layout_width="@dimen/edit_text_width_half"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        app:layout_constraintStart_toStartOf="@id/unit_length"
-                        app:layout_constraintEnd_toEndOf="@id/unit_length"
-                        app:layout_constraintTop_toBottomOf="@id/unit_length"
+                        android:layout_marginBottom="@dimen/margin_l"
                         app:endIconDrawable="@drawable/ic_picker"
-                        app:endIconMode="custom">
+                        app:endIconMode="custom"
+                        app:layout_constraintEnd_toEndOf="@id/unit_length"
+                        app:layout_constraintStart_toStartOf="@id/unit_length"
+                        app:layout_constraintTop_toBottomOf="@id/unit_length">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/new_profile_edit_length_unit_text"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:focusable="false"
-                            android:gravity="center_horizontal"
                             android:focusableInTouchMode="false"
+                            android:gravity="center_horizontal"
                             android:inputType="none"
                             android:singleLine="true"
                             android:text="@={viewModel.unitLength}" />
@@ -219,7 +221,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_medium"
+                    android:layout_margin="@dimen/margin_m"
                     android:gravity="center_horizontal"
                     android:orientation="horizontal">
 
@@ -228,16 +230,16 @@
                         style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="@dimen/margin_l"
                         android:onClick="@{() -> viewModel.onCancel()}"
-                        android:layout_marginEnd="@dimen/margin_large"
                         android:text="@string/dialog_cancel" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/new_profile_submit_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_l"
                         android:onClick="@{() -> viewModel.onSubmit()}"
-                        android:layout_marginStart="@dimen/margin_large"
                         android:text="@string/dialog_submit" />
                 </LinearLayout>
 
