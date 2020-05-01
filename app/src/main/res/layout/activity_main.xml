@@ -22,7 +22,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:navGraph="@navigation/navigation"/>
+            app:navGraph="@navigation/navigation"
+            tools:ignore="FragmentTagUsage" />
 
         <View
             android:id="@+id/bottom_navigation_border"

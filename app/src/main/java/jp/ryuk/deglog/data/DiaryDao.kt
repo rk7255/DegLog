@@ -28,8 +28,8 @@ interface DiaryDao {
     @Query("SELECT DISTINCT name FROM diary_table ORDER BY name")
     fun getNames() : List<String>
 
-    @Query("DELETE FROM diary_table")
-    fun clear()
+    @Query("DELETE FROM diary_table WHERE name = :name")
+    fun clear(name: String)
 
     @Query("SELECT date FROM diary_table WHERE (name = :name AND weight IS NOT NULL) ORDER BY date DESC LIMIT 1")
     fun getDateOfWeightLatest(name: String): Long

@@ -114,14 +114,15 @@
                                 android:src="@drawable/ic_weight"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_weight_latest_data"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/db_weight_latest" />
+                                app:layout_constraintTop_toBottomOf="@+id/db_weight_latest"
+                                android:contentDescription="@string/dummy_description" />
 
                             <TextView
                                 android:id="@+id/db_weight_latest"
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="体重"
+                                android:text="@string/hint_weight"
                                 app:layout_constraintEnd_toStartOf="@+id/db_weight_previous"
                                 app:layout_constraintHorizontal_bias="0.5"
                                 app:layout_constraintStart_toEndOf="@+id/db_weight_date"
@@ -154,7 +155,7 @@
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="前回比"
+                                android:text="@string/hint_prev"
                                 app:layout_constraintEnd_toStartOf="@+id/db_weight_dummy"
                                 app:layout_constraintHorizontal_bias="0.5"
                                 app:layout_constraintStart_toEndOf="@+id/db_weight_latest"
@@ -168,7 +169,8 @@
                                 app:layout_constraintBottom_toBottomOf="@+id/db_weight_latest_data"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/db_weight_latest"
-                                app:srcCompat="@drawable/ic_flat" />
+                                app:srcCompat="@drawable/ic_flat"
+                                android:contentDescription="@string/dummy_description" />
 
                             <View
                                 android:id="@+id/db_weight_border"
@@ -198,7 +200,7 @@
                                 android:layout_width="40dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="傾向"
+                                android:text="@string/hint_diff"
                                 app:layout_constraintEnd_toEndOf="@+id/db_weight_diff"
                                 app:layout_constraintStart_toStartOf="@+id/db_weight_diff"
                                 app:layout_constraintTop_toTopOf="@+id/db_weight_previous" />
@@ -241,14 +243,15 @@
                                 android:src="@drawable/ic_length"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_length_latest_data"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/db_length_latest" />
+                                app:layout_constraintTop_toBottomOf="@+id/db_length_latest"
+                                android:contentDescription="@string/dummy_description" />
 
                             <TextView
                                 android:id="@+id/db_length_latest"
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="体重"
+                                android:text="@string/hint_length"
                                 app:layout_constraintEnd_toStartOf="@+id/db_length_previous"
                                 app:layout_constraintHorizontal_bias="0.5"
                                 app:layout_constraintStart_toEndOf="@+id/db_length_date"
@@ -281,7 +284,7 @@
                                 android:layout_width="80dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="前回比"
+                                android:text="@string/hint_prev"
                                 app:layout_constraintEnd_toStartOf="@+id/db_length_dummy"
                                 app:layout_constraintHorizontal_bias="0.5"
                                 app:layout_constraintStart_toEndOf="@+id/db_length_latest"
@@ -295,7 +298,8 @@
                                 app:layout_constraintBottom_toBottomOf="@+id/db_length_latest_data"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/db_length_latest"
-                                app:srcCompat="@drawable/ic_flat" />
+                                app:srcCompat="@drawable/ic_flat"
+                                android:contentDescription="@string/dummy_description" />
 
                             <View
                                 android:id="@+id/db_length_border"
@@ -325,7 +329,7 @@
                                 android:layout_width="40dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="傾向"
+                                android:text="@string/hint_diff"
                                 app:layout_constraintEnd_toEndOf="@+id/db_length_diff"
                                 app:layout_constraintStart_toStartOf="@+id/db_length_diff"
                                 app:layout_constraintTop_toTopOf="@+id/db_length_previous" />
@@ -358,13 +362,14 @@
                                 android:layout_marginBottom="24dp"
                                 android:src="@drawable/ic_memo"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                app:layout_constraintTop_toTopOf="parent"
+                                android:contentDescription="@string/dummy_description" />
 
                             <TextView
                                 android:id="@+id/db_memo_recent"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="最新のメモ"
+                                android:text="@string/hint_recent_memo"
                                 app:layout_constraintStart_toEndOf="@id/db_memo_icon"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toTopOf="@+id/db_memo_icon" />
@@ -376,7 +381,7 @@
                                 android:layout_marginStart="24dp"
                                 android:layout_marginTop="8dp"
                                 android:layout_marginEnd="8dp"
-                                android:text="新しいメモはありません"
+                                android:text="@string/hint_nothing_memo"
                                 android:textSize="18sp"
                                 app:layout_constraintEnd_toStartOf="@+id/db_memo_recent_first_date"
                                 app:layout_constraintStart_toEndOf="@+id/db_memo_icon"
@@ -387,7 +392,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginEnd="16dp"
-                                android:text="*分前"
+                                android:text="@string/hint_dummy_en"
                                 android:textSize="14sp"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_memo_recent_first"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -399,7 +404,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:layout_marginEnd="8dp"
-                                android:text="（未着手）"
+                                android:text="@string/hint_dummy_jp"
                                 android:textSize="18sp"
                                 app:layout_constraintEnd_toStartOf="@+id/db_memo_recent_second_date"
                                 app:layout_constraintStart_toStartOf="@+id/db_memo_recent_first"

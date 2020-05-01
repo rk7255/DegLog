@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
         <variable
@@ -60,7 +59,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="性別"
+                    android:text="@string/hint_gender"
                     android:textSize="14sp" />
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
@@ -231,7 +230,7 @@
                         android:layout_height="wrap_content"
                         android:onClick="@{() -> viewModel.onCancel()}"
                         android:layout_marginEnd="@dimen/margin_large"
-                        android:text="Cancel" />
+                        android:text="@string/dialog_cancel" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/new_profile_submit_button"
@@ -239,7 +238,7 @@
                         android:layout_height="wrap_content"
                         android:onClick="@{() -> viewModel.onSubmit()}"
                         android:layout_marginStart="@dimen/margin_large"
-                        android:text="Submit" />
+                        android:text="@string/dialog_submit" />
                 </LinearLayout>
 
             </LinearLayout>

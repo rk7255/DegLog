@@ -2,7 +2,6 @@ package jp.ryuk.deglog.ui.dashboard
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -128,7 +127,7 @@ class DashboardFragment : Fragment() {
         val application = requireNotNull(this.activity).application
         val diaryDatabase = DiaryRepository.getInstance(application).diaryDao
         val profileDatabase = ProfileRepository.getInstance(application).profileDao
-        val viewModelFactory = DashboardViewModelFactory(diaryDatabase, profileDatabase, application)
+        val viewModelFactory = DashboardViewModelFactory(diaryDatabase, profileDatabase)
         return ViewModelProvider(this, viewModelFactory).get(DashboardViewModel::class.java)
     }
 

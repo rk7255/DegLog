@@ -6,7 +6,6 @@ import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.text.TextPaint
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -15,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.utilities.getMonth
-import java.util.*
 import kotlin.math.min
 
 class DiaryStickerDecoration(context: Context, val list: List<Diary>) : RecyclerView.ItemDecoration() {
@@ -25,7 +23,6 @@ class DiaryStickerDecoration(context: Context, val list: List<Diary>) : Recycler
 
     private val sizeRect = dp1 * 42
     private val sizeText = dp1 * 18
-    private val posText = dp1 * 6
 
     init {
         textPaint.apply {

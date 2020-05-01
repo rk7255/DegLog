@@ -25,7 +25,7 @@ class NewProfileViewModel(
     var unitWeight = "g"
     var unitLength = "mm"
 
-    var isInsert = true
+    private var isInsert = true
 
 
     init {

@@ -11,7 +11,7 @@ import jp.ryuk.deglog.databinding.LengthItemBinding
 class LengthAdapter(
     private val clickListener: LengthListener,
     private val suffix: String
-) : ListAdapter<Diary, LengthAdapter.ViewHolder>(DiaryListDiffCallback()) {
+) : ListAdapter<Diary, LengthAdapter.ViewHolder>(LengthDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)

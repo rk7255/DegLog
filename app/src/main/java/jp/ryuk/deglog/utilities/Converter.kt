@@ -1,14 +1,10 @@
 package jp.ryuk.deglog.utilities
 
 import android.annotation.SuppressLint
-import android.util.Log
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
-import java.time.LocalTime
-import java.time.temporal.ChronoUnit
 import java.util.*
-import kotlin.math.round
 
 
 /**
@@ -50,12 +46,13 @@ fun convertLongToDateStringOutYear(systemTime: Long): String {
         .format(systemTime).toString()
 }
 
-@SuppressLint("SimpleDateFormat")
-fun c(systemTime: Long): SimpleDateFormat {
-    val t = SimpleDateFormat("yyyy/MM/dd")
-        .format(systemTime).toString()
-    return SimpleDateFormat(t, Locale.JAPAN)
-}
+// 作った理由忘れた 不要なら削除
+//@SuppressLint("SimpleDateFormat")
+//fun c(systemTime: Long): SimpleDateFormat {
+//    val t = SimpleDateFormat("yyyy/MM/dd")
+//        .format(systemTime).toString()
+//    return SimpleDateFormat(t, Locale.JAPAN)
+//}
 
 @SuppressLint("SimpleDateFormat")
 fun convertLongToDateStringRelative(systemTime: Long): String {
@@ -79,30 +76,20 @@ fun convertLongToDateStringRelative(systemTime: Long): String {
 /**
  * 型変換
  */
-fun convertIntToString(num: Int?): String {
-    return num?.toString() ?: ""
+fun convertStringToFloat(str: String?, unit: String): Float? {
+    return if (unit == "kg" || unit == "m") {
+        if (str.isNullOrEmpty()) null else (str.toFloat() * 1000)
+    } else {
+        if (str.isNullOrEmpty()) null else str.toFloat()
+    }
 }
 
-fun convertStringToInt(str: String?): Float? {
-    return if (str.isNullOrEmpty()) null else str.toFloat()
-}
-
-/**
- * 体重と体長の単位付与
- */
-fun convertWeight(weight: Float?): String? {
-    return if (weight == null) { null } else { "$weight g" }
-}
-
-fun convertLength(length: Float?): String? {
-    return if (length == null) { null } else { "$length mm" }
-}
 
 /**
  * 単位変換
  */
-fun convertUnit(number: Float, suffix: String): String {
-    return when (suffix) {
+fun convertUnit(number: Float, unit: String): String {
+    return when (unit) {
         "g" -> "${roundDown(number)} g"
         "kg" -> "${roundUp(number)} kg"
         "mm" -> "${roundDown(number)} mm"

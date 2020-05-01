@@ -94,13 +94,13 @@
                     android:layout_marginBottom="@dimen/margin_small"
                     app:errorEnabled="true"
                     app:startIconDrawable="@drawable/ic_weight"
-                    app:suffixText="@string/suffixText_weight_g">
+                    app:suffixText="@{viewModel.weightUnit}">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/new_diary_edit_weight_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:hint="@string/hint_weight"
                         android:text="@={viewModel.weight}" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -114,14 +114,14 @@
                     android:layout_marginBottom="@dimen/margin_small"
                     app:errorEnabled="true"
                     app:startIconDrawable="@drawable/ic_length"
-                    app:suffixText="@string/suffixText_length_mm">
+                    app:suffixText="@{viewModel.lengthUnit}">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/new_diary_edit_length_text"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/hint_length"
-                        android:inputType="number"
+                        android:inputType="numberDecimal"
                         android:text="@={viewModel.length}" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -159,7 +159,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="@dimen/margin_large"
                         android:onClick="@{() -> viewModel.onCancel()}"
-                        android:text="Cancel" />
+                        android:text="@string/dialog_cancel" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/next_button"
@@ -167,7 +167,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/margin_large"
                         android:onClick="@{() -> viewModel.onSubmit()}"
-                        android:text="Submit" />
+                        android:text="@string/dialog_submit" />
                 </LinearLayout>
 
 <!--                <com.google.android.material.button.MaterialButton-->

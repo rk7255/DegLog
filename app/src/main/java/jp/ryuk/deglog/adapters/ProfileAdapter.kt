@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.databinding.ProfilesItemBinding
 
+
 class ProfileAdapter(private val clickListener: ProfileListener)
     : ListAdapter<Profile, ProfileAdapter.ViewHolder>(ProfileDiffCallback()) {
 

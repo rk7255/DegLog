@@ -1,7 +1,5 @@
 package jp.ryuk.deglog.ui.profile.profiles
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -15,11 +13,6 @@ import jp.ryuk.deglog.adapters.ProfileAdapter
 import jp.ryuk.deglog.adapters.ProfileListener
 import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentProfilesBinding
-import jp.ryuk.deglog.ui.dashboard.DashboardFragmentDirections
-import jp.ryuk.deglog.ui.diarylist.ListKey
-import jp.ryuk.deglog.ui.profile.newprofile.NewProfileFragment
-import jp.ryuk.deglog.ui.profile.newprofile.NewProfileViewModel
-import jp.ryuk.deglog.ui.profile.newprofile.NewProfileViewModelFactory
 
 
 class ProfilesFragment : Fragment() {

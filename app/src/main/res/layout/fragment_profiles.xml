@@ -56,10 +56,11 @@
                 <Button
                     android:layout_gravity="center"
                     android:layout_marginTop="100dp"
-                    android:layout_width="100dp"
+                    android:layout_width="150dp"
                     android:layout_height="wrap_content"
-                    android:text="clear"
-                    android:onClick="@{() -> viewModel.onClear()}"/>
+                    android:text="[DEBUG] clear"
+                    android:onClick="@{() -> viewModel.onClear()}"
+                    tools:ignore="HardcodedText" />
                 </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>

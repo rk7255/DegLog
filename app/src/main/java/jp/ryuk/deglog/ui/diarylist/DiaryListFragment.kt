@@ -1,7 +1,6 @@
 package jp.ryuk.deglog.ui.diarylist
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +19,6 @@ import jp.ryuk.deglog.adapters.WEIGHT_PAGE_INDEX
 import jp.ryuk.deglog.data.DiaryRepository
 import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentDiaryListBinding
-import jp.ryuk.deglog.utilities.tag
 
 
 class DiaryListFragment : Fragment() {

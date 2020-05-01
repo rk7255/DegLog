@@ -1,14 +1,11 @@
 package jp.ryuk.deglog.ui.profile.profiles
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
-import jp.ryuk.deglog.utilities.tag
 import kotlinx.coroutines.*
 
 class ProfilesViewModel(

@@ -1,22 +1,20 @@
 package jp.ryuk.deglog.ui.diarydetail
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
-import jp.ryuk.deglog.utilities.*
+import jp.ryuk.deglog.utilities.convertUnit
+import jp.ryuk.deglog.utilities.getDayOfMonth
+import jp.ryuk.deglog.utilities.getMonth
+import jp.ryuk.deglog.utilities.getYear
 import kotlinx.coroutines.*
-import java.lang.StringBuilder
 import java.time.LocalDate
 import java.time.Period
 
-@RequiresApi(Build.VERSION_CODES.O)
 class DiaryDetailViewModel(
     private val diaryKey: Long,
     private val selectedName: String,
@@ -92,26 +90,9 @@ class DiaryDetailViewModel(
     /**
      * Database
      */
-    private suspend fun getDiary(key: Long): Diary {
-        return withContext(Dispatchers.IO) {
-            diaryDatabase.getDiary(key)
-        }
-    }
     private suspend fun getDiaries(selectedName: String): List<Diary> {
         return withContext(Dispatchers.IO) {
             diaryDatabase.getDiariesAtName(selectedName)
-        }
-    }
-
-    private suspend fun update(diary: Diary) {
-        withContext(Dispatchers.IO) {
-            diaryDatabase.update(diary)
-        }
-    }
-
-    private fun updateDiary(diary: Diary) {
-        uiScope.launch {
-            update(diary)
         }
     }
 

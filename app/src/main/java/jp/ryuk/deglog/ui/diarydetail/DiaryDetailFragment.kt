@@ -1,18 +1,16 @@
 package jp.ryuk.deglog.ui.diarydetail
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.adapters.DiaryDetailPagerAdapter
 import jp.ryuk.deglog.data.DiaryRepository
@@ -20,7 +18,6 @@ import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentDiaryDetailBinding
 import jp.ryuk.deglog.ui.diarylist.ListKey
 import jp.ryuk.deglog.utilities.convertLongToDateStringOutYear
-
 
 class DiaryDetailFragment : Fragment() {
 
@@ -86,9 +83,7 @@ class DiaryDetailFragment : Fragment() {
         super.onCreateOptionsMenu(menu, menuInflater)
     }
 
-    private fun getTabPos(): Int {
-        return tabLayout.selectedTabPosition
-    }
+    private fun getTabPos(): Int = tabLayout.selectedTabPosition
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val fromKey = when (args.fromKey) {

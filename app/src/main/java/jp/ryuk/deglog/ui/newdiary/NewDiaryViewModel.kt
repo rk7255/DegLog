@@ -1,17 +1,16 @@
 package jp.ryuk.deglog.ui.newdiary
 
 import android.util.Log
-import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
+import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
-import jp.ryuk.deglog.utilities.convertLongToDateString
 import jp.ryuk.deglog.utilities.convertLongToDateStringInTime
-import jp.ryuk.deglog.utilities.convertStringToInt
+import jp.ryuk.deglog.utilities.convertStringToFloat
 import jp.ryuk.deglog.utilities.convertYMDToLong
 import kotlinx.coroutines.*
 import java.util.*
@@ -19,8 +18,8 @@ import kotlin.random.Random
 
 
 class NewDiaryViewModel(
-    private val diaryId: Long,
-    private val selectedName: String = "",
+    diaryId: Long,
+    private val selectedName: String,
     private val diaryDatabase: DiaryDao,
     private val profileDatabase: ProfileDao
 ) : ViewModel() {
@@ -37,6 +36,8 @@ class NewDiaryViewModel(
     var length: String? = null
     var memo: String? = null
 
+    var weightUnit = MediatorLiveData<String>()
+    var lengthUnit = MediatorLiveData<String>()
 
     /**
      * Initialize
@@ -48,6 +49,10 @@ class NewDiaryViewModel(
 
     private fun initialize() {
         uiScope.launch {
+            val profile = getProfile(selectedName)
+            weightUnit.value = profile.weightUnit
+            lengthUnit.value = profile.lengthUnit
+
             names = getNames()
             date = Calendar.getInstance().timeInMillis
             dateOfString = convertLongToDateStringInTime(date)
@@ -57,6 +62,10 @@ class NewDiaryViewModel(
 
     private fun initializeEdit() {
         uiScope.launch {
+            val profile = getProfile(selectedName)
+            weightUnit.value = profile.weightUnit
+            lengthUnit.value = profile.lengthUnit
+
             val diary = getDiary(id)
             name = diary.name
             date = diary.date
@@ -91,10 +100,16 @@ class NewDiaryViewModel(
         _backToDiary.value = true
     }
 
-    // DEBUG用
+    fun onDate() {
+        _getCalendar.value = true
+    }
+
+    /**
+     * DEBUG
+     */
     fun onClear() {
         uiScope.launch {
-            clear()
+            clear(selectedName)
             _navigateToDiary.value = true
         }
     }
@@ -109,8 +124,9 @@ class NewDiaryViewModel(
                         val newDiary = Diary()
                         newDiary.date = convertYMDToLong(2020, m, d)
                         newDiary.name = name
-                        newDiary.weight = 250f + loop * Random.nextInt(1, 5)
-                        newDiary.length = 150f + loop * Random.nextInt(1, 5)
+                        newDiary.weight = 250f + loop * Random.nextInt(1, 15)
+                        newDiary.length = 150f + loop * Random.nextInt(1, 15)
+                        newDiary.memo = "DUMMY DUMMY"
                         insert(newDiary)
                     }
                 }
@@ -119,9 +135,6 @@ class NewDiaryViewModel(
         }
     }
 
-    fun onDate() {
-        _getCalendar.value = true
-    }
 
     /**
      *  LiveData
@@ -182,8 +195,8 @@ class NewDiaryViewModel(
             val newDiary = Diary()
             newDiary.name = name
             newDiary.date = date
-            newDiary.weight = convertStringToInt(weight)
-            newDiary.length = convertStringToInt(length)
+            newDiary.weight = convertStringToFloat(weight, weightUnit.value!!)
+            newDiary.length = convertStringToFloat(length, lengthUnit.value!!)
             newDiary.memo = if (memo.isNullOrEmpty()) null else memo
             Log.d("DEBUG", "Insert New Diary -> $newDiary")
             insert(newDiary)
@@ -199,24 +212,16 @@ class NewDiaryViewModel(
 
     private fun updateDiary() {
         uiScope.launch {
-            Log.d("DEBUG", "$id $name $weight $length $memo")
-
             val newDiary = Diary()
             newDiary.id = id
             newDiary.name = name
             newDiary.date = date
-            newDiary.weight = convertStringToInt(weight)
-            newDiary.length = convertStringToInt(length)
+            newDiary.weight = convertStringToFloat(weight, weightUnit.value!!)
+            newDiary.length = convertStringToFloat(length, lengthUnit.value!!)
             newDiary.memo = if (memo.isNullOrEmpty()) null else memo
             Log.d("DEBUG", "Update Diary -> $newDiary")
             update(newDiary)
             _navigateToDiaryDetail.value = true
-        }
-    }
-
-    private suspend fun getNames(): List<String> {
-        return withContext(Dispatchers.IO) {
-            profileDatabase.getNames()
         }
     }
 
@@ -226,9 +231,21 @@ class NewDiaryViewModel(
         }
     }
 
-    private suspend fun clear() {
+    private suspend fun getNames(): List<String> {
+        return withContext(Dispatchers.IO) {
+            profileDatabase.getNames()
+        }
+    }
+
+    private suspend fun getProfile(name: String): Profile {
+        return withContext(Dispatchers.IO) {
+            profileDatabase.getProfile(name)
+        }
+    }
+
+    private suspend fun clear(name: String) {
         withContext(Dispatchers.IO) {
-            diaryDatabase.clear()
+            diaryDatabase.clear(name)
         }
     }
 

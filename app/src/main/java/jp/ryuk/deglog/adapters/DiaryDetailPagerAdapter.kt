@@ -4,12 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import jp.ryuk.deglog.data.Diary
+import androidx.recyclerview.widget.ListAdapter
 import jp.ryuk.deglog.databinding.DetailViewPagerBinding
 import jp.ryuk.deglog.ui.diarydetail.Detail
 
-class DiaryDetailPagerAdapter()
-    : androidx.recyclerview.widget.ListAdapter<Detail, DiaryDetailPagerAdapter.ViewHolder>(DetailDiffCallback()) {
+class DiaryDetailPagerAdapter : ListAdapter<Detail, DiaryDetailPagerAdapter.ViewHolder>(DetailDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)

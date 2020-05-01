@@ -1,7 +1,9 @@
 package jp.ryuk.deglog.ui.dashboard
 
-import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -17,9 +19,8 @@ import kotlin.math.absoluteValue
 
 class DashboardViewModel(
     private val diaryDatabase: DiaryDao,
-    private val profileDatabase: ProfileDao,
-    application: Application
-) : AndroidViewModel(application) {
+    private val profileDatabase: ProfileDao
+) : ViewModel() {
 
     private var viewModelJob = Job()
     private var uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
@@ -27,7 +28,6 @@ class DashboardViewModel(
     private var diaries = listOf<Diary>()
     var names = listOf<String>()
     private var filteredDiaries = MediatorLiveData<List<Diary>>()
-
 
     var selectedFilter = ""
     lateinit var weightChart: LineChart
@@ -227,12 +227,6 @@ class DashboardViewModel(
     private suspend fun  getDiaries(): List<Diary> {
         return withContext(Dispatchers.IO) {
             diaryDatabase.getDiaries()
-        }
-    }
-
-    private suspend fun getDiariesAtName(name: String): List<Diary> {
-        return withContext(Dispatchers.IO) {
-            diaryDatabase.getDiariesAtName(name)
         }
     }
 

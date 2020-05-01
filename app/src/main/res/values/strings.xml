@@ -32,6 +32,14 @@
     <string name="hint_length">体長</string>
     <string name="hint_memo">メモ</string>
 
+    <string name="hint_prev">前回比</string>
+    <string name="hint_diff">傾向</string>
+    <string name="hint_recent_memo">最近のメモ</string>
+    <string name="hint_nothing_memo">新しいメモはありません</string>
+    <string name="hint_dummy_en">dummy</string>
+    <string name="hint_dummy_jp">ダミーテキスト</string>
+
+
     <!-- New Profile -->
     <string name="new_profile_title">情報の登録</string>
     <string name="edit_profile_title">情報の更新</string>
@@ -54,6 +62,7 @@
     <string name="dialog_tag">Tag</string>
     <string name="dialog_yes">はい</string>
     <string name="dialog_no">いいえ</string>
+    <string name="dialog_submit">登録</string>
     <string name="dialog_cancel">キャンセル</string>
     <string name="delete_title">削除しますか？</string>
     <string name="delete_message">この操作は取り消せません</string>
@@ -101,5 +110,8 @@
         <item>m</item>
         <item>ft</item>
     </string-array>
+
+    <string name="dummy_description">Dummy Description</string>
+
 
 </resources>

@@ -1,6 +1,5 @@
 package jp.ryuk.deglog.data
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao

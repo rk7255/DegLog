@@ -8,11 +8,7 @@ import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
-import jp.ryuk.deglog.utilities.convertLongToDateStringOutYear
-import jp.ryuk.deglog.utilities.convertUnit
-import jp.ryuk.deglog.utilities.getMonth
 import kotlinx.coroutines.*
-import kotlin.collections.List
 
 class DiaryListViewModel(
     private val selectedName: String,
