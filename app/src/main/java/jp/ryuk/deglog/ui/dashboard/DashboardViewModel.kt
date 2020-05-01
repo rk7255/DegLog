@@ -120,7 +120,7 @@ class DashboardViewModel(
         return when {
             diff > 0 -> "+ $result "
             diff < 0 -> "- $result"
-            else -> "$result"
+            else -> result
         }
 
     }

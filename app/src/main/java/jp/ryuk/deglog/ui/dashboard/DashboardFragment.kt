@@ -106,11 +106,11 @@ class DashboardFragment : Fragment() {
         dashboardViewModel.changeFilterNames(dashboardViewModel.selectedFilter, 0)
     }
 
-    @SuppressLint("InflateParams")
     private fun initChipGroup(items: List<String?>, chipGroup: ChipGroup, select: String) {
         if (items.isNotEmpty()) {
             val chipInflater = LayoutInflater.from(activity!!)
             items.forEachIndexed { index, item ->
+                @SuppressLint("InflateParams")
                 val chip = chipInflater.inflate(R.layout.chip_item_filter, null, false) as Chip
                 chip.id = View.generateViewId()
                 chip.text = item

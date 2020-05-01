@@ -1,6 +1,7 @@
 package jp.ryuk.deglog.ui.diarydetail
 
-import android.util.Log
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,13 +10,13 @@ import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
-import jp.ryuk.deglog.utilities.convertUnit
-import jp.ryuk.deglog.utilities.tag
+import jp.ryuk.deglog.utilities.*
 import kotlinx.coroutines.*
-import java.time.chrono.ChronoPeriod
-import java.time.temporal.ChronoUnit
-import java.util.*
+import java.lang.StringBuilder
+import java.time.LocalDate
+import java.time.Period
 
+@RequiresApi(Build.VERSION_CODES.O)
 class DiaryDetailViewModel(
     private val diaryKey: Long,
     private val selectedName: String,
@@ -62,9 +63,16 @@ class DiaryDetailViewModel(
     }
 
     private fun getAge(birthday: Long, date: Long): String {
-        val diffDays = (date - birthday) / (1000 * 60 * 60 * 24)
+        val from = LocalDate.of(birthday.getYear(), birthday.getMonth(), birthday.getDayOfMonth())
+        val to = LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth())
+        val diff = Period.between(from, to)
 
-        return "$diffDays 日"
+        val age = StringBuilder()
+        if (diff.years > 0) age.append("${diff.years}歳 ")
+        if (diff.months > 0) age.append("${diff.months}ヶ月 ")
+        if (diff.days > 0) age.append("${diff.days}日")
+
+        return age.toString()
     }
 
     /**
@@ -79,16 +87,6 @@ class DiaryDetailViewModel(
         val id = detail.id
         deleteById(id)
         return detail.name
-    }
-
-    /**
-     * LiveData
-     */
-    private var _navigateToDiaryDetail = MutableLiveData<Long?>()
-    val navigateToDiaryDetail: LiveData<Long?>
-        get() = _navigateToDiaryDetail
-    fun doneNavigateToDiary() {
-        _navigateToDiaryDetail.value = null
     }
 
     /**
