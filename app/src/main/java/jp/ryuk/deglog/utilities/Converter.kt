@@ -1,10 +1,14 @@
 package jp.ryuk.deglog.utilities
 
 import android.annotation.SuppressLint
+import android.util.Log
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.time.LocalTime
 import java.time.temporal.ChronoUnit
 import java.util.*
+import kotlin.math.round
 
 
 /**
@@ -18,17 +22,14 @@ fun convertYMDToLong(y: Int, m: Int, d: Int) : Long {
 }
 
 @SuppressLint("SimpleDateFormat")
-fun Long.getYear(): Int {
-    return SimpleDateFormat("yyyy").format(this).toInt()
-}
+fun Long.getYear(): Int =
+    SimpleDateFormat("yyyy").format(this).toInt()
+
 @SuppressLint("SimpleDateFormat")
-fun Long.getMonth(): Int {
-    return SimpleDateFormat("M").format(this).toInt()
-}
+fun Long.getMonth(): Int = SimpleDateFormat("M").format(this).toInt()
+
 @SuppressLint("SimpleDateFormat")
-fun Long.getDayOfMonth(): Int {
-    return SimpleDateFormat("d").format(this).toInt()
-}
+fun Long.getDayOfMonth(): Int = SimpleDateFormat("d").format(this).toInt()
 
 
 @SuppressLint("SimpleDateFormat")
@@ -96,3 +97,19 @@ fun convertWeight(weight: Float?): String? {
 fun convertLength(length: Float?): String? {
     return if (length == null) { null } else { "$length mm" }
 }
+
+/**
+ * 単位変換
+ */
+fun convertUnit(number: Float, suffix: String): String {
+    return when (suffix) {
+        "g" -> "${number.toInt()} g"
+        "kg" -> "${roundUp(number)} kg"
+        "mm" -> "${number.toInt()} mm"
+        "m" -> "${roundUp(number)} m"
+        else -> "$number"
+    }
+}
+
+private fun roundUp(number: Float): BigDecimal =
+    BigDecimal((number / 1000).toString()).setScale(2, RoundingMode.HALF_UP)

@@ -11,6 +11,7 @@ import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
 import jp.ryuk.deglog.utilities.convertLongToDateStringRelative
+import jp.ryuk.deglog.utilities.convertUnit
 import kotlinx.coroutines.*
 import kotlin.math.absoluteValue
 
@@ -98,40 +99,28 @@ class DashboardViewModel(
         return dashboard
     }
 
-    private fun listEmptyCheck(dataList: List<Float>): List<Float> {
-        return when {
+    private fun listEmptyCheck(dataList: List<Float>): List<Float> = when {
             dataList.isEmpty() -> listOf(0f, 0f)
             dataList.size == 1 -> dataList.plus(dataList)
             else -> dataList
         }
-    }
-    private fun dateFormatter(date: Long): String {
-        return if (date == 0L) "no data" else convertLongToDateStringRelative(date)
-    }
 
-    private fun latest(dataList: List<Float>, suffix: String): String {
-        return when (suffix) {
-            "g" -> "${dataList[0]} g"
-            "kg" -> "${dataList[0] / 1000} kg"
-            "mm" -> "${dataList[0]} mm"
-            "m" -> "${dataList[0] / 1000} m"
-            else -> ""
-        }
-    }
+    private fun dateFormatter(date: Long): String =
+        if (date == 0L) "no data" else convertLongToDateStringRelative(date)
+
+
+    private fun latest(dataList: List<Float>, suffix: String): String =
+        convertUnit(dataList[0], suffix)
+
 
     private fun previous(dataList: List<Float>, suffix: String): String {
-        val diff = when (suffix) {
-            "g" -> (dataList[0] - dataList[1])
-            "kg" -> (dataList[0] - dataList[1]) / 1000
-            "mm" -> (dataList[0] - dataList[1])
-            "m" -> (dataList[0] - dataList[1]) / 1000
-            else -> (dataList[0] - dataList[1])
-        }
+        val diff = dataList[0] - dataList[1]
+        val result = convertUnit(diff.absoluteValue, suffix)
 
         return when {
-            diff > 0 -> "+ ${diff.absoluteValue} $suffix"
-            diff < 0 -> "- ${diff.absoluteValue} $suffix"
-            else -> "0 $suffix"
+            diff > 0 -> "+ $result "
+            diff < 0 -> "- $result"
+            else -> "$result"
         }
 
     }
@@ -147,9 +136,9 @@ class DashboardViewModel(
         }
     }
 
-    private fun diffPercent(first: Float, last: Float): Double {
-        return (first.toDouble() / last.toDouble()) - 1
-    }
+    private fun diffPercent(first: Float, last: Float): Double =
+        (first.toDouble() / last.toDouble()) - 1
+
 
     /**
      * Chips Click Event

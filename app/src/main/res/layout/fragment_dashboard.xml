@@ -168,7 +168,7 @@
                                 app:layout_constraintBottom_toBottomOf="@+id/db_weight_latest_data"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/db_weight_latest"
-                                app:srcCompat="@drawable/ic_up" />
+                                app:srcCompat="@drawable/ic_flat" />
 
                             <View
                                 android:id="@+id/db_weight_border"
@@ -198,6 +198,7 @@
                                 android:layout_width="40dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
+                                android:text="傾向"
                                 app:layout_constraintEnd_toEndOf="@+id/db_weight_diff"
                                 app:layout_constraintStart_toStartOf="@+id/db_weight_diff"
                                 app:layout_constraintTop_toTopOf="@+id/db_weight_previous" />
@@ -294,7 +295,7 @@
                                 app:layout_constraintBottom_toBottomOf="@+id/db_length_latest_data"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/db_length_latest"
-                                app:srcCompat="@drawable/ic_up" />
+                                app:srcCompat="@drawable/ic_flat" />
 
                             <View
                                 android:id="@+id/db_length_border"
@@ -324,6 +325,7 @@
                                 android:layout_width="40dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
+                                android:text="傾向"
                                 app:layout_constraintEnd_toEndOf="@+id/db_length_diff"
                                 app:layout_constraintStart_toStartOf="@+id/db_length_diff"
                                 app:layout_constraintTop_toTopOf="@+id/db_length_previous" />

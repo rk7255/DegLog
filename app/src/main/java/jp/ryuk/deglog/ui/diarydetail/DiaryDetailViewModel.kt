@@ -9,6 +9,7 @@ import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
+import jp.ryuk.deglog.utilities.convertUnit
 import jp.ryuk.deglog.utilities.tag
 import kotlinx.coroutines.*
 import java.time.chrono.ChronoPeriod
@@ -46,20 +47,8 @@ class DiaryDetailViewModel(
                 detail.id = diary.id
                 detail.date = diary.date
                 detail.name = diary.name
-                diary.weight?.let {
-                    detail.weight = when (profile.weightUnit) {
-                        "g" -> "$it g"
-                        "kg" -> "${it / 1000} kg"
-                        else -> "$it"
-                    }
-                }
-                diary.length?.let {
-                    detail.length = when (profile.lengthUnit) {
-                        "mm" -> "$it mm"
-                        "m" -> "${it / 1000} m"
-                        else -> "$it"
-                    }
-                }
+                diary.weight?.let { detail.weight = convertUnit(it, profile.weightUnit) }
+                diary.length?.let { detail.length = convertUnit(it, profile.lengthUnit) }
                 detail.memo = diary.memo
                 profile.birthday?.let { detail.age = getAge(it, diary.date) }
                 detailList.add(detail)
