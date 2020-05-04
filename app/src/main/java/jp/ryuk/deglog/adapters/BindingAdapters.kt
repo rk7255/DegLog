@@ -11,7 +11,7 @@ import jp.ryuk.deglog.utilities.convertUnit
  */
 @BindingAdapter("number", "suffix")
 fun TextView.setDetailList(number: Float, suffix: String) {
-    text = convertUnit(number, suffix)
+    text = convertUnit(number, suffix, true)
 }
 
 

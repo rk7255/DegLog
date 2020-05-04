@@ -1,5 +1,6 @@
 package jp.ryuk.deglog.ui.diarydetail
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,7 @@ import jp.ryuk.deglog.data.DiaryRepository
 import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentDiaryDetailBinding
 import jp.ryuk.deglog.ui.diarylist.ListKey
+import jp.ryuk.deglog.utilities.InjectorUtil
 import jp.ryuk.deglog.utilities.convertLongToDateStringOutYear
 
 class DiaryDetailFragment : Fragment() {
@@ -40,7 +42,7 @@ class DiaryDetailFragment : Fragment() {
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarDiaryDetail)
         args = DiaryDetailFragmentArgs.fromBundle(arguments!!)
 
-        diaryDetailViewModel = createViewModel(args.diaryKey, args.selectedName)
+        diaryDetailViewModel = createViewModel(requireContext(), args.diaryKey, args.selectedName)
         binding.lifecycleOwner = this
         binding.appBarDiaryDetail.title = args.selectedName + getString(R.string.title_diary_detail_at_name)
 
@@ -69,12 +71,8 @@ class DiaryDetailFragment : Fragment() {
         }
     }
 
-    private fun createViewModel(diaryKey: Long, selectedName: String): DiaryDetailViewModel {
-        val application = requireNotNull(this.activity).application
-        val dataSourceDiary = DiaryRepository.getInstance(application).diaryDao
-        val dataSourceProfile = ProfileRepository.getInstance(application).profileDao
-        val viewModelFactory =
-            DiaryDetailViewModelFactory(diaryKey, selectedName, dataSourceDiary, dataSourceProfile)
+    private fun createViewModel(context: Context, id: Long, name: String): DiaryDetailViewModel {
+        val viewModelFactory = InjectorUtil.provideDiaryDetailViewModelFactory(context, id, name)
         return ViewModelProvider(this, viewModelFactory).get(DiaryDetailViewModel::class.java)
     }
 

@@ -110,12 +110,12 @@ class DashboardViewModel(
 
 
     private fun latest(dataList: List<Float>, suffix: String): String =
-        convertUnit(dataList[0], suffix)
+        convertUnit(dataList[0], suffix, true)
 
 
     private fun previous(dataList: List<Float>, suffix: String): String {
         val diff = dataList[0] - dataList[1]
-        val result = convertUnit(diff.absoluteValue, suffix)
+        val result = convertUnit(diff.absoluteValue, suffix, true)
 
         return when {
             diff > 0 -> "+ $result "

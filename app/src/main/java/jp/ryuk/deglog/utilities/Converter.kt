@@ -1,6 +1,7 @@
 package jp.ryuk.deglog.utilities
 
 import android.annotation.SuppressLint
+import java.lang.StringBuilder
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
@@ -88,14 +89,18 @@ fun convertStringToFloat(str: String?, unit: String): Float? {
 /**
  * 単位変換
  */
-fun convertUnit(number: Float, unit: String): String {
-    return when (unit) {
-        "g" -> "${roundDown(number)} g"
-        "kg" -> "${roundUp(number)} kg"
-        "mm" -> "${roundDown(number)} mm"
-        "m" -> "${roundUp(number)} m"
-        else -> "$number"
+fun convertUnit(number: Float, unit: String, onSuffix: Boolean): String {
+    val result = StringBuilder()
+    when (unit) {
+        "g" -> result.append("${roundDown(number)}")
+        "kg" -> result.append("${roundUp(number)}")
+        "mm" -> result.append("${roundDown(number)}")
+        "m" -> result.append("${roundUp(number)}")
+        else -> return "単位不明"
     }
+
+    if (onSuffix) result.append(" $unit")
+    return result.toString()
 }
 
 private fun roundDown(number: Float): BigDecimal =

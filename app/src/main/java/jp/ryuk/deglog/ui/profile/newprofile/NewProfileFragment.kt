@@ -1,6 +1,7 @@
 package jp.ryuk.deglog.ui.profile.newprofile
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +38,7 @@ class NewProfileFragment : Fragment() {
             inflater, R.layout.fragment_new_profile, container, false
         )
         args = NewProfileFragmentArgs.fromBundle(arguments!!)
-        newProfileViewModel = createViewModel(args.selectedName)
+        newProfileViewModel = createViewModel(requireContext() , args.selectedName)
 
         binding.lifecycleOwner = this
         binding.viewModel = newProfileViewModel
@@ -196,11 +197,8 @@ class NewProfileFragment : Fragment() {
             }
     }
 
-    private fun createViewModel(selectedName: String): NewProfileViewModel {
-        val application = requireNotNull(this.activity).application
-        val dataSourceProfile = ProfileRepository.getInstance(application).profileDao
-        val viewModelFactory =
-            NewProfileViewModelFactory(selectedName, dataSourceProfile)
+    private fun createViewModel(context: Context, name: String): NewProfileViewModel {
+        val viewModelFactory = InjectorUtil.provideNewProfileViewModelFactory(context, name)
         return ViewModelProvider(this, viewModelFactory).get(NewProfileViewModel::class.java)
     }
 

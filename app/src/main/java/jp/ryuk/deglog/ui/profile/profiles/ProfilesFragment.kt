@@ -1,5 +1,6 @@
 package jp.ryuk.deglog.ui.profile.profiles
 
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ import jp.ryuk.deglog.adapters.ProfileAdapter
 import jp.ryuk.deglog.adapters.ProfileListener
 import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentProfilesBinding
+import jp.ryuk.deglog.utilities.InjectorUtil
 
 
 class ProfilesFragment : Fragment() {
@@ -32,7 +34,7 @@ class ProfilesFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_profiles, container, false)
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarProfiles)
-        profilesViewModel = createViewModel()
+        profilesViewModel = createViewModel(requireContext())
         binding.viewModel = profilesViewModel
 
 
@@ -59,11 +61,8 @@ class ProfilesFragment : Fragment() {
         return binding.root
     }
 
-    private fun createViewModel(): ProfilesViewModel {
-        val application = requireNotNull(this.activity).application
-        val dataSourceProfile = ProfileRepository.getInstance(application).profileDao
-        val viewModelFactory =
-            ProfilesViewModelFactory(dataSourceProfile)
+    private fun createViewModel(context: Context): ProfilesViewModel {
+        val viewModelFactory = InjectorUtil.provideProfilesViewModelFactory(context)
         return ViewModelProvider(this, viewModelFactory).get(ProfilesViewModel::class.java)
     }
 

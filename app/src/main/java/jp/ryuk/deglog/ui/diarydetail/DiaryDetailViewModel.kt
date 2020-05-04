@@ -7,16 +7,10 @@ import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
-import jp.ryuk.deglog.utilities.convertUnit
-import jp.ryuk.deglog.utilities.getDayOfMonth
-import jp.ryuk.deglog.utilities.getMonth
-import jp.ryuk.deglog.utilities.getYear
 import kotlinx.coroutines.*
-import java.time.LocalDate
-import java.time.Period
 
 class DiaryDetailViewModel(
-    private val diaryKey: Long,
+    private val diaryId: Long,
     private val selectedName: String,
     private val diaryDatabase: DiaryDao,
     private val profileDatabase: ProfileDao
@@ -46,32 +40,21 @@ class DiaryDetailViewModel(
                 detail.id = diary.id
                 detail.date = diary.date
                 detail.name = diary.name
-                diary.weight?.let { detail.weight = convertUnit(it, profile.weightUnit) }
-                diary.length?.let { detail.length = convertUnit(it, profile.lengthUnit) }
+                detail.weight = diary.convertWeightUnit(profile.weightUnit, true)
+                detail.length = diary.convertLengthUnit(profile.lengthUnit, true)
                 detail.memo = diary.memo
-                profile.birthday?.let { detail.age = getAge(it, diary.date) }
+                detail.age = profile.getAge(diary.date)
                 detailList.add(detail)
             }
 
             details.value = detailList
 
             val ids = diaries.map(Diary::id)
-            _diaryPosition.value = ids.indexOf(diaryKey)
+            _diaryPosition.value = ids.indexOf(diaryId)
         }
     }
 
-    private fun getAge(birthday: Long, date: Long): String {
-        val from = LocalDate.of(birthday.getYear(), birthday.getMonth(), birthday.getDayOfMonth())
-        val to = LocalDate.of(date.getYear(), date.getMonth(), date.getDayOfMonth())
-        val diff = Period.between(from, to)
 
-        val age = StringBuilder()
-        if (diff.years > 0) age.append("${diff.years}歳 ")
-        if (diff.months > 0) age.append("${diff.months}ヶ月 ")
-        if (diff.days > 0) age.append("${diff.days}日")
-
-        return age.toString()
-    }
 
     /**
      * onClick

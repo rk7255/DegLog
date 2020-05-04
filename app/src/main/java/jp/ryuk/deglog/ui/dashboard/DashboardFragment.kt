@@ -1,6 +1,7 @@
 package jp.ryuk.deglog.ui.dashboard
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -12,10 +13,9 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import jp.ryuk.deglog.R
-import jp.ryuk.deglog.data.DiaryRepository
-import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentDashboardBinding
 import jp.ryuk.deglog.ui.diarylist.ListKey
+import jp.ryuk.deglog.utilities.InjectorUtil
 
 
 class DashboardFragment : Fragment() {
@@ -35,7 +35,7 @@ class DashboardFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard, container, false)
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarDiary)
 
-        dashboardViewModel = createViewModel()
+        dashboardViewModel = createViewModel(requireContext())
 
         binding.viewModel = dashboardViewModel
         binding.weight = dashboardViewModel.weight.value
@@ -123,11 +123,8 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun createViewModel(): DashboardViewModel {
-        val application = requireNotNull(this.activity).application
-        val diaryDatabase = DiaryRepository.getInstance(application).diaryDao
-        val profileDatabase = ProfileRepository.getInstance(application).profileDao
-        val viewModelFactory = DashboardViewModelFactory(diaryDatabase, profileDatabase)
+    private fun createViewModel(context: Context): DashboardViewModel {
+        val viewModelFactory = InjectorUtil.provideDashboardViewModelFactory(context)
         return ViewModelProvider(this, viewModelFactory).get(DashboardViewModel::class.java)
     }
 

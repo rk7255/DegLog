@@ -2,6 +2,9 @@ package jp.ryuk.deglog.data
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import jp.ryuk.deglog.utilities.convertUnit
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 @Entity(tableName = "diary_table")
 data class Diary(
@@ -12,4 +15,12 @@ data class Diary(
     var weight: Float? = null,
     var length: Float? = null,
     var memo: String? = null
-)
+) {
+    fun convertWeightUnit(unit: String, onSuffix: Boolean): String =
+        if (this.weight == null) "" else convertUnit(this.weight!!, unit, onSuffix)
+
+    fun convertLengthUnit(unit: String, onSuffix: Boolean): String =
+        if (this.length == null) "" else convertUnit(this.length!!, unit, onSuffix)
+
+}
+

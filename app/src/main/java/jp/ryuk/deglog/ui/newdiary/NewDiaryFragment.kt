@@ -2,6 +2,7 @@ package jp.ryuk.deglog.ui.newdiary
 
 import android.annotation.SuppressLint
 import android.app.TimePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,10 +22,7 @@ import jp.ryuk.deglog.data.DiaryRepository
 import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentNewDiaryBinding
 import jp.ryuk.deglog.ui.diarylist.ListKey
-import jp.ryuk.deglog.utilities.getDayOfMonth
-import jp.ryuk.deglog.utilities.getMonth
-import jp.ryuk.deglog.utilities.getYear
-import jp.ryuk.deglog.utilities.hideKeyboard
+import jp.ryuk.deglog.utilities.*
 import java.util.*
 
 class NewDiaryFragment : Fragment() {
@@ -55,7 +53,7 @@ class NewDiaryFragment : Fragment() {
             binding.newDiaryEditName.isEnabled = false
         }
 
-        newDiaryViewModel = createViewModel()
+        newDiaryViewModel = createViewModel(requireContext(), args.diaryKey, args.selectedName)
         binding.viewModel = newDiaryViewModel
         binding.lifecycleOwner = this
 
@@ -157,12 +155,8 @@ class NewDiaryFragment : Fragment() {
     }
 
 
-    private fun createViewModel(): NewDiaryViewModel {
-        val application = requireNotNull(this.activity).application
-        val dataSourceDiary = DiaryRepository.getInstance(application).diaryDao
-        val dataSourceProfile = ProfileRepository.getInstance(application).profileDao
-        val viewModelFactory =
-            NewDiaryViewModelFactory(args.diaryKey, args.selectedName, dataSourceDiary, dataSourceProfile)
+    private fun createViewModel(context: Context, id: Long, name: String): NewDiaryViewModel {
+        val viewModelFactory = InjectorUtil.provideNewDiaryViewModelFactory(context, id, name)
         return ViewModelProvider(this, viewModelFactory).get(NewDiaryViewModel::class.java)
     }
 

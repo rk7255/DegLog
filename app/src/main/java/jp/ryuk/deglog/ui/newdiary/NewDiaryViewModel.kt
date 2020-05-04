@@ -18,7 +18,7 @@ import kotlin.random.Random
 
 
 class NewDiaryViewModel(
-    diaryId: Long,
+    private val diaryId: Long,
     private val selectedName: String,
     private val diaryDatabase: DiaryDao,
     private val profileDatabase: ProfileDao
@@ -28,7 +28,6 @@ class NewDiaryViewModel(
     private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     var names = listOf<String>()
-    var id: Long = -1L
     var date: Long = 0L
     var dateOfString = ""
     var name: String = selectedName
@@ -43,8 +42,7 @@ class NewDiaryViewModel(
      * Initialize
      */
     init {
-        id = diaryId
-        if (id == -1L) initialize() else initializeEdit()
+        if (diaryId == -1L) initialize() else initializeEdit()
     }
 
     private fun initialize() {
@@ -66,12 +64,12 @@ class NewDiaryViewModel(
             weightUnit.value = profile.weightUnit
             lengthUnit.value = profile.lengthUnit
 
-            val diary = getDiary(id)
+            val diary = getDiary(diaryId)
             name = diary.name
             date = diary.date
             dateOfString = convertLongToDateStringInTime(date)
-            weight = diary.weight?.toString()
-            length = diary.length?.toString()
+            weight = diary.convertWeightUnit(weightUnit.value ?: "g", false)
+            length = diary.convertLengthUnit(lengthUnit.value ?: "mm", false)
             memo = diary.memo
             _initialized.value = true
         }
@@ -82,7 +80,7 @@ class NewDiaryViewModel(
      * onClick
     */
     fun onSubmit() {
-        if (id == -1L) {
+        if (diaryId == -1L) {
             if (isInputDataValid()) insertNewDiary()
         } else {
             if (isInputDataValid()) updateDiary()
@@ -213,7 +211,7 @@ class NewDiaryViewModel(
     private fun updateDiary() {
         uiScope.launch {
             val newDiary = Diary()
-            newDiary.id = id
+            newDiary.id = diaryId
             newDiary.name = name
             newDiary.date = date
             newDiary.weight = convertStringToFloat(weight, weightUnit.value!!)

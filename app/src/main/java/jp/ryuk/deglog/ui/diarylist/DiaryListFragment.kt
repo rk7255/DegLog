@@ -1,5 +1,6 @@
 package jp.ryuk.deglog.ui.diarylist
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +20,7 @@ import jp.ryuk.deglog.adapters.WEIGHT_PAGE_INDEX
 import jp.ryuk.deglog.data.DiaryRepository
 import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentDiaryListBinding
+import jp.ryuk.deglog.utilities.InjectorUtil
 
 
 class DiaryListFragment : Fragment() {
@@ -35,7 +37,7 @@ class DiaryListFragment : Fragment() {
             inflater, R.layout.fragment_diary_list, container, false)
 
         args = DiaryListFragmentArgs.fromBundle(arguments!!)
-        diaryListViewModel = createViewModel(args.selectedName)
+        diaryListViewModel = createViewModel(requireContext(), args.selectedName)
         binding.appBarDiaryList.title = args.selectedName + getString(R.string.title_diary_detail_at_name)
 
         var fromKey = args.fromKey
@@ -104,11 +106,8 @@ class DiaryListFragment : Fragment() {
         }
     }
 
-    private fun createViewModel(selectedName: String): DiaryListViewModel {
-        val application = requireNotNull(this.activity).application
-        val dataSourceDiary = DiaryRepository.getInstance(application).diaryDao
-        val dataSourceProfile = ProfileRepository.getInstance(application).profileDao
-        val viewModelFactory = DiaryListViewModelFactory(selectedName, dataSourceDiary, dataSourceProfile)
+    private fun createViewModel(context: Context, name: String): DiaryListViewModel {
+        val viewModelFactory = InjectorUtil.provideDiaryListViewModelFactory(context, name)
         return ViewModelProvider(this, viewModelFactory).get(DiaryListViewModel::class.java)
     }
 }
