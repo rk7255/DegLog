@@ -1,27 +1,26 @@
 package jp.ryuk.deglog.adapters
 
+import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import jp.ryuk.deglog.utilities.convertLongToDateStringInTime
 import jp.ryuk.deglog.utilities.convertLongToDateStringOutYear
 import jp.ryuk.deglog.utilities.convertUnit
 
-/**
- * DiaryDetailList
- */
+@BindingAdapter("isGone")
+fun bindIsGone(view: View, isGone: Boolean) {
+    view.visibility = if (isGone) {
+        View.GONE
+    } else {
+        View.VISIBLE
+    }
+}
+
+
 @BindingAdapter("number", "suffix")
 fun TextView.setDetailList(number: Float, suffix: String) {
     text = convertUnit(number, suffix, true)
 }
-
-
-// 名前
-//@BindingAdapter("diaryName")
-//fun TextView.setDiaryName(item: String?) {
-//    item?.let {
-//        text = item
-//    }
-//}
 
 // 日付
 @BindingAdapter("diaryDateFormatted")
@@ -39,23 +38,6 @@ fun TextView.setWeightDateFormatted(item: Long?){
     }
 }
 
-
-/*
-// 体重
-@BindingAdapter("diaryWeightFormatted")
-fun TextView.setDiaryWeightFormatted(weight: Float?) {
-    weight?.let {
-        text = convertWeight(weight)
-    }
-}
-// 体長
-@BindingAdapter("diaryLengthFormatted")
-fun TextView.setDiaryLengthFormatted(length: Float?) {
-    length?.let {
-        text = convertLength(length)
-    }
-}
-*/
 
 // メモ
 @BindingAdapter("diaryMemoFormatted")

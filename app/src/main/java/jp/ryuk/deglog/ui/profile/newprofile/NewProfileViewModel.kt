@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
 import jp.ryuk.deglog.utilities.convertLongToDateString
@@ -12,6 +13,7 @@ import kotlinx.coroutines.*
 
 class NewProfileViewModel(
     private val selectedName: String,
+    private val diaryDatabase: DiaryDao,
     private val profileDatabase: ProfileDao
 ) : ViewModel() {
     private var viewModelJob = Job()
@@ -47,7 +49,6 @@ class NewProfileViewModel(
             unitWeight = profile.weightUnit
             unitLength = profile.lengthUnit
             _initialized.value = true
-
         }
     }
 
@@ -128,22 +129,34 @@ class NewProfileViewModel(
 
     private fun updateProfile() {
         uiScope.launch {
-            val newProfile = Profile()
-            newProfile.name = name
-            newProfile.gender = gender
-            newProfile.type = type
-            newProfile.birthday = birthday
-            newProfile.weightUnit = unitWeight
-            newProfile.lengthUnit = unitLength
-            Log.d(tag, "Update Profile -> $newProfile")
-            update(newProfile)
-            _navigateToProfiles.value = true
+            if (selectedName != name) {
+                changeName(selectedName, name)
+                insertNewProfile()
+            } else {
+                val newProfile = Profile()
+                newProfile.name = name
+                newProfile.gender = gender
+                newProfile.type = type
+                newProfile.birthday = birthday
+                newProfile.weightUnit = unitWeight
+                newProfile.lengthUnit = unitLength
+                Log.d(tag, "Update Profile -> $newProfile")
+                update(newProfile)
+                _navigateToProfiles.value = true
+            }
         }
     }
 
     private suspend fun get(key: String): Profile {
         return withContext(Dispatchers.IO) {
             profileDatabase.getProfile(key)
+        }
+    }
+
+    private suspend fun changeName(old: String, new: String) {
+        withContext(Dispatchers.IO) {
+            diaryDatabase.changeName(old, new)
+            profileDatabase.deleteByName(old)
         }
     }
 

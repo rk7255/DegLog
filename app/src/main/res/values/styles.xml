@@ -37,5 +37,8 @@
         <item name="android:textSize">40sp</item>
     </style>
 
+    <style name="Widget.Deglog.Button.Suffix" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textAllCaps">false</item>
+    </style>
 
 </resources>

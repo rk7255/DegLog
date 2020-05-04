@@ -11,6 +11,7 @@ import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
 import jp.ryuk.deglog.utilities.convertLongToDateStringInTime
 import jp.ryuk.deglog.utilities.convertStringToFloat
+import jp.ryuk.deglog.utilities.convertUnit
 import jp.ryuk.deglog.utilities.convertYMDToLong
 import kotlinx.coroutines.*
 import java.util.*
@@ -47,7 +48,7 @@ class NewDiaryViewModel(
 
     private fun initialize() {
         uiScope.launch {
-            val profile = getProfile(selectedName)
+            val profile = if (isRegistered(selectedName)) getProfile(selectedName) else Profile()
             weightUnit.value = profile.weightUnit
             lengthUnit.value = profile.lengthUnit
 
@@ -85,13 +86,25 @@ class NewDiaryViewModel(
         } else {
             if (isInputDataValid()) updateDiary()
         }
-
     }
 
     private fun isInputDataValid(): Boolean {
         val isValid = name.isNotEmpty()
         _submitError.value = !isValid
         return isValid
+    }
+
+    fun onChangeSuffix(witch: Int) {
+        when (witch) {
+            1 -> { when (weightUnit.value) {
+                    "g" -> weightUnit.value = "kg"
+                    "kg" -> weightUnit.value = "g"
+            }}
+            2 -> { when (lengthUnit.value) {
+                "mm" -> lengthUnit.value = "m"
+                "m" -> lengthUnit.value = "mm"
+            }}
+        }
     }
 
     fun onCancel() {
@@ -105,33 +118,33 @@ class NewDiaryViewModel(
     /**
      * DEBUG
      */
-    fun onClear() {
-        uiScope.launch {
-            clear(selectedName)
-            _navigateToDiary.value = true
-        }
-    }
-
-    fun onAddDummy() {
-        uiScope.launch {
-
-            for (m in 1..3) {
-                for (d in 1..5) {
-                    val loop = Random.nextInt(0, 3)
-                    for (i in 0..loop) {
-                        val newDiary = Diary()
-                        newDiary.date = convertYMDToLong(2020, m, d)
-                        newDiary.name = name
-                        newDiary.weight = 250f + loop * Random.nextInt(1, 15)
-                        newDiary.length = 150f + loop * Random.nextInt(1, 15)
-                        newDiary.memo = "DUMMY DUMMY"
-                        insert(newDiary)
-                    }
-                }
-            }
-            _navigateToDiary.value = true
-        }
-    }
+//    fun onClear() {
+//        uiScope.launch {
+//            clear(selectedName)
+//            _navigateToDiary.value = true
+//        }
+//    }
+//
+//    fun onAddDummy() {
+//        uiScope.launch {
+//
+//            for (m in 1..3) {
+//                for (d in 1..5) {
+//                    val loop = Random.nextInt(0, 3)
+//                    for (i in 0..loop) {
+//                        val newDiary = Diary()
+//                        newDiary.date = convertYMDToLong(2020, m, d)
+//                        newDiary.name = name
+//                        newDiary.weight = 250f + loop * Random.nextInt(1, 15)
+//                        newDiary.length = 150f + loop * Random.nextInt(1, 15)
+//                        newDiary.memo = "DUMMY DUMMY"
+//                        insert(newDiary)
+//                    }
+//                }
+//            }
+//            _navigateToDiary.value = true
+//        }
+//    }
 
 
     /**
@@ -190,6 +203,8 @@ class NewDiaryViewModel(
 
     private fun insertNewDiary() {
         uiScope.launch {
+            if (!isRegistered(name)) insertNewProfile(Profile(name = name))
+
             val newDiary = Diary()
             newDiary.name = name
             newDiary.date = date
@@ -241,11 +256,24 @@ class NewDiaryViewModel(
         }
     }
 
-    private suspend fun clear(name: String) {
-        withContext(Dispatchers.IO) {
-            diaryDatabase.clear(name)
+    private suspend fun isRegistered(name: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            val profile = profileDatabase.isRegistered(name)
+            profile != null
         }
     }
+
+    private suspend fun insertNewProfile(profile: Profile) {
+        withContext(Dispatchers.IO) {
+            profileDatabase.insert(profile)
+        }
+    }
+
+//    private suspend fun clear(name: String) {
+//        withContext(Dispatchers.IO) {
+//            diaryDatabase.clear(name)
+//        }
+//    }
 
     override fun onCleared() {
         super.onCleared()

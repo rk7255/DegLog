@@ -20,6 +20,10 @@
         <variable
             name="key"
             type="jp.ryuk.deglog.ui.diarylist.ListKey" />
+
+        <variable
+            name="isEmpty"
+            type="Boolean" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -44,10 +48,29 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="@dimen/margin_m"
+            android:fitsSystemWindows="true"
+            app:isGone="@{isEmpty}"
+            android:background="@color/colorBackground"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="データがありません！"/>
+
+        </FrameLayout>
+
         <LinearLayout
             android:id="@+id/dashboard_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:isGone="@{!isEmpty}"
             android:elevation="@dimen/margin_m"
             android:fitsSystemWindows="true"
             android:orientation="vertical"

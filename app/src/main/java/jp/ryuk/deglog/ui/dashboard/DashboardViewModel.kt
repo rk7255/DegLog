@@ -1,5 +1,6 @@
 package jp.ryuk.deglog.ui.dashboard
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -33,6 +34,9 @@ class DashboardViewModel(
     lateinit var weightChart: LineChart
     lateinit var lengthChart: LineChart
 
+    private var _isEmpty = MutableLiveData<Boolean>()
+    val isEmpty: LiveData<Boolean> get() = _isEmpty
+
     /**
      * Initialize
      */
@@ -44,6 +48,8 @@ class DashboardViewModel(
         uiScope.launch {
             names = getNames()
             diaries = getDiaries()
+            _isEmpty.value = names.isEmpty()
+
             _initialized.value = true
         }
     }
@@ -143,9 +149,9 @@ class DashboardViewModel(
     /**
      * Chips Click Event
      */
-    fun changeFilterNames(name: String, id: Int) {
+    fun changeFilterNames(name: String) {
         uiScope.launch {
-            if (id >= 0) {
+            if (name.isNotEmpty()) {
                 filteredDiaries.value = diaries.filter { it.name == name }
 
                 val weightList = filteredDiaries.value!!.mapNotNull(Diary::weight)
@@ -157,9 +163,9 @@ class DashboardViewModel(
                 val dateOfLength = getDateOfLengthLatest(name)
                 createLineChart(weightChart, weights.reversed())
                 createLineChart(lengthChart, lengths.reversed())
+                Log.d("DEBUG", "!! $name")
 
                 val profile = getProfile(name)
-
                 changeDashboard(
                     weights, dateOfWeight, profile.weightUnit,
                     lengths, dateOfLength, profile.lengthUnit)

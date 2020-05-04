@@ -3,6 +3,7 @@ package jp.ryuk.deglog.ui.dashboard
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -36,12 +37,16 @@ class DashboardFragment : Fragment() {
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarDiary)
 
         dashboardViewModel = createViewModel(requireContext())
+        binding.lifecycleOwner = this
 
         binding.viewModel = dashboardViewModel
         binding.weight = dashboardViewModel.weight.value
         binding.length = dashboardViewModel.length.value
 
-        binding.lifecycleOwner = this
+        dashboardViewModel.isEmpty.observe(viewLifecycleOwner, Observer {
+            binding.isEmpty = !it
+            Log.d("DEBUG", "$it")
+        })
 
         dashboardViewModel.weightChart = binding.dbWeightChart
         dashboardViewModel.lengthChart = binding.dbLengthChart
@@ -100,9 +105,9 @@ class DashboardFragment : Fragment() {
     private fun setupChipGroup(select: String = "") {
         initChipGroup(dashboardViewModel.names, binding.filterChipGroup, select)
         binding.filterChipGroup.setOnCheckedChangeListener { _, _ ->
-            dashboardViewModel.changeFilterNames(dashboardViewModel.selectedFilter, 0)
+            dashboardViewModel.changeFilterNames(dashboardViewModel.selectedFilter)
         }
-        dashboardViewModel.changeFilterNames(dashboardViewModel.selectedFilter, 0)
+        dashboardViewModel.changeFilterNames(dashboardViewModel.selectedFilter)
     }
 
     private fun initChipGroup(items: List<String?>, chipGroup: ChipGroup, select: String) {

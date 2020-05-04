@@ -47,8 +47,9 @@ object InjectorUtil {
     }
 
     fun provideNewProfileViewModelFactory(context: Context, name: String): NewProfileViewModelFactory {
+        val diaryDao = getDiaryDao(context)
         val profileDao = getProfileDao(context)
-        return NewProfileViewModelFactory(name, profileDao)
+        return NewProfileViewModelFactory(name, diaryDao, profileDao)
     }
 
     fun provideProfilesViewModelFactory(context: Context): ProfilesViewModelFactory {

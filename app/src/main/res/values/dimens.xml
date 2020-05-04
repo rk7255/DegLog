@@ -12,7 +12,10 @@
     <dimen name="dashboard_chart_height">80dp</dimen>
 
     <dimen name="edit_text_width">300dp</dimen>
+    <dimen name="edit_text_height">60dp</dimen>
     <dimen name="edit_text_width_half">140dp</dimen>
+    <dimen name="edit_text_width_mini">240dp</dimen>
+
 
     <dimen name="margin_s">4dp</dimen>
     <dimen name="margin_m">8dp</dimen>

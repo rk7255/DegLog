@@ -4,7 +4,7 @@ import androidx.room.*
 
 @Dao
 interface DiaryDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(diary: Diary)
 
     @Update
@@ -37,4 +37,6 @@ interface DiaryDao {
     @Query("SELECT date FROM diary_table WHERE (name = :name AND length IS NOT NULL) ORDER BY date DESC LIMIT 1")
     fun getDateOfLengthLatest(name: String): Long
 
+    @Query("UPDATE diary_table SET name = :new WHERE name = :old")
+    fun changeName(old: String, new: String)
 }
