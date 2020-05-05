@@ -19,8 +19,6 @@
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/app_bar_chart"
                     style="@style/Widget.Deglog.Toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/toolbar_height"
                     app:layout_scrollFlags="scroll|enterAlways"
                     app:title="@string/title_chart" />
             </com.google.android.material.appbar.AppBarLayout>

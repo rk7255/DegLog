@@ -112,6 +112,9 @@
     </string-array>
 
     <string name="dummy_description">Dummy Description</string>
+    <string name="load_diaries">日誌の読込中…</string>
+    <string name="load_profiles">プロフィールの読込中…</string>
+    <string name="load_names">名前リストの取得中…</string>
 
 
 </resources>

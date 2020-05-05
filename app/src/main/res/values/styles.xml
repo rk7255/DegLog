@@ -10,6 +10,8 @@
     </style>
 
     <style name="Widget.Deglog.Toolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/toolbar_height</item>
         <item name="android:background">?attr/colorPrimary</item>
         <item name="android:theme">?theme</item>
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
@@ -20,11 +22,9 @@
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="Widget.Deglog.EditText"
-        parent='Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense'/>
+    <style name="Widget.Deglog.EditText" parent='Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense' />
 
-    <style name="Widget.Deglog.EditText_DropDown"
-        parent='Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu'/>
+    <style name="Widget.Deglog.EditText_DropDown" parent='Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu' />
 
     <style name="MyTimePickerDialogStyle" parent="@style/ThemeOverlay.MaterialComponents.MaterialCalendar">
         <item name="colorControlActivated">@color/primaryColor</item>
@@ -45,4 +45,67 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">51%</item>
     </style>
+
+    <!--  Dashboard  -->
+    <style name="Deglog.Dashboard.Title" parent="TextAppearance.MaterialComponents.Subtitle1">
+        <item name="fontFamily">monospace</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+    </style>
+    <style name="DashboardTitle">
+        <item name="android:textAppearance">@style/Deglog.Dashboard.Title</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="Deglog.Dashboard.SubTitle" parent="TextAppearance.MaterialComponents.Subtitle2">
+        <item name="android:gravity">center</item>
+        <item name="fontFamily">monospace</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+    </style>
+
+    <style name="Deglog.Dashboard.Body" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:gravity">center</item>
+        <item name="fontFamily">monospace</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+    </style>
+
+    <style name="Deglog.Dashboard.Main1" parent="Deglog.Dashboard.Body">
+        <item name="android:textSize">30sp</item>
+    </style>
+
+    <style name="Deglog.Dashboard.Main2" parent="Deglog.Dashboard.Body">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="LoadingText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="DashboardContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:elevation">8dp</item>
+        <item name="cardCornerRadius">8dp</item>
+    </style>
+
+    <style name="DashboardIcon">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginTop">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:tint">@color/primaryDarkColor</item>
+    </style>
+
 </resources>

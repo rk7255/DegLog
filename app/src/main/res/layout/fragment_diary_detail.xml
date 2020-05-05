@@ -21,8 +21,6 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/app_bar_diary_detail"
                 style="@style/Widget.Deglog.Toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/toolbar_height"
                 app:layout_scrollFlags="noScroll"
                 app:title="@string/title_diary_detail" />
 

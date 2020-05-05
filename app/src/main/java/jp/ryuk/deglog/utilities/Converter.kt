@@ -106,5 +106,11 @@ fun convertUnit(number: Float, unit: String, onSuffix: Boolean): String {
 private fun roundDown(number: Float): BigDecimal =
     BigDecimal(number.toString()).setScale(0, RoundingMode.HALF_UP)
 
-private fun roundUp(number: Float): BigDecimal =
-    BigDecimal((number / 1000).toString()).setScale(2, RoundingMode.HALF_UP)
+private fun roundUp(number: Float): BigDecimal {
+    val scale = when (number / 1000) {
+        in 0.0..99.0 -> 2
+        in 99.0..999.0 -> 1
+        else -> 0
+    }
+    return BigDecimal((number / 1000).toString()).setScale(scale, RoundingMode.HALF_UP)
+}
