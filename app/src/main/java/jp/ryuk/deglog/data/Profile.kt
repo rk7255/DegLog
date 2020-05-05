@@ -26,6 +26,7 @@ data class Profile (
 
             val diff = Period.between(from, to)
             val age = StringBuilder()
+            if (diff.years <= 0 && diff.months <= 3) age.append("生後 ")
             if (diff.years > 0) age.append("${diff.years}歳 ")
             if (diff.months > 0) age.append("${diff.months}ヶ月 ")
             if (diff.days > 0) age.append("${diff.days}日")

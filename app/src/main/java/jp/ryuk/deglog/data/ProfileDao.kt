@@ -1,5 +1,6 @@
 package jp.ryuk.deglog.data
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
@@ -33,4 +34,9 @@ interface ProfileDao {
 
     @Query("SELECT name FROM profile_table WHERE name = :name")
     fun isRegistered(name: String): String?
+
+
+
+    @Query("SELECT * FROM profile_table ORDER BY name")
+    fun getProfilesLive() : LiveData<List<Profile>>
 }

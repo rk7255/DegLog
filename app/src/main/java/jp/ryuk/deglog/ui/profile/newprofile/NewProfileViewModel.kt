@@ -8,7 +8,7 @@ import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
 import jp.ryuk.deglog.utilities.convertLongToDateString
-import jp.ryuk.deglog.utilities.tag
+import jp.ryuk.deglog.utilities.deg
 import kotlinx.coroutines.*
 
 class NewProfileViewModel(
@@ -115,7 +115,7 @@ class NewProfileViewModel(
             newProfile.birthday = birthday
             newProfile.weightUnit = unitWeight
             newProfile.lengthUnit = unitLength
-            Log.d(tag, "Insert Profile -> $newProfile")
+            Log.d(deg, "Insert Profile -> $newProfile")
             insert(newProfile)
             _navigateToProfiles.value = true
         }
@@ -140,7 +140,7 @@ class NewProfileViewModel(
                 newProfile.birthday = birthday
                 newProfile.weightUnit = unitWeight
                 newProfile.lengthUnit = unitLength
-                Log.d(tag, "Update Profile -> $newProfile")
+                Log.d(deg, "Update Profile -> $newProfile")
                 update(newProfile)
                 _navigateToProfiles.value = true
             }

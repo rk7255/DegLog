@@ -1,5 +1,6 @@
 package jp.ryuk.deglog.data
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
@@ -39,4 +40,20 @@ interface DiaryDao {
 
     @Query("UPDATE diary_table SET name = :new WHERE name = :old")
     fun changeName(old: String, new: String)
+
+
+    // テスト用
+    @Query("SELECT * FROM diary_table ORDER BY date DESC")
+    fun getAllDiaries() : LiveData<List<Diary>>
+
+    @Query("SELECT DISTINCT name FROM diary_table ORDER BY name")
+    fun getNamesInDiaryDB() : LiveData<List<String>>
+
+
+
+
+
+
+
+
 }

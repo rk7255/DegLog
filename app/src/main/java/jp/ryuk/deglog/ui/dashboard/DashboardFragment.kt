@@ -5,6 +5,8 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -13,16 +15,19 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.databinding.FragmentDashboardBinding
 import jp.ryuk.deglog.ui.diarylist.ListKey
 import jp.ryuk.deglog.utilities.InjectorUtil
+import jp.ryuk.deglog.utilities.deg
 
 
 class DashboardFragment : Fragment() {
 
     private lateinit var binding: FragmentDashboardBinding
-    private lateinit var dashboardViewModel: DashboardViewModel
+    private lateinit var viewModel: DashboardViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,98 +39,77 @@ class DashboardFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_dashboard, container, false)
-        (activity as AppCompatActivity).setSupportActionBar(binding.appBarDiary)
+        (activity as AppCompatActivity).setSupportActionBar(binding.dbAppBar)
 
-        dashboardViewModel = createViewModel(requireContext())
+        viewModel = createViewModel(requireContext())
         binding.lifecycleOwner = this
 
-        binding.viewModel = dashboardViewModel
-        binding.weight = dashboardViewModel.weight.value
-        binding.length = dashboardViewModel.length.value
+        binding.viewModel = viewModel
 
-        dashboardViewModel.isEmpty.observe(viewLifecycleOwner, Observer {
-            binding.isEmpty = !it
-            Log.d("DEBUG", "$it")
-        })
+        viewModel.chartWeight = binding.dbWeightChart
+        viewModel.chartLength = binding.dbLengthChart
 
-        dashboardViewModel.weightChart = binding.dbWeightChart
-        dashboardViewModel.lengthChart = binding.dbLengthChart
-        binding.dbWeightChart.setNoDataText("")
-        binding.dbLengthChart.setNoDataText("")
+        var names = arrayOf<String>()
 
-        dashboardViewModel.initialized.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                setupChipGroup()
-                dashboardViewModel.doneInitialized()
+        viewModel.diaries.observe(viewLifecycleOwner, Observer {
+            if (!it.isNullOrEmpty()) {
+                viewModel.diariesLoaded.value = true
+                viewModel.sectionLoaded()
             }
         })
 
-        if (dashboardViewModel.names.isNotEmpty()) {
-            setupChipGroup(dashboardViewModel.selectedFilter)
-        }
-
-        dashboardViewModel.navigateToDetail.observe(viewLifecycleOwner, Observer { key ->
-            if (key != null) {
-                this.findNavController().navigate(
-                    DashboardFragmentDirections.actionDiaryFragmentToDiaryDetailFragment(key, dashboardViewModel.selectedFilter))
-                dashboardViewModel.doneNavigateToDetail()
+        viewModel.profiles.observe(viewLifecycleOwner, Observer {
+            if (!it.isNullOrEmpty()) {
+                viewModel.profilesLoaded.value = true
+                viewModel.sectionLoaded()
             }
         })
 
-        /**
-         *  DashBoard
-         */
-        dashboardViewModel.changeDashboard.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                binding.weight = dashboardViewModel.weight.value
-                binding.length = dashboardViewModel.length.value
-
-                binding.dbWeightDiff.setImageResource(
-                    when (dashboardViewModel.weight.value!!.diff) {
-                        "up" -> R.drawable.ic_up
-                        "down" -> R.drawable.ic_down
-                        else -> R.drawable.ic_flat
-                    }
-                )
-                binding.dbLengthDiff.setImageResource(
-                    when (dashboardViewModel.length.value!!.diff) {
-                        "up" -> R.drawable.ic_up
-                        "down" -> R.drawable.ic_down
-                        else -> R.drawable.ic_flat
-                    }
-                )
-                dashboardViewModel.doneChangeDashboard()
+        viewModel.names.observe(viewLifecycleOwner, Observer {
+            if (!it.isNullOrEmpty()) {
+                Log.d(deg, "names loaded")
+                viewModel.namesLoaded.value = true
+                names = it.toTypedArray()
+                if (viewModel.selected.value.isNullOrEmpty()) viewModel.selected.value = names[0]
+                binding.dbPersonalName.text = viewModel.selected.value
+                viewModel.sectionLoaded()
             }
         })
 
+        viewModel.call.observe(viewLifecycleOwner, Observer { call ->
+            if (call != null) {
+                when (call) {
+                    OnCallKey.PERSONAL_ICON -> makeSnackBar("ICON")
+                    OnCallKey.PERSONAL_CONTAINER -> dialogBuilder(requireContext(), names).show()
+                    OnCallKey.NOTIFY_CONTAINER -> makeSnackBar("NOTIFY")
+                    OnCallKey.WEIGHT_CONTAINER -> navigateToDiaryList(ListKey.FROM_WEIGHT)
+                    OnCallKey.LENGTH_CONTAINER -> navigateToDiaryList(ListKey.FROM_LENGTH)
+                    OnCallKey.TODO_CONTAINER -> makeSnackBar("TODO")
+                }
+                viewModel.doneCall()
+            }
+        })
 
         return binding.root
     }
 
-    private fun setupChipGroup(select: String = "") {
-        initChipGroup(dashboardViewModel.names, binding.filterChipGroup, select)
-        binding.filterChipGroup.setOnCheckedChangeListener { _, _ ->
-            dashboardViewModel.changeFilterNames(dashboardViewModel.selectedFilter)
-        }
-        dashboardViewModel.changeFilterNames(dashboardViewModel.selectedFilter)
+    private fun navigateToDiaryList(key: Int) {
+        this.findNavController().navigate(
+            DashboardFragmentDirections.actionDiaryFragmentToDiaryDetailFragment(key, viewModel.selected.value!!)
+        )
     }
 
-    private fun initChipGroup(items: List<String?>, chipGroup: ChipGroup, select: String) {
-        if (items.isNotEmpty()) {
-            val chipInflater = LayoutInflater.from(activity!!)
-            items.forEachIndexed { index, item ->
-                @SuppressLint("InflateParams")
-                val chip = chipInflater.inflate(R.layout.chip_item_filter, null, false) as Chip
-                chip.id = View.generateViewId()
-                chip.text = item
-                chip.isChecked = if (item == select) true else index == 0
-                chip.setOnCheckedChangeListener { buttonView, isChecked ->
-                    if (isChecked) dashboardViewModel.selectedFilter = buttonView.text.toString()
-                }
-                chipGroup.addView(chip)
+    private fun dialogBuilder(context: Context, list: Array<String>): MaterialAlertDialogBuilder {
+        return MaterialAlertDialogBuilder(context)
+            .setTitle("ペットの選択")
+            .setItems(list) { _, which ->
+                viewModel.selected.value = list[which]
+                viewModel.changeDashboard()
             }
-            if (dashboardViewModel.selectedFilter.isEmpty()) dashboardViewModel.selectedFilter = items[0].toString()
-        }
+    }
+
+    private fun makeSnackBar(text: String) {
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_LONG).show()
     }
 
     private fun createViewModel(context: Context): DashboardViewModel {
@@ -144,7 +128,7 @@ class DashboardFragment : Fragment() {
                 this.findNavController().navigate(
                     DashboardFragmentDirections
                         .actionDiaryFragmentToNewDiaryFragment(
-                            ListKey.FROM_UNKNOWN, -1 ,dashboardViewModel.selectedFilter))
+                            ListKey.FROM_UNKNOWN, -1 , viewModel.selected.value ?: ""))
             }
         }
         return super.onOptionsItemSelected(item)

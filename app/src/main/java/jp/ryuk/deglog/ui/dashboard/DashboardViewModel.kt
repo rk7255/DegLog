@@ -1,5 +1,6 @@
 package jp.ryuk.deglog.ui.dashboard
 
+import android.graphics.Color
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -13,171 +14,123 @@ import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
-import jp.ryuk.deglog.utilities.convertLongToDateStringRelative
+import jp.ryuk.deglog.utilities.convertLongToDateString
 import jp.ryuk.deglog.utilities.convertUnit
-import kotlinx.coroutines.*
+import jp.ryuk.deglog.utilities.deg
+import java.util.*
 import kotlin.math.absoluteValue
 
 class DashboardViewModel(
-    private val diaryDatabase: DiaryDao,
-    private val profileDatabase: ProfileDao
+    diaryDatabase: DiaryDao,
+    profileDatabase: ProfileDao
 ) : ViewModel() {
 
-    private var viewModelJob = Job()
-    private var uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+    val diaries: LiveData<List<Diary>> = diaryDatabase.getAllDiaries()
+    val names: LiveData<List<String>> = diaryDatabase.getNamesInDiaryDB()
+    val profiles: LiveData<List<Profile>> = profileDatabase.getProfilesLive()
+    var selected = MediatorLiveData<String?>()
 
-    private var diaries = listOf<Diary>()
-    var names = listOf<String>()
-    private var filteredDiaries = MediatorLiveData<List<Diary>>()
+    var allLoaded = MutableLiveData<Boolean>()
+    var diariesLoaded = MutableLiveData<Boolean>()
+    var profilesLoaded = MutableLiveData<Boolean>()
+    var namesLoaded = MutableLiveData<Boolean>()
 
-    var selectedFilter = ""
-    lateinit var weightChart: LineChart
-    lateinit var lengthChart: LineChart
-
-    private var _isEmpty = MutableLiveData<Boolean>()
-    val isEmpty: LiveData<Boolean> get() = _isEmpty
-
-    /**
-     * Initialize
-     */
-    init {
-        initialize()
-    }
-
-    private fun initialize() {
-        uiScope.launch {
-            names = getNames()
-            diaries = getDiaries()
-            _isEmpty.value = names.isEmpty()
-
-            _initialized.value = true
+    fun sectionLoaded() {
+        if (diariesLoaded.value == true
+            && profilesLoaded.value == true
+            && namesLoaded.value == true) {
+            allLoaded.value = true
+            changeDashboard()
         }
     }
 
-    private var _initialized = MutableLiveData<Boolean>()
-    val initialized: LiveData<Boolean>
-        get() = _initialized
-    fun doneInitialized() {
-        _initialized.value = false
-    }
+    // onClick
+    private var _call = MutableLiveData<Int?>()
+    val call: LiveData<Int?> get() = _call
+    fun onCall(key: Int) { _call.value = key }
+    fun doneCall() { _call.value = null }
 
-    /**
-     * Dashboard
-     */
-    private var weights = listOf<Float>()
-    private var lengths = listOf<Float>()
+    // Display Data
     var weight = MediatorLiveData<Dashboard>()
     var length = MediatorLiveData<Dashboard>()
+    var age = MediatorLiveData<String>()
 
-    private var _changeDashboard = MutableLiveData<Boolean>()
-    val changeDashboard: LiveData<Boolean>
-        get() = _changeDashboard
-    fun doneChangeDashboard() {
-        _changeDashboard.value = false
-    }
+    lateinit var chartWeight: LineChart
+    lateinit var chartLength: LineChart
 
-    private fun changeDashboard(
-        listOfWeight: List<Float>, dateOfWeight: Long, weightUnit: String,
-        listOfLength: List<Float>, dateOfLength: Long, lengthUnit: String) {
+    fun changeDashboard() {
+        val filtered = diaries.value!!.filter { it.name == selected.value!! }
+        val profile = profiles.value!!.find { it.name == selected.value }
 
-        val wgt = listEmptyCheck(listOfWeight)
-        val len = listEmptyCheck(listOfLength)
+        var weights = filtered.filter { it.weight != null }
+        if (weights.size >= 7) weights = weights.subList(0, 7)
+        var lengths = filtered.filter { it.length != null }
+        if (lengths.size >= 7) lengths = lengths.subList(0, 7)
 
-        weight.value = newDashboard(wgt, dateOfWeight, weightUnit)
-        length.value = newDashboard(len, dateOfLength, lengthUnit)
-
-        _changeDashboard.value = true
-    }
-
-    private fun newDashboard(dataList: List<Float>, date: Long, suffix: String): Dashboard {
-        val dashboard = Dashboard()
-
-        val list = if (suffix == "kg" || suffix == "m") {
-            dataList
+        val newWeight = Dashboard()
+        if (weights.isEmpty()) {
+            newWeight.unit = "g"
         } else {
-            dataList
+            val list = weights.mapNotNull(Diary::weight)
+            newWeight.unit = profile!!.weightUnit
+            newWeight.latest = latest(list, newWeight.unit)
+            newWeight.prev = diff(list, newWeight.unit, "prev")
+            newWeight.prevPlus = sign(list, newWeight.unit, "prev")
+            newWeight.recent = diff(list, newWeight.unit, "recent")
+            newWeight.recentPlus = sign(list, newWeight.unit, "recent")
+            newWeight.date = date(weights[0].date)
         }
 
-        dashboard.latest = latest(list, suffix)
-        dashboard.date = dateFormatter(date)
-        dashboard.prev = previous(list, suffix)
-        dashboard.diff = difference(list)
-        return dashboard
+        val newLength = Dashboard()
+        if (lengths.isEmpty()) {
+            newLength.unit = "mm"
+        } else {
+            val list = lengths.mapNotNull(Diary::length)
+            newLength.unit = profile!!.lengthUnit
+            newLength.latest = latest(list, newLength.unit)
+            newLength.prev = diff(list, newLength.unit, "prev")
+            newLength.prevPlus = sign(list, newLength.unit, "prev")
+            newLength.recent = diff(list, newLength.unit, "recent")
+            newLength.recentPlus = sign(list, newLength.unit, "recent")
+            newLength.date = date(lengths[0].date)
+        }
+
+        age.value = profile!!.getAge(Calendar.getInstance().timeInMillis)
+        weight.value = newWeight
+        length.value = newLength
+        createLineChart(chartWeight, weights.mapNotNull(Diary::weight).reversed())
+        createLineChart(chartLength, lengths.mapNotNull(Diary::length).reversed())
     }
-
-    private fun listEmptyCheck(dataList: List<Float>): List<Float> = when {
-            dataList.isEmpty() -> listOf(0f, 0f)
-            dataList.size == 1 -> dataList.plus(dataList)
-            else -> dataList
-        }
-
-    private fun dateFormatter(date: Long): String =
-        if (date == 0L) "no data" else convertLongToDateStringRelative(date)
-
 
     private fun latest(dataList: List<Float>, suffix: String): String =
-        convertUnit(dataList[0], suffix, true)
+        convertUnit(dataList[0], suffix, false)
 
-
-    private fun previous(dataList: List<Float>, suffix: String): String {
-        val diff = dataList[0] - dataList[1]
-        val result = convertUnit(diff.absoluteValue, suffix, true)
-
+    private fun diff(list: List<Float>, suffix: String, mode: String): String {
+        val diff = when (mode) {
+            "prev" -> if (list.size < 2) list[0] - list.last() else list[0] - list[1]
+            "recent" -> list[0] - list.last()
+            else -> 0f
+        }
         return when {
-            diff > 0 -> "+ $result "
-            diff < 0 -> "- $result"
-            else -> result
-        }
-
-    }
-
-    private fun difference(dataList: List<Float>): String {
-        val percent = diffPercent(dataList.first(), dataList.last())
-
-        return when {
-            percent.absoluteValue < 0.02 -> "flat"
-            percent > 0 -> "up"
-            percent < 0 -> "down"
-            else -> "flat"
+            diff > 0 -> "+ ${convertUnit(diff.absoluteValue, suffix, false)}"
+            diff < 0 -> "- ${convertUnit(diff.absoluteValue, suffix, false)}"
+            else -> convertUnit(diff.absoluteValue, suffix, false)
         }
     }
-
-    private fun diffPercent(first: Float, last: Float): Double =
-        (first.toDouble() / last.toDouble()) - 1
-
-
-    /**
-     * Chips Click Event
-     */
-    fun changeFilterNames(name: String) {
-        uiScope.launch {
-            if (name.isNotEmpty()) {
-                filteredDiaries.value = diaries.filter { it.name == name }
-
-                val weightList = filteredDiaries.value!!.mapNotNull(Diary::weight)
-                val lengthList = filteredDiaries.value!!.mapNotNull(Diary::length)
-                weights = if (weightList.size >= 7) weightList.subList(0, 7) else weightList
-                lengths = if (lengthList.size >= 7) lengthList.subList(0, 7) else lengthList
-
-                val dateOfWeight = getDateOfWeightLatest(name)
-                val dateOfLength = getDateOfLengthLatest(name)
-                createLineChart(weightChart, weights.reversed())
-                createLineChart(lengthChart, lengths.reversed())
-                Log.d("DEBUG", "!! $name")
-
-                val profile = getProfile(name)
-                changeDashboard(
-                    weights, dateOfWeight, profile.weightUnit,
-                    lengths, dateOfLength, profile.lengthUnit)
-            }
+    private fun sign(list: List<Float>, suffix: String, mode: String): Boolean {
+        val diff = when (mode) {
+            "prev" -> if (list.size < 2) list[0] - list.last() else list[0] - list[1]
+            "recent" -> list[0] - list.last()
+            else -> 0f
         }
+        return diff >= 0
     }
 
+    private fun date(date: Long?): String {
+        if (date == null) return "記録なし"
+        return "最終記録日: ${convertLongToDateString(date)}"
+    }
 
-
-    /**
-     * Chart
-     */
     private fun createLineChart(chart: LineChart, data: List<Float>) {
         chart.description.text = ""
 
@@ -197,6 +150,8 @@ class DashboardViewModel(
             lineWidth = 4f
             setDrawValues(false)
             circleRadius = 6f
+            color = Color.parseColor("#c6aa80")
+            setCircleColor(Color.parseColor("#c6aa80"))
         }
 
         chart.apply {
@@ -212,57 +167,6 @@ class DashboardViewModel(
             axisLeft.isEnabled = false
             axisRight. isEnabled = false
         }
-    }
-
-    /**
-     * onClick
-     */
-    private var _navigateToDetail = MutableLiveData<Int?>()
-    val navigateToDetail: LiveData<Int?>
-        get() = _navigateToDetail
-    fun navigateToDetail(key: Int) {
-        _navigateToDetail.value = key
-    }
-    fun doneNavigateToDetail() {
-        _navigateToDetail.value = null
-    }
-
-    /**
-     * Database
-     */
-    private suspend fun  getDiaries(): List<Diary> {
-        return withContext(Dispatchers.IO) {
-            diaryDatabase.getDiaries()
-        }
-    }
-
-    private suspend fun getDateOfWeightLatest(name: String): Long {
-        return withContext(Dispatchers.IO) {
-            diaryDatabase.getDateOfWeightLatest(name)
-        }
-    }
-
-    private suspend fun getDateOfLengthLatest(name: String): Long {
-        return withContext(Dispatchers.IO) {
-            diaryDatabase.getDateOfLengthLatest(name)
-        }
-    }
-
-    private suspend fun getNames(): List<String> {
-        return withContext(Dispatchers.IO) {
-            diaryDatabase.getNames()
-        }
-    }
-
-    private suspend fun getProfile(name: String): Profile {
-        return withContext(Dispatchers.IO) {
-            profileDatabase.getProfile(name)
-        }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
     }
 
 }

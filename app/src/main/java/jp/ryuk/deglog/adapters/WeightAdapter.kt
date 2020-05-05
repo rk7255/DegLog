@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.data.Diary
-import jp.ryuk.deglog.databinding.WeightItemBinding
+import jp.ryuk.deglog.databinding.ItemWeightBinding
 
 class WeightAdapter(
     private val clickListener: WeightListener,
@@ -22,7 +22,7 @@ class WeightAdapter(
     }
 
     class ViewHolder private constructor(
-        private val binding: WeightItemBinding
+        private val binding: ItemWeightBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Diary, clickListener: WeightListener, suffix: String) {
@@ -35,7 +35,7 @@ class WeightAdapter(
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = WeightItemBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemWeightBinding.inflate(layoutInflater, parent, false)
 
                 return ViewHolder(binding)
             }

@@ -1,5 +1,6 @@
 package jp.ryuk.deglog.ui.dashboard
 
+import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import jp.ryuk.deglog.data.DiaryDao

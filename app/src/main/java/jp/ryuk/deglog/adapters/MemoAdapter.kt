@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.data.Diary
-import jp.ryuk.deglog.databinding.MemoItemBinding
+import jp.ryuk.deglog.databinding.ItemMemoBinding
 
 class MemoAdapter(private val clickListener: MemoListener)
     : androidx.recyclerview.widget.ListAdapter<Diary, MemoAdapter.ViewHolder>(MemoDiffCallback()) {
@@ -18,7 +18,7 @@ class MemoAdapter(private val clickListener: MemoListener)
         holder.bind(getItem(position)!!, clickListener)
     }
 
-    class ViewHolder private constructor(private val binding: MemoItemBinding): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder private constructor(private val binding: ItemMemoBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Diary, clickListener: MemoListener) {
             binding.diary = item
             binding.clickListener = clickListener
@@ -27,7 +27,7 @@ class MemoAdapter(private val clickListener: MemoListener)
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = MemoItemBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemMemoBinding.inflate(layoutInflater, parent, false)
 
                 return ViewHolder(binding)
             }

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.data.Profile
-import jp.ryuk.deglog.databinding.ProfilesItemBinding
+import jp.ryuk.deglog.databinding.ItemProfilesBinding
 
 
 class ProfileAdapter(private val clickListener: ProfileListener)
@@ -20,7 +20,7 @@ class ProfileAdapter(private val clickListener: ProfileListener)
         holder.bind(getItem(position)!!, clickListener)
     }
 
-    class ViewHolder private constructor(private val binding: ProfilesItemBinding): RecyclerView.ViewHolder(binding.root) {
+    class ViewHolder private constructor(private val binding: ItemProfilesBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Profile, clickListener: ProfileListener) {
             binding.profile = item
             binding.clickListener = clickListener
@@ -29,7 +29,7 @@ class ProfileAdapter(private val clickListener: ProfileListener)
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ProfilesItemBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemProfilesBinding.inflate(layoutInflater, parent, false)
 
                 return ViewHolder(binding)
             }

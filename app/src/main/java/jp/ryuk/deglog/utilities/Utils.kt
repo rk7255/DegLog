@@ -7,7 +7,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 
 // デバッグ用 ログ解析タグ
-const val tag = "DEBUG"
+const val deg = "DEBUG"
 
 fun hideKeyboard(activity: Activity, view: View, event: MotionEvent?): Boolean {
     val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

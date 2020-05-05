@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.data.Diary
-import jp.ryuk.deglog.databinding.LengthItemBinding
+import jp.ryuk.deglog.databinding.ItemLengthBinding
 
 class LengthAdapter(
     private val clickListener: LengthListener,
@@ -22,7 +22,7 @@ class LengthAdapter(
     }
 
     class ViewHolder private constructor(
-        private val binding: LengthItemBinding
+        private val binding: ItemLengthBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Diary, clickListener: LengthListener, suffix: String) {
@@ -35,7 +35,7 @@ class LengthAdapter(
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = LengthItemBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemLengthBinding.inflate(layoutInflater, parent, false)
 
                 return ViewHolder(binding)
             }
