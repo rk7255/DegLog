@@ -11,8 +11,6 @@ import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
 import jp.ryuk.deglog.utilities.convertLongToDateStringInTime
 import jp.ryuk.deglog.utilities.convertStringToFloat
-import jp.ryuk.deglog.utilities.convertUnit
-import jp.ryuk.deglog.utilities.convertYMDToLong
 import kotlinx.coroutines.*
 import java.util.*
 import kotlin.random.Random

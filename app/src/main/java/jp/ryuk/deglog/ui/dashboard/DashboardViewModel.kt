@@ -190,10 +190,10 @@ class DashboardViewModel(
         }
     }
 
-    fun newTodo() {
+    fun newTodo(text: String) {
         val newDiary = Diary(
             name = selected.value!!,
-            todo = "${selected.value!!} 新しいToDo",
+            todo = text,
             success = false
         )
         Log.d(deg, "insert $newDiary")
