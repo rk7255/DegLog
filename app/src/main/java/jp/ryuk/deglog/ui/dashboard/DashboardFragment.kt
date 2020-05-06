@@ -18,6 +18,7 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import jp.ryuk.deglog.R
+import jp.ryuk.deglog.adapters.*
 import jp.ryuk.deglog.databinding.FragmentDashboardBinding
 import jp.ryuk.deglog.ui.diarylist.ListKey
 import jp.ryuk.deglog.utilities.InjectorUtil
@@ -44,6 +45,10 @@ class DashboardFragment : Fragment() {
         viewModel = createViewModel(requireContext())
         binding.lifecycleOwner = this
 
+        binding.dbAppBar.setNavigationOnClickListener {
+            makeSnackBar("click menu")
+        }
+
         binding.viewModel = viewModel
 
         viewModel.chartWeight = binding.dbWeightChart
@@ -67,12 +72,23 @@ class DashboardFragment : Fragment() {
 
         viewModel.names.observe(viewLifecycleOwner, Observer {
             if (!it.isNullOrEmpty()) {
-                Log.d(deg, "names loaded")
                 viewModel.namesLoaded.value = true
                 names = it.toTypedArray()
                 if (viewModel.selected.value.isNullOrEmpty()) viewModel.selected.value = names[0]
                 binding.dbPersonalName.text = viewModel.selected.value
                 viewModel.sectionLoaded()
+            }
+        })
+
+
+        val recyclerView = binding.dbTodoRecyclerView
+        val adapter = TodoAdapter()
+        recyclerView.adapter = adapter
+
+        viewModel.todoList.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.submitList(it)
+                Log.d(deg, "$adapter")
             }
         })
 
@@ -84,7 +100,10 @@ class DashboardFragment : Fragment() {
                     OnCallKey.NOTIFY_CONTAINER -> makeSnackBar("NOTIFY")
                     OnCallKey.WEIGHT_CONTAINER -> navigateToDiaryList(ListKey.FROM_WEIGHT)
                     OnCallKey.LENGTH_CONTAINER -> navigateToDiaryList(ListKey.FROM_LENGTH)
-                    OnCallKey.TODO_CONTAINER -> makeSnackBar("TODO")
+                    OnCallKey.TODO_CONTAINER -> {
+                        makeSnackBar("Add New ToDo")
+                        viewModel.newTodo()
+                    }
                 }
                 viewModel.doneCall()
             }

@@ -1,5 +1,6 @@
 package jp.ryuk.deglog.adapters
 
+import android.text.BoringLayout
 import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
@@ -14,6 +15,11 @@ fun bindIsGone(view: View, isGone: Boolean) {
     } else {
         View.VISIBLE
     }
+}
+
+@BindingAdapter("hasAlert")
+fun bindHasAlert(view: View, hasAlert: Boolean) {
+
 }
 
 

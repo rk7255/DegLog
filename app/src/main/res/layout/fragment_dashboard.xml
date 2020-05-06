@@ -149,7 +149,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            tools:text="猪名寺　乱太郎" />
+                            tools:text="名前" />
 
                         <TextView
                             android:id="@+id/db_personal_age"
@@ -181,6 +181,8 @@
                     <!-- SECTION PERSONAL -->
                     <com.google.android.material.card.MaterialCardView
                         style="@style/DashboardContainer"
+                        android:id="@+id/db_notify_container"
+                        isGone="@{!viewModel.hasNotify}"
                         android:onClick="@{() -> viewModel.onCall(call.NOTIFY_CONTAINER)}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -218,7 +220,7 @@
                                 android:layout_marginEnd="16dp"
                                 android:layout_marginBottom="16dp"
                                 android:gravity="center"
-                                android:text="未確認のTODOがあります"
+                                android:text="未確認のTODOがあります\nデバッグ中 20秒経過でアラート表示"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 android:textSize="14sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -608,12 +610,29 @@
                                 app:layout_constraintStart_toStartOf="@+id/db_todo_guideline"
                                 app:layout_constraintTop_toTopOf="parent" />
 
-                            <androidx.recyclerview.widget.RecyclerView
-                                android:id="@+id/db_todo_recycler_view"
+                            <TextView
+                                isGone="@{viewModel.hasTodo}"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
+                                android:layout_marginEnd="16dp"
                                 android:layout_marginTop="8dp"
+                                android:gravity="center"
+                                android:textAppearance="@style/Deglog.Dashboard.Body"
+                                android:layout_marginBottom="16dp"
+                                android:text="Todoはありません"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="@id/db_todo_guideline"
+                                app:layout_constraintTop_toBottomOf="@id/db_todo_title"/>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                isGone="@{!viewModel.hasTodo}"
+                                android:id="@+id/db_todo_recycler_view"
+                                android:layout_width="0dp"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
                                 android:layout_marginEnd="16dp"
                                 android:layout_marginBottom="16dp"
                                 app:layout_constraintBottom_toBottomOf="parent"

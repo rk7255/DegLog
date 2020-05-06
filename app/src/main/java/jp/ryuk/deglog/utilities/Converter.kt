@@ -9,18 +9,10 @@ import java.util.*
 
 
 /**
- * 日付の表示設定
+ * 日付変換
  */
 @SuppressLint("SimpleDateFormat")
-fun convertYMDToLong(y: Int, m: Int, d: Int) : Long {
-    val calendar = Calendar.getInstance()
-    calendar.set(y, m, d, 0, 0, 0)
-    return calendar.timeInMillis
-}
-
-@SuppressLint("SimpleDateFormat")
-fun Long.getYear(): Int =
-    SimpleDateFormat("yyyy").format(this).toInt()
+fun Long.getYear(): Int = SimpleDateFormat("yyyy").format(this).toInt()
 
 @SuppressLint("SimpleDateFormat")
 fun Long.getMonth(): Int = SimpleDateFormat("M").format(this).toInt()
@@ -47,17 +39,8 @@ fun convertLongToDateStringOutYear(systemTime: Long): String {
         .format(systemTime).toString()
 }
 
-// 作った理由忘れた 不要なら削除
-//@SuppressLint("SimpleDateFormat")
-//fun c(systemTime: Long): SimpleDateFormat {
-//    val t = SimpleDateFormat("yyyy/MM/dd")
-//        .format(systemTime).toString()
-//    return SimpleDateFormat(t, Locale.JAPAN)
-//}
-
-@SuppressLint("SimpleDateFormat")
 fun convertLongToDateStringRelative(systemTime: Long): String {
-    val diff = System.currentTimeMillis() - systemTime
+    val diff = Calendar.getInstance().timeInMillis - systemTime
     val second = 1000
     val minute = second * 60
     val hour = minute * 60
@@ -66,7 +49,7 @@ fun convertLongToDateStringRelative(systemTime: Long): String {
 
     return when {
         diff < 0 -> "0秒前"
-        diff < second -> "${diff / minute}秒前"
+        diff < minute -> "${diff % minute / second}秒前"
         diff < hour -> "${diff / minute}分前"
         diff < day -> "${diff / hour}時間前"
         diff < days -> "昨日"
@@ -75,14 +58,20 @@ fun convertLongToDateStringRelative(systemTime: Long): String {
 }
 
 /**
+ * TODOのアラート設定 2週間でTrue
+ */
+fun hasAlert(time: Long): Boolean {
+    val diff = Calendar.getInstance().timeInMillis - time
+    val week = 1000 * 60 * 60 * 24 * 7 * 2
+    return diff >= week
+}
+
+/**
  * 型変換
  */
 fun convertStringToFloat(str: String?, unit: String): Float? {
-    return if (unit == "kg" || unit == "m") {
-        if (str.isNullOrEmpty()) null else (str.toFloat() * 1000)
-    } else {
-        if (str.isNullOrEmpty()) null else str.toFloat()
-    }
+    if (str.isNullOrEmpty()) return null
+    return if (unit == "kg" || unit == "m") str.toFloat() * 1000 else str.toFloat()
 }
 
 
@@ -92,10 +81,10 @@ fun convertStringToFloat(str: String?, unit: String): Float? {
 fun convertUnit(number: Float, unit: String, onSuffix: Boolean): String {
     val result = StringBuilder()
     when (unit) {
-        "g" -> result.append("${roundDown(number)}")
-        "kg" -> result.append("${roundUp(number)}")
-        "mm" -> result.append("${roundDown(number)}")
-        "m" -> result.append("${roundUp(number)}")
+        "g" -> result.append("${roundInt(number)}")
+        "kg" -> result.append("${roundFloat(number)}")
+        "mm" -> result.append("${roundInt(number)}")
+        "m" -> result.append("${roundFloat(number)}")
         else -> return "単位不明"
     }
 
@@ -103,10 +92,10 @@ fun convertUnit(number: Float, unit: String, onSuffix: Boolean): String {
     return result.toString()
 }
 
-private fun roundDown(number: Float): BigDecimal =
+private fun roundInt(number: Float): BigDecimal =
     BigDecimal(number.toString()).setScale(0, RoundingMode.HALF_UP)
 
-private fun roundUp(number: Float): BigDecimal {
+private fun roundFloat(number: Float): BigDecimal {
     val scale = when (number / 1000) {
         in 0.0..99.0 -> 2
         in 99.0..999.0 -> 1

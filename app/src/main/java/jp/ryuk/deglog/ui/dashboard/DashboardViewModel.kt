@@ -2,10 +2,7 @@ package jp.ryuk.deglog.ui.dashboard
 
 import android.graphics.Color
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -14,14 +11,15 @@ import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
-import jp.ryuk.deglog.utilities.convertLongToDateString
-import jp.ryuk.deglog.utilities.convertUnit
-import jp.ryuk.deglog.utilities.deg
+import jp.ryuk.deglog.utilities.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 import kotlin.math.absoluteValue
 
 class DashboardViewModel(
-    diaryDatabase: DiaryDao,
+    private val diaryDatabase: DiaryDao,
     profileDatabase: ProfileDao
 ) : ViewModel() {
 
@@ -55,10 +53,18 @@ class DashboardViewModel(
     var length = MediatorLiveData<Dashboard>()
     var age = MediatorLiveData<String>()
 
+    var todoList = MediatorLiveData<List<Todo>>()
+    var hasTodo = MutableLiveData<Boolean>()
+    var hasNotify = MutableLiveData<Boolean>()
+
     lateinit var chartWeight: LineChart
     lateinit var chartLength: LineChart
 
     fun changeDashboard() {
+        todoList.value = listOf()
+        hasTodo.value = false
+        hasNotify.value = false
+
         val filtered = diaries.value!!.filter { it.name == selected.value!! }
         val profile = profiles.value!!.find { it.name == selected.value }
 
@@ -67,31 +73,46 @@ class DashboardViewModel(
         var lengths = filtered.filter { it.length != null }
         if (lengths.size >= 7) lengths = lengths.subList(0, 7)
 
+        val todos = filtered.filter { it.todo != null && it.success == false }
+        if (todos.isNotEmpty()) {
+            val list = mutableListOf<Todo>()
+            todos.forEach {
+                val alert = it.success == false && hasAlert(it.date)
+                hasNotify.value = alert
+
+                val newTodo = Todo(
+                    time = convertLongToDateStringRelative(it.date),
+                    todo = it.todo!!,
+                    success = it.success!!,
+                    alert = alert
+                )
+                list.add(newTodo)
+            }
+            hasTodo.value = true
+            todoList.value = list
+        }
+
         val newWeight = Dashboard()
-        if (weights.isEmpty()) {
-            newWeight.unit = "g"
-        } else {
-            val list = weights.mapNotNull(Diary::weight)
+        if (weights.isNotEmpty()) {
+            val weightList = weights.mapNotNull(Diary::weight)
             newWeight.unit = profile!!.weightUnit
-            newWeight.latest = latest(list, newWeight.unit)
-            newWeight.prev = diff(list, newWeight.unit, "prev")
-            newWeight.prevPlus = sign(list, newWeight.unit, "prev")
-            newWeight.recent = diff(list, newWeight.unit, "recent")
-            newWeight.recentPlus = sign(list, newWeight.unit, "recent")
+            newWeight.latest = latest(weightList, newWeight.unit)
+            newWeight.prev = diff(weightList, newWeight.unit, "prev")
+            newWeight.prevPlus = sign(weightList, "prev")
+            newWeight.recent = diff(weightList, newWeight.unit, "recent")
+            newWeight.recentPlus = sign(weightList, "recent")
             newWeight.date = date(weights[0].date)
         }
 
         val newLength = Dashboard()
-        if (lengths.isEmpty()) {
-            newLength.unit = "mm"
-        } else {
-            val list = lengths.mapNotNull(Diary::length)
+        if (lengths.isNotEmpty()) {
+            val lengthList = lengths.mapNotNull(Diary::length)
             newLength.unit = profile!!.lengthUnit
-            newLength.latest = latest(list, newLength.unit)
-            newLength.prev = diff(list, newLength.unit, "prev")
-            newLength.prevPlus = sign(list, newLength.unit, "prev")
-            newLength.recent = diff(list, newLength.unit, "recent")
-            newLength.recentPlus = sign(list, newLength.unit, "recent")
+            newLength.latest = latest(lengthList, newLength.unit)
+            newLength.prev = diff(lengthList, newLength.unit, "prev")
+            newLength.prevPlus = sign(lengthList, "prev")
+            newLength.recent = diff(lengthList, newLength.unit, "recent")
+            newLength.recentPlus = sign(lengthList, "recent")
             newLength.date = date(lengths[0].date)
         }
 
@@ -117,7 +138,7 @@ class DashboardViewModel(
             else -> convertUnit(diff.absoluteValue, suffix, false)
         }
     }
-    private fun sign(list: List<Float>, suffix: String, mode: String): Boolean {
+    private fun sign(list: List<Float>, mode: String): Boolean {
         val diff = when (mode) {
             "prev" -> if (list.size < 2) list[0] - list.last() else list[0] - list[1]
             "recent" -> list[0] - list.last()
@@ -169,4 +190,19 @@ class DashboardViewModel(
         }
     }
 
+    fun newTodo() {
+        val newDiary = Diary(
+            name = selected.value!!,
+            todo = "${selected.value!!} 新しいToDo",
+            success = false
+        )
+        Log.d(deg, "insert $newDiary")
+        viewModelScope.launch { insert(newDiary) }
+    }
+
+    private suspend fun insert(diary: Diary) {
+        withContext(Dispatchers.IO) {
+            diaryDatabase.insert(diary)
+        }
+    }
 }
