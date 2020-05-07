@@ -41,23 +41,22 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
-    <style name="circleImageView" parent="">
-        <item name="cornerFamily">rounded</item>
-        <item name="cornerSize">51%</item>
-    </style>
 
     <!--  Dashboard  -->
+    <style name="circleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">49%</item>
+    </style>
+
     <style name="Deglog.Dashboard.Title" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="fontFamily">monospace</item>
         <item name="android:textColor">@color/primaryTextColor</item>
     </style>
+
     <style name="DashboardTitle">
         <item name="android:textAppearance">@style/Deglog.Dashboard.Title</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">16dp</item>
-        <item name="android:layout_marginTop">16dp</item>
-        <item name="android:layout_marginEnd">16dp</item>
         <item name="android:gravity">center</item>
     </style>
 
@@ -91,20 +90,16 @@
     <style name="DashboardContainer">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginStart">16dp</item>
-        <item name="android:layout_marginTop">8dp</item>
-        <item name="android:layout_marginEnd">16dp</item>
         <item name="android:elevation">8dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginStart">16dp</item>
+        <item name="android:layout_marginEnd">16dp</item>
         <item name="cardCornerRadius">8dp</item>
     </style>
 
     <style name="DashboardIcon">
         <item name="android:layout_width">40dp</item>
         <item name="android:layout_height">40dp</item>
-        <item name="android:layout_marginStart">16dp</item>
-        <item name="android:layout_marginTop">16dp</item>
-        <item name="android:layout_marginEnd">16dp</item>
-        <item name="android:layout_marginBottom">16dp</item>
         <item name="android:tint">@color/primaryDarkColor</item>
     </style>
 

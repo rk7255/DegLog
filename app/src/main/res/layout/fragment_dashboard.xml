@@ -94,18 +94,14 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="16dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="16dp">
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/db_personal_icon"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
                     android:background="@color/colorBackground"
                     android:elevation="8dp"
                     android:onClick="@{() -> viewModel.onCall(call.PERSONAL_ICON)}"
@@ -121,9 +117,7 @@
                     android:layout_width="0dp"
                     android:layout_height="32dp"
                     android:layout_marginStart="16dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="8dp"
                     android:background="@color/colorBackground"
                     android:elevation="8dp"
                     android:onClick="@{() -> viewModel.onCall(call.PERSONAL_CONTAINER)}"
@@ -136,7 +130,7 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_margin="4dp">
+                        android:padding="4dp">
 
                         <TextView
                             android:id="@+id/db_personal_name"
@@ -180,8 +174,8 @@
 
                     <!-- SECTION PERSONAL -->
                     <com.google.android.material.card.MaterialCardView
-                        style="@style/DashboardContainer"
                         android:id="@+id/db_notify_container"
+                        style="@style/DashboardContainer"
                         isGone="@{!viewModel.hasNotify}"
                         android:onClick="@{() -> viewModel.onCall(call.NOTIFY_CONTAINER)}"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -191,11 +185,13 @@
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:padding="16dp">
 
                             <ImageView
                                 android:id="@+id/db_notify_icon"
                                 style="@style/DashboardIcon"
+                                android:layout_marginEnd="16dp"
                                 android:src="@drawable/ic_error"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toStartOf="@+id/db_notify_guideline"
@@ -205,6 +201,7 @@
                             <TextView
                                 android:id="@+id/db_notify_title"
                                 style="@style/DashboardTitle"
+                                android:layout_marginStart="16dp"
                                 android:text="― 重要な通知 ―"
                                 android:textAppearance="@style/Deglog.Dashboard.Title"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -215,17 +212,14 @@
                                 android:id="@+id/db_notify_first"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
                                 android:layout_marginTop="8dp"
-                                android:layout_marginEnd="16dp"
-                                android:layout_marginBottom="16dp"
                                 android:gravity="center"
-                                android:text="未確認のTODOがあります\nデバッグ中 20秒経過でアラート表示"
+                                android:text="未確認のTODOがあります"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 android:textSize="14sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="@+id/db_notify_guideline"
+                                app:layout_constraintEnd_toEndOf="@+id/db_notify_title"
+                                app:layout_constraintStart_toStartOf="@+id/db_notify_title"
                                 app:layout_constraintTop_toBottomOf="@+id/db_notify_title" />
 
                             <androidx.constraintlayout.widget.Guideline
@@ -253,11 +247,13 @@
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:padding="16dp">
 
                             <TextView
                                 android:id="@+id/db_weight_title"
                                 style="@style/DashboardTitle"
+                                android:layout_marginEnd="16dp"
                                 android:text="― 体重 ―"
                                 app:layout_constraintEnd_toStartOf="@+id/db_weight_guideline"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -267,13 +263,12 @@
                                 android:id="@+id/db_weight_latest"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
                                 android:layout_marginTop="4dp"
                                 android:gravity="center"
                                 android:text="@{viewModel.weight.latest}"
                                 android:textAppearance="@style/Deglog.Dashboard.Main1"
                                 app:layout_constraintEnd_toStartOf="@+id/db_weight_latest_unit"
-                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/db_weight_title"
                                 app:layout_constraintTop_toBottomOf="@+id/db_weight_title"
                                 tools:text="1.25" />
 
@@ -281,23 +276,21 @@
                                 android:id="@+id/db_weight_latest_unit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="16dp"
                                 android:gravity="center"
                                 android:text="@{viewModel.weight.unit}"
                                 android:textAppearance="@style/Deglog.Dashboard.Main2"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_weight_latest"
-                                app:layout_constraintEnd_toStartOf="@+id/db_weight_guideline"
+                                app:layout_constraintEnd_toEndOf="@+id/db_weight_title"
                                 tools:text="kg" />
 
                             <TextView
                                 android:id="@+id/db_weight_prev_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
                                 android:layout_marginTop="8dp"
                                 android:text="前回"
                                 android:textAppearance="@style/Deglog.Dashboard.SubTitle"
-                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/db_weight_latest"
                                 app:layout_constraintTop_toBottomOf="@+id/db_weight_latest" />
 
                             <TextView
@@ -319,24 +312,22 @@
                                 android:id="@+id/db_weight_prev_unit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="16dp"
                                 android:text="@{viewModel.weight.unit}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_weight_prev"
-                                app:layout_constraintEnd_toStartOf="@+id/db_weight_guideline"
+                                app:layout_constraintEnd_toEndOf="@+id/db_weight_latest_unit"
+                                app:layout_constraintTop_toTopOf="@+id/db_weight_prev"
                                 tools:text="kg" />
 
                             <TextView
                                 android:id="@+id/db_weight_recent_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
                                 android:layout_marginTop="4dp"
-                                android:layout_marginBottom="16dp"
                                 android:text="最近"
                                 android:textAppearance="@style/Deglog.Dashboard.SubTitle"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/db_weight_latest"
                                 app:layout_constraintTop_toBottomOf="@+id/db_weight_prev_title" />
 
                             <TextView
@@ -357,11 +348,10 @@
                                 android:id="@+id/db_weight_recent_unit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="16dp"
                                 android:text="@{viewModel.weight.unit}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_weight_recent"
-                                app:layout_constraintEnd_toStartOf="@+id/db_weight_guideline"
+                                app:layout_constraintEnd_toEndOf="@+id/db_weight_latest_unit"
                                 app:layout_constraintTop_toTopOf="@+id/db_weight_recent"
                                 tools:text="kg" />
 
@@ -379,8 +369,6 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginEnd="16dp"
                                 android:gravity="end"
                                 android:text="@{viewModel.weight.date}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
@@ -388,17 +376,15 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="@+id/db_weight_guideline"
                                 app:layout_constraintTop_toTopOf="parent"
-                                tools:text="最終記録日: 2020/03/03" />
+                                tools:text="2020/03/03" />
 
                             <com.github.mikephil.charting.charts.LineChart
                                 android:id="@+id/db_weight_chart"
                                 android:layout_width="0dp"
                                 android:layout_height="0dp"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginEnd="16dp"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_weight_recent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="@+id/db_weight_guideline"
+                                app:layout_constraintEnd_toEndOf="@+id/db_weight_date"
+                                app:layout_constraintStart_toStartOf="@+id/db_weight_date"
                                 app:layout_constraintTop_toBottomOf="@+id/db_weight_title" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -419,11 +405,13 @@
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:padding="16dp">
 
                             <TextView
                                 android:id="@+id/db_length_title"
                                 style="@style/DashboardTitle"
+                                android:layout_marginEnd="16dp"
                                 android:text="― 体長 ―"
                                 app:layout_constraintEnd_toStartOf="@+id/db_length_guideline"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -433,13 +421,12 @@
                                 android:id="@+id/db_length_latest"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
                                 android:layout_marginTop="4dp"
                                 android:gravity="center"
                                 android:text="@{viewModel.length.latest}"
                                 android:textAppearance="@style/Deglog.Dashboard.Main1"
                                 app:layout_constraintEnd_toStartOf="@+id/db_length_latest_unit"
-                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/db_length_title"
                                 app:layout_constraintTop_toBottomOf="@+id/db_length_title"
                                 tools:text="3000" />
 
@@ -447,23 +434,21 @@
                                 android:id="@+id/db_length_latest_unit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="16dp"
                                 android:gravity="center"
                                 android:text="@{viewModel.length.unit}"
                                 android:textAppearance="@style/Deglog.Dashboard.Main2"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_length_latest"
-                                app:layout_constraintEnd_toStartOf="@+id/db_length_guideline"
+                                app:layout_constraintEnd_toEndOf="@+id/db_length_title"
                                 tools:text="mm" />
 
                             <TextView
                                 android:id="@+id/db_length_prev_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
                                 android:layout_marginTop="8dp"
                                 android:text="前回"
                                 android:textAppearance="@style/Deglog.Dashboard.SubTitle"
-                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/db_length_latest"
                                 app:layout_constraintTop_toBottomOf="@+id/db_length_latest" />
 
                             <TextView
@@ -485,24 +470,22 @@
                                 android:id="@+id/db_length_prev_unit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="16dp"
                                 android:text="@{viewModel.length.unit}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_length_prev"
-                                app:layout_constraintEnd_toStartOf="@+id/db_length_guideline"
+                                app:layout_constraintEnd_toEndOf="@+id/db_length_latest_unit"
+                                app:layout_constraintTop_toTopOf="@+id/db_length_prev"
                                 tools:text="mm" />
 
                             <TextView
                                 android:id="@+id/db_length_recent_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
                                 android:layout_marginTop="4dp"
-                                android:layout_marginBottom="16dp"
                                 android:text="最近"
                                 android:textAppearance="@style/Deglog.Dashboard.SubTitle"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintStart_toStartOf="@+id/db_length_latest"
                                 app:layout_constraintTop_toBottomOf="@+id/db_length_prev_title" />
 
                             <TextView
@@ -523,11 +506,10 @@
                                 android:id="@+id/db_length_recent_unit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginEnd="16dp"
                                 android:text="@{viewModel.length.unit}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_length_recent"
-                                app:layout_constraintEnd_toStartOf="@+id/db_length_guideline"
+                                app:layout_constraintEnd_toEndOf="@+id/db_length_latest_unit"
                                 app:layout_constraintTop_toTopOf="@+id/db_length_recent"
                                 tools:text="mm" />
 
@@ -545,8 +527,6 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginEnd="16dp"
                                 android:gravity="end"
                                 android:text="@{viewModel.length.date}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
@@ -554,18 +534,16 @@
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="@+id/db_length_guideline"
                                 app:layout_constraintTop_toTopOf="parent"
-                                tools:text="最終記録日: 2020/03/03" />
+                                tools:text="2020/03/03" />
 
                             <com.github.mikephil.charting.charts.LineChart
                                 android:id="@+id/db_length_chart"
                                 android:layout_width="0dp"
                                 android:layout_height="0dp"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginEnd="16dp"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_length_recent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="@+id/db_length_guideline"
-                                app:layout_constraintTop_toBottomOf="@+id/db_length_title" />
+                                app:layout_constraintEnd_toEndOf="@+id/db_length_date"
+                                app:layout_constraintStart_toStartOf="@+id/db_length_date"
+                                app:layout_constraintTop_toBottomOf="@+id/db_length_date" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -583,11 +561,13 @@
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:padding="16dp">
 
                             <ImageView
                                 android:id="@+id/db_todo_icon"
                                 style="@style/DashboardIcon"
+                                android:layout_marginEnd="16dp"
                                 android:onClick="@{() -> viewModel.onCall(call.TODO_CONTAINER)}"
                                 android:src="@drawable/ic_todo"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -605,6 +585,7 @@
                             <TextView
                                 android:id="@+id/db_todo_title"
                                 style="@style/DashboardTitle"
+                                android:layout_marginStart="16dp"
                                 android:text="― TODO ―"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="@+id/db_todo_guideline"
@@ -615,29 +596,24 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
-                                android:layout_marginEnd="16dp"
                                 android:layout_marginTop="8dp"
                                 android:gravity="center"
-                                android:textAppearance="@style/Deglog.Dashboard.Body"
-                                android:layout_marginBottom="16dp"
                                 android:text="Todoはありません"
+                                android:textAppearance="@style/Deglog.Dashboard.Body"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="@id/db_todo_guideline"
-                                app:layout_constraintTop_toBottomOf="@id/db_todo_title"/>
+                                app:layout_constraintTop_toBottomOf="@id/db_todo_title" />
 
                             <androidx.recyclerview.widget.RecyclerView
-                                isGone="@{!viewModel.hasTodo}"
                                 android:id="@+id/db_todo_recycler_view"
+                                isGone="@{!viewModel.hasTodo}"
                                 android:layout_width="0dp"
-                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
-                                android:layout_marginEnd="16dp"
-                                android:layout_marginBottom="16dp"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="@id/db_todo_guideline"
+                                app:layout_constraintEnd_toEndOf="@+id/db_todo_title"
+                                app:layout_constraintStart_toStartOf="@+id/db_todo_title"
                                 app:layout_constraintTop_toBottomOf="@id/db_todo_title"
                                 tools:itemCount="3"
                                 tools:listitem="@layout/item_todo" />

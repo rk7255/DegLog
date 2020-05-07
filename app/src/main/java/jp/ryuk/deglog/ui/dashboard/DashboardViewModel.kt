@@ -150,7 +150,7 @@ class DashboardViewModel(
 
     private fun date(date: Long?): String {
         if (date == null) return "記録なし"
-        return "最終記録日: ${convertLongToDateString(date)}"
+        return convertLongToDateString(date)
     }
 
     private fun createLineChart(chart: LineChart, data: List<Float>) {
