@@ -1,17 +1,15 @@
 package jp.ryuk.deglog.ui.dashboard
+
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
-import android.util.TypedValue
 import android.view.*
 import android.widget.EditText
 import android.widget.FrameLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -19,8 +17,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.adapters.*
 import jp.ryuk.deglog.databinding.FragmentDashboardBinding
@@ -85,13 +81,13 @@ class DashboardFragment : Fragment() {
 
 
         val recyclerView = binding.dbTodoRecyclerView
-        val adapter = TodoAdapter()
+        val adapter = TodoAdapter(TodoListener { todo ->
+            dialogDeleteTodoBuilder(requireContext(), todo).show()
+        })
         recyclerView.adapter = adapter
 
         viewModel.todoList.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                adapter.submitList(it)
-            }
+            it?.let { adapter.submitList(it) }
         })
 
         viewModel.call.observe(viewLifecycleOwner, Observer { call ->
@@ -103,7 +99,7 @@ class DashboardFragment : Fragment() {
                     OnCallKey.WEIGHT_CONTAINER -> navigateToDiaryList(ListKey.FROM_WEIGHT)
                     OnCallKey.LENGTH_CONTAINER -> navigateToDiaryList(ListKey.FROM_LENGTH)
                     OnCallKey.TODO_CONTAINER -> {
-                        val dialog = dialogTodoBuilder(requireContext())
+                        val dialog = dialogCreateTodoBuilder(requireContext())
                         dialog.show()
                         dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
                     }
@@ -121,12 +117,7 @@ class DashboardFragment : Fragment() {
         )
     }
 
-    private fun dialogTodoBuilder(context: Context): AlertDialog {
-//        val layout = getEditTextLayout(context)
-//        val textInputLayout = layout.findViewWithTag<TextInputLayout>("textInputLayoutTag")
-//        val textInputEditText = layout.findViewWithTag<TextInputEditText>("textInputEditTextTag")
-//        textInputEditText.isSingleLine = true
-
+    private fun dialogCreateTodoBuilder(context: Context): AlertDialog {
         val editText = EditText(context).apply {
             inputType = InputType.TYPE_CLASS_TEXT
             layoutParams = FrameLayout.LayoutParams(
@@ -139,10 +130,10 @@ class DashboardFragment : Fragment() {
             }
         }
 
-        val layout = FrameLayout(context).apply{addView(editText)}
+        val layout = FrameLayout(context).apply{ addView(editText) }
 
         val dialog = MaterialAlertDialogBuilder(context)
-            .setTitle("TODOの追加")
+            .setTitle("ToDoの追加")
             .setView(layout)
             .setPositiveButton("追加") { _, _ ->
                 viewModel.newTodo(editText.text.toString())
@@ -151,11 +142,9 @@ class DashboardFragment : Fragment() {
             .create()
 
         editText.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {
-            }
+            override fun afterTextChanged(s: Editable?) {}
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = !s.isNullOrBlank()
@@ -165,44 +154,15 @@ class DashboardFragment : Fragment() {
         return dialog
     }
 
-    private fun isTextValid(text: Editable?): Boolean {
-        return text.isNullOrEmpty()
+    private fun dialogDeleteTodoBuilder(context: Context, todo: Todo): AlertDialog {
+        return MaterialAlertDialogBuilder(context)
+            .setMessage("選択したToDoを削除します\n\"${todo.todo}\"")
+            .setNeutralButton("キャンセル", null)
+            .setPositiveButton("削除") {_, _ ->
+                viewModel.deleteTodo(todo.id)
+            }
+            .create()
     }
-
-    private fun getEditTextLayout(context:Context): ConstraintLayout {
-        val constraintLayout = ConstraintLayout(context)
-        val layoutParams = ConstraintLayout.LayoutParams(
-            ConstraintLayout.LayoutParams.MATCH_PARENT,
-            ConstraintLayout.LayoutParams.WRAP_CONTENT
-        )
-        constraintLayout.layoutParams = layoutParams
-        constraintLayout.id = View.generateViewId()
-
-        val textInputLayout = TextInputLayout(context)
-        textInputLayout.boxBackgroundMode = TextInputLayout.BOX_BACKGROUND_OUTLINE
-        val margin = (32 * resources.displayMetrics.density).toInt()
-        layoutParams.setMargins(margin, margin, margin, margin)
-        textInputLayout.layoutParams = layoutParams
-        textInputLayout.hint = null
-        textInputLayout.id = View.generateViewId()
-        textInputLayout.tag = "textInputLayoutTag"
-
-        val textInputEditText = TextInputEditText(context)
-        textInputEditText.id = View.generateViewId()
-        textInputEditText.tag = "textInputEditTextTag"
-
-        textInputLayout.addView(textInputEditText)
-
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(constraintLayout)
-
-        constraintLayout.addView(textInputLayout)
-        return constraintLayout
-    }
-
-    private fun Int.toDp(context: Context):Int = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,this.toFloat(),context.resources.displayMetrics
-    ).toInt()
 
     private fun dialogSelectBuilder(context: Context, list: Array<String>): AlertDialog {
         return MaterialAlertDialogBuilder(context)

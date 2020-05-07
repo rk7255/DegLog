@@ -576,7 +576,6 @@
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/db_todo_container"
                         style="@style/DashboardContainer"
-                        android:onClick="@{() -> viewModel.onCall(call.TODO_CONTAINER)}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -589,6 +588,7 @@
                             <ImageView
                                 android:id="@+id/db_todo_icon"
                                 style="@style/DashboardIcon"
+                                android:onClick="@{() -> viewModel.onCall(call.TODO_CONTAINER)}"
                                 android:src="@drawable/ic_todo"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toStartOf="@+id/db_todo_guideline"

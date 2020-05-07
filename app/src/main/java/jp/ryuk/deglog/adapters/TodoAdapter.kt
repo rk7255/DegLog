@@ -4,10 +4,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.databinding.ItemTodoBinding
 import jp.ryuk.deglog.ui.dashboard.Todo
 
-class TodoAdapter()
+class TodoAdapter(private val clickListener: TodoListener)
     : androidx.recyclerview.widget.ListAdapter<Todo, TodoAdapter.ViewHolder>(TodoDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -15,12 +16,13 @@ class TodoAdapter()
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position)!!)
+        holder.bind(getItem(position)!!, clickListener)
     }
 
     class ViewHolder private constructor(private val binding: ItemTodoBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Todo) {
+        fun bind(item: Todo, clickListener: TodoListener) {
             binding.todo = item
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
         companion object {
@@ -42,4 +44,8 @@ class TodoDiffCallback : DiffUtil.ItemCallback<Todo>() {
     override fun areContentsTheSame(oldItem: Todo, newItem: Todo): Boolean {
         return oldItem == newItem
     }
+}
+
+class TodoListener(val clickListener: (todo: Todo) -> Unit) {
+    fun onClick(todo: Todo) = clickListener(todo)
 }

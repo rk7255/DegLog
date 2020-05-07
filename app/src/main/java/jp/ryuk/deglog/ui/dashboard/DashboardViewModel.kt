@@ -81,6 +81,7 @@ class DashboardViewModel(
                 hasNotify.value = alert
 
                 val newTodo = Todo(
+                    id = it.id,
                     time = convertLongToDateStringRelative(it.date),
                     todo = it.todo!!,
                     success = it.success!!,
@@ -203,6 +204,16 @@ class DashboardViewModel(
     private suspend fun insert(diary: Diary) {
         withContext(Dispatchers.IO) {
             diaryDatabase.insert(diary)
+        }
+    }
+
+    fun deleteTodo(id: Long) {
+        viewModelScope.launch { deleteById(id) }
+    }
+
+    private suspend fun deleteById(id: Long) {
+        withContext(Dispatchers.IO) {
+            diaryDatabase.deleteById(id)
         }
     }
 }
