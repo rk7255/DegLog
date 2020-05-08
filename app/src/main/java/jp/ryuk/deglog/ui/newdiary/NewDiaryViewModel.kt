@@ -1,25 +1,23 @@
 package jp.ryuk.deglog.ui.newdiary
 
-import android.util.Log
 import androidx.lifecycle.*
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
 import jp.ryuk.deglog.utilities.convertLongToDateStringInTime
-import jp.ryuk.deglog.utilities.convertStringToFloat
 import jp.ryuk.deglog.utilities.convertUnit
-import jp.ryuk.deglog.utilities.deg
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
-import kotlin.math.absoluteValue
 
 
 class NewDiaryViewModel(
     private val diaryId: Long,
-    private val selectedName: String,
+    selectedName: String,
     private val diaryDatabase: DiaryDao,
-    profileDatabase: ProfileDao
+    private val profileDatabase: ProfileDao
 ) : ViewModel() {
 
     private var isNew = true
@@ -60,7 +58,6 @@ class NewDiaryViewModel(
 
     fun setValues() {
         isNew = false
-        name.value = selectedName
         date = diary.value?.date ?: Calendar.getInstance().timeInMillis
         dateOfString.value = convertLongToDateStringInTime(date)
 
@@ -112,11 +109,15 @@ class NewDiaryViewModel(
             val diary = Diary(
                 date = date,
                 name = name.value!!,
-                weight = weight.value?.toFloat(),
-                length = length.value?.toFloat(),
+                weight = weight.value?.toFloat()?.times(if (weightUnit.value == "kg") 1000 else 1),
+                length = length.value?.toFloat()?.times(if (lengthUnit.value == "m") 1000 else 1),
                 memo = memo.value
             )
             if (isNew) {
+                if (!names.value!!.contains(diary.name)) {
+                    val profile = Profile(name = diary.name)
+                    insertProfile(profile)
+                }
                 insertDiary(diary)
             } else {
                 diary.id = diaryId
@@ -152,5 +153,13 @@ class NewDiaryViewModel(
 
     private fun updateDiary(diary: Diary) {
         viewModelScope.launch { update(diary) }
+    }
+
+    private suspend fun insert(profile: Profile) {
+        withContext(Dispatchers.IO) { profileDatabase.insert(profile) }
+    }
+
+    private fun insertProfile(profile: Profile) {
+        viewModelScope.launch { insert(profile) }
     }
 }

@@ -47,18 +47,21 @@ class NewDiaryFragment : Fragment() {
 
         args = NewDiaryFragmentArgs.fromBundle(arguments!!)
 
-        if (args.fromKey == ListKey.FROM_UNKNOWN) {
-            binding.newDiaryTitle.text = getString(R.string.new_diary_title)
-            binding.newDiaryEditName.isEnabled = true
-        } else {
-            binding.newDiaryTitle.text = getString(R.string.edit_diary_title)
-            binding.newDiaryEditName.isEnabled = false
+        when (args.mode) {
+            "edit" -> {
+                binding.newDiaryTitle.text = getString(R.string.edit_diary_title)
+                binding.newDiaryEditName.isEnabled = false
+            }
+            else -> {
+                binding.newDiaryTitle.text = getString(R.string.new_diary_title)
+                binding.newDiaryEditName.isEnabled = true
+            }
         }
-        viewModel = createViewModel(requireContext(), args.diaryKey, args.selectedName)
+
+        viewModel = createViewModel(requireContext(), args.id, args.name)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
-        // キーボードの非表示
         binding.newDiaryContainer.setOnTouchListener { view, event ->
             hideKeyboard(activity!!, view, event)
             binding.newDiaryEditName.error = null
@@ -90,14 +93,14 @@ class NewDiaryFragment : Fragment() {
             }
         })
 
-        viewModel.onDateCLick.observe(viewLifecycleOwner, Observer {
-            if (it == true) showDialogCalendar(requireContext(), parentFragmentManager)
-        })
-
         binding.newDiaryEditNameText.setOnKeyListener { _, _, _ ->
             binding.newDiaryEditName.error = null
             false
         }
+
+        viewModel.onDateCLick.observe(viewLifecycleOwner, Observer {
+            if (it == true) showDialogCalendar(requireContext(), parentFragmentManager)
+        })
 
         return binding.root
     }

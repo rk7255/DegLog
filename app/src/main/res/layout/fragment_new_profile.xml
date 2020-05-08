@@ -120,27 +120,37 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/new_profile_edit_birthday"
-                    style="@style/Widget.Deglog.EditText"
-                    android:layout_width="@dimen/edit_text_width"
-                    android:layout_height="@dimen/edit_text_height"
-                    android:layout_marginBottom="@dimen/margin_l"
-                    app:errorEnabled="true"
-                    app:hintAnimationEnabled="false"
-                    app:startIconDrawable="@drawable/ic_birthday">
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/new_profile_edit_birthday_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:focusable="false"
-                        android:focusableInTouchMode="false"
-                        android:hint="@string/hint_birthday"
-                        android:inputType="datetime"
-                        android:text="@={viewModel.birthdayString}" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/new_profile_edit_birthday"
+                        style="@style/Widget.Deglog.EditText"
+                        android:layout_width="@dimen/edit_text_width"
+                        android:layout_height="@dimen/edit_text_height"
+                        android:layout_marginBottom="@dimen/margin_l"
+                        app:errorEnabled="true"
+                        app:hintAnimationEnabled="false"
+                        app:startIconDrawable="@drawable/ic_birthday">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/new_profile_edit_birthday_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:hint="@string/hint_birthday"
+                            android:inputType="datetime"
+                            android:text="@={viewModel.birthdayString}" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <View
+                        android:layout_width="300dp"
+                        android:layout_height="60dp"
+                        android:onClick="@{() -> viewModel.onBirthday()}" />
+
+                </FrameLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="@dimen/edit_text_width"
@@ -185,7 +195,7 @@
                             android:gravity="center_horizontal"
                             android:inputType="none"
                             android:singleLine="true"
-                            android:text="@={viewModel.unitWeight}" />
+                            android:text="@={viewModel.weightUnit}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -210,7 +220,7 @@
                             android:gravity="center_horizontal"
                             android:inputType="none"
                             android:singleLine="true"
-                            android:text="@={viewModel.unitLength}" />
+                            android:text="@={viewModel.lengthUnit}" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 

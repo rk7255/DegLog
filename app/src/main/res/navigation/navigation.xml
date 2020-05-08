@@ -39,13 +39,13 @@
         android:label="fragment_new_diary"
         tools:layout="@layout/fragment_new_diary">
         <argument
-            android:name="fromKey"
-            app:argType="integer" />
+            android:name="mode"
+            app:argType="string" />
         <argument
-            android:name="diaryKey"
+            android:name="id"
             app:argType="long" />
         <argument
-            android:name="selectedName"
+            android:name="name"
             app:argType="string" />
         <action
             android:id="@+id/action_newDiaryFragment_to_diaryFragment"
@@ -76,10 +76,10 @@
         android:label="DiaryListFragment"
         tools:layout="@layout/fragment_diary_list">
         <argument
-            android:name="fromKey"
+            android:name="from"
             app:argType="integer" />
         <argument
-            android:name="selectedName"
+            android:name="name"
             app:argType="string" />
         <action
             android:id="@+id/action_diaryListFragment_to_diaryDetailFragment"
@@ -96,13 +96,10 @@
         android:label="DiaryDetailFragment"
         tools:layout="@layout/fragment_diary_detail">
         <argument
-            android:name="fromKey"
-            app:argType="integer" />
-        <argument
-            android:name="diaryKey"
+            android:name="id"
             app:argType="long" />
         <argument
-            android:name="selectedName"
+            android:name="name"
             app:argType="string" />
         <action
             android:id="@+id/action_diaryDetailFragment_to_diaryListFragment"
@@ -120,6 +117,10 @@
             app:exitAnim="@anim/spread_out"
             app:popEnterAnim="@anim/spread_pop_out"
             app:popExitAnim="@anim/spread_pop_in" />
+        <action
+            android:id="@+id/action_diaryDetailFragment_pop"
+            app:popUpTo="@id/diaryDetailFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 
@@ -148,7 +149,10 @@
         android:name="jp.ryuk.deglog.ui.profile.newprofile.NewProfileFragment"
         android:label="NewProfileFragment">
         <argument
-            android:name="selectedName"
+            android:name="mode"
+            app:argType="string" />
+        <argument
+            android:name="name"
             app:argType="string" />
         <action
             android:id="@+id/action_newProfileFragment_to_profilesFragment"

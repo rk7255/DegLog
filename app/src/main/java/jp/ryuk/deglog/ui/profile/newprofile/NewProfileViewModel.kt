@@ -1,14 +1,11 @@
 package jp.ryuk.deglog.ui.profile.newprofile
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
 import jp.ryuk.deglog.utilities.convertLongToDateString
-import jp.ryuk.deglog.utilities.deg
+import jp.ryuk.deglog.utilities.convertLongToDateStringInTime
 import kotlinx.coroutines.*
 
 class NewProfileViewModel(
@@ -16,71 +13,19 @@ class NewProfileViewModel(
     private val diaryDatabase: DiaryDao,
     private val profileDatabase: ProfileDao
 ) : ViewModel() {
-    private var viewModelJob = Job()
-    private var uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    var name = ""
-    var gender = "不明"
-    var type = ""
+    val profile = profileDatabase.getProfileLive(selectedName)
+
+    private var isNew = true
+    var isNameChanged = false
+
+    var name = MediatorLiveData<String>()
+    var gender = MediatorLiveData<String>()
+    var type = MediatorLiveData<String>()
     var birthday: Long? = null
-    var birthdayString = ""
-    var unitWeight = "g"
-    var unitLength = "mm"
-
-    private var isInsert = true
-
-
-    init {
-        if (selectedName.isNotEmpty()) {
-            initialize()
-            isInsert = false
-        }
-    }
-
-    // 更新する時のみ初期化処理
-    private fun initialize() {
-        uiScope.launch {
-            val profile = get(selectedName)
-            name = profile.name
-            gender = profile.gender
-            type = profile.type
-            birthday = profile.birthday
-            birthday?.let { birthdayString = convertLongToDateString(it) }
-            unitWeight = profile.weightUnit
-            unitLength = profile.lengthUnit
-            _initialized.value = true
-        }
-    }
-
-    /**
-     * onClick
-     */
-    fun onSubmit() {
-        if (isInsert) {
-            if (isInputDataValid()) insertNewProfile()
-        } else {
-            if (isInputDataValid()) updateProfile()
-        }
-    }
-
-    private fun isInputDataValid(): Boolean {
-        val isValid = name.isNotEmpty()
-        _submitError.value = !isValid
-        return isValid
-    }
-
-    fun onCancel() {
-        _submit.value = true
-    }
-
-    /**
-     * LiveData
-     */
-    private var _initialized = MutableLiveData<Boolean>()
-    val initialized: LiveData<Boolean> get() = _initialized
-    fun doneInitialize() {
-        _initialized.value = false
-    }
+    var birthdayString = MediatorLiveData<String>()
+    var weightUnit = MediatorLiveData<String>()
+    var lengthUnit = MediatorLiveData<String>()
 
     private var _submit = MutableLiveData<Boolean>()
     val submit: LiveData<Boolean> get() = _submit
@@ -88,28 +33,75 @@ class NewProfileViewModel(
     private var _submitError = MutableLiveData<Boolean>()
     val submitError: LiveData<Boolean> get() = _submitError
 
-    /**
-     * Database
-     */
+    private var _onDateClick = MutableLiveData<Boolean>()
+    val onDateCLick: LiveData<Boolean> get() = _onDateClick
+    fun doneOnDateClick(time: Long) {
+        birthday = time
+        birthdayString.value = convertLongToDateString(birthday!!)
+        _onDateClick.value = false
+    }
+
+    init {
+        name.value = selectedName
+        weightUnit.value = "g"
+        lengthUnit.value = "mm"
+    }
+
+    fun setValues() {
+        isNew = false
+        birthday = profile.value?.birthday
+        birthday?.let { birthdayString.value = convertLongToDateStringInTime(it) }
+        gender.value = profile.value?.gender
+        type.value = profile.value?.type
+        weightUnit.value = profile.value!!.weightUnit
+        lengthUnit.value = profile.value!!.lengthUnit
+    }
+
+    fun onSubmit() {
+        if (isValid()) {
+            val profile = Profile(
+                name = name.value!!,
+                type = type.value,
+                gender = gender.value,
+                birthday = birthday,
+                weightUnit = weightUnit.value ?: "g",
+                lengthUnit = lengthUnit.value ?: "mm"
+            )
+            if (isNew) {
+                insertProfile(profile)
+            } else {
+                if (name.value == selectedName) {
+                    updateProfile(profile)
+                } else {
+                    insertProfile(profile)
+                    changeProfile(selectedName, profile.name)
+                    isNameChanged = true
+                }
+            }
+            _submit.value = true
+        } else {
+            _submitError.value = true
+        }
+    }
+
+    private fun isValid(): Boolean = !name.value.isNullOrEmpty()
+
+    fun onCancel() {
+        _submit.value = true
+    }
+
+    fun onBirthday() {
+        _onDateClick.value = true
+    }
+
     private suspend fun insert(profile: Profile) {
         withContext(Dispatchers.IO) {
             profileDatabase.insert(profile)
         }
     }
 
-    private fun insertNewProfile() {
-        uiScope.launch {
-            val newProfile = Profile()
-            newProfile.name = name
-            newProfile.gender = gender
-            newProfile.type = type
-            newProfile.birthday = birthday
-            newProfile.weightUnit = unitWeight
-            newProfile.lengthUnit = unitLength
-            Log.d(deg, "Insert Profile -> $newProfile")
-            insert(newProfile)
-            _submit.value = true
-        }
+    private fun insertProfile(profile: Profile) {
+        viewModelScope.launch { insert(profile) }
     }
 
     private suspend fun update(profile: Profile) {
@@ -118,41 +110,20 @@ class NewProfileViewModel(
         }
     }
 
-    private fun updateProfile() {
-        uiScope.launch {
-            if (selectedName != name) {
-                changeName(selectedName, name)
-                insertNewProfile()
-            } else {
-                val newProfile = Profile()
-                newProfile.name = name
-                newProfile.gender = gender
-                newProfile.type = type
-                newProfile.birthday = birthday
-                newProfile.weightUnit = unitWeight
-                newProfile.lengthUnit = unitLength
-                Log.d(deg, "Update Profile -> $newProfile")
-                update(newProfile)
-                _submit.value = true
-            }
-        }
+    private fun updateProfile(profile: Profile) {
+        viewModelScope.launch { update(profile) }
     }
 
-    private suspend fun get(key: String): Profile {
-        return withContext(Dispatchers.IO) {
-            profileDatabase.getProfile(key)
-        }
-    }
-
-    private suspend fun changeName(old: String, new: String) {
+    private suspend fun change(oldName: String, newName: String) {
         withContext(Dispatchers.IO) {
-            diaryDatabase.changeName(old, new)
-            profileDatabase.deleteByName(old)
+            diaryDatabase.changeName(oldName, newName)
+            profileDatabase.deleteByName(oldName)
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
+    private fun changeProfile(oldName: String, newName: String) {
+        viewModelScope.launch {
+            change(oldName, newName)
+        }
     }
 }

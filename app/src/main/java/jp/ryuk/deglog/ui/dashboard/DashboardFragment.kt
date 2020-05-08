@@ -23,6 +23,7 @@ import jp.ryuk.deglog.R
 import jp.ryuk.deglog.adapters.*
 import jp.ryuk.deglog.databinding.FragmentDashboardBinding
 import jp.ryuk.deglog.ui.diarylist.ListKey
+import jp.ryuk.deglog.ui.profile.profiles.ProfilesFragmentDirections
 import jp.ryuk.deglog.utilities.InjectorUtil
 import jp.ryuk.deglog.utilities.deg
 import jp.ryuk.deglog.utilities.iconSelector
@@ -80,7 +81,7 @@ class DashboardFragment : Fragment() {
         })
 
         viewModel.type.observe(viewLifecycleOwner, Observer {
-            if (it != null) binding.dbPersonalIcon.setImageResource(iconSelector(it))
+            binding.dbPersonalIcon.setImageResource(iconSelector(it))
         })
 
         val recyclerView = binding.dbTodoRecyclerView
@@ -122,7 +123,7 @@ class DashboardFragment : Fragment() {
 
     private fun navigateToEditProfile() {
         this.findNavController().navigate(
-            DashboardFragmentDirections.actionDiaryFragmentToNewProfileFragment(viewModel.selected.value!!)
+            DashboardFragmentDirections.actionDiaryFragmentToNewProfileFragment("dashboard", viewModel.selected.value!!)
         )
     }
 
@@ -204,8 +205,7 @@ class DashboardFragment : Fragment() {
             R.id.toolbar_add -> {
                 this.findNavController().navigate(
                     DashboardFragmentDirections
-                        .actionDiaryFragmentToNewDiaryFragment(
-                            ListKey.FROM_UNKNOWN, -1 , viewModel.selected.value ?: ""))
+                        .actionDiaryFragmentToNewDiaryFragment("new", -1 , viewModel.selected.value ?: ""))
             }
         }
         return super.onOptionsItemSelected(item)

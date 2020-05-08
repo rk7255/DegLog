@@ -14,8 +14,8 @@ import java.util.*
 @Entity(tableName = "profile_table")
 data class Profile (
     @PrimaryKey var name: String = "",
-    var type: String = "",
-    var gender: String = "不明",
+    var type: String? = null,
+    var gender: String? = null,
     var birthday: Long? = null,
     @ColumnInfo(name = "weight_unit") var weightUnit: String = "g",
     @ColumnInfo(name = "length_unit") var lengthUnit: String = "mm"

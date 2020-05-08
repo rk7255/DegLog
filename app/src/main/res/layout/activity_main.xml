@@ -24,15 +24,6 @@
             app:navGraph="@navigation/navigation"
             tools:ignore="FragmentTagUsage" />
 
-        <!--        <View-->
-        <!--            android:id="@+id/bottom_navigation_border"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="1dp"-->
-        <!--            android:background="@color/secondaryColor"-->
-        <!--            app:layout_constraintBottom_toTopOf="@+id/bottom_navigation_bar"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintStart_toStartOf="parent" />-->
-
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_navigation_bar"
             android:layout_width="match_parent"

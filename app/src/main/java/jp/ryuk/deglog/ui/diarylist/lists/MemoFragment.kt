@@ -42,6 +42,6 @@ class MemoFragment(
     private fun onClick(id: Long) {
         this.findNavController().navigate(
             DiaryListFragmentDirections
-                .actionDiaryListFragmentToDiaryDetailFragment(ListKey.FROM_MEMO, id, selectedName))
+                .actionDiaryListFragmentToDiaryDetailFragment(id, selectedName))
     }
 }

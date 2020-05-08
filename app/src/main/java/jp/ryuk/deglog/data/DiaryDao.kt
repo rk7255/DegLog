@@ -54,4 +54,9 @@ interface DiaryDao {
 
     @Query("SELECT * FROM diary_table WHERE id = :id")
     fun getDiaryLive(id: Long) : LiveData<Diary?>
+
+    @Query("SELECT * FROM diary_table WHERE name = :name ORDER BY date DESC")
+    fun getDiariesLive(name: String) : LiveData<List<Diary>>
+
+
 }

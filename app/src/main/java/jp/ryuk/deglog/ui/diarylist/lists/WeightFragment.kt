@@ -45,7 +45,7 @@ class WeightFragment(
     private fun onClick(id: Long) {
         this.findNavController().navigate(
             DiaryListFragmentDirections
-                .actionDiaryListFragmentToDiaryDetailFragment(ListKey.FROM_WEIGHT, id, selectedName))
+                .actionDiaryListFragmentToDiaryDetailFragment(id, selectedName))
     }
 
 }

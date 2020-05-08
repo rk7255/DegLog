@@ -26,7 +26,7 @@ import jp.ryuk.deglog.utilities.InjectorUtil
 class DiaryListFragment : Fragment() {
 
     private lateinit var binding: FragmentDiaryListBinding
-    private lateinit var diaryListViewModel: DiaryListViewModel
+    private lateinit var viewModel: DiaryListViewModel
     private lateinit var args: DiaryListFragmentArgs
 
     override fun onCreateView(
@@ -37,28 +37,8 @@ class DiaryListFragment : Fragment() {
             inflater, R.layout.fragment_diary_list, container, false)
 
         args = DiaryListFragmentArgs.fromBundle(arguments!!)
-        diaryListViewModel = createViewModel(requireContext(), args.selectedName)
-        binding.appBarDiaryList.title = args.selectedName + getString(R.string.title_diary_detail_at_name)
-
-        var fromKey = args.fromKey
-        when (args.fromKey) {
-            ListKey.FROM_DETAIL_WEIGHT -> {
-                makeSnackBar(getString(R.string.delete_success))
-                fromKey = ListKey.FROM_WEIGHT
-            }
-            ListKey.FROM_DETAIL_LENGTH -> {
-                makeSnackBar(getString(R.string.delete_success))
-                fromKey = ListKey.FROM_LENGTH
-            }
-            ListKey.FROM_EDIT_WEIGHT -> {
-                makeSnackBar(getString(R.string.save_success))
-                fromKey = ListKey.FROM_WEIGHT
-            }
-            ListKey.FROM_EDIT_LENGTH -> {
-                makeSnackBar(getString(R.string.save_success))
-                fromKey = ListKey.FROM_LENGTH
-            }
-        }
+        viewModel = createViewModel(requireContext(), args.name)
+        binding.appBarDiaryList.title = args.name + getString(R.string.title_diary_detail_at_name)
 
         val tabLayout = binding.diaryListTab
         val viewPager = binding.diaryListViewPager
@@ -67,28 +47,43 @@ class DiaryListFragment : Fragment() {
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                diaryListViewModel.position.value = position
+                viewModel.position.value = position
             }
         })
 
-        diaryListViewModel.initialized.observe(viewLifecycleOwner, Observer {
-            viewPager.adapter = DiaryListPagerAdapter(
-                this,
-                args.selectedName,
-                diaryListViewModel.diaries.value!!,
-                diaryListViewModel.suffixWeight.value!!,
-                diaryListViewModel.suffixLength.value!!
-            )
-            if (diaryListViewModel.position.value == null) {
-                viewPager.setCurrentItem(fromKey, false)
-            } else {
-                viewPager.setCurrentItem(diaryListViewModel.position.value!!, false)
+        viewModel.diaries.observe(viewLifecycleOwner, Observer {
+            if (!it.isNullOrEmpty()) {
+                viewModel.diariesLoaded.value = true
+                viewModel.sectionLoaded()
             }
-            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-                tab.text = getTabTitle(position)
-            }.attach()
         })
 
+        viewModel.profile.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                viewModel.profileLoaded.value = true
+                viewModel.sectionLoaded()
+            }
+        })
+
+        viewModel.allLoaded.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                viewPager.adapter = DiaryListPagerAdapter(
+                    this,
+                    args.name,
+                    viewModel.diaries.value!!,
+                    viewModel.weightUnit.value!!,
+                    viewModel.lengthUnit.value!!
+                )
+                if (viewModel.position.value == null) {
+                    viewPager.setCurrentItem(args.from, false)
+                } else {
+                    viewPager.setCurrentItem(viewModel.position.value!!, false)
+                }
+                TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                    tab.text = getTabTitle(position)
+                }.attach()
+            }
+        })
 
         return binding.root
     }
@@ -97,14 +92,12 @@ class DiaryListFragment : Fragment() {
         Snackbar.make(binding.root, text, Snackbar.LENGTH_LONG).show()
     }
 
-    private fun getTabTitle(position: Int): String? {
-        return when (position) {
+    private fun getTabTitle(position: Int): String? = when (position) {
             WEIGHT_PAGE_INDEX -> getString(R.string.title_weight)
             LENGTH_PAGE_INDEX -> getString(R.string.title_length)
             MEMO_PAGE_INDEX -> getString(R.string.title_memo)
             else -> null
         }
-    }
 
     private fun createViewModel(context: Context, name: String): DiaryListViewModel {
         val viewModelFactory = InjectorUtil.provideDiaryListViewModelFactory(context, name)

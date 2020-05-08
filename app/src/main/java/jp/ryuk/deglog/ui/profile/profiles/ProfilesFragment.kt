@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.adapters.ProfileAdapter
 import jp.ryuk.deglog.adapters.ProfileListener
-import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentProfilesBinding
 import jp.ryuk.deglog.utilities.InjectorUtil
 
@@ -31,8 +30,7 @@ class ProfilesFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_profiles, container, false)
+        binding = FragmentProfilesBinding.inflate(inflater, container, false)
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarProfiles)
         profilesViewModel = createViewModel(requireContext())
 
@@ -40,23 +38,26 @@ class ProfilesFragment : Fragment() {
         val adapter = ProfileAdapter(
             requireContext(),
             ProfileListener { name ->
-            profilesViewModel.onClickProfile(name)
-        })
+                profilesViewModel.onClickProfile(name)
+            })
         recyclerView.adapter = adapter
 
         profilesViewModel.profiles.observe(viewLifecycleOwner, Observer {
-            if (!it.isNullOrEmpty()) { adapter.submitList(it) }
+            if (!it.isNullOrEmpty()) adapter.submitList(it)
         })
 
-        profilesViewModel.navigateToNewProfile.observe(viewLifecycleOwner, Observer { name ->
-            name?.let {
-                this.findNavController().navigate(
-                    ProfilesFragmentDirections.actionProfileFragmentToNewProfileFragment(name))
-                profilesViewModel.doneNavigateToNewProfile()
-            }
+        profilesViewModel.navigateToNewProfile.observe(viewLifecycleOwner, Observer {
+            if (it != null) navigate(it)
         })
 
         return binding.root
+    }
+
+    private fun navigate(name: String) {
+        this.findNavController().navigate(
+            ProfilesFragmentDirections.actionProfileFragmentToNewProfileFragment("edit", name)
+        )
+        profilesViewModel.doneNavigateToNewProfile()
     }
 
     private fun createViewModel(context: Context): ProfilesViewModel {
@@ -73,7 +74,8 @@ class ProfilesFragment : Fragment() {
         when (item.itemId) {
             R.id.toolbar_add -> {
                 this.findNavController().navigate(
-                    ProfilesFragmentDirections.actionProfileFragmentToNewProfileFragment(""))
+                    ProfilesFragmentDirections.actionProfileFragmentToNewProfileFragment("new", "")
+                )
             }
         }
         return super.onOptionsItemSelected(item)

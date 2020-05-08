@@ -7,11 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -25,7 +24,7 @@ import java.util.*
 class NewProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentNewProfileBinding
-    private lateinit var newProfileViewModel: NewProfileViewModel
+    private lateinit var viewModel: NewProfileViewModel
     private lateinit var args: NewProfileFragmentArgs
 
     @SuppressLint("ClickableViewAccessibility")
@@ -33,77 +32,48 @@ class NewProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_new_profile, container, false
-        )
+        binding = FragmentNewProfileBinding.inflate(inflater, container, false)
         args = NewProfileFragmentArgs.fromBundle(arguments!!)
-        newProfileViewModel = createViewModel(requireContext() , args.selectedName)
+        viewModel = createViewModel(requireContext(), args.name)
 
+        binding.viewModel = viewModel
         binding.lifecycleOwner = this
-        binding.viewModel = newProfileViewModel
 
         binding.newProfileTitle.text =
-            if (args.selectedName.isEmpty()) {
-                getString(R.string.new_profile_title)
-            } else {
-                getString(R.string.edit_profile_title)
+            when (args.mode) {
+                "new" -> getString(R.string.new_profile_title)
+                else -> getString(R.string.edit_profile_title)
             }
 
 
-        // キーボードの非表示
-        binding.newProfileContainer.setOnTouchListener { view, event -> hideKeyboard(activity!!, view, event) }
+        binding.newProfileContainer.setOnTouchListener { view, event ->
+            hideKeyboard(activity!!, view, event)
+            binding.newProfileEditName.error = null
+            false
+        }
 
-        // 更新
-        newProfileViewModel.initialized.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                binding.apply {
-                    newProfileEditNameText.setText(newProfileViewModel.name)
-                    newProfileEditTypeText.setText(newProfileViewModel.type)
-                    newProfileEditBirthdayText.setText(newProfileViewModel.birthdayString)
-                    newProfileEditWeightUnitText.setText(newProfileViewModel.unitWeight)
-                    newProfileEditLengthUnitText.setText(newProfileViewModel.unitLength)
-                    when (newProfileViewModel.gender) {
-                        "オス" -> genderMale.isChecked = true
-                        "メス" -> genderFemale.isChecked = true
-                        else -> genderUnknown.isChecked = true
-                    }
+        viewModel.profile.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                viewModel.setValues()
+                when (viewModel.gender.value) {
+                    "オス" -> binding.genderMale.isChecked = true
+                    "メス" -> binding.genderFemale.isChecked = true
+                    else -> binding.genderUnknown.isChecked = true
                 }
-                newProfileViewModel.doneInitialize()
             }
         })
 
-
-
-        // 性別
-        binding.newProfileToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
-            if (isChecked) {
-                val select = group.findViewById<MaterialButton>(checkedId).text.toString()
-                newProfileViewModel.gender = select
+        viewModel.submit.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                if (viewModel.isNameChanged && args.mode == "dashboard") {
+                    backToDashboard()
+                } else {
+                    pop()
+                }
             }
-        }
+        })
 
-        // 種類
-        val dialogType = typeDialogBuilder(binding.newProfileEditTypeText)
-        binding.newProfileEditType.setEndIconOnClickListener { dialogType.show() }
-
-        // 誕生日
-        val etBirthday = binding.newProfileEditBirthdayText
-        etBirthday.setOnClickListener {
-            showDatePicker(etBirthday, parentFragmentManager)
-        }
-
-        // 単位
-        val dialogWeightUnit = unitDialogBuilder(
-            binding.newProfileEditWeightUnitText,
-            resources.getStringArray(R.array.weight_unit))
-        val dialogLengthUnit = unitDialogBuilder(
-            binding.newProfileEditLengthUnitText,
-            resources.getStringArray(R.array.length_unit))
-        binding.newProfileEditWeightUnit.setEndIconOnClickListener { dialogWeightUnit.show() }
-        binding.newProfileEditLengthUnit.setEndIconOnClickListener { dialogLengthUnit.show() }
-
-        // エラー
-        newProfileViewModel.submitError.observe(viewLifecycleOwner, Observer {
+        viewModel.submitError.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 binding.newProfileEditName.error = getString(R.string.name_empty_error_string)
             } else {
@@ -111,9 +81,39 @@ class NewProfileFragment : Fragment() {
             }
         })
 
-        newProfileViewModel.submit.observe(viewLifecycleOwner, Observer {
-            if (it == true) pop()
+        binding.newProfileEditNameText.setOnKeyListener { _, _, _ ->
+            binding.newProfileEditName.error = null
+            false
+        }
+
+        viewModel.onDateCLick.observe(viewLifecycleOwner, Observer {
+            if (it == true)
+                showDatePicker(binding.newProfileEditBirthdayText, parentFragmentManager)
         })
+
+        binding.newProfileToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+            if (isChecked)
+                viewModel.gender.value =
+                    group.findViewById<MaterialButton>(checkedId).text.toString()
+        }
+
+        binding.newProfileEditType.setEndIconOnClickListener {
+            typeDialogBuilder(binding.newProfileEditTypeText).show()
+        }
+
+        binding.newProfileEditWeightUnit.setEndIconOnClickListener {
+            unitDialogBuilder(
+                binding.newProfileEditWeightUnitText,
+                resources.getStringArray(R.array.weight_unit)
+            ).show()
+        }
+
+        binding.newProfileEditLengthUnit.setEndIconOnClickListener {
+            unitDialogBuilder(
+                binding.newProfileEditLengthUnitText,
+                resources.getStringArray(R.array.length_unit)
+            ).show()
+        }
 
         return binding.root
     }
@@ -124,7 +124,16 @@ class NewProfileFragment : Fragment() {
         )
     }
 
-    private fun unitDialogBuilder(editText: EditText, units: Array<String>): MaterialAlertDialogBuilder {
+    private fun backToDashboard() {
+        this.findNavController().navigate(
+            NewProfileFragmentDirections.actionNewProfileFragmentToDiaryFragment()
+        )
+    }
+
+    private fun unitDialogBuilder(
+        editText: EditText,
+        units: Array<String>
+    ): MaterialAlertDialogBuilder {
         return MaterialAlertDialogBuilder(context)
             .setTitle(getString(R.string.choice_unit))
             .setItems(units) { _, unit ->
@@ -147,9 +156,9 @@ class NewProfileFragment : Fragment() {
             .build()
             .apply {
                 addOnPositiveButtonClickListener { date ->
-                    selected.set(date.getYear(), date.getMonth()-1, date.getDayOfMonth(), 0, 0, 0)
+                    selected.set(date.getYear(), date.getMonth() - 1, date.getDayOfMonth(), 0, 0, 0)
                     editText.setText(convertLongToDateString(selected.timeInMillis))
-                    newProfileViewModel.birthday = selected.timeInMillis
+                    viewModel.doneOnDateClick(selected.timeInMillis)
                 }
             }.show(fm, getString(R.string.dialog_tag))
     }

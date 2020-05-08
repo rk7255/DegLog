@@ -1,104 +1,75 @@
 package jp.ryuk.deglog.ui.diarydetail
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
-import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DiaryDetailViewModel(
     private val diaryId: Long,
-    private val selectedName: String,
+    selectedName: String,
     private val diaryDatabase: DiaryDao,
-    private val profileDatabase: ProfileDao
+    profileDatabase: ProfileDao
 ) : ViewModel() {
-    private var viewModelJob = Job()
-    private var uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    private var diaries = listOf<Diary>()
-    private var _diaryPosition = MediatorLiveData<Int>()
-    val diaryPosition: LiveData<Int>
-        get() = _diaryPosition
+    val diaries = diaryDatabase.getDiariesLive(selectedName)
+    val profile = profileDatabase.getProfileLive(selectedName)
+
     var details = MediatorLiveData<List<Detail>>()
+    var diaryPosition = MediatorLiveData<Int>()
 
+    var diariesLoaded = MutableLiveData<Boolean>()
+    var profileLoaded = MutableLiveData<Boolean>()
 
-    init {
-        initialize()
-    }
-
-    private fun initialize() {
-        uiScope.launch {
-            diaries = getDiaries(selectedName).reversed()
-            val profile = getProfile(selectedName)
-            val detailList = mutableListOf<Detail>()
-
-            diaries.forEach { diary ->
-                val detail = Detail()
-                detail.id = diary.id
-                detail.date = diary.date
-                detail.name = diary.name
-                detail.weight = diary.convertWeightUnit(profile.weightUnit, true)
-                detail.length = diary.convertLengthUnit(profile.lengthUnit, true)
-                detail.memo = diary.memo
-                detail.age = profile.getAge(diary.date)
-                detailList.add(detail)
-            }
-
-            details.value = detailList
-
-            val ids = diaries.map(Diary::id)
-            _diaryPosition.value = ids.indexOf(diaryId)
+    fun sectionLoaded() {
+        if (diariesLoaded.value == true && profileLoaded.value == true) {
+            setDetails()
         }
     }
 
+    private fun setDetails() {
+        val detailList = mutableListOf<Detail>()
+        diaries.value!!.forEach {
+            val detail = Detail(
+                id = it.id,
+                date = it.date,
+                name = it.name,
+                weight = it.convertWeightUnit(profile.value?.weightUnit ?: "g", true),
+                length = it.convertLengthUnit(profile.value?.lengthUnit ?: "mm", true),
+                memo = it.memo,
+                age = profile.value?.getAge(it.date) ?: ""
+            )
+            detailList.add(detail)
+        }
+        details.value = detailList.reversed()
 
+        val ids = diaries.value!!.map(Diary::id).reversed()
+        diaryPosition.value = ids.indexOf(diaryId)
+    }
 
     /**
      * onClick
      */
-    fun editDiary(position: Int): Long {
-        return details.value!![position].id
-    }
+    fun editDiary(position: Int): Long = details.value!![position].id
 
-    fun deleteDiary(position: Int): String {
+    fun deleteDiary(position: Int) {
         val detail = details.value!![position]
-        val id = detail.id
-        deleteById(id)
-        return detail.name
+        deleteById(detail.id)
     }
 
-    /**
-     * Database
-     */
-    private suspend fun getDiaries(selectedName: String): List<Diary> {
-        return withContext(Dispatchers.IO) {
-            diaryDatabase.getDiariesAtName(selectedName)
-        }
-    }
 
     private suspend fun delete(id: Long) {
-        withContext(Dispatchers.IO) {
-            diaryDatabase.deleteById(id)
-        }
+        withContext(Dispatchers.IO) { diaryDatabase.deleteById(id) }
     }
 
     private fun deleteById(id: Long) {
-        uiScope.launch {
-            delete(id)
-        }
+        viewModelScope.launch { delete(id) }
     }
 
-    private suspend fun getProfile(name: String): Profile {
-        return withContext(Dispatchers.IO) {
-            profileDatabase.getProfile(name)
-        }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
-    }
 }

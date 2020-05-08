@@ -18,9 +18,9 @@ fun hideKeyboard(activity: Activity, view: View, event: MotionEvent?): Boolean {
     return view.onTouchEvent(event)
 }
 
-fun iconSelector(type: String): Int {
+fun iconSelector(type: String?): Int {
     return when(type) {
-        "" -> R.drawable.nav_ic_diary
+        null -> R.drawable.nav_ic_diary
         // 大型
         "牛" -> R.drawable.img_big_ushi
         "馬" -> R.drawable.img_big_uma
