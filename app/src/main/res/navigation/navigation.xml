@@ -25,6 +25,13 @@
             app:exitAnim="@anim/spread_out"
             app:popEnterAnim="@anim/spread_pop_out"
             app:popExitAnim="@anim/spread_pop_in" />
+        <action
+            android:id="@+id/action_diaryFragment_to_newProfileFragment"
+            app:destination="@id/newProfileFragment"
+            app:enterAnim="@anim/spread_in"
+            app:exitAnim="@anim/spread_out"
+            app:popEnterAnim="@anim/spread_pop_out"
+            app:popExitAnim="@anim/spread_pop_in" />
     </fragment>
     <fragment
         android:id="@+id/newDiaryFragment"
@@ -70,17 +77,17 @@
         tools:layout="@layout/fragment_diary_list">
         <argument
             android:name="fromKey"
-            app:argType="integer"/>
+            app:argType="integer" />
         <argument
             android:name="selectedName"
             app:argType="string" />
         <action
             android:id="@+id/action_diaryListFragment_to_diaryDetailFragment"
+            app:destination="@id/diaryDetailFragment"
             app:enterAnim="@anim/spread_in"
             app:exitAnim="@anim/spread_out"
             app:popEnterAnim="@anim/spread_pop_out"
-            app:popExitAnim="@anim/spread_pop_in"
-            app:destination="@id/diaryDetailFragment" />
+            app:popExitAnim="@anim/spread_pop_in" />
 
     </fragment>
     <fragment
@@ -100,11 +107,11 @@
         <action
             android:id="@+id/action_diaryDetailFragment_to_diaryListFragment"
             app:destination="@id/diaryListFragment"
-            app:popUpTo="@id/diaryListFragment"
             app:enterAnim="@anim/spread_pop_out"
             app:exitAnim="@anim/spread_pop_in"
             app:popEnterAnim="@anim/spread_in"
             app:popExitAnim="@anim/spread_out"
+            app:popUpTo="@id/diaryListFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_diaryDetailFragment_to_newDiaryFragment"
@@ -112,7 +119,7 @@
             app:enterAnim="@anim/spread_in"
             app:exitAnim="@anim/spread_out"
             app:popEnterAnim="@anim/spread_pop_out"
-            app:popExitAnim="@anim/spread_pop_in"/>
+            app:popExitAnim="@anim/spread_pop_in" />
     </fragment>
 
 
@@ -127,34 +134,37 @@
         android:id="@+id/profilesFragment"
         android:name="jp.ryuk.deglog.ui.profile.profiles.ProfilesFragment"
         android:label="fragment_profiles"
-        tools:layout="@layout/fragment_profiles" >
+        tools:layout="@layout/fragment_profiles">
         <action
             android:id="@+id/action_profileFragment_to_newProfileFragment"
             app:destination="@id/newProfileFragment"
             app:enterAnim="@anim/spread_in"
             app:exitAnim="@anim/spread_out"
             app:popEnterAnim="@anim/spread_pop_out"
-            app:popExitAnim="@anim/spread_pop_in"/>
+            app:popExitAnim="@anim/spread_pop_in" />
     </fragment>
     <fragment
         android:id="@+id/newProfileFragment"
         android:name="jp.ryuk.deglog.ui.profile.newprofile.NewProfileFragment"
-        android:label="NewProfileFragment" >
+        android:label="NewProfileFragment">
         <argument
             android:name="selectedName"
             app:argType="string" />
         <action
             android:id="@+id/action_newProfileFragment_to_profilesFragment"
             app:destination="@id/profilesFragment"
-            app:popUpTo="@id/profilesFragment"
             app:enterAnim="@anim/spread_in"
             app:exitAnim="@anim/spread_out"
             app:popEnterAnim="@anim/spread_pop_out"
             app:popExitAnim="@anim/spread_pop_in"
+            app:popUpTo="@id/profilesFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_newProfileFragment_pop"
             app:popUpTo="@id/newProfileFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_newProfileFragment_to_diaryFragment"
+            app:destination="@id/diaryFragment" />
     </fragment>
 </navigation>

@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
         <variable
             name="profile"
             type="jp.ryuk.deglog.data.Profile" />
+        <variable
+            name="ageAndBirthday"
+            type="String" />
         <variable
             name="clickListener"
             type="jp.ryuk.deglog.adapters.ProfileListener" />
@@ -13,69 +17,95 @@
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
+        android:layout_marginTop="8dp"
         android:onClick="@{() -> clickListener.onClick(profile)}"
         android:layout_height="wrap_content">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/profile_icon"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:background="@color/colorBackground"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/nav_ic_diary" />
 
             <TextView
                 android:id="@+id/profile_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_m"
-                android:layout_marginTop="@dimen/margin_m"
-                android:layout_marginBottom="@dimen/margin_m"
+                android:layout_marginStart="16dp"
+                android:textAppearance="@style/Deglog.Dashboard.SubTitle"
                 android:text="@{profile.name}"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/profile_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_l"
-                android:text="@{profile.type}"
-                app:layout_constraintStart_toEndOf="@+id/profile_name"
-                app:layout_constraintTop_toTopOf="@+id/profile_name" />
+                tools:text="名前なまえナマエ"
+                app:layout_constraintStart_toEndOf="@+id/profile_icon"
+                app:layout_constraintTop_toTopOf="@+id/profile_icon" />
 
             <TextView
                 android:id="@+id/profile_gender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_l"
+                android:layout_marginStart="16dp"
                 android:text="@{profile.gender}"
-                app:layout_constraintStart_toEndOf="@id/profile_type"
-                app:layout_constraintTop_toTopOf="@id/profile_type" />
+                android:textAppearance="@style/Deglog.Dashboard.Body"
+                app:layout_constraintBottom_toBottomOf="@+id/profile_name"
+                app:layout_constraintStart_toEndOf="@+id/profile_name"
+                app:layout_constraintTop_toTopOf="@+id/profile_name"
+                tools:text="オス" />
 
             <TextView
-                android:id="@+id/profile_age"
+                android:id="@+id/profile_age_and_birthday"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_l"
-                diaryDateFormatted="@{profile.birthday}"
-                app:layout_constraintStart_toEndOf="@id/profile_gender"
-                app:layout_constraintTop_toTopOf="@id/profile_gender" />
+                android:textAppearance="@style/Deglog.Dashboard.Body"
+                android:layout_marginStart="16dp"
+                android:text="@{ageAndBirthday}"
+                tools:text="2020/01/01生（1歳2ヶ月3日）"
+                app:layout_constraintBottom_toBottomOf="@+id/profile_icon"
+                app:layout_constraintStart_toEndOf="@+id/profile_icon" />
 
             <TextView
-                android:id="@+id/profile_unit_w"
+                android:id="@+id/profile_unit_weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_l"
                 android:text="@{profile.weightUnit}"
-                app:layout_constraintStart_toEndOf="@+id/profile_age"
-                app:layout_constraintTop_toTopOf="@+id/profile_age" />
+                android:textAppearance="@style/Deglog.Dashboard.Body"
+                android:textColor="@color/gray"
+                app:layout_constraintBottom_toBottomOf="@+id/profile_type"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/profile_type"
+                tools:text="kg" />
 
             <TextView
-                android:id="@+id/profile_unit_l"
+                android:id="@+id/profile_unit_length"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_l"
                 android:text="@{profile.lengthUnit}"
-                app:layout_constraintStart_toEndOf="@+id/profile_unit_w"
-                app:layout_constraintTop_toTopOf="@+id/profile_unit_w" />
+                android:textAppearance="@style/Deglog.Dashboard.Body"
+                android:textColor="@color/gray"
+                app:layout_constraintBottom_toBottomOf="@+id/profile_age_and_birthday"
+                app:layout_constraintEnd_toEndOf="@+id/profile_unit_weight"
+                app:layout_constraintTop_toTopOf="@+id/profile_age_and_birthday"
+                tools:text="mm" />
+
+            <TextView
+                android:id="@+id/profile_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="@{profile.type}"
+                android:textAppearance="@style/Deglog.Dashboard.Body"
+                app:layout_constraintBottom_toBottomOf="@+id/profile_gender"
+                app:layout_constraintStart_toEndOf="@+id/profile_gender"
+                app:layout_constraintTop_toTopOf="@+id/profile_gender"
+                tools:text="デグー" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </com.google.android.material.card.MaterialCardView>

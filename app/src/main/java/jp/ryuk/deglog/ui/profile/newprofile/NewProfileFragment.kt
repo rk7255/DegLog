@@ -17,7 +17,6 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import jp.ryuk.deglog.R
-import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentNewProfileBinding
 import jp.ryuk.deglog.utilities.*
 import java.util.*
@@ -112,26 +111,17 @@ class NewProfileFragment : Fragment() {
             }
         })
 
-        // ナビゲーション
-        newProfileViewModel.navigateToProfiles.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                this.findNavController().navigate(
-                    NewProfileFragmentDirections.actionNewProfileFragmentToProfilesFragment()
-                )
-                newProfileViewModel.doneNavigateToProfiles()
-            }
-        })
-
-        newProfileViewModel.backToProfiles.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                this.findNavController().navigate(
-                    NewProfileFragmentDirections.actionNewProfileFragmentPop()
-                )
-                newProfileViewModel.doneBackToProfiles()
-            }
+        newProfileViewModel.submit.observe(viewLifecycleOwner, Observer {
+            if (it == true) pop()
         })
 
         return binding.root
+    }
+
+    private fun pop() {
+        this.findNavController().navigate(
+            NewProfileFragmentDirections.actionNewProfileFragmentPop()
+        )
     }
 
     private fun unitDialogBuilder(editText: EditText, units: Array<String>): MaterialAlertDialogBuilder {
@@ -170,6 +160,8 @@ class NewProfileFragment : Fragment() {
         val typesBig = resources.getStringArray(R.array.types_big)
         val typesMedium = resources.getStringArray(R.array.types_medium)
         val typesSmall = resources.getStringArray(R.array.types_small)
+        val typesBird = resources.getStringArray(R.array.types_bird)
+        val typesEtc = resources.getStringArray(R.array.types_etc)
 
         return MaterialAlertDialogBuilder(context)
             .setTitle(getString(R.string.choice_type))
@@ -191,6 +183,18 @@ class NewProfileFragment : Fragment() {
                         MaterialAlertDialogBuilder(context)
                             .setTitle(R.string.choice_type_big)
                             .setItems(typesBig) { _, type -> editText.setText(typesBig[type]) }
+                            .show()
+                    }
+                    3 -> {
+                        MaterialAlertDialogBuilder(context)
+                            .setTitle(R.string.choice_type_bird)
+                            .setItems(typesBird) { _, type -> editText.setText(typesBird[type]) }
+                            .show()
+                    }
+                    4 -> {
+                        MaterialAlertDialogBuilder(context)
+                            .setTitle(R.string.choice_type_etc)
+                            .setItems(typesEtc) { _, type -> editText.setText(typesEtc[type]) }
                             .show()
                     }
                 }

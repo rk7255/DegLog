@@ -21,6 +21,7 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:cardCornerRadius="0dp"
         android:elevation="0dp"
         android:onClick="@{() -> clickListener.onClick(diary)}">
 

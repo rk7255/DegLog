@@ -99,18 +99,18 @@
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/db_personal_icon"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_marginStart="16dp"
                     android:background="@color/colorBackground"
-                    android:elevation="8dp"
+                    android:elevation="4dp"
                     android:onClick="@{() -> viewModel.onCall(call.PERSONAL_ICON)}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/db_personal_icon"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:shapeAppearanceOverlay="@style/circleImageView"
-                    app:srcCompat="@drawable/img_degu" />
+                    app:srcCompat="@drawable/nav_ic_diary"/>
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/db_personal_container"
@@ -155,7 +155,7 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
-                            tools:text="10歳 13ヶ月 32日" />
+                            tools:text="年齢" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -186,48 +186,40 @@
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:padding="16dp">
+                            android:paddingStart="16dp"
+                            android:paddingTop="8dp"
+                            android:paddingEnd="16dp"
+                            android:paddingBottom="8dp">
 
                             <ImageView
                                 android:id="@+id/db_notify_icon"
                                 style="@style/DashboardIcon"
-                                android:layout_marginEnd="16dp"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_marginEnd="8dp"
                                 android:src="@drawable/ic_error"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toStartOf="@+id/db_notify_guideline"
+                                app:layout_constraintEnd_toStartOf="@+id/db_notify_first"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintHorizontal_chainStyle="packed"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                android:id="@+id/db_notify_title"
-                                style="@style/DashboardTitle"
-                                android:layout_marginStart="16dp"
-                                android:text="― 重要な通知 ―"
-                                android:textAppearance="@style/Deglog.Dashboard.Title"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="@+id/db_notify_guideline"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
                                 android:id="@+id/db_notify_first"
-                                android:layout_width="0dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="8dp"
+                                android:layout_marginStart="8dp"
                                 android:gravity="center"
                                 android:text="未確認のTODOがあります"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 android:textSize="14sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintEnd_toEndOf="@+id/db_notify_title"
-                                app:layout_constraintStart_toStartOf="@+id/db_notify_title"
-                                app:layout_constraintTop_toBottomOf="@+id/db_notify_title" />
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toEndOf="@+id/db_notify_icon"
+                                app:layout_constraintTop_toTopOf="parent" />
 
-                            <androidx.constraintlayout.widget.Guideline
-                                android:id="@+id/db_notify_guideline"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                app:layout_constraintGuide_percent="0.25" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
 

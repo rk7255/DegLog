@@ -44,41 +44,54 @@
                     android:textAppearance="@style/Deglog.PageTitle"
                     tools:text="@string/new_diary_title" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/new_diary_edit_date"
-                    style="@style/Widget.Deglog.EditText"
-                    android:layout_width="@dimen/edit_text_width"
-                    android:layout_height="@dimen/edit_text_height"
-                    android:layout_marginBottom="@dimen/margin_l"
-                    app:errorEnabled="true"
-                    app:hintAnimationEnabled="false"
-                    app:startIconDrawable="@drawable/ic_calendar">
+                <FrameLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/new_diary_edit_date_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/new_diary_edit_date"
+                        style="@style/Widget.Deglog.EditText"
+                        android:layout_width="@dimen/edit_text_width"
+                        android:layout_height="@dimen/edit_text_height"
+                        android:layout_marginBottom="@dimen/margin_l"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
-                        android:hint="@string/hint_date"
-                        android:inputType="datetime"
-                        android:onClick="@{() -> viewModel.onDate()}"
-                        android:text="@={viewModel.dateOfString}" />
+                        app:hintAnimationEnabled="false"
+                        app:startIconDrawable="@drawable/ic_calendar">
 
-                </com.google.android.material.textfield.TextInputLayout>
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/new_diary_edit_date_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:hint="@string/hint_date"
+                            android:inputType="datetime"
+                            android:text="@={viewModel.dateOfString}" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <View
+                        android:layout_width="300dp"
+                        android:layout_height="60dp"
+                        android:onClick="@{() -> viewModel.onDate()}"/>
+
+                </FrameLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/new_diary_edit_name"
-                    style="@style/Widget.Deglog.EditText_DropDown"
+                    style="@style/Widget.Deglog.EditText"
                     android:layout_width="@dimen/edit_text_width"
-                    android:layout_height="@dimen/edit_text_height"
-                    android:layout_marginBottom="@dimen/margin_l"
+                    android:layout_height="wrap_content"
                     app:errorEnabled="true"
+                    app:endIconDrawable="@drawable/ic_picker"
+                    app:endIconMode="custom"
                     app:startIconDrawable="@drawable/nav_ic_diary">
 
-                    <AutoCompleteTextView
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/new_diary_edit_name_text"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:hint="@string/hint_name"
                         android:inputType="none"
                         android:singleLine="true"
@@ -113,7 +126,7 @@
                         style="@style/Widget.Deglog.Button.Suffix"
                         android:layout_width="@dimen/edit_text_height"
                         tools:text="kg"
-                        android:onClick="@{() -> viewModel.onChangeSuffix(1)}"
+                        android:onClick="@{() -> viewModel.cycleUnitWeight()}"
                         android:text="@{viewModel.weightUnit}"
                         android:layout_height="@dimen/edit_text_height"/>
                     </LinearLayout>
@@ -146,7 +159,7 @@
                         style="@style/Widget.Deglog.Button.Suffix"
                         android:layout_width="@dimen/edit_text_height"
                         tools:text="mm"
-                        android:onClick="@{() -> viewModel.onChangeSuffix(2)}"
+                        android:onClick="@{() -> viewModel.cycleUnitLength()}"
                         android:text="@{viewModel.lengthUnit}"
                         android:layout_height="@dimen/edit_text_height"/>
                 </LinearLayout>

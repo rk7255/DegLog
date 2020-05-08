@@ -35,6 +35,7 @@
 
     <style name="Deglog.PageTitle" parent="@style/TextAppearance.MaterialComponents.Headline3">
         <item name="android:textSize">40sp</item>
+        <item name="android:textColor">@color/primaryDarkColor</item>
     </style>
 
     <style name="Widget.Deglog.Button.Suffix" parent="Widget.MaterialComponents.Button.TextButton">

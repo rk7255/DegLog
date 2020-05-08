@@ -49,6 +49,9 @@ interface DiaryDao {
     @Query("SELECT DISTINCT name FROM diary_table ORDER BY name")
     fun getNamesInDiaryDB() : LiveData<List<String>>
 
+    @Query("UPDATE diary_table SET success = :success WHERE id = :id")
+    fun success(id: Long, success: Boolean)
 
-
+    @Query("SELECT * FROM diary_table WHERE id = :id")
+    fun getDiaryLive(id: Long) : LiveData<Diary?>
 }

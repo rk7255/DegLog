@@ -120,12 +120,11 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/new_profile_edit_birthday"
                     style="@style/Widget.Deglog.EditText"
                     android:layout_width="@dimen/edit_text_width"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/edit_text_height"
                     android:layout_marginBottom="@dimen/margin_l"
                     app:errorEnabled="true"
                     app:hintAnimationEnabled="false"

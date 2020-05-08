@@ -1,15 +1,21 @@
 package jp.ryuk.deglog.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import jp.ryuk.deglog.R
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.databinding.ItemProfilesBinding
+import jp.ryuk.deglog.utilities.convertLongToDateString
+import jp.ryuk.deglog.utilities.iconSelector
 
 
-class ProfileAdapter(private val clickListener: ProfileListener)
+class ProfileAdapter(
+    private val context: Context,
+    private val clickListener: ProfileListener)
     : ListAdapter<Profile, ProfileAdapter.ViewHolder>(ProfileDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -17,13 +23,23 @@ class ProfileAdapter(private val clickListener: ProfileListener)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position)!!, clickListener)
+        holder.bind(getItem(position)!!, clickListener, context)
     }
 
     class ViewHolder private constructor(private val binding: ItemProfilesBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Profile, clickListener: ProfileListener) {
-            binding.profile = item
+        fun bind(profile: Profile, clickListener: ProfileListener, context: Context) {
+            binding.profile = profile
+            binding.ageAndBirthday = profile.getAgeAndBirthday()
             binding.clickListener = clickListener
+            binding.profileIcon.setImageResource(iconSelector(profile.type))
+
+            val color = when (profile.gender) {
+                "オス" -> context.getColor(R.color.blue)
+                "メス" -> context.getColor(R.color.pink)
+                else -> context.getColor(R.color.gray)
+            }
+            binding.profileGender.setTextColor(color)
+
             binding.executePendingBindings()
         }
         companion object {

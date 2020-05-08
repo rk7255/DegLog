@@ -1,280 +1,156 @@
 package jp.ryuk.deglog.ui.newdiary
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
 import jp.ryuk.deglog.utilities.convertLongToDateStringInTime
 import jp.ryuk.deglog.utilities.convertStringToFloat
+import jp.ryuk.deglog.utilities.convertUnit
+import jp.ryuk.deglog.utilities.deg
 import kotlinx.coroutines.*
 import java.util.*
-import kotlin.random.Random
+import kotlin.math.absoluteValue
 
 
 class NewDiaryViewModel(
     private val diaryId: Long,
     private val selectedName: String,
     private val diaryDatabase: DiaryDao,
-    private val profileDatabase: ProfileDao
+    profileDatabase: ProfileDao
 ) : ViewModel() {
 
-    private val viewModelJob = Job()
-    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+    private var isNew = true
 
-    var names = listOf<String>()
-    var date: Long = 0L
-    var dateOfString = ""
-    var name: String = selectedName
-    var weight: String?= null
-    var length: String? = null
-    var memo: String? = null
+    val names: LiveData<List<String>> = profileDatabase.getNamesLive()
+    val diary: LiveData<Diary?> = diaryDatabase.getDiaryLive(diaryId)
 
+    var date = Calendar.getInstance().timeInMillis
+    var dateOfString = MediatorLiveData<String>()
+    var name = MediatorLiveData<String>()
+    var weight = MediatorLiveData<String>()
+    var length = MediatorLiveData<String>()
+    var memo = MediatorLiveData<String>()
     var weightUnit = MediatorLiveData<String>()
     var lengthUnit = MediatorLiveData<String>()
 
-    /**
-     * Initialize
-     */
+    private var _submit = MutableLiveData<Boolean>()
+    val submit: LiveData<Boolean> get() = _submit
+
+    private var _submitError = MutableLiveData<Boolean>()
+    val submitError: LiveData<Boolean> get() = _submitError
+
+    private var _onDateClick = MutableLiveData<Boolean>()
+    val onDateCLick: LiveData<Boolean> get() = _onDateClick
+
+    fun doneOnDateClick(time: Long) {
+        date = time
+        dateOfString.value = convertLongToDateStringInTime(date)
+        _onDateClick.value = false
+    }
+
     init {
-        if (diaryId == -1L) initialize() else initializeEdit()
+        name.value = selectedName
+        dateOfString.value = convertLongToDateStringInTime(date)
+        weightUnit.value = "g"
+        lengthUnit.value = "mm"
     }
 
-    private fun initialize() {
-        uiScope.launch {
-            val profile = if (isRegistered(selectedName)) getProfile(selectedName) else Profile()
-            weightUnit.value = profile.weightUnit
-            lengthUnit.value = profile.lengthUnit
+    fun setValues() {
+        isNew = false
+        name.value = selectedName
+        date = diary.value?.date ?: Calendar.getInstance().timeInMillis
+        dateOfString.value = convertLongToDateStringInTime(date)
 
-            names = getNames()
-            date = Calendar.getInstance().timeInMillis
-            dateOfString = convertLongToDateStringInTime(date)
-            _initialized.value = true
+        diary.value?.let { diary ->
+            diary.weight?.let { weight.value = convertUnit(it, weightUnit.value ?: "g", false) }
+            diary.length?.let { length.value = convertUnit(it, lengthUnit.value ?: "mm", false) }
+            diary.memo?.let { memo.value = it }
         }
     }
 
-    private fun initializeEdit() {
-        uiScope.launch {
-            val profile = getProfile(selectedName)
-            weightUnit.value = profile.weightUnit
-            lengthUnit.value = profile.lengthUnit
+    fun cycleUnitWeight() {
+        when (weightUnit.value) {
+            "g" -> {
+                weightUnit.value = "kg"
+                weight.value = changeUnit(weight.value, "kg")
+            }
+            "kg" -> {
+                weightUnit.value = "g"
+                weight.value = changeUnit(weight.value, "g")
 
-            val diary = getDiary(diaryId)
-            name = diary.name
-            date = diary.date
-            dateOfString = convertLongToDateStringInTime(date)
-            weight = diary.convertWeightUnit(weightUnit.value ?: "g", false)
-            length = diary.convertLengthUnit(lengthUnit.value ?: "mm", false)
-            memo = diary.memo
-            _initialized.value = true
+            }
         }
     }
 
+    fun cycleUnitLength() {
+        when (lengthUnit.value) {
+            "mm" -> {
+                lengthUnit.value = "m"
+                length.value = changeUnit(length.value, "m")
+            }
+            "m" -> {
+                lengthUnit.value = "mm"
+                length.value = changeUnit(length.value, "mm")
+            }
+        }
+    }
 
-    /**
-     * onClick
-    */
-    fun onSubmit() {
-        if (diaryId == -1L) {
-            if (isInputDataValid()) insertNewDiary()
+    private fun changeUnit(number: String?, unit: String): String {
+        if (number.isNullOrBlank()) return ""
+        return if (unit == "g" || unit == "mm") {
+            (number.toFloat() * 1000).toInt().toString()
         } else {
-            if (isInputDataValid()) updateDiary()
+            (number.toFloat() / 1000).toString()
         }
     }
 
-    private fun isInputDataValid(): Boolean {
-        val isValid = name.isNotEmpty()
-        _submitError.value = !isValid
-        return isValid
-    }
-
-    fun onChangeSuffix(witch: Int) {
-        when (witch) {
-            1 -> { when (weightUnit.value) {
-                    "g" -> weightUnit.value = "kg"
-                    "kg" -> weightUnit.value = "g"
-            }}
-            2 -> { when (lengthUnit.value) {
-                "mm" -> lengthUnit.value = "m"
-                "m" -> lengthUnit.value = "mm"
-            }}
+    fun onSubmit() {
+        if (isValid()) {
+            val diary = Diary(
+                date = date,
+                name = name.value!!,
+                weight = weight.value?.toFloat(),
+                length = length.value?.toFloat(),
+                memo = memo.value
+            )
+            if (isNew) {
+                insertDiary(diary)
+            } else {
+                diary.id = diaryId
+                updateDiary(diary)
+            }
+            _submit.value = true
+        } else {
+            _submitError.value = true
         }
     }
+
+    private fun isValid(): Boolean = !name.value.isNullOrEmpty()
 
     fun onCancel() {
-        _backToDiary.value = true
+        _submit.value = true
     }
 
     fun onDate() {
-        _getCalendar.value = true
+        _onDateClick.value = true
     }
 
-    /**
-     * DEBUG
-     */
-//    fun onClear() {
-//        uiScope.launch {
-//            clear(selectedName)
-//            _navigateToDiary.value = true
-//        }
-//    }
-//
-//    fun onAddDummy() {
-//        uiScope.launch {
-//
-//            for (m in 1..3) {
-//                for (d in 1..5) {
-//                    val loop = Random.nextInt(0, 3)
-//                    for (i in 0..loop) {
-//                        val newDiary = Diary()
-//                        newDiary.date = convertYMDToLong(2020, m, d)
-//                        newDiary.name = name
-//                        newDiary.weight = 250f + loop * Random.nextInt(1, 15)
-//                        newDiary.length = 150f + loop * Random.nextInt(1, 15)
-//                        newDiary.memo = "DUMMY DUMMY"
-//                        insert(newDiary)
-//                    }
-//                }
-//            }
-//            _navigateToDiary.value = true
-//        }
-//    }
-
-
-    /**
-     *  LiveData
-     */
-    private var _navigateToDiary = MutableLiveData<Boolean>()
-    val navigateToDiary: LiveData<Boolean>
-        get() = _navigateToDiary
-    fun doneNavigateToDiary() {
-        _navigateToDiary.value = false
-    }
-
-    private var _navigateToDiaryDetail = MutableLiveData<Boolean>()
-    val navigateToDiaryDetail: LiveData<Boolean>
-        get() = _navigateToDiaryDetail
-    fun doneNavigateToDiaryDetail() {
-        _navigateToDiaryDetail.value = false
-    }
-
-    private var _backToDiary = MutableLiveData<Boolean>()
-    val backToDiary: LiveData<Boolean>
-        get() = _backToDiary
-    fun doneBackToDiary() {
-        _backToDiary.value = false
-    }
-
-    private var _submitError = MutableLiveData<Boolean>()
-    val submitError: LiveData<Boolean>
-        get() = _submitError
-
-    private var _initialized = MutableLiveData<Boolean>()
-    val initialized: LiveData<Boolean>
-        get() = _initialized
-    fun doneInitialized() {
-        _initialized.value = false
-    }
-
-    private var _getCalendar = MutableLiveData<Boolean>()
-    val getCalendar: LiveData<Boolean>
-        get() = _getCalendar
-    fun doneGetCalendar(time: Long) {
-        date = time
-        dateOfString = convertLongToDateStringInTime(date)
-        _initialized.value = true
-        _getCalendar.value = false
-    }
-
-    /**
-     * Database
-     */
     private suspend fun insert(diary: Diary) {
-        withContext(Dispatchers.IO) {
-            diaryDatabase.insert(diary)
-        }
+        withContext(Dispatchers.IO) { diaryDatabase.insert(diary) }
     }
 
-    private fun insertNewDiary() {
-        uiScope.launch {
-            if (!isRegistered(name)) insertNewProfile(Profile(name = name))
-
-            val newDiary = Diary()
-            newDiary.name = name
-            newDiary.date = date
-            newDiary.weight = convertStringToFloat(weight, weightUnit.value!!)
-            newDiary.length = convertStringToFloat(length, lengthUnit.value!!)
-            newDiary.memo = if (memo.isNullOrEmpty()) null else memo
-            Log.d("DEBUG", "Insert New Diary -> $newDiary")
-            insert(newDiary)
-            _navigateToDiary.value = true
-        }
+    private fun insertDiary(diary: Diary) {
+        viewModelScope.launch { insert(diary) }
     }
 
     private suspend fun update(diary: Diary) {
-        withContext(Dispatchers.IO) {
-            diaryDatabase.update(diary)
-        }
+        withContext(Dispatchers.IO) { diaryDatabase.update(diary) }
     }
 
-    private fun updateDiary() {
-        uiScope.launch {
-            val newDiary = Diary()
-            newDiary.id = diaryId
-            newDiary.name = name
-            newDiary.date = date
-            newDiary.weight = convertStringToFloat(weight, weightUnit.value!!)
-            newDiary.length = convertStringToFloat(length, lengthUnit.value!!)
-            newDiary.memo = if (memo.isNullOrEmpty()) null else memo
-            Log.d("DEBUG", "Update Diary -> $newDiary")
-            update(newDiary)
-            _navigateToDiaryDetail.value = true
-        }
-    }
-
-    private suspend fun getDiary(id: Long): Diary {
-        return withContext(Dispatchers.IO) {
-            diaryDatabase.getDiary(id)
-        }
-    }
-
-    private suspend fun getNames(): List<String> {
-        return withContext(Dispatchers.IO) {
-            profileDatabase.getNames()
-        }
-    }
-
-    private suspend fun getProfile(name: String): Profile {
-        return withContext(Dispatchers.IO) {
-            profileDatabase.getProfile(name)
-        }
-    }
-
-    private suspend fun isRegistered(name: String): Boolean {
-        return withContext(Dispatchers.IO) {
-            val profile = profileDatabase.isRegistered(name)
-            profile != null
-        }
-    }
-
-    private suspend fun insertNewProfile(profile: Profile) {
-        withContext(Dispatchers.IO) {
-            profileDatabase.insert(profile)
-        }
-    }
-
-//    private suspend fun clear(name: String) {
-//        withContext(Dispatchers.IO) {
-//            diaryDatabase.clear(name)
-//        }
-//    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
+    private fun updateDiary(diary: Diary) {
+        viewModelScope.launch { update(diary) }
     }
 }

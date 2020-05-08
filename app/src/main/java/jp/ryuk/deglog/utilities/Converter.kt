@@ -62,7 +62,8 @@ fun convertLongToDateStringRelative(systemTime: Long): String {
  */
 fun hasAlert(time: Long): Boolean {
     val diff = Calendar.getInstance().timeInMillis - time
-    val week = 1000 * 60 * 60 * 24 * 7 * 2
+//    val week = 1000 * 60 * 60 * 24 * 7 * 2
+    val week = 1000 * 60 * 3
     return diff >= week
 }
 

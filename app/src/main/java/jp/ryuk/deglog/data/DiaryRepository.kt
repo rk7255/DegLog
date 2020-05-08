@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Database(entities = [Diary::class], version = 1, exportSchema = false)
 abstract class DiaryRepository : RoomDatabase() {

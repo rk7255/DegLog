@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.EditText
 import android.widget.FrameLayout
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -22,6 +24,8 @@ import jp.ryuk.deglog.adapters.*
 import jp.ryuk.deglog.databinding.FragmentDashboardBinding
 import jp.ryuk.deglog.ui.diarylist.ListKey
 import jp.ryuk.deglog.utilities.InjectorUtil
+import jp.ryuk.deglog.utilities.deg
+import jp.ryuk.deglog.utilities.iconSelector
 
 
 class DashboardFragment : Fragment() {
@@ -43,10 +47,6 @@ class DashboardFragment : Fragment() {
 
         viewModel = createViewModel(requireContext())
         binding.lifecycleOwner = this
-
-        binding.dbAppBar.setNavigationOnClickListener {
-            makeSnackBar("click menu")
-        }
 
         binding.viewModel = viewModel
 
@@ -79,6 +79,9 @@ class DashboardFragment : Fragment() {
             }
         })
 
+        viewModel.type.observe(viewLifecycleOwner, Observer {
+            if (it != null) binding.dbPersonalIcon.setImageResource(iconSelector(it))
+        })
 
         val recyclerView = binding.dbTodoRecyclerView
         val adapter = TodoAdapter(TodoListener { todo ->
@@ -93,7 +96,7 @@ class DashboardFragment : Fragment() {
         viewModel.call.observe(viewLifecycleOwner, Observer { call ->
             if (call != null) {
                 when (call) {
-                    OnCallKey.PERSONAL_ICON -> makeSnackBar("ICON")
+                    OnCallKey.PERSONAL_ICON -> navigateToEditProfile()
                     OnCallKey.PERSONAL_CONTAINER -> dialogSelectBuilder(requireContext(), names).show()
                     OnCallKey.NOTIFY_CONTAINER -> makeSnackBar("NOTIFY")
                     OnCallKey.WEIGHT_CONTAINER -> navigateToDiaryList(ListKey.FROM_WEIGHT)
@@ -116,6 +119,14 @@ class DashboardFragment : Fragment() {
             DashboardFragmentDirections.actionDiaryFragmentToDiaryDetailFragment(key, viewModel.selected.value!!)
         )
     }
+
+    private fun navigateToEditProfile() {
+        this.findNavController().navigate(
+            DashboardFragmentDirections.actionDiaryFragmentToNewProfileFragment(viewModel.selected.value!!)
+        )
+    }
+
+
 
     private fun dialogCreateTodoBuilder(context: Context): AlertDialog {
         val editText = EditText(context).apply {
@@ -156,9 +167,9 @@ class DashboardFragment : Fragment() {
 
     private fun dialogDeleteTodoBuilder(context: Context, todo: Todo): AlertDialog {
         return MaterialAlertDialogBuilder(context)
-            .setMessage("選択したToDoを削除します\n\"${todo.todo}\"")
+            .setMessage("選択したToDoを完了します\n\"${todo.todo}\"")
             .setNeutralButton("キャンセル", null)
-            .setPositiveButton("削除") {_, _ ->
+            .setPositiveButton("完了") {_, _ ->
                 viewModel.deleteTodo(todo.id)
             }
             .create()

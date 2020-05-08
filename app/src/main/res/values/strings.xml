@@ -76,39 +76,64 @@
     <string name="choice_type_small">小型</string>
     <string name="choice_type_medium">中型</string>
     <string name="choice_type_big">大型</string>
+    <string name="choice_type_bird">鳥類</string>
+    <string name="choice_type_etc">その他</string>
 
     <string-array name="types">
         <item>小型</item>
         <item>中型</item>
         <item>大型</item>
+        <item>鳥類</item>
+        <item>その他</item>
     </string-array>
 
     <string-array name="types_big">
         <item>牛</item>
         <item>馬</item>
+        <item>豚</item>
+        <item>羊</item>
+        <item>ヤギ</item>
     </string-array>
 
     <string-array name="types_medium">
         <item>犬</item>
         <item>猫</item>
+        <item>キツネ</item>
+        <item>タヌキ</item>
     </string-array>
 
     <string-array name="types_small">
-        <item>うさぎ</item>
+        <item>ウサギ</item>
         <item>デグー</item>
         <item>チンチラ</item>
+        <item>ハムスター</item>
+        <item>ハリネズミ</item>
+        <item>マウス・ラット</item>
+        <item>モルモット</item>
+        <item>リス</item>
+        <item>モモンガ</item>
+    </string-array>
+
+    <string-array name="types_bird">
+        <item>インコ類</item>
+        <item>フィンチ類</item>
+        <item>猛禽類</item>
+    </string-array>
+
+    <string-array name="types_etc">
+        <item>爬虫類</item>
+        <item>魚類</item>
+        <item>昆虫</item>
     </string-array>
 
     <string-array name="weight_unit">
         <item>g</item>
         <item>kg</item>
-        <item>lbs</item>
     </string-array>
 
     <string-array name="length_unit">
         <item>mm</item>
         <item>m</item>
-        <item>ft</item>
     </string-array>
 
     <string name="dummy_description">Dummy Description</string>

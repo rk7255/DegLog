@@ -3,6 +3,7 @@ package jp.ryuk.deglog.ui.newdiary
 import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,6 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -17,9 +21,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import jp.ryuk.deglog.R
-import jp.ryuk.deglog.data.DiaryRepository
-import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentNewDiaryBinding
 import jp.ryuk.deglog.ui.diarylist.ListKey
 import jp.ryuk.deglog.utilities.*
@@ -27,7 +30,7 @@ import java.util.*
 
 class NewDiaryFragment : Fragment() {
     private lateinit var binding: FragmentNewDiaryBinding
-    private lateinit var newDiaryViewModel: NewDiaryViewModel
+    private lateinit var viewModel: NewDiaryViewModel
     private lateinit var args: NewDiaryFragmentArgs
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +46,6 @@ class NewDiaryFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_diary, container, false)
 
         args = NewDiaryFragmentArgs.fromBundle(arguments!!)
-        Log.d("DEBUG", "${args.fromKey}")
 
         if (args.fromKey == ListKey.FROM_UNKNOWN) {
             binding.newDiaryTitle.text = getString(R.string.new_diary_title)
@@ -52,63 +54,35 @@ class NewDiaryFragment : Fragment() {
             binding.newDiaryTitle.text = getString(R.string.edit_diary_title)
             binding.newDiaryEditName.isEnabled = false
         }
-
-        newDiaryViewModel = createViewModel(requireContext(), args.diaryKey, args.selectedName)
-        binding.viewModel = newDiaryViewModel
+        viewModel = createViewModel(requireContext(), args.diaryKey, args.selectedName)
+        binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
-        newDiaryViewModel.initialized.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                binding.newDiaryEditWeightText.setText(newDiaryViewModel.weight)
-                binding.newDiaryEditLengthText.setText(newDiaryViewModel.length)
-                binding.newDiaryEditMemoText.setText(newDiaryViewModel.memo)
-                binding.newDiaryEditDateText.setText(newDiaryViewModel.dateOfString)
+        // キーボードの非表示
+        binding.newDiaryContainer.setOnTouchListener { view, event ->
+            hideKeyboard(activity!!, view, event)
+            binding.newDiaryEditName.error = null
+            false
+        }
 
-                val adapter = ArrayAdapter(
-                    requireContext(),
-                    R.layout.support_simple_spinner_dropdown_item,
-                    newDiaryViewModel.names
-                )
-                (binding.newDiaryEditName.editText as? AutoCompleteTextView)?.setAdapter(adapter)
-                newDiaryViewModel.doneInitialized()
-            }
-        })
-
-        newDiaryViewModel.navigateToDiary.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                this.findNavController().navigate(
-                    NewDiaryFragmentDirections.actionNewDiaryFragmentToDiaryFragment()
-                )
-                newDiaryViewModel.doneNavigateToDiary()
-            }
-        })
-
-        newDiaryViewModel.navigateToDiaryDetail.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                val fromKey = when (args.fromKey) {
-                    ListKey.FROM_DETAIL_WEIGHT -> ListKey.FROM_EDIT_WEIGHT
-                    ListKey.FROM_DETAIL_LENGTH -> ListKey.FROM_EDIT_LENGTH
-                    else -> args.fromKey
+        viewModel.names.observe(viewLifecycleOwner, Observer {
+            if (!it.isNullOrEmpty()) {
+                val names = it.toTypedArray()
+                binding.newDiaryEditName.setEndIconOnClickListener {
+                    dialogNameSelectBuilder(binding.newDiaryEditNameText, names).show()
                 }
-                this.findNavController().navigate(
-                    NewDiaryFragmentDirections
-                        .actionNewDiaryFragmentToDiaryListFragment(
-                            fromKey, args.selectedName)
-                )
-                newDiaryViewModel.doneNavigateToDiaryDetail()
             }
         })
 
-        newDiaryViewModel.backToDiary.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                this.findNavController().navigate(
-                    NewDiaryFragmentDirections.actionNewDiaryFragmentPop()
-                )
-                newDiaryViewModel.doneBackToDiary()
-            }
+        viewModel.diary.observe(viewLifecycleOwner, Observer {
+            if (it != null) viewModel.setValues()
         })
 
-        newDiaryViewModel.submitError.observe(viewLifecycleOwner, Observer {
+        viewModel.submit.observe(viewLifecycleOwner, Observer {
+            if (it == true) pop()
+        })
+
+        viewModel.submitError.observe(viewLifecycleOwner, Observer {
             if (it == true) {
                 binding.newDiaryEditName.error = getString(R.string.name_empty_error_string)
             } else {
@@ -116,44 +90,57 @@ class NewDiaryFragment : Fragment() {
             }
         })
 
-        // キーボードの非表示
-        binding.newDiaryContainer.setOnTouchListener { view, event -> hideKeyboard(activity!!, view, event) }
-
-        // 日付の選択
-        newDiaryViewModel.getCalendar.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                val today = Calendar.getInstance()
-                val selected = Calendar.getInstance()
-                showDateAndTimePicker(today, selected, parentFragmentManager)
-            }
+        viewModel.onDateCLick.observe(viewLifecycleOwner, Observer {
+            if (it == true) showDialogCalendar(requireContext(), parentFragmentManager)
         })
 
+        binding.newDiaryEditNameText.setOnKeyListener { _, _, _ ->
+            binding.newDiaryEditName.error = null
+            false
+        }
 
         return binding.root
     }
 
-    private fun showDateAndTimePicker(today: Calendar, selected: Calendar, fm: FragmentManager) {
+    private fun pop() {
+        this.findNavController().navigate(
+            NewDiaryFragmentDirections.actionNewDiaryFragmentPop())
+    }
+
+    private fun dialogNameSelectBuilder(editText: EditText, names: Array<String>): AlertDialog {
+        return MaterialAlertDialogBuilder(context)
+            .setTitle("ペットの選択")
+            .setItems(names) { _, i ->
+                editText.setText(names[i])
+            }
+            .create()
+    }
+
+    private fun showDialogCalendar(context: Context, fm: FragmentManager) {
+        val today = Calendar.getInstance()
+
         MaterialDatePicker.Builder.datePicker()
             .setSelection(today.timeInMillis)
             .setTitleText("日付の選択")
             .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
             .build()
             .apply {
-                addOnPositiveButtonClickListener { date ->
+                addOnPositiveButtonClickListener {
+                    val selected = Calendar.getInstance()
                     TimePickerDialog(
                         context,
                         TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-                            selected.set(date.getYear(), date.getMonth()-1, date.getDayOfMonth(), hourOfDay, minute)
-                            newDiaryViewModel.doneGetCalendar(selected.timeInMillis)
+                            selected.set(it.getYear(), it.getMonth() - 1, it.getDayOfMonth(), hourOfDay, minute)
+                            viewModel.doneOnDateClick(selected.timeInMillis)
                         },
                         today.get(Calendar.HOUR_OF_DAY),
                         today.get(Calendar.MINUTE),
                         true
                     ).show()
                 }
-            }.show(fm, "Tag")
+            }
+            .show(fm, "dialogDateAndTimePickerTag")
     }
-
 
     private fun createViewModel(context: Context, id: Long, name: String): NewDiaryViewModel {
         val viewModelFactory = InjectorUtil.provideNewDiaryViewModelFactory(context, id, name)

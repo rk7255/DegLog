@@ -25,8 +25,9 @@ class DashboardViewModel(
 
     val diaries: LiveData<List<Diary>> = diaryDatabase.getAllDiaries()
     val names: LiveData<List<String>> = diaryDatabase.getNamesInDiaryDB()
-    val profiles: LiveData<List<Profile>> = profileDatabase.getProfilesLive()
+    val profiles: LiveData<List<Profile>> = profileDatabase.getProfiles()
     var selected = MediatorLiveData<String?>()
+    var type = MutableLiveData<String?>()
 
     var allLoaded = MutableLiveData<Boolean>()
     var diariesLoaded = MutableLiveData<Boolean>()
@@ -120,6 +121,7 @@ class DashboardViewModel(
         age.value = profile!!.getAge(Calendar.getInstance().timeInMillis)
         weight.value = newWeight
         length.value = newLength
+        type.value = profile.type
         createLineChart(chartWeight, weights.mapNotNull(Diary::weight).reversed())
         createLineChart(chartLength, lengths.mapNotNull(Diary::length).reversed())
     }
@@ -208,12 +210,12 @@ class DashboardViewModel(
     }
 
     fun deleteTodo(id: Long) {
-        viewModelScope.launch { deleteById(id) }
+        viewModelScope.launch { success(id) }
     }
 
-    private suspend fun deleteById(id: Long) {
+    private suspend fun success(id: Long) {
         withContext(Dispatchers.IO) {
-            diaryDatabase.deleteById(id)
+            diaryDatabase.success(id, true)
         }
     }
 }

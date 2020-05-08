@@ -70,7 +70,7 @@ class NewProfileViewModel(
     }
 
     fun onCancel() {
-        _backToProfiles.value = true
+        _submit.value = true
     }
 
     /**
@@ -82,17 +82,8 @@ class NewProfileViewModel(
         _initialized.value = false
     }
 
-    private var _navigateToProfiles = MutableLiveData<Boolean>()
-    val navigateToProfiles: LiveData<Boolean> get() = _navigateToProfiles
-    fun doneNavigateToProfiles() {
-        _navigateToProfiles.value = false
-    }
-
-    private var _backToProfiles = MutableLiveData<Boolean>()
-    val backToProfiles: LiveData<Boolean> get() = _backToProfiles
-    fun doneBackToProfiles() {
-        _backToProfiles.value = false
-    }
+    private var _submit = MutableLiveData<Boolean>()
+    val submit: LiveData<Boolean> get() = _submit
 
     private var _submitError = MutableLiveData<Boolean>()
     val submitError: LiveData<Boolean> get() = _submitError
@@ -117,7 +108,7 @@ class NewProfileViewModel(
             newProfile.lengthUnit = unitLength
             Log.d(deg, "Insert Profile -> $newProfile")
             insert(newProfile)
-            _navigateToProfiles.value = true
+            _submit.value = true
         }
     }
 
@@ -142,7 +133,7 @@ class NewProfileViewModel(
                 newProfile.lengthUnit = unitLength
                 Log.d(deg, "Update Profile -> $newProfile")
                 update(newProfile)
-                _navigateToProfiles.value = true
+                _submit.value = true
             }
         }
     }

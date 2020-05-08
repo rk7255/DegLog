@@ -35,26 +35,24 @@ class ProfilesFragment : Fragment() {
             inflater, R.layout.fragment_profiles, container, false)
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarProfiles)
         profilesViewModel = createViewModel(requireContext())
-        binding.viewModel = profilesViewModel
-
 
         val recyclerView = binding.profilesRecyclerView
-        val adapter = ProfileAdapter(ProfileListener { name ->
+        val adapter = ProfileAdapter(
+            requireContext(),
+            ProfileListener { name ->
             profilesViewModel.onClickProfile(name)
         })
         recyclerView.adapter = adapter
 
         profilesViewModel.profiles.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                adapter.submitList(it)
-            }
+            if (!it.isNullOrEmpty()) { adapter.submitList(it) }
         })
 
         profilesViewModel.navigateToNewProfile.observe(viewLifecycleOwner, Observer { name ->
             name?.let {
                 this.findNavController().navigate(
                     ProfilesFragmentDirections.actionProfileFragmentToNewProfileFragment(name))
-                profilesViewModel.doneNavigateTpNewProfile()
+                profilesViewModel.doneNavigateToNewProfile()
             }
         })
 
