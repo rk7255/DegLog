@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="diary"
+            type="jp.ryuk.deglog.data.Diary" />
+
+        <variable
+            name="clickListener"
+            type="jp.ryuk.deglog.adapters.DetailListListener" />
+
+        <variable
+            name="suffixWeight"
+            type="String" />
+
+        <variable
+            name="suffixLength"
+            type="String" />
+
+        <variable
+            name="hasComment"
+            type="Boolean" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorBackground"
+        android:elevation="0dp"
+        android:onClick="@{() -> clickListener.onClick(diary)}">
+
+
+        <TextView
+            android:id="@+id/detail_list_date"
+            weightDateFormatted="@{diary.date}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="10日 12:30" />
+
+        <TextView
+            android:id="@+id/detail_list_weight"
+            number="@{diary.weight}"
+            suffix="@{suffixWeight}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/detail_list_weight_guideline"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1.0"
+            tools:text="3000 kg" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/detail_list_weight_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <ImageView
+            android:id="@+id/detail_list_has_commnet"
+            isGone="@{hasComment}"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:layout_marginEnd="24dp"
+            android:tint="#FFC107"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_point" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/detail_list_length_guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.8" />
+
+        <TextView
+            android:id="@+id/detail_list_length"
+            android:layout_width="wrap_content"
+            number="@{diary.length}"
+            suffix="@{suffixLength}"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/detail_list_length_guideline"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="1000 mm" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

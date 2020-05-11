@@ -28,20 +28,14 @@
             android:layout_margin="16dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <LinearLayout
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/profiles_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_profiles" />
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/profiles_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_profiles" />
-
-            </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
 

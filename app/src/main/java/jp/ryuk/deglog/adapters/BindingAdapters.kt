@@ -24,8 +24,8 @@ fun bindHasAlert(view: View, hasAlert: Boolean) {
 
 
 @BindingAdapter("number", "suffix")
-fun TextView.setDetailList(number: Float, suffix: String) {
-    text = convertUnit(number, suffix, true)
+fun TextView.setDetailList(number: Float?, suffix: String) {
+    text = if (number == null) "" else convertUnit(number, suffix, true)
 }
 
 // 日付

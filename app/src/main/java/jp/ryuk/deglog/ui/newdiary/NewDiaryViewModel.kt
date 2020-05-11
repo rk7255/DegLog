@@ -109,9 +109,9 @@ class NewDiaryViewModel(
             val diary = Diary(
                 date = date,
                 name = name.value!!,
-                weight = weight.value?.toFloat()?.times(if (weightUnit.value == "kg") 1000 else 1),
-                length = length.value?.toFloat()?.times(if (lengthUnit.value == "m") 1000 else 1),
-                memo = memo.value
+                weight = convertStringToFloat(weight.value, weightUnit.value ?: "g"),
+                length = convertStringToFloat(length.value, lengthUnit.value ?: "mm"),
+                memo = if (memo.value.isNullOrEmpty()) null else memo.value
             )
             if (isNew) {
                 if (!names.value!!.contains(diary.name)) {
@@ -130,6 +130,19 @@ class NewDiaryViewModel(
     }
 
     private fun isValid(): Boolean = !name.value.isNullOrEmpty()
+
+    private fun convertStringToFloat(text: String?, unit: String): Float? {
+        return if (text.isNullOrEmpty()) {
+            null
+        } else {
+            val num = text.toFloat()
+            if (unit == "kg" || unit == "m") {
+                num / 1000
+            } else {
+                num
+            }
+        }
+    }
 
     fun onCancel() {
         _submit.value = true
