@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.*
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -127,26 +128,15 @@ class DashboardFragment : Fragment() {
         )
     }
 
-
-
     private fun dialogCreateTodoBuilder(context: Context): AlertDialog {
-        val editText = EditText(context).apply {
-            inputType = InputType.TYPE_CLASS_TEXT
-            layoutParams = FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.WRAP_CONTENT
-            ).apply {
-                val margin = (16 * resources.displayMetrics.density).toInt()
-                marginStart = margin
-                marginEnd = margin
-            }
-        }
-
-        val layout = FrameLayout(context).apply{ addView(editText) }
+        val view = LayoutInflater.from(context).inflate(R.layout.dialog_todo, null)
+        val titleText = view.findViewById<TextView>(R.id.dialog_todo_title)
+        val editText = view.findViewById<EditText>(R.id.dialog_todo_text)
+        titleText.text = "ToDoの追加"
+        editText.hint = "ToDo"
 
         val dialog = MaterialAlertDialogBuilder(context)
-            .setTitle("ToDoの追加")
-            .setView(layout)
+            .setView(view)
             .setPositiveButton("追加") { _, _ ->
                 viewModel.newTodo(editText.text.toString())
             }

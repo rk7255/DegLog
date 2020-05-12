@@ -36,17 +36,16 @@ class DiaryListViewModel(
             weightUnit.value = profile.value?.weightUnit ?: "g"
             lengthUnit.value = profile.value?.lengthUnit ?: "mm"
             applyFilter()
-            Log.d(deg, "w: $checkedWeight, l: $checkedLength, m: $checkedMemo")
             allLoaded.value = true
         }
     }
 
     fun applyFilter() {
         var newDiaries = diaries.value
-        if (checkedWeight.value == true) newDiaries = newDiaries!!.filter { it.weight != null }
-        if (checkedLength.value == true) newDiaries = newDiaries!!.filter { it.length != null }
-        if (checkedMemo.value == true) newDiaries = newDiaries!!.filter { it.memo != null }
+        newDiaries = newDiaries!!.filter { it.todo == null }
+        if (checkedWeight.value == true) newDiaries = newDiaries.filter { it.weight != null }
+        if (checkedLength.value == true) newDiaries = newDiaries.filter { it.length != null }
+        if (checkedMemo.value == true) newDiaries = newDiaries.filter { it.memo != null }
         filteredDiaries.value = newDiaries
-        Log.d(deg, "${filteredDiaries.value}")
     }
 }

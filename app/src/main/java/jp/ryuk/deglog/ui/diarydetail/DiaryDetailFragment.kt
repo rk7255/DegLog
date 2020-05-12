@@ -3,27 +3,22 @@ package jp.ryuk.deglog.ui.diarydetail
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.adapters.DiaryDetailPagerAdapter
-import jp.ryuk.deglog.data.DiaryRepository
-import jp.ryuk.deglog.data.ProfileRepository
 import jp.ryuk.deglog.databinding.FragmentDiaryDetailBinding
-import jp.ryuk.deglog.ui.diarylist.DiaryListFragment
-import jp.ryuk.deglog.ui.diarylist.ListKey
 import jp.ryuk.deglog.utilities.InjectorUtil
 import jp.ryuk.deglog.utilities.convertLongToDateStringOutYear
-import kotlinx.android.synthetic.main.detail_view_pager.*
 
 class DiaryDetailFragment : Fragment() {
 
@@ -47,6 +42,7 @@ class DiaryDetailFragment : Fragment() {
         args = DiaryDetailFragmentArgs.fromBundle(arguments!!)
 
         viewModel = createViewModel(requireContext(), args.id, args.name)
+        binding.viewModel = viewModel
         binding.lifecycleOwner = this
         binding.appBarDiaryDetail.title = args.name + getString(R.string.title_diary_detail_at_name)
 
@@ -68,16 +64,33 @@ class DiaryDetailFragment : Fragment() {
         tabLayout = binding.diaryDetailTab
         val adapter = DiaryDetailPagerAdapter()
         viewPager.adapter = adapter
+        viewPager.setCurrentItem(viewModel.position, false)
 
-        viewModel.details.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
+        viewPager.registerOnPageChangeCallback(object :
+            ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                if (position != viewModel.diaryPosition.value)
+                    viewModel.diaryPosition.value = position
+            }
         })
 
-        viewModel.diaryPosition.observe(viewLifecycleOwner, Observer {
-            viewPager.setCurrentItem(it, false)
+        viewModel.detailsLoaded.observe(viewLifecycleOwner, Observer {
+            adapter.submitList(viewModel.details.value)
+
+            val pos = viewModel.diaryPosition.value ?: 1
+            viewPager.setCurrentItem(pos, false)
+            viewModel.position = pos
+
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->
                 tab.text = getTitle(position)
             }.attach()
+        })
+
+        viewModel.diaryPosition.observe(viewLifecycleOwner, Observer {
+            viewPager.setCurrentItem(it, true)
+            viewModel.position = it
+            viewModel.getDetail()
         })
 
     return binding.root

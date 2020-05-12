@@ -129,6 +129,7 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
+                        android:background="@color/colorBackground"
                         android:layout_height="match_parent"
                         android:padding="4dp">
 
@@ -188,6 +189,7 @@
                             android:layout_height="wrap_content"
                             android:paddingStart="16dp"
                             android:paddingTop="8dp"
+                            android:background="@color/colorBackground"
                             android:paddingEnd="16dp"
                             android:paddingBottom="8dp">
 
@@ -239,6 +241,7 @@
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
+                            android:background="@color/colorBackground"
                             android:layout_height="wrap_content"
                             android:padding="16dp">
 
@@ -398,6 +401,7 @@
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@color/colorBackground"
                             android:padding="16dp">
 
                             <TextView
@@ -553,6 +557,7 @@
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
+                            android:background="@color/colorBackground"
                             android:layout_height="wrap_content"
                             android:padding="16dp">
 

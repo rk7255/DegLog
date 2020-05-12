@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
 import jp.ryuk.deglog.databinding.DetailViewPagerBinding
+import jp.ryuk.deglog.databinding.ItemDetailBinding
 import jp.ryuk.deglog.ui.diarydetail.Detail
 
 class DiaryDetailPagerAdapter : ListAdapter<Detail, DiaryDetailPagerAdapter.ViewHolder>(DetailDiffCallback()) {
@@ -18,17 +19,17 @@ class DiaryDetailPagerAdapter : ListAdapter<Detail, DiaryDetailPagerAdapter.View
         holder.bind(getItem(position)!!)
     }
 
-    class ViewHolder private constructor(private val binding: DetailViewPagerBinding)
+    class ViewHolder private constructor(private val binding: ItemDetailBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Detail) {
-            binding.diary = item
+//            binding.diary = item
             binding.executePendingBindings()
         }
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = DetailViewPagerBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemDetailBinding.inflate(layoutInflater, parent, false)
 
                 return ViewHolder(binding)
             }

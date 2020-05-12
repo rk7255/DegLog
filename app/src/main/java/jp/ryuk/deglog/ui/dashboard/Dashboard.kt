@@ -1,10 +1,10 @@
 package jp.ryuk.deglog.ui.dashboard
 
 data class Dashboard(
-    var latest: String = "0",
-    var prev: String = "0",
+    var latest: String = "",
+    var prev: String = "",
     var prevPlus: Boolean = true,
-    var recent: String = "0",
+    var recent: String = "",
     var recentPlus: Boolean = true,
     var unit: String = "",
     var date: String = "記録なし"
