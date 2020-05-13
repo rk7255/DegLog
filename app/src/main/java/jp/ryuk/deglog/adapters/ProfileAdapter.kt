@@ -9,9 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.databinding.ItemProfilesBinding
-import jp.ryuk.deglog.utilities.convertLongToDateString
 import jp.ryuk.deglog.utilities.iconSelector
-
 
 class ProfileAdapter(
     private val context: Context,
@@ -31,7 +29,7 @@ class ProfileAdapter(
             binding.profile = profile
             binding.ageAndBirthday = profile.getAgeAndBirthday()
             binding.clickListener = clickListener
-            binding.profileIcon.setImageResource(iconSelector(profile.type))
+            binding.profileIcon.setImageResource(iconSelector(context, profile.type))
 
             val color = when (profile.gender) {
                 "オス" -> context.getColor(R.color.blue)

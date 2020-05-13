@@ -3,7 +3,6 @@ package jp.ryuk.deglog.ui.diarydetail
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -22,7 +21,6 @@ import jp.ryuk.deglog.databinding.FragmentDiaryDetailBinding
 import jp.ryuk.deglog.utilities.FlickListener
 import jp.ryuk.deglog.utilities.InjectorUtil
 import jp.ryuk.deglog.utilities.convertLongToDateStringOutYear
-import jp.ryuk.deglog.utilities.deg
 
 class DiaryDetailFragment : Fragment() {
 
@@ -45,14 +43,12 @@ class DiaryDetailFragment : Fragment() {
             inflater, R.layout.fragment_diary_detail, container, false
         )
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarDiaryDetail)
-        args = DiaryDetailFragmentArgs.fromBundle(arguments!!)
+        args = DiaryDetailFragmentArgs.fromBundle(requireArguments())
 
         viewModel = createViewModel(requireContext(), args.id, args.name)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         binding.appBarDiaryDetail.title = args.name + getString(R.string.title_diary_detail_at_name)
-
-        Log.d(deg, "dpos: ${viewModel.diaryPosition.value} pos: ${viewModel.position}")
 
         viewModel.diaries.observe(viewLifecycleOwner, Observer {
             if (!it.isNullOrEmpty()) {
@@ -101,7 +97,6 @@ class DiaryDetailFragment : Fragment() {
                 viewPager.setCurrentItem(it, true)
                 viewModel.getDetail()
                 viewModel.position = it
-                Log.d(deg, "dpos: ${viewModel.diaryPosition.value} pos: ${viewModel.position}")
             }
         })
 
@@ -131,7 +126,7 @@ class DiaryDetailFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.toolbar_delete -> {
-                MaterialAlertDialogBuilder(context)
+                MaterialAlertDialogBuilder(requireContext())
                     .setTitle(getString(R.string.dialog_delete_title))
                     .setMessage(getString(R.string.dialog_delete_message))
                     .setNeutralButton(getString(R.string.dialog_cancel)) { _, _ -> }
@@ -142,7 +137,7 @@ class DiaryDetailFragment : Fragment() {
                                 .actionDiaryDetailFragmentPop()
                         )
                         Snackbar.make(
-                            view!!.rootView,
+                            requireView().rootView,
                             getString(R.string.dialog_delete_success),
                             Snackbar.LENGTH_SHORT
                         )

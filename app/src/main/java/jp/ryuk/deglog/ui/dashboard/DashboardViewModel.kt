@@ -24,7 +24,7 @@ class DashboardViewModel(
 ) : ViewModel() {
 
     val diaries: LiveData<List<Diary>> = diaryDatabase.getAllDiaries()
-    val names: LiveData<List<String>> = diaryDatabase.getNamesInDiaryDB()
+    val names: LiveData<List<String>> = diaryDatabase.getNames()
     val profiles: LiveData<List<Profile>> = profileDatabase.getProfiles()
     var selected = MediatorLiveData<String?>()
     var type = MutableLiveData<String?>()
@@ -199,7 +199,7 @@ class DashboardViewModel(
             todo = text,
             success = false
         )
-        Log.d(deg, "insert $newDiary")
+        Log.d(deg, "insert ToDo: $newDiary")
         viewModelScope.launch { insert(newDiary) }
     }
 

@@ -40,9 +40,9 @@ class FlickListener(
         endX = event.x
         endY = event.y
         when {
-            leftScope()  -> listener.onFlickToLeft()
+            leftScope() -> listener.onFlickToLeft()
             rightScope() -> listener.onFlickToRight()
-            else         -> listener.onButtonReleased()
+            else -> listener.onButtonReleased()
         }
     }
 

@@ -1,6 +1,5 @@
 package jp.ryuk.deglog.ui.diarydetail
 
-import android.util.Log
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.ProfileDao
 import jp.ryuk.deglog.ui.dashboard.Dashboard
-import jp.ryuk.deglog.utilities.*
+import jp.ryuk.deglog.utilities.convertLongToDateStringInTime
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -20,8 +19,8 @@ class DiaryDetailViewModel(
     profileDatabase: ProfileDao
 ) : ViewModel() {
 
-    val diaries = diaryDatabase.getDiariesLive(selectedName)
-    val profile = profileDatabase.getProfileLive(selectedName)
+    val diaries = diaryDatabase.getDiaries(selectedName)
+    val profile = profileDatabase.getProfile(selectedName)
 
     var details = MediatorLiveData<List<Detail>>()
     var diaryPosition = MediatorLiveData<Int>()

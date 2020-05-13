@@ -5,7 +5,6 @@ import android.content.Context
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import jp.ryuk.deglog.R
 
 // デバッグ用 ログ解析タグ
@@ -18,38 +17,38 @@ fun hideKeyboard(activity: Activity, view: View, event: MotionEvent?): Boolean {
     return view.onTouchEvent(event)
 }
 
-fun iconSelector(type: String?): Int {
-    return when(type) {
+fun iconSelector(context: Context, type: String?): Int {
+    return when (type) {
         null -> R.drawable.nav_ic_diary
         // 大型
-        "牛" -> R.drawable.img_big_ushi
-        "馬" -> R.drawable.img_big_uma
-        "豚" -> R.drawable.img_big_buta
-        "羊" -> R.drawable.img_big_hitsuji
-        "ヤギ" -> R.drawable.img_big_yagi
+        context.getString(R.string.animal_ushi) -> R.drawable.img_big_ushi
+        context.getString(R.string.animal_uma) -> R.drawable.img_big_uma
+        context.getString(R.string.animal_buta) -> R.drawable.img_big_buta
+        context.getString(R.string.animal_hitsuji) -> R.drawable.img_big_hitsuji
+        context.getString(R.string.animal_yagi) -> R.drawable.img_big_yagi
         // 中型
-        "犬" -> R.drawable.img_medium_inu
-        "猫" -> R.drawable.img_medium_neko
-        "キツネ" -> R.drawable.img_medium_kitsune
-        "タヌキ" -> R.drawable.img_medium_tanuki
+        context.getString(R.string.animal_inu) -> R.drawable.img_medium_inu
+        context.getString(R.string.animal_neko) -> R.drawable.img_medium_neko
+        context.getString(R.string.animal_kitsune) -> R.drawable.img_medium_kitsune
+        context.getString(R.string.animal_tanuki) -> R.drawable.img_medium_tanuki
         // 小型
-        "ウサギ" -> R.drawable.img_small_usagi
-        "デグー" -> R.drawable.img_small_degu
-        "チンチラ" -> R.drawable.img_small_chinchira
-        "ハムスター" -> R.drawable.img_small_hamster
-        "ハリネズミ" -> R.drawable.img_small_harinezumi
-        "マウス・ラット" -> R.drawable.img_small_nezumi
-        "モルモット" -> R.drawable.img_small_marmot
-        "リス" -> R.drawable.img_small_risu
-        "モモンガ" -> R.drawable.img_small_momonga
+        context.getString(R.string.animal_usagi) -> R.drawable.img_small_usagi
+        context.getString(R.string.animal_degu) -> R.drawable.img_small_degu
+        context.getString(R.string.animal_chinchira) -> R.drawable.img_small_chinchira
+        context.getString(R.string.animal_hamster) -> R.drawable.img_small_hamster
+        context.getString(R.string.animal_harinezumi) -> R.drawable.img_small_harinezumi
+        context.getString(R.string.animal_nezumi) -> R.drawable.img_small_nezumi
+        context.getString(R.string.animal_marmot) -> R.drawable.img_small_marmot
+        context.getString(R.string.animal_risu) -> R.drawable.img_small_risu
+        context.getString(R.string.animal_momonga) -> R.drawable.img_small_momonga
         // 鳥類
-        "インコ類" -> R.drawable.img_bird_inko
-        "フィンチ類" -> R.drawable.img_bird_finchi
-        "猛禽類" -> R.drawable.img_bird_moukinrui
+        context.getString(R.string.animal_inko) -> R.drawable.img_bird_inko
+        context.getString(R.string.animal_finchi) -> R.drawable.img_bird_finchi
+        context.getString(R.string.animal_moukin) -> R.drawable.img_bird_moukinrui
         // その他
-        "爬虫類" -> R.drawable.img_etc_hachurui
-        "魚類" -> R.drawable.img_etc_gyorui
-        "昆虫" -> R.drawable.img_etc_konchu
+        context.getString(R.string.animal_hachurui) -> R.drawable.img_etc_hachurui
+        context.getString(R.string.animal_gyorui) -> R.drawable.img_etc_gyorui
+        context.getString(R.string.animal_konchu) -> R.drawable.img_etc_konchu
 
         else -> R.drawable.nav_ic_diary
     }

@@ -39,7 +39,7 @@ class NewDiaryFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_diary, container, false)
 
-        args = NewDiaryFragmentArgs.fromBundle(arguments!!)
+        args = NewDiaryFragmentArgs.fromBundle(requireArguments())
 
         when (args.mode) {
             "edit" -> {
@@ -57,7 +57,7 @@ class NewDiaryFragment : Fragment() {
         binding.lifecycleOwner = this
 
         binding.newDiaryContainer.setOnTouchListener { view, event ->
-            hideKeyboard(activity!!, view, event)
+            hideKeyboard(requireActivity(), view, event)
             binding.newDiaryEditName.error = null
             false
         }
@@ -66,7 +66,11 @@ class NewDiaryFragment : Fragment() {
             if (!it.isNullOrEmpty()) {
                 val names = it.toTypedArray()
                 binding.newDiaryEditName.setEndIconOnClickListener {
-                    dialogNameSelectBuilder(binding.newDiaryEditNameText, names).show()
+                    dialogNameSelectBuilder(
+                        requireContext(),
+                        binding.newDiaryEditNameText,
+                        names
+                    ).show()
                 }
             }
         })
@@ -101,12 +105,17 @@ class NewDiaryFragment : Fragment() {
 
     private fun pop() {
         this.findNavController().navigate(
-            NewDiaryFragmentDirections.actionNewDiaryFragmentPop())
+            NewDiaryFragmentDirections.actionNewDiaryFragmentPop()
+        )
     }
 
-    private fun dialogNameSelectBuilder(editText: EditText, names: Array<String>): AlertDialog {
+    private fun dialogNameSelectBuilder(
+        context: Context,
+        editText: EditText,
+        names: Array<String>
+    ): AlertDialog {
         return MaterialAlertDialogBuilder(context)
-            .setTitle("ペットの選択")
+            .setTitle(getString(R.string.choice_pet))
             .setItems(names) { _, i ->
                 editText.setText(names[i])
             }
@@ -118,7 +127,7 @@ class NewDiaryFragment : Fragment() {
 
         MaterialDatePicker.Builder.datePicker()
             .setSelection(today.timeInMillis)
-            .setTitleText("日付の選択")
+            .setTitleText(getString(R.string.choice_date))
             .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
             .build()
             .apply {
@@ -127,7 +136,13 @@ class NewDiaryFragment : Fragment() {
                     TimePickerDialog(
                         context,
                         TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-                            selected.set(it.getYear(), it.getMonth() - 1, it.getDayOfMonth(), hourOfDay, minute)
+                            selected.set(
+                                it.getYear(),
+                                it.getMonth() - 1,
+                                it.getDayOfMonth(),
+                                hourOfDay,
+                                minute
+                            )
                             viewModel.doneOnDateClick(selected.timeInMillis)
                         },
                         today.get(Calendar.HOUR_OF_DAY),

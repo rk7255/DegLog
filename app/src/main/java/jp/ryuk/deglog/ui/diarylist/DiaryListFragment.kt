@@ -2,7 +2,6 @@ package jp.ryuk.deglog.ui.diarylist
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +11,11 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import jp.ryuk.deglog.R
-import jp.ryuk.deglog.adapters.*
+import jp.ryuk.deglog.adapters.DetailListAdapter
+import jp.ryuk.deglog.adapters.DetailListListener
+import jp.ryuk.deglog.adapters.DiaryStickerDecoration
 import jp.ryuk.deglog.databinding.FragmentDiaryListBinding
 import jp.ryuk.deglog.utilities.InjectorUtil
-import jp.ryuk.deglog.utilities.deg
 
 
 class DiaryListFragment : Fragment() {
@@ -32,7 +32,7 @@ class DiaryListFragment : Fragment() {
             inflater, R.layout.fragment_diary_list, container, false
         )
 
-        args = DiaryListFragmentArgs.fromBundle(arguments!!)
+        args = DiaryListFragmentArgs.fromBundle(requireArguments())
         viewModel = createViewModel(requireContext(), args.name)
         binding.appBarDetailList.title = args.name + getString(R.string.title_diary_detail_at_name)
 
@@ -89,7 +89,7 @@ class DiaryListFragment : Fragment() {
                 )
                 recyclerView.adapter = adapter
                 adapter.submitList(it)
-                val decoration = DiaryStickerDecoration(activity!!, it)
+                val decoration = DiaryStickerDecoration(requireActivity(), it)
                 recyclerView.addItemDecoration(decoration)
             }
         })

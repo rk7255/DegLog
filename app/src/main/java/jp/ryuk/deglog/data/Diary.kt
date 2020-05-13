@@ -3,8 +3,6 @@ package jp.ryuk.deglog.data
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import jp.ryuk.deglog.utilities.convertUnit
-import java.math.BigDecimal
-import java.math.RoundingMode
 import java.util.*
 
 @Entity(tableName = "diary_table")
@@ -25,6 +23,5 @@ data class Diary(
 
     fun convertLengthUnit(unit: String, onSuffix: Boolean): String =
         if (this.length == null) "" else convertUnit(this.length!!, unit, onSuffix)
-
 }
 

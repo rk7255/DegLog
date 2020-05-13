@@ -22,8 +22,8 @@ class NewDiaryViewModel(
 
     private var isNew = true
 
-    val names: LiveData<List<String>> = profileDatabase.getNamesLive()
-    val diary: LiveData<Diary?> = diaryDatabase.getDiaryLive(diaryId)
+    val names: LiveData<List<String>> = profileDatabase.getNames()
+    val diary: LiveData<Diary?> = diaryDatabase.getDiary(diaryId)
 
     var date = Calendar.getInstance().timeInMillis
     var dateOfString = MediatorLiveData<String>()
@@ -72,11 +72,11 @@ class NewDiaryViewModel(
         when (weightUnit.value) {
             "g" -> {
                 weightUnit.value = "kg"
-                weight.value = changeUnit(weight.value, "g", "kg")
+                weight.value = changeUnit(weight.value, "kg")
             }
             "kg" -> {
                 weightUnit.value = "g"
-                weight.value = changeUnit(weight.value, "kg", "g")
+                weight.value = changeUnit(weight.value, "g")
 
             }
         }
@@ -86,24 +86,24 @@ class NewDiaryViewModel(
         when (lengthUnit.value) {
             "mm" -> {
                 lengthUnit.value = "cm"
-                length.value = changeUnit(length.value, "mm", "cm")
+                length.value = changeUnit(length.value, "cm")
             }
             "cm" -> {
                 lengthUnit.value = "m"
-                length.value = changeUnit(length.value, "cm", "m")
+                length.value = changeUnit(length.value, "m")
             }
             "m" -> {
                 lengthUnit.value = "mm"
-                length.value = changeUnit(length.value, "m", "mm")
+                length.value = changeUnit(length.value, "mm")
             }
         }
     }
 
-    private fun changeUnit(number: String?, from: String, to: String): String {
+    private fun changeUnit(number: String?, changeTo: String): String {
         if (number.isNullOrBlank()) return ""
 
-        return when (to) {
-            "g"-> (number.toFloat() * 1000).toInt().toString()
+        return when (changeTo) {
+            "g" -> (number.toFloat() * 1000).toInt().toString()
             "kg" -> (number.toFloat() / 1000).toString()
 
             "mm" -> (number.toFloat() * 1000).toInt().toString()

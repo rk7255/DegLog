@@ -1,13 +1,11 @@
 package jp.ryuk.deglog.ui.diarylist
 
-import android.util.Log
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.ProfileDao
-import jp.ryuk.deglog.utilities.deg
 
 class DiaryListViewModel(
     selectedName: String,
@@ -15,8 +13,8 @@ class DiaryListViewModel(
     profileDatabase: ProfileDao
 ) : ViewModel() {
 
-    var diaries = diaryDatabase.getDiariesLive(selectedName)
-    val profile = profileDatabase.getProfileLive(selectedName)
+    var diaries = diaryDatabase.getDiaries(selectedName)
+    val profile = profileDatabase.getProfile(selectedName)
 
     var filteredDiaries = MediatorLiveData<List<Diary>>()
 

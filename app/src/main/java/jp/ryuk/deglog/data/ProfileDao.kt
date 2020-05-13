@@ -17,31 +17,13 @@ interface ProfileDao {
     @Query("DELETE FROM profile_table WHERE name = :name")
     fun deleteByName(name: String)
 
-//    @Query("SELECT * FROM profile_table ORDER BY name")
-////    fun getProfiles() : List<Profile>
-
     @Query("SELECT * FROM profile_table WHERE name = :key")
-    fun getProfile(key: String) : Profile
-
-    @Query("SELECT birthday FROM profile_table WHERE name = :name")
-    fun getBirthday(name: String): Long?
-
-    @Query("SELECT name FROM profile_table")
-    fun getNames() : List<String>
-
-    @Query("DELETE FROM profile_table")
-    fun clear()
-
-    @Query("SELECT name FROM profile_table WHERE name = :name")
-    fun isRegistered(name: String): String?
-
-
-    @Query("SELECT * FROM profile_table WHERE name = :key")
-    fun getProfileLive(key: String) : LiveData<Profile?>
+    fun getProfile(key: String) : LiveData<Profile?>
 
     @Query("SELECT * FROM profile_table ORDER BY name")
     fun getProfiles() : LiveData<List<Profile>>
 
     @Query("SELECT name FROM profile_table")
-    fun getNamesLive() : LiveData<List<String>>
+    fun getNames() : LiveData<List<String>>
+
 }

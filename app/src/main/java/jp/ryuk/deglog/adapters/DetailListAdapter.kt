@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.databinding.ItemDetailListBinding
+import jp.ryuk.deglog.utilities.convertLongToDateStringOutYear
 
 class DetailListAdapter(
     private val clickListener: DetailListListener,
@@ -28,6 +29,7 @@ class DetailListAdapter(
 
         fun bind(item: Diary, clickListener: DetailListListener, suffixWeight: String, suffixLength: String) {
             binding.diary = item
+            binding.date = convertLongToDateStringOutYear(item.date)
             binding.suffixWeight = suffixWeight
             binding.suffixLength = suffixLength
             binding.clickListener = clickListener

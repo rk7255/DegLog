@@ -10,17 +10,13 @@
     <string name="previous">前回</string>
     <string name="next">次回</string>
     <string name="recent">最近</string>
+    <string name="add">追加</string>
     <string name="type">種類</string>
     <string name="gender">性別</string>
     <string name="gender_male">オス</string>
     <string name="gender_female">メス</string>
     <string name="gender_unknown">不明</string>
     <string name="birthday">誕生日</string>
-    <string name="type_small">小型</string>
-    <string name="type_medium">中型</string>
-    <string name="type_big">大型</string>
-    <string name="type_bird">鳥類</string>
-    <string name="type_etc">その他</string>
 
     <!-- ナビゲーション -->
     <string name="bottom_nav_diary">日誌</string>
@@ -46,6 +42,7 @@
     <string name="load_profiles">プロフィールの読込中…</string>
     <string name="load_names">名前リストの取得中…</string>
     <string name="notify_todo">未確認のTODOがあります</string>
+    <string name="add_new_todo">ToDoの追加</string>
 
     <!-- 日誌詳細 -->
     <string name="exclude_blank">空白を除く</string>
@@ -76,10 +73,11 @@
     <string name="icon_of_has_memo">メモあり</string>
 
     <!-- ダイアログ関係 -->
-    <string name="dialog_tag">DialogTag</string>
+    <string name="dialog_tag">dialogTag</string>
     <string name="dialog_yes">はい</string>
     <string name="dialog_no">いいえ</string>
     <string name="dialog_submit">登録</string>
+    <string name="dialog_success">完了</string>
     <string name="dialog_cancel">キャンセル</string>
     <string name="dialog_delete_title">削除しますか？</string>
     <string name="dialog_delete_message">この操作は取り消せません</string>
@@ -90,53 +88,85 @@
     <string name="choice_unit">単位の選択</string>
     <string name="choice_date">単位の選択</string>
     <string name="choice_type">種類の選択</string>
+    <string name="choice_pet">ペットの選択</string>
 
-    <!-- Arrays -->
+    <!-- 動物の種類 -->
+    <string name="type_small">小型</string>
+    <string name="type_medium">中型</string>
+    <string name="type_big">大型</string>
+    <string name="type_bird">鳥類</string>
+    <string name="type_etc">その他</string>
+
+    <string name="animal_ushi">牛</string>
+    <string name="animal_uma">馬</string>
+    <string name="animal_buta">豚</string>
+    <string name="animal_hitsuji">羊</string>
+    <string name="animal_yagi">ヤギ</string>
+    <string name="animal_inu">犬</string>
+    <string name="animal_neko">猫</string>
+    <string name="animal_kitsune">キツネ</string>
+    <string name="animal_tanuki">タヌキ</string>
+    <string name="animal_usagi">ウサギ</string>
+    <string name="animal_degu">デグー</string>
+    <string name="animal_chinchira">チンチラ</string>
+    <string name="animal_hamster">ハムスター</string>
+    <string name="animal_harinezumi">ハリネズミ</string>
+    <string name="animal_nezumi">マウス・ラット</string>
+    <string name="animal_marmot">モルモット</string>
+    <string name="animal_risu">リス</string>
+    <string name="animal_momonga">モモンガ</string>
+    <string name="animal_inko">インコ類</string>
+    <string name="animal_finchi">フィンチ類</string>
+    <string name="animal_moukin">猛禽類</string>
+    <string name="animal_hachurui">爬虫類</string>
+    <string name="animal_gyorui">魚類</string>
+    <string name="animal_konchu">昆虫</string>
+
     <string-array name="types">
-        <item>小型</item>
-        <item>中型</item>
-        <item>大型</item>
-        <item>鳥類</item>
-        <item>その他</item>
+        <item>@string/type_small</item>
+        <item>@string/type_medium</item>
+        <item>@string/type_big</item>
+        <item>@string/type_bird</item>
+        <item>@string/type_etc</item>
     </string-array>
 
     <string-array name="types_big">
-        <item>牛</item>
-        <item>馬</item>
-        <item>豚</item>
-        <item>羊</item>
-        <item>ヤギ</item>
+        <item>@string/animal_ushi</item>
+        <item>@string/animal_uma</item>
+        <item>@string/animal_buta</item>
+        <item>@string/animal_hitsuji</item>
+        <item>@string/animal_yagi</item>
     </string-array>
 
     <string-array name="types_medium">
-        <item>犬</item>
-        <item>猫</item>
-        <item>キツネ</item>
-        <item>タヌキ</item>
+        <item>@string/animal_inu</item>
+        <item>@string/animal_neko</item>
+        <item>@string/animal_kitsune</item>
+        <item>@string/animal_tanuki</item>
     </string-array>
 
     <string-array name="types_small">
-        <item>ウサギ</item>
-        <item>デグー</item>
-        <item>チンチラ</item>
-        <item>ハムスター</item>
-        <item>ハリネズミ</item>
-        <item>マウス・ラット</item>
-        <item>モルモット</item>
-        <item>リス</item>
-        <item>モモンガ</item>
+        <item>@string/animal_usagi</item>
+        <item>@string/animal_degu</item>
+        <item>@string/animal_chinchira</item>
+        <item>@string/animal_hamster</item>
+        <item>@string/animal_harinezumi</item>
+        <item>@string/animal_nezumi</item>
+        <item>@string/animal_marmot</item>
+        <item>@string/animal_risu</item>
+        <item>@string/animal_momonga</item>
     </string-array>
 
     <string-array name="types_bird">
-        <item>インコ類</item>
-        <item>フィンチ類</item>
-        <item>猛禽類</item>
+        <item>@string/animal_inko</item>
+        <item>@string/animal_finchi</item>
+        <item>@string/animal_moukin</item>
     </string-array>
 
     <string-array name="types_etc">
-        <item>爬虫類</item>
-        <item>魚類</item>
-        <item>昆虫</item>
+        <item>@string/animal_hachurui</item>
+        <item>@string/animal_gyorui</item>
+        <item>@string/animal_konchu</item>
     </string-array>
 
     <string-array name="weight_unit">

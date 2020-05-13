@@ -10,6 +10,10 @@
             type="jp.ryuk.deglog.data.Diary" />
 
         <variable
+            name="date"
+            type="String" />
+
+        <variable
             name="clickListener"
             type="jp.ryuk.deglog.adapters.DetailListListener" />
 
@@ -37,7 +41,7 @@
 
         <TextView
             android:id="@+id/detail_list_date"
-            weightDateFormatted="@{diary.date}"
+            android:text="@{date}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

@@ -28,25 +28,39 @@ object InjectorUtil {
         return DashboardViewModelFactory(diaryDao, profileDao)
     }
 
-    fun provideDiaryDetailViewModelFactory(context: Context, id: Long, name: String): DiaryDetailViewModelFactory {
+    fun provideDiaryDetailViewModelFactory(
+        context: Context,
+        id: Long,
+        name: String
+    ): DiaryDetailViewModelFactory {
         val diaryDao = getDiaryDao(context)
         val profileDao = getProfileDao(context)
         return DiaryDetailViewModelFactory(id, name, diaryDao, profileDao)
     }
 
-    fun provideDiaryListViewModelFactory(context: Context, name: String): DiaryListViewModelFactory {
+    fun provideDiaryListViewModelFactory(
+        context: Context,
+        name: String
+    ): DiaryListViewModelFactory {
         val diaryDao = getDiaryDao(context)
         val profileDao = getProfileDao(context)
         return DiaryListViewModelFactory(name, diaryDao, profileDao)
     }
 
-    fun provideNewDiaryViewModelFactory(context: Context, id: Long, name: String): NewDiaryViewModelFactory {
+    fun provideNewDiaryViewModelFactory(
+        context: Context,
+        id: Long,
+        name: String
+    ): NewDiaryViewModelFactory {
         val diaryDao = getDiaryDao(context)
         val profileDao = getProfileDao(context)
         return NewDiaryViewModelFactory(id, name, diaryDao, profileDao)
     }
 
-    fun provideNewProfileViewModelFactory(context: Context, name: String): NewProfileViewModelFactory {
+    fun provideNewProfileViewModelFactory(
+        context: Context,
+        name: String
+    ): NewProfileViewModelFactory {
         val diaryDao = getDiaryDao(context)
         val profileDao = getProfileDao(context)
         return NewProfileViewModelFactory(name, diaryDao, profileDao)

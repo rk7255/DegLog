@@ -1,7 +1,6 @@
 package jp.ryuk.deglog.utilities
 
 import android.annotation.SuppressLint
-import java.lang.StringBuilder
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
@@ -39,6 +38,9 @@ fun convertLongToDateStringOutYear(systemTime: Long): String {
         .format(systemTime).toString()
 }
 
+/**
+ * 相対時間の計算
+ */
 fun convertLongToDateStringRelative(systemTime: Long): String {
     val diff = Calendar.getInstance().timeInMillis - systemTime
     val second = 1000
@@ -95,6 +97,7 @@ private fun roundFloatInCm(number: Float): BigDecimal {
     }
     return BigDecimal((number / 10).toString()).setScale(scale, RoundingMode.HALF_UP)
 }
+
 private fun roundFloatInM(number: Float): BigDecimal {
     val scale = when (number / 1000) {
         in 0.0..99.0 -> 2

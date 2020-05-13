@@ -1,32 +1,27 @@
 package jp.ryuk.deglog.ui.dashboard
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
-import android.text.InputType
 import android.text.TextWatcher
-import android.util.Log
 import android.view.*
 import android.widget.EditText
-import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.snackbar.Snackbar
 import jp.ryuk.deglog.R
-import jp.ryuk.deglog.adapters.*
+import jp.ryuk.deglog.adapters.TodoAdapter
+import jp.ryuk.deglog.adapters.TodoListener
 import jp.ryuk.deglog.databinding.FragmentDashboardBinding
 import jp.ryuk.deglog.ui.diarylist.ListKey
-import jp.ryuk.deglog.ui.profile.profiles.ProfilesFragmentDirections
 import jp.ryuk.deglog.utilities.InjectorUtil
-import jp.ryuk.deglog.utilities.deg
 import jp.ryuk.deglog.utilities.iconSelector
 
 
@@ -82,7 +77,7 @@ class DashboardFragment : Fragment() {
         })
 
         viewModel.type.observe(viewLifecycleOwner, Observer {
-            binding.dbPersonalIcon.setImageResource(iconSelector(it))
+            binding.dbPersonalIcon.setImageResource(iconSelector(requireContext(), it))
         })
 
         val recyclerView = binding.dbTodoRecyclerView
@@ -138,19 +133,20 @@ class DashboardFragment : Fragment() {
         )
     }
 
+    @SuppressLint("InflateParams")
     private fun dialogCreateTodoBuilder(context: Context): AlertDialog {
         val view = LayoutInflater.from(context).inflate(R.layout.dialog_todo, null)
         val titleText = view.findViewById<TextView>(R.id.dialog_todo_title)
         val editText = view.findViewById<EditText>(R.id.dialog_todo_text)
-        titleText.text = "ToDoの追加"
-        editText.hint = "ToDo"
+        titleText.text = getString(R.string.add_new_todo)
+        editText.hint = getString(R.string.todo)
 
         val dialog = MaterialAlertDialogBuilder(context)
             .setView(view)
-            .setPositiveButton("追加") { _, _ ->
+            .setPositiveButton(getString(R.string.add)) { _, _ ->
                 viewModel.newTodo(editText.text.toString())
             }
-            .setNeutralButton("キャンセル", null)
+            .setNeutralButton(getString(R.string.dialog_cancel), null)
             .create()
 
         editText.addTextChangedListener(object : TextWatcher {
@@ -169,8 +165,8 @@ class DashboardFragment : Fragment() {
     private fun dialogDeleteTodoBuilder(context: Context, todo: Todo): AlertDialog {
         return MaterialAlertDialogBuilder(context)
             .setMessage("選択したToDoを完了します\n\"${todo.todo}\"")
-            .setNeutralButton("キャンセル", null)
-            .setPositiveButton("完了") { _, _ ->
+            .setNeutralButton(getString(R.string.dialog_cancel), null)
+            .setPositiveButton(getString(R.string.dialog_success)) { _, _ ->
                 viewModel.deleteTodo(todo.id)
             }
             .create()
@@ -178,16 +174,12 @@ class DashboardFragment : Fragment() {
 
     private fun dialogSelectBuilder(context: Context, list: Array<String>): AlertDialog {
         return MaterialAlertDialogBuilder(context)
-            .setTitle("ペットの選択")
+            .setTitle(getString(R.string.choice_pet))
             .setItems(list) { _, which ->
                 viewModel.selected.value = list[which]
                 viewModel.changeDashboard()
             }
             .create()
-    }
-
-    private fun makeSnackBar(text: String) {
-        Snackbar.make(binding.root, text, Snackbar.LENGTH_LONG).show()
     }
 
     private fun createViewModel(context: Context): DashboardViewModel {

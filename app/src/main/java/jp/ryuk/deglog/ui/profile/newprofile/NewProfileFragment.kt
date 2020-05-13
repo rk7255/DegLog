@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -33,7 +33,7 @@ class NewProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentNewProfileBinding.inflate(inflater, container, false)
-        args = NewProfileFragmentArgs.fromBundle(arguments!!)
+        args = NewProfileFragmentArgs.fromBundle(requireArguments())
         viewModel = createViewModel(requireContext(), args.name)
 
         binding.viewModel = viewModel
@@ -47,7 +47,7 @@ class NewProfileFragment : Fragment() {
 
 
         binding.newProfileContainer.setOnTouchListener { view, event ->
-            hideKeyboard(activity!!, view, event)
+            hideKeyboard(requireActivity(), view, event)
             binding.newProfileEditName.error = null
             false
         }
@@ -98,11 +98,12 @@ class NewProfileFragment : Fragment() {
         }
 
         binding.newProfileEditType.setEndIconOnClickListener {
-            typeDialogBuilder(binding.newProfileEditTypeText).show()
+            typeDialogBuilder(requireContext(), binding.newProfileEditTypeText).show()
         }
 
         binding.newProfileEditWeightUnit.setEndIconOnClickListener {
             unitDialogBuilder(
+                requireContext(),
                 binding.newProfileEditWeightUnitText,
                 resources.getStringArray(R.array.weight_unit)
             ).show()
@@ -110,6 +111,7 @@ class NewProfileFragment : Fragment() {
 
         binding.newProfileEditLengthUnit.setEndIconOnClickListener {
             unitDialogBuilder(
+                requireContext(),
                 binding.newProfileEditLengthUnitText,
                 resources.getStringArray(R.array.length_unit)
             ).show()
@@ -131,17 +133,14 @@ class NewProfileFragment : Fragment() {
     }
 
     private fun unitDialogBuilder(
+        context: Context,
         editText: EditText,
         units: Array<String>
     ): MaterialAlertDialogBuilder {
         return MaterialAlertDialogBuilder(context)
             .setTitle(getString(R.string.choice_unit))
-            .setItems(units) { _, unit ->
-                when (unit) {
-                    0 -> editText.setText(units[0])
-                    1 -> editText.setText(units[1])
-                    2 -> editText.setText(units[2])
-                }
+            .setItems(units) { _, i ->
+                editText.setText(units[i])
             }
     }
 
@@ -164,7 +163,7 @@ class NewProfileFragment : Fragment() {
     }
 
 
-    private fun typeDialogBuilder(editText: EditText): MaterialAlertDialogBuilder {
+    private fun typeDialogBuilder(context: Context, editText: EditText): MaterialAlertDialogBuilder {
         val types = resources.getStringArray(R.array.types)
         val typesBig = resources.getStringArray(R.array.types_big)
         val typesMedium = resources.getStringArray(R.array.types_medium)

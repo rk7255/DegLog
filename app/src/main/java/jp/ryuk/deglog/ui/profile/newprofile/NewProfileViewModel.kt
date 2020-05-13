@@ -6,7 +6,9 @@ import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.data.ProfileDao
 import jp.ryuk.deglog.utilities.convertLongToDateString
 import jp.ryuk.deglog.utilities.convertLongToDateStringInTime
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class NewProfileViewModel(
     private val selectedName: String,
@@ -14,7 +16,7 @@ class NewProfileViewModel(
     private val profileDatabase: ProfileDao
 ) : ViewModel() {
 
-    val profile = profileDatabase.getProfileLive(selectedName)
+    val profile = profileDatabase.getProfile(selectedName)
 
     private var isNew = true
     var isNameChanged = false
