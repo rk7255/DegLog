@@ -79,7 +79,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_point" />
+            app:srcCompat="@drawable/ic_point"
+            android:contentDescription="@string/icon_of_has_memo" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/detail_list_length_guideline"

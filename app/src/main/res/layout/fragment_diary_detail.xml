@@ -62,7 +62,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp" />
 
-
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -92,7 +91,6 @@
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent">
-
 
                             <TextView
                                 android:id="@+id/detail_date"
@@ -125,6 +123,7 @@
                                 android:id="@+id/detail_date_image_back"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="@string/icon_of_previous"
                                 android:tint="@color/primaryDarkColor"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -145,6 +144,7 @@
                                 android:id="@+id/detail_date_image_next"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="@string/icon_of_next"
                                 android:tint="@color/primaryDarkColor"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -187,7 +187,7 @@
                             <TextView
                                 android:id="@+id/detail_weight_title"
                                 style="@style/DashboardTitle"
-                                android:text="― 体重 ―"
+                                android:text="@string/title_weight"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -210,6 +210,7 @@
                                 android:id="@+id/detail_weight_image_back"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="@string/icon_of_previous"
                                 android:tint="@color/primaryDarkColor"
                                 app:layout_constraintBottom_toBottomOf="@+id/detail_weight_latest"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -230,6 +231,7 @@
                                 android:id="@+id/detail_weight_image_next"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="@string/icon_of_next"
                                 android:tint="@color/primaryDarkColor"
                                 app:layout_constraintBottom_toBottomOf="@+id/detail_weight_latest"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -251,7 +253,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="16dp"
-                                android:text="前回"
+                                android:text="@string/previous"
                                 android:textAppearance="@style/Deglog.Dashboard.SubTitle"
                                 app:layout_constraintStart_toStartOf="@+id/detail_weight_title"
                                 app:layout_constraintTop_toBottomOf="@+id/detail_weight_latest" />
@@ -275,7 +277,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
-                                android:text="次回"
+                                android:text="@string/next"
                                 android:textAppearance="@style/Deglog.Dashboard.SubTitle"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="@+id/guideline"
@@ -305,6 +307,7 @@
 
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
+
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
@@ -328,7 +331,7 @@
                             <TextView
                                 android:id="@+id/detail_length_title"
                                 style="@style/DashboardTitle"
-                                android:text="― 体長 ―"
+                                android:text="@string/title_length"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -351,6 +354,7 @@
                                 android:id="@+id/detail_length_image_back"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="@string/icon_of_previous"
                                 android:tint="@color/primaryDarkColor"
                                 app:layout_constraintBottom_toBottomOf="@+id/detail_length_latest"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -371,6 +375,7 @@
                                 android:id="@+id/detail_length_image_next"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="@string/icon_of_next"
                                 android:tint="@color/primaryDarkColor"
                                 app:layout_constraintBottom_toBottomOf="@+id/detail_length_latest"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -387,13 +392,12 @@
                                 app:layout_constraintStart_toStartOf="@+id/detail_length_image_next"
                                 app:layout_constraintTop_toTopOf="@+id/detail_length_image_next" />
 
-
                             <TextView
                                 android:id="@+id/detail_length_prev_title"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="16dp"
-                                android:text="前回"
+                                android:text="@string/previous"
                                 android:textAppearance="@style/Deglog.Dashboard.SubTitle"
                                 app:layout_constraintStart_toStartOf="@+id/detail_length_title"
                                 app:layout_constraintTop_toBottomOf="@+id/detail_length_latest" />
@@ -417,7 +421,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
-                                android:text="次回"
+                                android:text="@string/next"
                                 android:textAppearance="@style/Deglog.Dashboard.SubTitle"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="@+id/guideline_length"
@@ -445,8 +449,8 @@
                                 app:layout_constraintGuide_percent="0.5"
                                 app:layout_constraintStart_toStartOf="parent" />
 
-
                         </androidx.constraintlayout.widget.ConstraintLayout>
+
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
@@ -470,21 +474,21 @@
                             <TextView
                                 android:id="@+id/detail_memo_title"
                                 style="@style/DashboardTitle"
-                                android:text="― メモ ―"
+                                android:text="@string/title_memo"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
                                 android:id="@+id/detail_memo_nothing"
+                                isGone="@{hasMemo}"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:gravity="center"
-                                isGone="@{hasMemo}"
-                                android:text="メモはありません"
-                                android:textColor="@color/gray"
+                                android:text="@string/nothing_memo"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
+                                android:textColor="@color/gray"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintHorizontal_chainStyle="packed"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -493,14 +497,14 @@
 
                             <TextView
                                 android:id="@+id/detail_memo"
+                                isGone="@{!hasMemo}"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:gravity="center"
-                                isGone="@{!hasMemo}"
-                                android:visibility="gone"
                                 android:text="@{viewModel.memo}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
+                                android:visibility="gone"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintHorizontal_chainStyle="packed"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -508,12 +512,12 @@
                                 tools:text="1.25 mm" />
 
                         </androidx.constraintlayout.widget.ConstraintLayout>
+
                     </com.google.android.material.card.MaterialCardView>
 
                 </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>
-
 
         </LinearLayout>
 

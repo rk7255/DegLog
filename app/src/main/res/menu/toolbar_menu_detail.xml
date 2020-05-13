@@ -5,12 +5,12 @@
     <item
         android:id="@+id/toolbar_delete"
         android:icon="@drawable/ic_delete"
-        android:title="@string/title_delete"
+        android:title="@string/menu_delete"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/toolbar_edit"
         android:icon="@drawable/ic_edit"
-        android:title="@string/title_edit"
+        android:title="@string/menu_edit"
         app:showAsAction="always"/>
 </menu>

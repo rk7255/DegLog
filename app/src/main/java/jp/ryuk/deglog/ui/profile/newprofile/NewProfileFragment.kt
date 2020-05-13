@@ -41,8 +41,8 @@ class NewProfileFragment : Fragment() {
 
         binding.newProfileTitle.text =
             when (args.mode) {
-                "new" -> getString(R.string.new_profile_title)
-                else -> getString(R.string.edit_profile_title)
+                "new" -> getString(R.string.title_new_profile)
+                else -> getString(R.string.title_edit_profile)
             }
 
 
@@ -178,31 +178,31 @@ class NewProfileFragment : Fragment() {
                 when (size) {
                     0 -> {
                         MaterialAlertDialogBuilder(context)
-                            .setTitle(R.string.choice_type_small)
+                            .setTitle(R.string.type_small)
                             .setItems(typesSmall) { _, type -> editText.setText(typesSmall[type]) }
                             .show()
                     }
                     1 -> {
                         MaterialAlertDialogBuilder(context)
-                            .setTitle(R.string.choice_type_medium)
+                            .setTitle(R.string.type_medium)
                             .setItems(typesMedium) { _, type -> editText.setText(typesMedium[type]) }
                             .show()
                     }
                     2 -> {
                         MaterialAlertDialogBuilder(context)
-                            .setTitle(R.string.choice_type_big)
+                            .setTitle(R.string.type_big)
                             .setItems(typesBig) { _, type -> editText.setText(typesBig[type]) }
                             .show()
                     }
                     3 -> {
                         MaterialAlertDialogBuilder(context)
-                            .setTitle(R.string.choice_type_bird)
+                            .setTitle(R.string.type_bird)
                             .setItems(typesBird) { _, type -> editText.setText(typesBird[type]) }
                             .show()
                     }
                     4 -> {
                         MaterialAlertDialogBuilder(context)
-                            .setTitle(R.string.choice_type_etc)
+                            .setTitle(R.string.type_etc)
                             .setItems(typesEtc) { _, type -> editText.setText(typesEtc[type]) }
                             .show()
                     }

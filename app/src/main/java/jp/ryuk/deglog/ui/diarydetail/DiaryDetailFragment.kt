@@ -132,8 +132,8 @@ class DiaryDetailFragment : Fragment() {
         when (item.itemId) {
             R.id.toolbar_delete -> {
                 MaterialAlertDialogBuilder(context)
-                    .setTitle(getString(R.string.delete_title))
-                    .setMessage(getString(R.string.delete_message))
+                    .setTitle(getString(R.string.dialog_delete_title))
+                    .setMessage(getString(R.string.dialog_delete_message))
                     .setNeutralButton(getString(R.string.dialog_cancel)) { _, _ -> }
                     .setPositiveButton(getString(R.string.dialog_yes)) { _, _ ->
                         viewModel.deleteDiary(getTabPos())
@@ -143,7 +143,7 @@ class DiaryDetailFragment : Fragment() {
                         )
                         Snackbar.make(
                             view!!.rootView,
-                            getString(R.string.delete_success),
+                            getString(R.string.dialog_delete_success),
                             Snackbar.LENGTH_SHORT
                         )
                             .setAnchorView(R.id.bottom_navigation_bar)

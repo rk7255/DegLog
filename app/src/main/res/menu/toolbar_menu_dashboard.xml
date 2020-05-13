@@ -2,15 +2,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <item
-            android:id="@+id/toolbar_list"
-            android:icon="@drawable/ic_menu"
-            android:title="list"
-            app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/toolbar_list"
+        android:icon="@drawable/ic_menu"
+        android:title=""
+        app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/toolbar_add"
         android:icon="@drawable/ic_add"
         android:title=""
-        app:showAsAction="always"/>
+        app:showAsAction="always" />
 </menu>

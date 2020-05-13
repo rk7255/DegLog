@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_xl"
                     android:layout_marginBottom="@dimen/margin_xl"
-                    android:text="@string/new_profile_title"
+                    android:text="@string/title_new_profile"
                     android:textAppearance="@style/Deglog.PageTitle" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -60,7 +60,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/hint_gender"
+                    android:text="@string/gender"
                     android:textSize="14sp" />
 
                 <com.google.android.material.button.MaterialButtonToggleGroup
@@ -79,7 +79,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/hint_gender_male" />
+                        android:text="@string/gender_male" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/gender_female"
@@ -87,7 +87,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/hint_gender_female" />
+                        android:text="@string/gender_female" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/gender_unknown"
@@ -95,7 +95,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/hint_gender_unknown" />
+                        android:text="@string/gender_unknown" />
 
                 </com.google.android.material.button.MaterialButtonToggleGroup>
 
@@ -105,7 +105,7 @@
                     android:layout_width="@dimen/edit_text_width"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/margin_l"
-                    android:hint="@string/hint_type"
+                    android:hint="@string/type"
                     app:endIconDrawable="@drawable/ic_picker"
                     app:endIconMode="custom"
                     app:startIconDrawable="@drawable/nav_ic_diary">
@@ -140,7 +140,7 @@
                             android:layout_height="wrap_content"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
-                            android:hint="@string/hint_birthday"
+                            android:hint="@string/birthday"
                             android:inputType="datetime"
                             android:text="@={viewModel.birthdayString}" />
                     </com.google.android.material.textfield.TextInputLayout>

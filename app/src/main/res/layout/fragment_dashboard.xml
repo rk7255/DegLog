@@ -35,7 +35,7 @@
                 android:id="@+id/db_app_bar"
                 style="@style/Widget.Deglog.Toolbar"
                 app:layout_scrollFlags="scroll|enterAlways"
-                app:title="@string/title_diary" />
+                app:title="@string/title_dashboard" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -119,9 +119,9 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:background="@color/colorBackground"
-                    app:cardElevation="6dp"
                     android:onClick="@{() -> viewModel.onCall(call.PERSONAL_CONTAINER)}"
                     app:cardCornerRadius="16dp"
+                    app:cardElevation="6dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/db_personal_icon"
@@ -201,6 +201,7 @@
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
                                 android:layout_marginEnd="8dp"
+                                android:contentDescription="@string/icon_of_notify"
                                 android:src="@drawable/ic_error"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toStartOf="@+id/db_notify_first"
@@ -215,7 +216,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
                                 android:gravity="center"
-                                android:text="未確認のTODOがあります"
+                                android:text="@string/notify_todo"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 android:textSize="14sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -255,7 +256,7 @@
                                 android:id="@+id/db_weight_title"
                                 style="@style/DashboardTitle"
                                 android:layout_marginEnd="16dp"
-                                android:text="― 体重 ―"
+                                android:text="@string/title_weight"
                                 app:layout_constraintEnd_toStartOf="@+id/db_weight_guideline"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -289,7 +290,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:text="前回"
+                                android:text="@string/previous"
                                 android:textAppearance="@style/Deglog.Dashboard.SubTitle"
                                 app:layout_constraintStart_toStartOf="@+id/db_weight_latest"
                                 app:layout_constraintTop_toBottomOf="@+id/db_weight_latest" />
@@ -325,7 +326,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:text="最近"
+                                android:text="@string/recent"
                                 android:textAppearance="@style/Deglog.Dashboard.SubTitle"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="@+id/db_weight_latest"
@@ -418,7 +419,7 @@
                                 android:id="@+id/db_length_title"
                                 style="@style/DashboardTitle"
                                 android:layout_marginEnd="16dp"
-                                android:text="― 体長 ―"
+                                android:text="@string/title_length"
                                 app:layout_constraintEnd_toStartOf="@+id/db_length_guideline"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -452,7 +453,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
-                                android:text="前回"
+                                android:text="@string/previous"
                                 android:textAppearance="@style/Deglog.Dashboard.SubTitle"
                                 app:layout_constraintStart_toStartOf="@+id/db_length_latest"
                                 app:layout_constraintTop_toBottomOf="@+id/db_length_latest" />
@@ -488,7 +489,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:text="最近"
+                                android:text="@string/recent"
                                 android:textAppearance="@style/Deglog.Dashboard.SubTitle"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="@+id/db_length_latest"
@@ -579,6 +580,7 @@
                                 android:id="@+id/db_todo_icon"
                                 style="@style/DashboardIcon"
                                 android:layout_marginEnd="16dp"
+                                android:contentDescription="@string/icon_of_todo"
                                 android:onClick="@{() -> viewModel.onCall(call.TODO_CONTAINER)}"
                                 android:src="@drawable/ic_todo"
                                 app:layout_constraintBottom_toBottomOf="parent"
@@ -597,7 +599,7 @@
                                 android:id="@+id/db_todo_title"
                                 style="@style/DashboardTitle"
                                 android:layout_marginStart="16dp"
-                                android:text="― ToDo ―"
+                                android:text="@string/title_todo"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="@+id/db_todo_guideline"
                                 app:layout_constraintTop_toTopOf="parent" />
@@ -609,7 +611,7 @@
                                 android:layout_marginStart="16dp"
                                 android:layout_marginTop="8dp"
                                 android:gravity="center"
-                                android:text="Todoはありません"
+                                android:text="@string/nothing_todo"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"

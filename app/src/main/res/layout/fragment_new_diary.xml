@@ -42,7 +42,7 @@
                     android:layout_marginTop="@dimen/margin_xl"
                     android:layout_marginBottom="@dimen/margin_xl"
                     android:textAppearance="@style/Deglog.PageTitle"
-                    tools:text="@string/new_diary_title" />
+                    tools:text="@string/title_new_diary" />
 
                 <FrameLayout
                     android:layout_width="wrap_content"
@@ -65,7 +65,7 @@
                             android:layout_height="match_parent"
                             android:focusable="false"
                             android:focusableInTouchMode="false"
-                            android:hint="@string/hint_date"
+                            android:hint="@string/date"
                             android:inputType="datetime"
                             android:text="@={viewModel.dateOfString}" />
 
@@ -74,7 +74,7 @@
                     <View
                         android:layout_width="300dp"
                         android:layout_height="60dp"
-                        android:onClick="@{() -> viewModel.onDate()}"/>
+                        android:onClick="@{() -> viewModel.onDate()}" />
 
                 </FrameLayout>
 
@@ -83,9 +83,9 @@
                     style="@style/Widget.Deglog.EditText"
                     android:layout_width="@dimen/edit_text_width"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true"
                     app:endIconDrawable="@drawable/ic_picker"
                     app:endIconMode="custom"
+                    app:errorEnabled="true"
                     app:startIconDrawable="@drawable/nav_ic_diary">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -116,7 +116,7 @@
                             android:id="@+id/new_diary_edit_weight_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="@string/hint_weight"
+                            android:hint="@string/weight"
                             android:inputType="numberDecimal"
                             android:text="@={viewModel.weight}" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -125,11 +125,12 @@
                         android:id="@+id/new_diary_edit_weight_text_suffix"
                         style="@style/Widget.Deglog.Button.Suffix"
                         android:layout_width="@dimen/edit_text_height"
-                        tools:text="kg"
+                        android:layout_height="@dimen/edit_text_height"
                         android:onClick="@{() -> viewModel.cycleUnitWeight()}"
                         android:text="@{viewModel.weightUnit}"
-                        android:layout_height="@dimen/edit_text_height"/>
-                    </LinearLayout>
+                        tools:text="kg" />
+                </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="@dimen/edit_text_width"
                     android:layout_height="@dimen/edit_text_height"
@@ -149,7 +150,7 @@
                             android:id="@+id/new_diary_edit_length_text"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="@string/hint_length"
+                            android:hint="@string/length"
                             android:inputType="numberDecimal"
                             android:text="@={viewModel.length}" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -158,10 +159,10 @@
                         android:id="@+id/new_diary_edit_length_text_suffix"
                         style="@style/Widget.Deglog.Button.Suffix"
                         android:layout_width="@dimen/edit_text_height"
-                        tools:text="mm"
+                        android:layout_height="@dimen/edit_text_height"
                         android:onClick="@{() -> viewModel.cycleUnitLength()}"
                         android:text="@{viewModel.lengthUnit}"
-                        android:layout_height="@dimen/edit_text_height"/>
+                        tools:text="mm" />
                 </LinearLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -177,7 +178,7 @@
                         android:id="@+id/new_diary_edit_memo_text"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="@string/hint_memo"
+                        android:hint="@string/memo"
                         android:lines="3"
                         android:maxLines="3"
                         android:text="@={viewModel.memo}" />
@@ -207,21 +208,6 @@
                         android:onClick="@{() -> viewModel.onSubmit()}"
                         android:text="@string/dialog_submit" />
                 </LinearLayout>
-
-                <!--                <com.google.android.material.button.MaterialButton-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginTop="100dp"-->
-                <!--                    android:onClick="@{() -> viewModel.onAddDummy()}"-->
-                <!--                    android:text="[DEBUG] Add Dummy" />-->
-
-                <!--                <com.google.android.material.button.MaterialButton-->
-                <!--                    android:layout_width="wrap_content"-->
-                <!--                    android:layout_height="wrap_content"-->
-                <!--                    android:layout_marginTop="8dp"-->
-                <!--                    android:onClick="@{() -> viewModel.onClear()}"-->
-                <!--                    android:text="[DEBUG] DB Clear" />-->
-
 
             </LinearLayout>
 

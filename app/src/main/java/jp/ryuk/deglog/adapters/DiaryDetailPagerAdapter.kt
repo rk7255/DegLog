@@ -3,9 +3,8 @@ package jp.ryuk.deglog.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
-import jp.ryuk.deglog.databinding.DetailViewPagerBinding
+import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.databinding.ItemDetailBinding
 import jp.ryuk.deglog.ui.diarydetail.Detail
 
@@ -16,13 +15,13 @@ class DiaryDetailPagerAdapter : ListAdapter<Detail, DiaryDetailPagerAdapter.View
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position)!!)
+        holder.bind()
     }
 
     class ViewHolder private constructor(private val binding: ItemDetailBinding)
         : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Detail) {
+        fun bind() {
             binding.executePendingBindings()
         }
         companion object {

@@ -3,17 +3,12 @@ package jp.ryuk.deglog.ui.newdiary
 import android.annotation.SuppressLint
 import android.app.TimePickerDialog
 import android.content.Context
-import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
-import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -24,7 +19,6 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.databinding.FragmentNewDiaryBinding
-import jp.ryuk.deglog.ui.diarylist.ListKey
 import jp.ryuk.deglog.utilities.*
 import java.util.*
 
@@ -49,11 +43,11 @@ class NewDiaryFragment : Fragment() {
 
         when (args.mode) {
             "edit" -> {
-                binding.newDiaryTitle.text = getString(R.string.edit_diary_title)
+                binding.newDiaryTitle.text = getString(R.string.title_edit_title)
                 binding.newDiaryEditName.isEnabled = false
             }
             else -> {
-                binding.newDiaryTitle.text = getString(R.string.new_diary_title)
+                binding.newDiaryTitle.text = getString(R.string.title_new_diary)
                 binding.newDiaryEditName.isEnabled = true
             }
         }
