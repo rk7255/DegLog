@@ -36,6 +36,11 @@ class DiaryListFragment : Fragment() {
         viewModel = createViewModel(requireContext(), args.name)
         binding.appBarDetailList.title = args.name + getString(R.string.title_diary_detail_at_name)
 
+        when (args.from) {
+            ListKey.FROM_WEIGHT -> viewModel.checkedWeight.value = true
+            ListKey.FROM_LENGTH -> viewModel.checkedLength.value = true
+        }
+
         binding.detailListCheckWeight.isChecked = viewModel.checkedWeight.value ?: false
         binding.detailListCheckLength.isChecked = viewModel.checkedLength.value ?: false
         binding.detailListCheckMemo.isChecked = viewModel.checkedMemo.value ?: false

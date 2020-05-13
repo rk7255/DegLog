@@ -133,6 +133,7 @@
 
     <string-array name="length_unit">
         <item>mm</item>
+        <item>cm</item>
         <item>m</item>
     </string-array>
 

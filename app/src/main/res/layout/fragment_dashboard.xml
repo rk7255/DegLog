@@ -110,7 +110,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:shapeAppearanceOverlay="@style/circleImageView"
-                    app:srcCompat="@drawable/nav_ic_diary"/>
+                    app:srcCompat="@drawable/nav_ic_diary" />
 
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/db_personal_container"
@@ -119,7 +119,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:background="@color/colorBackground"
-                    android:elevation="8dp"
+                    app:cardElevation="6dp"
                     android:onClick="@{() -> viewModel.onCall(call.PERSONAL_CONTAINER)}"
                     app:cardCornerRadius="16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -129,8 +129,8 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:background="@color/colorBackground"
                         android:layout_height="match_parent"
+                        android:background="@color/colorBackground"
                         android:padding="4dp">
 
                         <TextView
@@ -178,7 +178,9 @@
                         android:id="@+id/db_notify_container"
                         style="@style/DashboardContainer"
                         isGone="@{!viewModel.hasNotify}"
+                        android:layout_margin="16dp"
                         android:onClick="@{() -> viewModel.onCall(call.NOTIFY_CONTAINER)}"
+                        app:cardElevation="6dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -187,9 +189,9 @@
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@color/colorBackground"
                             android:paddingStart="16dp"
                             android:paddingTop="8dp"
-                            android:background="@color/colorBackground"
                             android:paddingEnd="16dp"
                             android:paddingBottom="8dp">
 
@@ -233,7 +235,11 @@
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/db_weight_container"
                         style="@style/DashboardContainer"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
                         android:onClick="@{() -> viewModel.onCall(call.WEIGHT_CONTAINER)}"
+                        app:cardElevation="6dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -241,8 +247,8 @@
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:background="@color/colorBackground"
                             android:layout_height="wrap_content"
+                            android:background="@color/colorBackground"
                             android:padding="16dp">
 
                             <TextView
@@ -392,7 +398,11 @@
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/db_length_container"
                         style="@style/DashboardContainer"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
                         android:onClick="@{() -> viewModel.onCall(call.LENGTH_CONTAINER)}"
+                        app:cardElevation="6dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -550,6 +560,10 @@
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/db_todo_container"
                         style="@style/DashboardContainer"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        app:cardElevation="6dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -557,8 +571,8 @@
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:background="@color/colorBackground"
                             android:layout_height="wrap_content"
+                            android:background="@color/colorBackground"
                             android:padding="16dp">
 
                             <ImageView
@@ -583,7 +597,7 @@
                                 android:id="@+id/db_todo_title"
                                 style="@style/DashboardTitle"
                                 android:layout_marginStart="16dp"
-                                android:text="― TODO ―"
+                                android:text="― ToDo ―"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="@+id/db_todo_guideline"
                                 app:layout_constraintTop_toTopOf="parent" />

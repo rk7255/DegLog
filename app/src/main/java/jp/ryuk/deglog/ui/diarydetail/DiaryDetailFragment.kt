@@ -1,7 +1,9 @@
 package jp.ryuk.deglog.ui.diarydetail
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -17,8 +19,10 @@ import com.google.android.material.tabs.TabLayoutMediator
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.adapters.DiaryDetailPagerAdapter
 import jp.ryuk.deglog.databinding.FragmentDiaryDetailBinding
+import jp.ryuk.deglog.utilities.FlickListener
 import jp.ryuk.deglog.utilities.InjectorUtil
 import jp.ryuk.deglog.utilities.convertLongToDateStringOutYear
+import jp.ryuk.deglog.utilities.deg
 
 class DiaryDetailFragment : Fragment() {
 
@@ -32,12 +36,14 @@ class DiaryDetailFragment : Fragment() {
         setHasOptionsMenu(true)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_diary_detail, container, false)
+            inflater, R.layout.fragment_diary_detail, container, false
+        )
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarDiaryDetail)
         args = DiaryDetailFragmentArgs.fromBundle(arguments!!)
 
@@ -45,6 +51,8 @@ class DiaryDetailFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
         binding.appBarDiaryDetail.title = args.name + getString(R.string.title_diary_detail_at_name)
+
+        Log.d(deg, "dpos: ${viewModel.diaryPosition.value} pos: ${viewModel.position}")
 
         viewModel.diaries.observe(viewLifecycleOwner, Observer {
             if (!it.isNullOrEmpty()) {
@@ -70,8 +78,9 @@ class DiaryDetailFragment : Fragment() {
             ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
-                if (position != viewModel.diaryPosition.value)
+                if (position != viewModel.diaryPosition.value) {
                     viewModel.diaryPosition.value = position
+                }
             }
         })
 
@@ -88,18 +97,23 @@ class DiaryDetailFragment : Fragment() {
         })
 
         viewModel.diaryPosition.observe(viewLifecycleOwner, Observer {
-            viewPager.setCurrentItem(it, true)
-            viewModel.position = it
-            viewModel.getDetail()
+            if (it != null) {
+                viewPager.setCurrentItem(it, true)
+                viewModel.getDetail()
+                viewModel.position = it
+                Log.d(deg, "dpos: ${viewModel.diaryPosition.value} pos: ${viewModel.position}")
+            }
         })
 
-    return binding.root
-}
+        viewModel.memo.observe(viewLifecycleOwner, Observer {
+            binding.hasMemo = !it.isNullOrEmpty()
+        })
 
-    private fun getTitle(position: Int): String? {
-        return viewModel.details.value?.get(position)?.date?.let {
-            convertLongToDateStringOutYear(it)
-        }
+        binding.detailDateContainer.setOnTouchListener(FlickListener(flickListenerForDate))
+        binding.detailWeightContainer.setOnTouchListener(FlickListener(flickListenerForWeight))
+        binding.detailLengthContainer.setOnTouchListener(FlickListener(flickListenerForLength))
+
+        return binding.root
     }
 
     private fun createViewModel(context: Context, id: Long, name: String): DiaryDetailViewModel {
@@ -125,8 +139,13 @@ class DiaryDetailFragment : Fragment() {
                         viewModel.deleteDiary(getTabPos())
                         this.findNavController().navigate(
                             DiaryDetailFragmentDirections
-                                .actionDiaryDetailFragmentPop())
-                        Snackbar.make(view!!.rootView, getString(R.string.delete_success), Snackbar.LENGTH_SHORT)
+                                .actionDiaryDetailFragmentPop()
+                        )
+                        Snackbar.make(
+                            view!!.rootView,
+                            getString(R.string.delete_success),
+                            Snackbar.LENGTH_SHORT
+                        )
                             .setAnchorView(R.id.bottom_navigation_bar)
                             .show()
                     }
@@ -135,11 +154,38 @@ class DiaryDetailFragment : Fragment() {
             R.id.toolbar_edit -> {
                 this.findNavController().navigate(
                     DiaryDetailFragmentDirections.actionDiaryDetailFragmentToNewDiaryFragment(
-                        "edit", viewModel.editDiary(getTabPos()), args.name)
+                        "edit", viewModel.editDiary(getTabPos()), args.name
+                    )
                 )
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
+    private val flickListenerForDate = object : FlickListener.Listener {
+        override fun onButtonPressed() {}
+        override fun onButtonReleased() {}
+        override fun onFlickToLeft() { viewModel.onDateNext() }
+        override fun onFlickToRight() { viewModel.onDateBack() }
+    }
+
+    private val flickListenerForWeight = object : FlickListener.Listener {
+        override fun onButtonPressed() {}
+        override fun onButtonReleased() {}
+        override fun onFlickToLeft() { viewModel.onWeightNext() }
+        override fun onFlickToRight() { viewModel.onWeightBack() }
+    }
+
+    private val flickListenerForLength = object : FlickListener.Listener {
+        override fun onButtonPressed() {}
+        override fun onButtonReleased() {}
+        override fun onFlickToLeft() { viewModel.onLengthNext() }
+        override fun onFlickToRight() { viewModel.onLengthBack() }
+    }
+
+    private fun getTitle(position: Int): String? {
+        return viewModel.details.value?.get(position)?.date?.let {
+            convertLongToDateStringOutYear(it)
+        }
+    }
 }

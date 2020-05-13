@@ -72,11 +72,11 @@ class NewDiaryViewModel(
         when (weightUnit.value) {
             "g" -> {
                 weightUnit.value = "kg"
-                weight.value = changeUnit(weight.value, "kg")
+                weight.value = changeUnit(weight.value, "g", "kg")
             }
             "kg" -> {
                 weightUnit.value = "g"
-                weight.value = changeUnit(weight.value, "g")
+                weight.value = changeUnit(weight.value, "kg", "g")
 
             }
         }
@@ -85,22 +85,31 @@ class NewDiaryViewModel(
     fun cycleUnitLength() {
         when (lengthUnit.value) {
             "mm" -> {
+                lengthUnit.value = "cm"
+                length.value = changeUnit(length.value, "mm", "cm")
+            }
+            "cm" -> {
                 lengthUnit.value = "m"
-                length.value = changeUnit(length.value, "m")
+                length.value = changeUnit(length.value, "cm", "m")
             }
             "m" -> {
                 lengthUnit.value = "mm"
-                length.value = changeUnit(length.value, "mm")
+                length.value = changeUnit(length.value, "m", "mm")
             }
         }
     }
 
-    private fun changeUnit(number: String?, unit: String): String {
+    private fun changeUnit(number: String?, from: String, to: String): String {
         if (number.isNullOrBlank()) return ""
-        return if (unit == "g" || unit == "mm") {
-            (number.toFloat() * 1000).toInt().toString()
-        } else {
-            (number.toFloat() / 1000).toString()
+
+        return when (to) {
+            "g"-> (number.toFloat() * 1000).toInt().toString()
+            "kg" -> (number.toFloat() / 1000).toString()
+
+            "mm" -> (number.toFloat() * 1000).toInt().toString()
+            "cm" -> (number.toFloat() / 10).toString()
+            "m" -> (number.toFloat() / 100).toString()
+            else -> ""
         }
     }
 
@@ -136,10 +145,16 @@ class NewDiaryViewModel(
             null
         } else {
             val num = text.toFloat()
-            if (unit == "kg" || unit == "m") {
-                num / 1000
-            } else {
-                num
+
+            when (unit) {
+                "g" -> num
+                "kg" -> num * 1000
+
+                "mm" -> num
+                "cm" -> num * 10
+                "m" -> num * 1000
+
+                else -> num
             }
         }
     }

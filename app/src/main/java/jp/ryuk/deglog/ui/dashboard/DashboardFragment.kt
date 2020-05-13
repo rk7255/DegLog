@@ -99,8 +99,12 @@ class DashboardFragment : Fragment() {
             if (call != null) {
                 when (call) {
                     OnCallKey.PERSONAL_ICON -> navigateToEditProfile()
-                    OnCallKey.PERSONAL_CONTAINER -> dialogSelectBuilder(requireContext(), names).show()
-                    OnCallKey.NOTIFY_CONTAINER -> makeSnackBar("NOTIFY")
+                    OnCallKey.PERSONAL_CONTAINER -> dialogSelectBuilder(
+                        requireContext(),
+                        names
+                    ).show()
+                    OnCallKey.NOTIFY_CONTAINER -> {
+                    }
                     OnCallKey.WEIGHT_CONTAINER -> navigateToDiaryList(ListKey.FROM_WEIGHT)
                     OnCallKey.LENGTH_CONTAINER -> navigateToDiaryList(ListKey.FROM_LENGTH)
                     OnCallKey.TODO_CONTAINER -> {
@@ -118,13 +122,19 @@ class DashboardFragment : Fragment() {
 
     private fun navigateToDiaryList(key: Int) {
         this.findNavController().navigate(
-            DashboardFragmentDirections.actionDiaryFragmentToDiaryDetailFragment(key, viewModel.selected.value!!)
+            DashboardFragmentDirections.actionDiaryFragmentToDiaryDetailFragment(
+                key,
+                viewModel.selected.value!!
+            )
         )
     }
 
     private fun navigateToEditProfile() {
         this.findNavController().navigate(
-            DashboardFragmentDirections.actionDiaryFragmentToNewProfileFragment("dashboard", viewModel.selected.value!!)
+            DashboardFragmentDirections.actionDiaryFragmentToNewProfileFragment(
+                "dashboard",
+                viewModel.selected.value!!
+            )
         )
     }
 
@@ -160,7 +170,7 @@ class DashboardFragment : Fragment() {
         return MaterialAlertDialogBuilder(context)
             .setMessage("選択したToDoを完了します\n\"${todo.todo}\"")
             .setNeutralButton("キャンセル", null)
-            .setPositiveButton("完了") {_, _ ->
+            .setPositiveButton("完了") { _, _ ->
                 viewModel.deleteTodo(todo.id)
             }
             .create()
@@ -186,7 +196,7 @@ class DashboardFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        menuInflater.inflate(R.menu.toolbar_menu_dashboard, menu)
         super.onCreateOptionsMenu(menu, menuInflater)
     }
 
@@ -195,7 +205,15 @@ class DashboardFragment : Fragment() {
             R.id.toolbar_add -> {
                 this.findNavController().navigate(
                     DashboardFragmentDirections
-                        .actionDiaryFragmentToNewDiaryFragment("new", -1 , viewModel.selected.value ?: ""))
+                        .actionDiaryFragmentToNewDiaryFragment(
+                            "new",
+                            -1,
+                            viewModel.selected.value ?: ""
+                        )
+                )
+            }
+            R.id.toolbar_list -> {
+                navigateToDiaryList(-1)
             }
         }
         return super.onOptionsItemSelected(item)

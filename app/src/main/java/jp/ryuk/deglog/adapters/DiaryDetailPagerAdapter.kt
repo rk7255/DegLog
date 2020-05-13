@@ -23,7 +23,6 @@ class DiaryDetailPagerAdapter : ListAdapter<Detail, DiaryDetailPagerAdapter.View
         : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Detail) {
-//            binding.diary = item
             binding.executePendingBindings()
         }
         companion object {

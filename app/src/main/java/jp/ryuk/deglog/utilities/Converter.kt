@@ -62,19 +62,9 @@ fun convertLongToDateStringRelative(systemTime: Long): String {
  */
 fun hasAlert(time: Long): Boolean {
     val diff = Calendar.getInstance().timeInMillis - time
-//    val week = 1000 * 60 * 60 * 24 * 7 * 2
-    val week = 1000 * 60 * 3
+    val week = 1000 * 60 * 60 * 24 * 7 * 2
     return diff >= week
 }
-
-/**
- * 型変換
- */
-fun convertStringToFloat(str: String?, unit: String): Float? {
-    if (str.isNullOrEmpty()) return null
-    return if (unit == "kg" || unit == "m") str.toFloat() * 1000 else str.toFloat()
-}
-
 
 /**
  * 単位変換
@@ -83,9 +73,10 @@ fun convertUnit(number: Float, unit: String, onSuffix: Boolean): String {
     val result = StringBuilder()
     when (unit) {
         "g" -> result.append("${roundInt(number)}")
-        "kg" -> result.append("${roundFloat(number)}")
+        "kg" -> result.append("${roundFloatInM(number)}")
         "mm" -> result.append("${roundInt(number)}")
-        "m" -> result.append("${roundFloat(number)}")
+        "cm" -> result.append("${roundFloatInCm(number)}")
+        "m" -> result.append("${roundFloatInM(number)}")
         else -> return "単位不明"
     }
 
@@ -96,7 +87,15 @@ fun convertUnit(number: Float, unit: String, onSuffix: Boolean): String {
 private fun roundInt(number: Float): BigDecimal =
     BigDecimal(number.toString()).setScale(0, RoundingMode.HALF_UP)
 
-private fun roundFloat(number: Float): BigDecimal {
+private fun roundFloatInCm(number: Float): BigDecimal {
+    val scale = when (number / 10) {
+        in 0.0..99.0 -> 1
+        in 99.0..999.0 -> 0
+        else -> 0
+    }
+    return BigDecimal((number / 10).toString()).setScale(scale, RoundingMode.HALF_UP)
+}
+private fun roundFloatInM(number: Float): BigDecimal {
     val scale = when (number / 1000) {
         in 0.0..99.0 -> 2
         in 99.0..999.0 -> 1
