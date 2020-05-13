@@ -62,10 +62,8 @@ class DiaryListFragment : Fragment() {
         }
 
         viewModel.diaries.observe(viewLifecycleOwner, Observer {
-            if (!it.isNullOrEmpty()) {
                 viewModel.diariesLoaded.value = true
                 viewModel.sectionLoaded()
-            }
         })
 
         viewModel.profile.observe(viewLifecycleOwner, Observer {

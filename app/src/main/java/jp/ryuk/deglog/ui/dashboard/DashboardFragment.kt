@@ -5,6 +5,7 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.*
 import android.widget.EditText
 import android.widget.TextView
@@ -54,8 +55,11 @@ class DashboardFragment : Fragment() {
 
         viewModel.diaries.observe(viewLifecycleOwner, Observer {
             if (!it.isNullOrEmpty()) {
+                Log.d("DEBUG", "$it")
                 viewModel.diariesLoaded.value = true
                 viewModel.sectionLoaded()
+            } else {
+                viewModel.diariesLoaded.value = false
             }
         })
 
@@ -63,6 +67,8 @@ class DashboardFragment : Fragment() {
             if (!it.isNullOrEmpty()) {
                 viewModel.profilesLoaded.value = true
                 viewModel.sectionLoaded()
+            } else {
+                viewModel.profilesLoaded.value = false
             }
         })
 
@@ -73,6 +79,8 @@ class DashboardFragment : Fragment() {
                 if (viewModel.selected.value.isNullOrEmpty()) viewModel.selected.value = names[0]
                 binding.dbPersonalName.text = viewModel.selected.value
                 viewModel.sectionLoaded()
+            } else {
+                viewModel.namesLoaded.value = true
             }
         })
 
@@ -205,7 +213,9 @@ class DashboardFragment : Fragment() {
                 )
             }
             R.id.toolbar_list -> {
-                navigateToDiaryList(-1)
+                if (viewModel.allLoaded.value == true) {
+                    navigateToDiaryList(-1)
+                }
             }
         }
         return super.onOptionsItemSelected(item)
