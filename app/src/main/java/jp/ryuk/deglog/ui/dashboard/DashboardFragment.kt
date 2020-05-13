@@ -80,7 +80,7 @@ class DashboardFragment : Fragment() {
                 binding.dbPersonalName.text = viewModel.selected.value
                 viewModel.sectionLoaded()
             } else {
-                viewModel.namesLoaded.value = true
+                viewModel.namesLoaded.value = false
             }
         })
 
