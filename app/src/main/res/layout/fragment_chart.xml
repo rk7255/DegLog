@@ -3,45 +3,161 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="0dp"
+        android:fitsSystemWindows="true">
 
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:elevation="4dp">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/db_app_bar"
+                style="@style/Widget.Deglog.Toolbar"
+                app:layout_scrollFlags="noScroll"
+                app:title="@string/title_chart" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorBackground"
-            android:fitsSystemWindows="true">
+            android:fitsSystemWindows="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <com.google.android.material.appbar.AppBarLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/toolbar_height"
-                app:elevation="0dp">
-
-                <androidx.appcompat.widget.Toolbar
-                    android:id="@+id/app_bar_chart"
-                    style="@style/Widget.Deglog.Toolbar"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    app:title="@string/title_chart" />
-            </com.google.android.material.appbar.AppBarLayout>
-
-            <FrameLayout
+            <com.github.mikephil.charting.charts.LineChart
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fitsSystemWindows="true"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="48dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/secondaryDarkColor" />
 
-                <androidx.core.widget.NestedScrollView
+            <View
+                android:id="@+id/chart_filter_bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/bgBlack"
+                android:visibility="gone" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:id="@+id/chart_filter_container"
+                android:visibility="gone"
+                android:elevation="4dp"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:background="@color/secondaryLightColor"
+                    android:orientation="vertical"
+                    android:paddingStart="16dp"
+                    android:paddingTop="56dp"
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="16dp">
 
                     <TextView
-                        android:id="@+id/test_text"
+                        android:id="@+id/textView8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Filter 1"
+                        android:textSize="18sp" />
+
+                    <com.google.android.material.chip.ChipGroup
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text=""
-                        android:textSize="40sp" />
+                        android:layout_height="wrap_content">
 
-                </androidx.core.widget.NestedScrollView>
-            </FrameLayout>
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_weight"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="体重" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_length"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="体長" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_free"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="フリー" />
+
+                    </com.google.android.material.chip.ChipGroup>
 
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+                    <TextView
+                        android:id="@+id/textView9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Filter 2"
+                        android:textSize="18sp" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Chip1" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Chip2" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Chip3" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:id="@+id/chart_filter_open"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@color/secondaryColor"
+                android:gravity="center"
+                android:elevation="6dp"
+                android:orientation="horizontal"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Filters"
+                    android:textSize="24sp" />
+
+                <ImageView
+                    android:id="@+id/chart_filter_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_more" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>
