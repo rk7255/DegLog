@@ -13,6 +13,10 @@
     <color name="gray">#aeaeae</color>
     <color name="pink">#F08279</color>
     <color name="blue">#3AB6EF</color>
+    <color name="green">#9AFF6E</color>
+    <color name="yellow">#FFFE77</color>
+    <color name="purple">#D768E8</color>
+    <color name="orange">#FFBF5B</color>
 
     <color name="bgBlack">#55000000</color>
 

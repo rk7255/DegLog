@@ -17,6 +17,36 @@ fun hideKeyboard(activity: Activity, view: View, event: MotionEvent?): Boolean {
     return view.onTouchEvent(event)
 }
 
+fun colorSelector(color: Int?): Int? {
+    return when (color) {
+        0 -> R.color.pink
+        1 -> R.color.blue
+        2 -> R.color.green
+        3 -> R.color.yellow
+        4 -> R.color.orange
+        5 -> R.color.purple
+        6 -> R.color.primaryColor
+        7 -> R.color.gray
+        else -> null
+    }
+}
+
+fun colorSelectorRGB(color: Int?): String {
+    return when (color) {
+        0 -> "#F08279"
+        1 -> "#3AB6EF"
+        2 -> "#9AFF6E"
+        3 -> "#FFFE77"
+        4 -> "#FFBF5B"
+        5 -> "#D768E8"
+        6 -> "#C6AA80"
+        7 -> "#AEAEAE"
+        else -> "#3D332A"
+    }
+}
+
+
+
 fun iconSelector(context: Context, type: String?): Int {
     return when (type) {
         null -> R.drawable.nav_ic_diary

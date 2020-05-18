@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.databinding.ItemProfilesBinding
+import jp.ryuk.deglog.utilities.colorSelector
 import jp.ryuk.deglog.utilities.iconSelector
 
 class ProfileAdapter(
@@ -37,6 +38,11 @@ class ProfileAdapter(
                 else -> context.getColor(R.color.gray)
             }
             binding.profileGender.setTextColor(color)
+
+            val colorId = colorSelector(profile.color)
+            if (colorId != null) {
+                binding.profileViewColor.setBackgroundResource(colorId)
+            }
 
             binding.executePendingBindings()
         }

@@ -1,11 +1,9 @@
 package jp.ryuk.deglog.ui.chart
 
 import android.graphics.Color
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.Legend
@@ -13,14 +11,12 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.ProfileDao
-import jp.ryuk.deglog.utilities.convertLongToDateString
+import jp.ryuk.deglog.utilities.colorSelectorRGB
 import java.lang.StringBuilder
-import java.util.*
 import kotlin.collections.ArrayList
 
 class ChartViewModel(
@@ -80,14 +76,8 @@ class ChartViewModel(
         whichAxis: String,
         names: ArrayList<String>
     ) {
-        val colors = arrayListOf(
-            "#88ff0000", "#8800ff00", "#880000ff",
-            "#88ff00ff", "#88ffff00", "8800ffff"
-        )
-
-        val sets = arrayListOf<ILineDataSet>()
-
         val diaries = diaries.value!!.sortedBy { it.date }
+        val sets = arrayListOf<ILineDataSet>()
 
         names.forEachIndexed { index, name ->
             var diariesByName = diaries.filter { it.name == name }
@@ -113,14 +103,16 @@ class ChartViewModel(
                 entries.add(entry)
             }
 
+            val profile = profiles.value!!.find { it.name == name }
+            val rgb = colorSelectorRGB(profile?.color)
+
             val set = LineDataSet(entries, name)
             set.apply {
-
                 setDrawValues(false)
                 lineWidth = 4f
                 circleRadius = 4f
-                color = Color.parseColor(colors[index])
-                setCircleColor(Color.parseColor(colors[index]))
+                color = Color.parseColor(rgb)
+                setCircleColor(Color.parseColor(rgb))
 
             }
             sets.add(set)

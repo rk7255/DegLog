@@ -3,6 +3,7 @@ package jp.ryuk.deglog.ui.profile.newprofile
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -39,86 +40,118 @@ class NewProfileFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
-        binding.newProfileTitle.text =
-            when (args.mode) {
-                "new" -> getString(R.string.title_new_profile)
-                else -> getString(R.string.title_edit_profile)
-            }
-
-
-        binding.newProfileContainer.setOnTouchListener { view, event ->
-            hideKeyboard(requireActivity(), view, event)
-            binding.newProfileEditName.error = null
-            false
-        }
-
-        viewModel.profile.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                viewModel.setValues()
-                when (viewModel.gender.value) {
-                    "オス" -> binding.genderMale.isChecked = true
-                    "メス" -> binding.genderFemale.isChecked = true
-                    else -> binding.genderUnknown.isChecked = true
+        binding.apply {
+            newProfileTitle.text =
+                when (args.mode) {
+                    "new" -> getString(R.string.title_new_profile)
+                    else -> getString(R.string.title_edit_profile)
                 }
-            }
-        })
 
-        viewModel.submit.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                if (viewModel.isNameChanged && args.mode == "dashboard") {
-                    backToDashboard()
-                } else {
-                    pop()
-                }
-            }
-        })
-
-        viewModel.submitError.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                binding.newProfileEditName.error = getString(R.string.name_empty_error_string)
-            } else {
+            newProfileContainer.setOnTouchListener { view, event ->
+                hideKeyboard(requireActivity(), view, event)
                 binding.newProfileEditName.error = null
+                false
             }
-        })
 
-        binding.newProfileEditNameText.setOnKeyListener { _, _, _ ->
-            binding.newProfileEditName.error = null
-            false
+            newProfileEditNameText.setOnKeyListener { _, _, _ ->
+                binding.newProfileEditName.error = null
+                false
+            }
+
+            newProfileEditType.setEndIconOnClickListener {
+                typeDialogBuilder(requireContext(), binding.newProfileEditTypeText).show()
+            }
+
+            newProfileEditWeightUnit.setEndIconOnClickListener {
+                unitDialogBuilder(
+                    requireContext(),
+                    binding.newProfileEditWeightUnitText,
+                    resources.getStringArray(R.array.weight_unit)
+                ).show()
+            }
+
+            newProfileEditLengthUnit.setEndIconOnClickListener {
+                unitDialogBuilder(
+                    requireContext(),
+                    binding.newProfileEditLengthUnitText,
+                    resources.getStringArray(R.array.length_unit)
+                ).show()
+            }
+
         }
 
-        viewModel.onDateCLick.observe(viewLifecycleOwner, Observer {
-            if (it == true)
-                showDatePicker(binding.newProfileEditBirthdayText, parentFragmentManager)
-        })
-
-        binding.newProfileToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
+        binding.newProfileToggleGroupGender.addOnButtonCheckedListener { group, checkedId, isChecked ->
             if (isChecked)
                 viewModel.gender.value =
                     group.findViewById<MaterialButton>(checkedId).text.toString()
         }
 
-        binding.newProfileEditType.setEndIconOnClickListener {
-            typeDialogBuilder(requireContext(), binding.newProfileEditTypeText).show()
+        viewModel.apply {
+            profile.observe(viewLifecycleOwner, Observer {
+                if (it != null) {
+                    viewModel.setValues()
+                    when (viewModel.gender.value) {
+                        "オス" -> binding.genderMale.isChecked = true
+                        "メス" -> binding.genderFemale.isChecked = true
+                        else -> binding.genderUnknown.isChecked = true
+                    }
+                }
+            })
+
+            submit.observe(viewLifecycleOwner, Observer {
+                if (it == true) {
+                    if (viewModel.isNameChanged && args.mode == "dashboard") {
+                        backToDashboard()
+                    } else {
+                        pop()
+                    }
+                }
+            })
+
+            submitError.observe(viewLifecycleOwner, Observer {
+                if (it == true) {
+                    binding.newProfileEditName.error = getString(R.string.name_empty_error_string)
+                } else {
+                    binding.newProfileEditName.error = null
+                }
+            })
+
+            onDateCLick.observe(viewLifecycleOwner, Observer {
+                if (it == true)
+                    showDatePicker(binding.newProfileEditBirthdayText, parentFragmentManager)
+            })
+
+            selectedColor.observe(viewLifecycleOwner, Observer {
+                val colorId = colorSelector(it)
+                if (colorId != null) {
+                    binding.viewColor.setBackgroundResource(colorId)
+                }
+            })
         }
 
-        binding.newProfileEditWeightUnit.setEndIconOnClickListener {
-            unitDialogBuilder(
-                requireContext(),
-                binding.newProfileEditWeightUnitText,
-                resources.getStringArray(R.array.weight_unit)
-            ).show()
-        }
 
-        binding.newProfileEditLengthUnit.setEndIconOnClickListener {
-            unitDialogBuilder(
-                requireContext(),
-                binding.newProfileEditLengthUnitText,
-                resources.getStringArray(R.array.length_unit)
-            ).show()
-        }
 
         return binding.root
     }
+
+//    private fun getButtons(): ArrayList<MaterialButton> {
+//        val views = binding.labelColorContainer
+//        val chips = ArrayList<MaterialButton>()
+//        findButtons(views, chips)
+//        return chips
+//    }
+//
+//    private fun findButtons(view: View, chips: ArrayList<MaterialButton>) {
+//        if (MaterialButton::class.java.isInstance(view)) {
+//            chips.add(view as MaterialButton)
+//        }
+//
+//        if (view is ViewGroup) {
+//            for (i in 0 until view.childCount) {
+//                findButtons(view.getChildAt(i), chips)
+//            }
+//        }
+//    }
 
     private fun pop() {
         this.findNavController().navigate(
@@ -163,7 +196,10 @@ class NewProfileFragment : Fragment() {
     }
 
 
-    private fun typeDialogBuilder(context: Context, editText: EditText): MaterialAlertDialogBuilder {
+    private fun typeDialogBuilder(
+        context: Context,
+        editText: EditText
+    ): MaterialAlertDialogBuilder {
         val types = resources.getStringArray(R.array.types)
         val typesBig = resources.getStringArray(R.array.types_big)
         val typesMedium = resources.getStringArray(R.array.types_medium)

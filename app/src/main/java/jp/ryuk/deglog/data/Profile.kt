@@ -18,7 +18,8 @@ data class Profile (
     var gender: String? = null,
     var birthday: Long? = null,
     @ColumnInfo(name = "weight_unit") var weightUnit: String = "g",
-    @ColumnInfo(name = "length_unit") var lengthUnit: String = "mm"
+    @ColumnInfo(name = "length_unit") var lengthUnit: String = "mm",
+    var color: Int? = null
 ) {
     fun getAge(target: Long): String {
         this.birthday?.let {

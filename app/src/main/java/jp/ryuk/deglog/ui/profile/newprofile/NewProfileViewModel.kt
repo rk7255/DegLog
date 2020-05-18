@@ -43,6 +43,9 @@ class NewProfileViewModel(
         _onDateClick.value = false
     }
 
+    val selectedColor = MediatorLiveData<Int?>()
+    fun onSelectColor(select: Int) { selectedColor.value = select }
+
     init {
         name.value = selectedName
         weightUnit.value = "g"
@@ -57,6 +60,7 @@ class NewProfileViewModel(
         type.value = profile.value?.type
         weightUnit.value = profile.value!!.weightUnit
         lengthUnit.value = profile.value!!.lengthUnit
+        selectedColor.value = profile.value!!.color
     }
 
     fun onSubmit() {
@@ -67,7 +71,8 @@ class NewProfileViewModel(
                 gender = gender.value,
                 birthday = birthday,
                 weightUnit = weightUnit.value ?: "g",
-                lengthUnit = lengthUnit.value ?: "mm"
+                lengthUnit = lengthUnit.value ?: "mm",
+                color = selectedColor.value
             )
             if (isNew) {
                 insertProfile(profile)
