@@ -55,7 +55,6 @@ class DashboardFragment : Fragment() {
 
         viewModel.diaries.observe(viewLifecycleOwner, Observer {
             if (!it.isNullOrEmpty()) {
-                Log.d("DEBUG", "$it")
                 viewModel.diariesLoaded.value = true
                 viewModel.sectionLoaded()
             } else {

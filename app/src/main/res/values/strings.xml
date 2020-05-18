@@ -121,6 +121,9 @@
     <string name="animal_hachurui">爬虫類</string>
     <string name="animal_gyorui">魚類</string>
     <string name="animal_konchu">昆虫</string>
+    <string name="time">時間</string>
+    <string name="age">年齢</string>
+    <string name="recorded">記録順</string>
 
     <string-array name="types">
         <item>@string/type_small</item>

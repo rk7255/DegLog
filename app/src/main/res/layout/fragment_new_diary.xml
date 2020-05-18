@@ -209,6 +209,19 @@
                         android:text="@string/dialog_submit" />
                 </LinearLayout>
 
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_marginTop="80dp"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> viewModel.onAddDebug()}"
+                    android:text="データ100追加"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> viewModel.onDeleteDebug()}"
+                    android:text="データ削除"/>
+
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>

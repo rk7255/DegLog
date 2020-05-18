@@ -14,6 +14,9 @@ interface DiaryDao {
     @Query("DELETE FROM diary_table WHERE id = :id")
     fun deleteById(id: Long)
 
+    @Query("DELETE FROM diary_table WHERE name = :name")
+    fun deleteAll(name: String)
+
     @Query("SELECT * FROM diary_table WHERE id = :id")
     fun getDiary(id: Long) : LiveData<Diary?>
 

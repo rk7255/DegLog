@@ -3,6 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="jp.ryuk.deglog.ui.chart.ChartViewModel" />
+
+        <variable
+            name="hasDiaries"
+            type="Boolean" />
+    </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -31,13 +42,25 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart_chart"
+                isGone="@{!hasDiaries}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="48dp"
                 android:layout_marginEnd="8dp"
+                android:background="@color/colorBackground" />
+
+            <TextView
+                isGone="@{hasDiaries}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:background="@color/secondaryDarkColor" />
+                android:gravity="center"
+                android:text="@string/nothing_data" />
 
             <View
                 android:id="@+id/chart_filter_bg"
@@ -47,51 +70,80 @@
                 android:visibility="gone" />
 
             <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
                 android:id="@+id/chart_filter_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:elevation="4dp"
-                android:layout_height="wrap_content">
+                android:elevation="4dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="true"
                     android:background="@color/secondaryLightColor"
+                    android:clickable="true"
                     android:orientation="vertical"
                     android:paddingStart="16dp"
                     android:paddingTop="56dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="16dp">
+                    android:paddingBottom="8dp"
+                    android:paddingEnd="16dp">
 
                     <TextView
                         android:id="@+id/textView8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Filter 1"
+                        android:text="グラフ切替"
                         android:textSize="18sp" />
 
                     <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chip_group_chart"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        app:selectionRequired="true"
+                        android:layout_height="wrap_content"
+                        app:singleSelection="true">
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chip_weight"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="体重" />
+                            android:text="@string/weight" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chip_length"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="体長" />
+                            android:text="@string/length" />
+
+                    </com.google.android.material.chip.ChipGroup>
+
+                    <TextView
+                        android:id="@+id/textView10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="横軸切替"
+                        android:textSize="18sp" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chip_group_axis"
+                        android:layout_width="match_parent"
+                        app:selectionRequired="true"
+                        android:layout_height="wrap_content"
+                        app:singleSelection="true">
 
                         <com.google.android.material.chip.Chip
-                            android:id="@+id/chip_free"
+                            android:id="@+id/chip_day"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="フリー" />
+                            android:text="@string/time" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_record"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/recorded" />
 
                     </com.google.android.material.chip.ChipGroup>
 
@@ -100,34 +152,25 @@
                         android:id="@+id/textView9"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Filter 2"
+                        android:text="表示するペット"
                         android:textSize="18sp" />
 
                     <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/chip_group_names"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chip_1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Chip1" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chip_2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Chip2" />
-
-                        <com.google.android.material.chip.Chip
-                            android:id="@+id/chip_3"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Chip3" />
-
                     </com.google.android.material.chip.ChipGroup>
 
+                    <com.google.android.material.button.MaterialButton
+                        android:layout_width="wrap_content"
+                        android:id="@+id/chart_button_submit"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="適用" />
+
                 </LinearLayout>
+
             </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
@@ -135,18 +178,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:background="@color/secondaryColor"
-                android:gravity="center"
                 android:elevation="6dp"
+                android:gravity="center"
                 android:orientation="horizontal"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp">
 
                 <TextView
+                    android:id="@+id/chart_filter_text"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Filters"
-                    android:textSize="24sp" />
+                    android:singleLine="true"
+                    android:text="@{viewModel.filterString}"
+                    android:textSize="16sp" />
 
                 <ImageView
                     android:id="@+id/chart_filter_icon"

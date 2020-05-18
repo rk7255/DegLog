@@ -5,6 +5,7 @@ import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.DiaryRepository
 import jp.ryuk.deglog.data.ProfileDao
 import jp.ryuk.deglog.data.ProfileRepository
+import jp.ryuk.deglog.ui.chart.ChartViewModelFactory
 import jp.ryuk.deglog.ui.dashboard.DashboardViewModelFactory
 import jp.ryuk.deglog.ui.diarydetail.DiaryDetailViewModelFactory
 import jp.ryuk.deglog.ui.diarylist.DiaryListViewModelFactory
@@ -69,5 +70,11 @@ object InjectorUtil {
     fun provideProfilesViewModelFactory(context: Context): ProfilesViewModelFactory {
         val profileDao = getProfileDao(context)
         return ProfilesViewModelFactory(profileDao)
+    }
+
+    fun provideChartViewModelFactory(context: Context): ChartViewModelFactory {
+        val diaryDao = getDiaryDao(context)
+        val profileDao = getProfileDao(context)
+        return ChartViewModelFactory(diaryDao, profileDao)
     }
 }

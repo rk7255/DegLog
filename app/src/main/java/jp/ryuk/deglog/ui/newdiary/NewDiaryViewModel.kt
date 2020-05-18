@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
+import kotlin.random.Random
 
 
 class NewDiaryViewModel(
@@ -136,6 +137,45 @@ class NewDiaryViewModel(
         } else {
             _submitError.value = true
         }
+    }
+
+    fun onAddDebug() {
+        var w = 100
+        var l = 100
+
+        val dates = mutableListOf<Long>()
+        for (i in 1..100) {
+            val y = Random.nextInt(Random.nextInt(2010, 2020), Random.nextInt(2020, 2030))
+            val m = Random.nextInt(1, 12)
+            val d = Random.nextInt(1, 28)
+            val c = Calendar.getInstance()
+            c.set(y, m, d)
+            dates.add(c.timeInMillis)
+        }
+        dates.sorted().forEach {
+            w += Random.nextInt(0, 30)
+            l += Random.nextInt(0, 10)
+
+            val diary = Diary(
+                date = it,
+                name = name.value!!,
+                weight = w.toFloat(),
+                length = l.toFloat()
+            )
+            insertDiary(diary)
+        }
+    }
+
+    fun onDeleteDebug() {
+        deleteAll(name.value!!)
+    }
+
+    private suspend fun delete(name: String) {
+        withContext(Dispatchers.IO) { diaryDatabase.deleteAll(name) }
+    }
+
+    private fun deleteAll(name: String) {
+        viewModelScope.launch { delete(name) }
     }
 
     private fun isValid(): Boolean = !name.value.isNullOrEmpty()

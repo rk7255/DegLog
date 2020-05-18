@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/bottom_nav_height"
             android:background="?attr/colorPrimaryDark"
-            android:elevation="8dp"
+            android:elevation="10dp"
             app:itemHorizontalTranslationEnabled="false"
             app:itemIconSize="@dimen/bottom_nav_icon_height"
             app:itemIconTint="@color/primaryTextColor"
