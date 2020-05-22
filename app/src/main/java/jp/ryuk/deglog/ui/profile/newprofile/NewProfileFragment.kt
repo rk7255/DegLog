@@ -2,8 +2,8 @@ package jp.ryuk.deglog.ui.profile.newprofile
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +17,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import jp.ryuk.deglog.R
+import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.databinding.FragmentNewProfileBinding
 import jp.ryuk.deglog.utilities.*
 import java.util.*
@@ -122,9 +123,15 @@ class NewProfileFragment : Fragment() {
             })
 
             selectedColor.observe(viewLifecycleOwner, Observer {
-                val colorId = colorSelector(it)
-                if (colorId != null) {
-                    binding.viewColor.setBackgroundResource(colorId)
+                val colorMap = getColorMap(requireContext())
+                val colorKey = colorSelector(it)
+                val colorLabel = colorMap[colorKey]
+                binding.viewColor.setBackgroundColor(colorLabel!!)
+            })
+
+            confirmUpdate.observe(viewLifecycleOwner, Observer {
+                if (it != null) {
+                    confirmDialogBuilder(requireContext(), it).show()
                 }
             })
         }
@@ -133,25 +140,6 @@ class NewProfileFragment : Fragment() {
 
         return binding.root
     }
-
-//    private fun getButtons(): ArrayList<MaterialButton> {
-//        val views = binding.labelColorContainer
-//        val chips = ArrayList<MaterialButton>()
-//        findButtons(views, chips)
-//        return chips
-//    }
-//
-//    private fun findButtons(view: View, chips: ArrayList<MaterialButton>) {
-//        if (MaterialButton::class.java.isInstance(view)) {
-//            chips.add(view as MaterialButton)
-//        }
-//
-//        if (view is ViewGroup) {
-//            for (i in 0 until view.childCount) {
-//                findButtons(view.getChildAt(i), chips)
-//            }
-//        }
-//    }
 
     private fun pop() {
         this.findNavController().navigate(
@@ -163,6 +151,16 @@ class NewProfileFragment : Fragment() {
         this.findNavController().navigate(
             NewProfileFragmentDirections.actionNewProfileFragmentToDiaryFragment()
         )
+    }
+
+    private fun confirmDialogBuilder(context: Context, profile: Profile): MaterialAlertDialogBuilder {
+        return MaterialAlertDialogBuilder(context)
+            .setTitle("名前を変更します")
+            .setMessage("過去に記録した日誌データにも反映されます\n名前が登録済みの場合は上書きされます")
+            .setNeutralButton(getString(R.string.dialog_cancel), null)
+            .setPositiveButton(getString(R.string.dialog_ok)) { _, _ ->
+                viewModel.updateAndChange(profile)
+            }
     }
 
     private fun unitDialogBuilder(

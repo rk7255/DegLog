@@ -10,102 +10,63 @@
             type="jp.ryuk.deglog.data.Diary" />
 
         <variable
-            name="date"
-            type="String" />
-
-        <variable
             name="clickListener"
-            type="jp.ryuk.deglog.adapters.DetailListListener" />
+            type="jp.ryuk.deglog.adapters.DiaryListListener" />
 
         <variable
-            name="suffixWeight"
-            type="String" />
-
-        <variable
-            name="suffixLength"
-            type="String" />
-
-        <variable
-            name="hasComment"
+            name="hasMemo"
             type="Boolean" />
     </data>
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorBackground"
-        android:elevation="0dp"
-        android:onClick="@{() -> clickListener.onClick(diary)}">
-
+        android:gravity="center"
+        android:onClick="@{() -> clickListener.onClick(diary.id)}"
+        android:orientation="horizontal"
+        android:padding="8dp">
 
         <TextView
             android:id="@+id/detail_list_date"
-            android:text="@{date}"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:gravity="center"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:layout_weight="2"
+            app:date="@{diary.date}"
             tools:text="10日 12:30" />
 
         <TextView
             android:id="@+id/detail_list_weight"
-            number="@{diary.weight}"
-            suffix="@{suffixWeight}"
-            android:layout_width="wrap_content"
+            app:weight="@{diary.weight}"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_weight="3"
+            android:gravity="center"
             android:textAppearance="@style/Deglog.Dashboard.Main1"
-            android:layout_marginBottom="8dp"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/detail_list_weight_guideline"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0"
             tools:text="3000 kg" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/detail_list_weight_guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
-
-        <ImageView
-            android:id="@+id/detail_list_has_commnet"
-            isGone="@{hasComment}"
-            android:layout_width="6dp"
-            android:layout_height="6dp"
-            android:layout_marginEnd="24dp"
-            android:tint="#FFC107"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_point"
-            android:contentDescription="@string/icon_of_has_memo" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/detail_list_length_guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.8" />
 
         <TextView
             android:id="@+id/detail_list_length"
-            android:layout_width="wrap_content"
-            number="@{diary.length}"
-            android:textAppearance="@style/Deglog.Dashboard.Main1"
-            suffix="@{suffixLength}"
+            app:weight="@{diary.length}"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:textAppearance="@style/Deglog.Dashboard.Main1"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/detail_list_length_guideline"
-            app:layout_constraintTop_toTopOf="parent"
             tools:text="1000 mm" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <TextView
+            app:isVisible="@{hasMemo}"
+            android:id="@+id/detail_list_has_comment"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:text="@string/dot"
+            android:textSize="18sp"
+            android:textColor="@color/orange"
+            android:gravity="center" />
+
+    </LinearLayout>
 
 </layout>

@@ -2,21 +2,23 @@ package jp.ryuk.deglog.ui.diarylist
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
+import android.view.ViewTreeObserver
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.paging.PagedList
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.adapters.DetailListAdapter
-import jp.ryuk.deglog.adapters.DetailListListener
+import jp.ryuk.deglog.adapters.DiaryListListener
 import jp.ryuk.deglog.adapters.DiaryStickerDecoration
 import jp.ryuk.deglog.databinding.FragmentDiaryListBinding
 import jp.ryuk.deglog.utilities.InjectorUtil
-
+import jp.ryuk.deglog.utilities.deg
 
 class DiaryListFragment : Fragment() {
 
@@ -28,13 +30,13 @@ class DiaryListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_diary_list, container, false
-        )
-
+        binding = FragmentDiaryListBinding.inflate(inflater, container, false)
         args = DiaryListFragmentArgs.fromBundle(requireArguments())
-        viewModel = createViewModel(requireContext(), args.name)
         binding.appBarDetailList.title = args.name + getString(R.string.title_diary_detail_at_name)
+
+        viewModel = createViewModel(requireContext(), args.name)
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
 
         when (args.from) {
             ListKey.FROM_WEIGHT -> viewModel.checkedWeight.value = true
@@ -62,28 +64,33 @@ class DiaryListFragment : Fragment() {
         }
 
         viewModel.diaries.observe(viewLifecycleOwner, Observer {
+            if (it != null) {
                 viewModel.diariesLoaded.value = true
                 viewModel.sectionLoaded()
+            } else {
+                viewModel.diariesLoaded.value = false
+            }
         })
 
         viewModel.profile.observe(viewLifecycleOwner, Observer {
             if (it != null) {
                 viewModel.profileLoaded.value = true
                 viewModel.sectionLoaded()
+            } else {
+                viewModel.profileLoaded.value = false
             }
         })
 
-        viewModel.filteredDiaries.observe(viewLifecycleOwner, Observer {
+        val recyclerView = binding.detailListRecyclerView
+        recyclerView.itemAnimator?.changeDuration = 0
+        viewModel.diaryList.observe(viewLifecycleOwner, Observer {
             if (it.isNullOrEmpty()) {
                 binding.hasData = false
             } else {
                 binding.hasData = true
-                val recyclerView = binding.detailListRecyclerView
                 if (recyclerView.itemDecorationCount > 0) recyclerView.removeItemDecorationAt(0)
                 val adapter = DetailListAdapter(
-                    DetailListListener { id -> onClick(id) },
-                    viewModel.weightUnit.value ?: "g",
-                    viewModel.lengthUnit.value ?: "mm"
+                    DiaryListListener { id -> onClick(id) }
                 )
                 recyclerView.adapter = adapter
                 adapter.submitList(it)
@@ -95,10 +102,12 @@ class DiaryListFragment : Fragment() {
         return binding.root
     }
 
+
     private fun onClick(id: Long) {
         this.findNavController().navigate(
             DiaryListFragmentDirections
-                .actionDiaryListFragmentToDiaryDetailFragment(id, args.name))
+                .actionDiaryListFragmentToDiaryDetailFragment(id, args.name)
+        )
     }
 
     private fun createViewModel(context: Context, name: String): DiaryListViewModel {

@@ -2,6 +2,7 @@ package jp.ryuk.deglog.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import androidx.paging.DataSource
 
 @Dao
 interface DiaryDao {
@@ -18,16 +19,19 @@ interface DiaryDao {
     fun deleteAll(name: String)
 
     @Query("SELECT * FROM diary_table WHERE id = :id")
-    fun getDiary(id: Long) : LiveData<Diary?>
+    fun getDiary(id: Long): LiveData<Diary?>
 
     @Query("SELECT * FROM diary_table WHERE name = :name ORDER BY date DESC")
-    fun getDiaries(name: String) : LiveData<List<Diary>>
+    fun getDiaries(name: String): LiveData<List<Diary>>
+
+    @Query("SELECT * FROM diary_table WHERE name = :name ORDER BY date DESC")
+    fun getDiariesForPaging(name: String): DataSource.Factory<Int, Diary>
 
     @Query("SELECT * FROM diary_table ORDER BY date DESC")
-    fun getAllDiaries() : LiveData<List<Diary>>
+    fun getAllDiaries(): LiveData<List<Diary>>
 
     @Query("SELECT DISTINCT name FROM diary_table ORDER BY name")
-    fun getNames() : LiveData<List<String>>
+    fun getNames(): LiveData<List<String>>
 
     @Query("UPDATE diary_table SET success = :success WHERE id = :id")
     fun success(id: Long, success: Boolean)

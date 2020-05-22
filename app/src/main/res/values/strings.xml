@@ -76,6 +76,7 @@
     <string name="dialog_tag">dialogTag</string>
     <string name="dialog_yes">はい</string>
     <string name="dialog_no">いいえ</string>
+    <string name="dialog_ok">OK</string>
     <string name="dialog_submit">登録</string>
     <string name="dialog_success">完了</string>
     <string name="dialog_cancel">キャンセル</string>
@@ -124,6 +125,7 @@
     <string name="time">時間</string>
     <string name="age">年齢</string>
     <string name="recorded">記録順</string>
+    <string name="dot">・</string>
 
     <string-array name="types">
         <item>@string/type_small</item>

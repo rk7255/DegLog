@@ -1,8 +1,10 @@
 package jp.ryuk.deglog.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -10,6 +12,8 @@ import jp.ryuk.deglog.R
 import jp.ryuk.deglog.data.Profile
 import jp.ryuk.deglog.databinding.ItemProfilesBinding
 import jp.ryuk.deglog.utilities.colorSelector
+import jp.ryuk.deglog.utilities.deg
+import jp.ryuk.deglog.utilities.getColorMap
 import jp.ryuk.deglog.utilities.iconSelector
 
 class ProfileAdapter(
@@ -32,17 +36,18 @@ class ProfileAdapter(
             binding.clickListener = clickListener
             binding.profileIcon.setImageResource(iconSelector(context, profile.type))
 
-            val color = when (profile.gender) {
-                "オス" -> context.getColor(R.color.blue)
-                "メス" -> context.getColor(R.color.pink)
-                else -> context.getColor(R.color.gray)
-            }
-            binding.profileGender.setTextColor(color)
+            val colorMap = getColorMap(context)
 
-            val colorId = colorSelector(profile.color)
-            if (colorId != null) {
-                binding.profileViewColor.setBackgroundResource(colorId)
+            val colorGender = when (profile.gender) {
+                "オス" -> colorMap["blue"]
+                "メス" -> colorMap["red"]
+                else -> colorMap["gray"]
             }
+            binding.profileGender.setTextColor(colorGender!!)
+
+            val colorKey = colorSelector(profile.color)
+            val colorLabel = colorMap[colorKey]
+            binding.profileViewColor.setBackgroundColor(colorLabel!!)
 
             binding.executePendingBindings()
         }

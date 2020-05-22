@@ -46,6 +46,9 @@ class NewProfileViewModel(
     val selectedColor = MediatorLiveData<Int?>()
     fun onSelectColor(select: Int) { selectedColor.value = select }
 
+    private var _confirmUpdate = MutableLiveData<Profile?>()
+    val confirmUpdate: LiveData<Profile?> get() = _confirmUpdate
+
     init {
         name.value = selectedName
         weightUnit.value = "g"
@@ -56,7 +59,7 @@ class NewProfileViewModel(
         isNew = false
         birthday = profile.value?.birthday
         birthday?.let { birthdayString.value = convertLongToDateStringInTime(it) }
-        gender.value = profile.value?.gender
+        gender.value = profile.value?.gender ?: "不明"
         type.value = profile.value?.type
         weightUnit.value = profile.value!!.weightUnit
         lengthUnit.value = profile.value!!.lengthUnit
@@ -68,7 +71,7 @@ class NewProfileViewModel(
             val profile = Profile(
                 name = name.value!!,
                 type = type.value,
-                gender = gender.value,
+                gender = gender.value ?: "不明",
                 birthday = birthday,
                 weightUnit = weightUnit.value ?: "g",
                 lengthUnit = lengthUnit.value ?: "mm",
@@ -76,19 +79,25 @@ class NewProfileViewModel(
             )
             if (isNew) {
                 insertProfile(profile)
+                _submit.value = true
             } else {
                 if (name.value == selectedName) {
                     updateProfile(profile)
+                    _submit.value = true
                 } else {
-                    insertProfile(profile)
-                    changeProfile(selectedName, profile.name)
-                    isNameChanged = true
+                    _confirmUpdate.value = profile
                 }
             }
-            _submit.value = true
         } else {
             _submitError.value = true
         }
+    }
+
+    fun updateAndChange(profile: Profile) {
+        insertProfile(profile)
+        changeProfile(selectedName, profile.name)
+        isNameChanged = true
+        _submit.value = true
     }
 
     private fun isValid(): Boolean = !name.value.isNullOrEmpty()

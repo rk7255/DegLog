@@ -5,6 +5,7 @@ import android.content.Context
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.core.content.ContextCompat
 import jp.ryuk.deglog.R
 
 // デバッグ用 ログ解析タグ
@@ -17,35 +18,33 @@ fun hideKeyboard(activity: Activity, view: View, event: MotionEvent?): Boolean {
     return view.onTouchEvent(event)
 }
 
-fun colorSelector(color: Int?): Int? {
-    return when (color) {
-        0 -> R.color.pink
-        1 -> R.color.blue
-        2 -> R.color.green
-        3 -> R.color.yellow
-        4 -> R.color.orange
-        5 -> R.color.purple
-        6 -> R.color.primaryColor
-        7 -> R.color.gray
-        else -> null
-    }
+fun getColorMap(context: Context): Map<String, Int> {
+    val colorMap = mutableMapOf<String, Int>()
+    colorMap["red"] = ContextCompat.getColor(context, R.color.pink)
+    colorMap["blue"] = ContextCompat.getColor(context, R.color.blue)
+    colorMap["green"] = ContextCompat.getColor(context, R.color.green)
+    colorMap["yellow"] = ContextCompat.getColor(context, R.color.yellow)
+    colorMap["orange"] = ContextCompat.getColor(context, R.color.orange)
+    colorMap["purple"] = ContextCompat.getColor(context, R.color.purple)
+    colorMap["brown"] = ContextCompat.getColor(context, R.color.primaryColor)
+    colorMap["gray"] = ContextCompat.getColor(context, R.color.gray)
+    colorMap["none"] = ContextCompat.getColor(context, R.color.primaryTextColor)
+    return colorMap
 }
 
-fun colorSelectorRGB(color: Int?): String {
+fun colorSelector(color: Int?): String {
     return when (color) {
-        0 -> "#F08279"
-        1 -> "#3AB6EF"
-        2 -> "#9AFF6E"
-        3 -> "#FFFE77"
-        4 -> "#FFBF5B"
-        5 -> "#D768E8"
-        6 -> "#C6AA80"
-        7 -> "#AEAEAE"
-        else -> "#3D332A"
+        0 -> "red"
+        1 -> "blue"
+        2 -> "green"
+        3 -> "yellow"
+        4 -> "orange"
+        5 -> "purple"
+        6 -> "brown"
+        7 -> "gray"
+        else -> "none"
     }
 }
-
-
 
 fun iconSelector(context: Context, type: String?): Int {
     return when (type) {

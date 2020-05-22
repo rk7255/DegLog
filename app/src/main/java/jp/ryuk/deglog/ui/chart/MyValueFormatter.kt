@@ -13,7 +13,7 @@ class MyValueFormatter : ValueFormatter() {
     }
 
     override fun getAxisLabel(value: Float, axis: AxisBase): String {
-        if (value < Int.MAX_VALUE) return ""
+        if (value < Int.MAX_VALUE) return value.toInt().toString()
 
         val year = value.toLong().getYear()
         val month = value.toLong().getMonth()

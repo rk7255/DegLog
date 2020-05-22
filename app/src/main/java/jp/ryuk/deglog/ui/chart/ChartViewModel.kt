@@ -4,6 +4,7 @@ import android.graphics.Color
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Description
 import com.github.mikephil.charting.components.Legend
@@ -15,7 +16,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import jp.ryuk.deglog.data.Diary
 import jp.ryuk.deglog.data.DiaryDao
 import jp.ryuk.deglog.data.ProfileDao
-import jp.ryuk.deglog.utilities.colorSelectorRGB
+import jp.ryuk.deglog.utilities.colorSelector
 import java.lang.StringBuilder
 import kotlin.collections.ArrayList
 
@@ -35,6 +36,8 @@ class ChartViewModel(
 
     var hasDiaries = MutableLiveData<Boolean>()
     var filterString = MediatorLiveData<String>()
+
+    var colorMap = mapOf<String, Int>()
 
     lateinit var chart: LineChart
 
@@ -79,7 +82,7 @@ class ChartViewModel(
         val diaries = diaries.value!!.sortedBy { it.date }
         val sets = arrayListOf<ILineDataSet>()
 
-        names.forEachIndexed { index, name ->
+        names.sorted().forEachIndexed { index, name ->
             var diariesByName = diaries.filter { it.name == name }
 
             // グラフ切替
@@ -104,16 +107,15 @@ class ChartViewModel(
             }
 
             val profile = profiles.value!!.find { it.name == name }
-            val rgb = colorSelectorRGB(profile?.color)
+            val colorKey = colorSelector(profile?.color)
 
             val set = LineDataSet(entries, name)
             set.apply {
                 setDrawValues(false)
                 lineWidth = 4f
                 circleRadius = 4f
-                color = Color.parseColor(rgb)
-                setCircleColor(Color.parseColor(rgb))
-
+                color = colorMap[colorKey] ?: error("")
+                setCircleColor(colorMap[colorKey] ?: error(""))
             }
             sets.add(set)
         }
@@ -129,7 +131,7 @@ class ChartViewModel(
             legend.apply {
                 isEnabled = true
                 horizontalAlignment = Legend.LegendHorizontalAlignment.LEFT
-                verticalAlignment = Legend.LegendVerticalAlignment.BOTTOM
+                verticalAlignment = Legend.LegendVerticalAlignment.TOP
                 orientation = Legend.LegendOrientation.HORIZONTAL
                 setDrawInside(false)
                 yOffset = 4f
@@ -140,7 +142,8 @@ class ChartViewModel(
                 isDoubleTapToZoomEnabled = false
                 setTouchEnabled(true)
                 setDrawBorders(false)
-                animateY(200)
+                animateX(600, Easing.EaseInOutCubic)
+                animateY(400, Easing.EaseInOutCubic)
                 val desc = Description()
                 desc.text = ""
                 description = desc

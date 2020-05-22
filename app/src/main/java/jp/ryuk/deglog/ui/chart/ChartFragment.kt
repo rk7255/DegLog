@@ -3,10 +3,12 @@ package jp.ryuk.deglog.ui.chart
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +19,8 @@ import jp.ryuk.deglog.R
 import jp.ryuk.deglog.databinding.FragmentChartBinding
 import jp.ryuk.deglog.ui.dashboard.DashboardFragmentDirections
 import jp.ryuk.deglog.utilities.InjectorUtil
+import jp.ryuk.deglog.utilities.deg
+import jp.ryuk.deglog.utilities.getColorMap
 import org.json.JSONArray
 
 const val KEY = "shared_pref"
@@ -33,6 +37,9 @@ class ChartFragment : Fragment() {
     ): View? {
         binding = FragmentChartBinding.inflate(inflater, container, false)
         viewModel = createViewModel(requireContext())
+
+        val colorMap = getColorMap(requireContext())
+        viewModel.colorMap = colorMap
 
         binding.viewModel = viewModel
         viewModel.chart = binding.chartChart
@@ -89,7 +96,7 @@ class ChartFragment : Fragment() {
         if (names.isNotEmpty()) {
             val inflater = LayoutInflater.from(context)
 
-            names.forEach { item ->
+            names.sorted().forEach { item ->
                 @SuppressLint("InflateParams")
                 val chip = inflater.inflate(R.layout.item_chip, null, false) as Chip
                 chip.apply {

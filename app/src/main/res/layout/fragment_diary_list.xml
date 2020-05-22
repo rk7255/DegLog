@@ -12,6 +12,7 @@
         <variable
             name="hasData"
             type="Boolean" />
+
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -105,23 +106,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="@string/nothing_data" />
+                android:text="@string/nothing_data"
+                tools:visibility="gone" />
 
-            <androidx.core.widget.NestedScrollView
-                isGone="@{!hasData}"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/detail_list_recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fitsSystemWindows="true">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/detail_list_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/item_detail_list" />
-
-            </androidx.core.widget.NestedScrollView>
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_detail_list" />
 
         </LinearLayout>
 
