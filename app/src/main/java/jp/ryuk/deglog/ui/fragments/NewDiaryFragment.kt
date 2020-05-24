@@ -45,7 +45,7 @@ class NewDiaryFragment : Fragment() {
         )
 
         when (args.mode) {
-            "edit" -> {
+            NavMode.EDIT -> {
                 binding.newDiaryTitle.text = getString(R.string.title_edit_title)
                 binding.newDiaryEditName.isEnabled = false
             }

@@ -126,7 +126,7 @@ class ChartFragment : Fragment() {
     }
 
     private fun saveSharedPreferences() {
-        val sharedPreferences = requireContext().getSharedPreferences(KEY, Context.MODE_PRIVATE)
+        val sharedPreferences = requireContext().getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
         val chips = getChips()
@@ -142,7 +142,7 @@ class ChartFragment : Fragment() {
     }
 
     private fun loadSharedPreferences(): ArrayList<String> {
-        val sharedPreferences = requireContext().getSharedPreferences(KEY, Context.MODE_PRIVATE)
+        val sharedPreferences = requireContext().getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
         val jsonArray = JSONArray(sharedPreferences.getString(KEY_CHECKED, "[]"))
         val array = arrayListOf<String>()
         for (i in 0 until jsonArray.length()) {

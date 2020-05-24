@@ -10,7 +10,7 @@ import java.util.*
 
 @Entity(tableName = PROFILE_TABLE)
 data class Profile (
-    @PrimaryKey var name: String = "",
+    @PrimaryKey var name: String,
     var type: String? = null,
     var gender: String? = null,
     var birthday: Long? = null,

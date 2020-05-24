@@ -5,7 +5,31 @@ const val PROFILE_TABLE = "profile_table"
 const val TODO_TABLE = "todo_table"
 const val DATABASE_NAME = "app_database"
 
-const val KEY = "shared_pref"
+const val SHARED_PREF_KEY = "shared_pref"
+const val KEY_DASHBOARD = "dashboard"
 const val KEY_CHECKED = "checked"
 
-const val deg = "DEBUG"
+const val deg = "DEGLOG_DEBUG"
+
+class WhereClicked {
+    companion object {
+        const val UNKNOWN = 0
+        const val ICON = 1
+        const val NAME = 2
+        const val NOTIFY = 3
+        const val WEIGHT = 4
+        const val LENGTH = 5
+        const val TODO = 6
+    }
+}
+
+class NavMode {
+    companion object {
+        const val NEW = 0
+        const val EDIT = 1
+        const val DASHBOARD = 2
+
+        const val FROM_WEIGHT = 0
+        const val FROM_LENGTH = 1
+    }
+}

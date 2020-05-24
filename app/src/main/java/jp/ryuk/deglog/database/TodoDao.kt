@@ -1,5 +1,6 @@
 package jp.ryuk.deglog.database
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -14,8 +15,11 @@ interface TodoDao {
     fun getTodo(id: Long): Todo
 
     @Query("SELECT * FROM todo_table WHERE name = :name")
-    fun getTodoList(name: String): List<Todo>
+    fun getTodoList(name: String): LiveData<List<Todo>>
 
     @Query("SELECT * FROM todo_table")
-    fun getAllTodo(): List<Todo>
+    fun getAllTodo(): LiveData<List<Todo>>
+
+    @Query("UPDATE todo_table SET done = :done WHERE id = :id")
+    suspend fun done(id: Long, done: Boolean)
 }

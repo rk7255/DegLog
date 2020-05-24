@@ -6,7 +6,7 @@
     <data>
         <variable
             name="todo"
-            type="jp.ryuk.deglog.ui.data.Todo" />
+            type="jp.ryuk.deglog.database.Todo" />
 
         <variable
             name="clickListener"
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/todo_content"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -30,20 +30,19 @@
             android:layout_marginEnd="8dp"
             android:textAppearance="@style/Deglog.Dashboard.Body"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/textView2"
+            app:layout_constraintEnd_toStartOf="@+id/todo_date"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/todo_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@{todo.time}"
-            android:textColor="@{todo.alert ? @color/pink : @color/primaryTextColor}"
+            android:textAppearance="@style/Deglog.Dashboard.Body"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/textView"
+            app:layout_constraintBottom_toBottomOf="@+id/todo_content"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="@+id/todo_content"
             tools:text="2日前" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

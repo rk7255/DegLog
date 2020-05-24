@@ -33,11 +33,10 @@ class DiaryListViewModel(
     }
 
     fun applyFilter() {
-        var newDiaries = diaries.value
-        newDiaries = newDiaries!!.filter { it.todo == null }
+        var newDiaries = diaries.value!!
         if (checkedWeight.value == true) newDiaries = newDiaries.filter { it.weight != null }
         if (checkedLength.value == true) newDiaries = newDiaries.filter { it.length != null }
-        if (checkedMemo.value == true) newDiaries = newDiaries.filter { it.memo != null }
+        if (checkedMemo.value == true) newDiaries = newDiaries.filter { it.note != null }
         diaryList.value = newDiaries
     }
 

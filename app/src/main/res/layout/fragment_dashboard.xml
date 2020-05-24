@@ -10,12 +10,8 @@
             type="jp.ryuk.deglog.ui.viewmodels.DashboardViewModel" />
 
         <variable
-            name="key"
-            type="jp.ryuk.deglog.ui.data.ListKey" />
-
-        <variable
-            name="call"
-            type="jp.ryuk.deglog.ui.data.OnCallKey" />
+            name="where"
+            type="jp.ryuk.deglog.utilities.WhereClicked" />
 
     </data>
 
@@ -39,50 +35,49 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <!-- Section Loading -->
-        <LinearLayout
-            isGone="@{viewModel.allLoaded}"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/colorBackground"
-            android:elevation="4dp"
-            android:fitsSystemWindows="true"
-            android:gravity="center"
-            android:orientation="vertical"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            tools:visibility="gone">
+        <!--        &lt;!&ndash; Section Loading &ndash;&gt;-->
+        <!--        <LinearLayout-->
+        <!--            isGone="@{viewModel.allLoaded}"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent"-->
+        <!--            android:background="@color/colorBackground"-->
+        <!--            android:elevation="4dp"-->
+        <!--            android:fitsSystemWindows="true"-->
+        <!--            android:gravity="center"-->
+        <!--            android:orientation="vertical"-->
+        <!--            app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+        <!--            tools:visibility="gone">-->
 
-            <ProgressBar
-                android:id="@+id/db_progress"
-                style="?android:attr/progressBarStyle"
-                isGone="@{viewModel.allLoaded}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp" />
+        <!--            <ProgressBar-->
+        <!--                android:id="@+id/db_progress"-->
+        <!--                style="?android:attr/progressBarStyle"-->
+        <!--                isGone="@{viewModel.allLoaded}"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_margin="16dp" />-->
 
-            <TextView
-                style="@style/LoadingText"
-                isGone="@{viewModel.diariesLoaded}"
-                android:text="@string/load_diaries"
-                android:textAppearance="@style/Deglog.Dashboard.Body" />
+        <!--            <TextView-->
+        <!--                style="@style/LoadingText"-->
+        <!--                isGone="@{viewModel.diariesLoaded}"-->
+        <!--                android:text="@string/load_diaries"-->
+        <!--                android:textAppearance="@style/Deglog.Dashboard.Body" />-->
 
-            <TextView
-                style="@style/LoadingText"
-                isGone="@{viewModel.profilesLoaded}"
-                android:text="@string/load_profiles"
-                android:textAppearance="@style/Deglog.Dashboard.Body" />
+        <!--            <TextView-->
+        <!--                style="@style/LoadingText"-->
+        <!--                isGone="@{viewModel.profilesLoaded}"-->
+        <!--                android:text="@string/load_profiles"-->
+        <!--                android:textAppearance="@style/Deglog.Dashboard.Body" />-->
 
-            <TextView
-                style="@style/LoadingText"
-                isGone="@{viewModel.namesLoaded}"
-                android:text="@string/load_names"
-                android:textAppearance="@style/Deglog.Dashboard.Body" />
+        <!--            <TextView-->
+        <!--                style="@style/LoadingText"-->
+        <!--                isGone="@{viewModel.namesLoaded}"-->
+        <!--                android:text="@string/load_names"-->
+        <!--                android:textAppearance="@style/Deglog.Dashboard.Body" />-->
 
-        </LinearLayout>
+        <!--        </LinearLayout>-->
 
         <!-- Section Dashboard -->
         <LinearLayout
-            isGone="@{!viewModel.allLoaded}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/primaryColor"
@@ -104,7 +99,7 @@
                     android:layout_marginStart="16dp"
                     android:background="@color/colorBackground"
                     android:elevation="4dp"
-                    android:onClick="@{() -> viewModel.onCall(call.PERSONAL_ICON)}"
+                    android:onClick="@{() -> viewModel.onClick(where.ICON)}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@id/db_personal_icon"
                     app:layout_constraintStart_toStartOf="parent"
@@ -119,7 +114,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginEnd="16dp"
                     android:background="@color/colorBackground"
-                    android:onClick="@{() -> viewModel.onCall(call.PERSONAL_CONTAINER)}"
+                    android:onClick="@{() -> viewModel.onClick(where.NAME)}"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="6dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -177,9 +172,8 @@
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/db_notify_container"
                         style="@style/DashboardContainer"
-                        isGone="@{!viewModel.hasNotify}"
                         android:layout_margin="16dp"
-                        android:onClick="@{() -> viewModel.onCall(call.NOTIFY_CONTAINER)}"
+                        android:onClick="@{() -> viewModel.onClick(where.NOTIFY)}"
                         app:cardElevation="6dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -239,7 +233,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
-                        android:onClick="@{() -> viewModel.onCall(call.WEIGHT_CONTAINER)}"
+                        android:onClick="@{() -> viewModel.onClick(where.WEIGHT)}"
                         app:cardElevation="6dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -267,7 +261,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:gravity="center"
-                                android:text="@{viewModel.weight.latest}"
+                                android:text="@{viewModel.weightData.latest}"
                                 android:textAppearance="@style/Deglog.Dashboard.Main1"
                                 app:layout_constraintEnd_toStartOf="@+id/db_weight_latest_unit"
                                 app:layout_constraintStart_toStartOf="@+id/db_weight_title"
@@ -279,7 +273,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@{viewModel.weight.unit}"
+                                android:text="@{viewModel.weightData.unit}"
                                 android:textAppearance="@style/Deglog.Dashboard.Main2"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_weight_latest"
                                 app:layout_constraintEnd_toEndOf="@+id/db_weight_title"
@@ -300,9 +294,9 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@{viewModel.weight.prev}"
+                                android:text="@{viewModel.weightData.prev}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
-                                android:textColor="@{viewModel.weight.prevPlus ? @color/blue : @color/pink}"
+                                android:textColor="@{viewModel.weightData.plusPrev ? @color/blue : @color/pink}"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_weight_prev_title"
                                 app:layout_constraintEnd_toStartOf="@+id/db_weight_prev_unit"
                                 app:layout_constraintStart_toEndOf="@+id/db_weight_prev_title"
@@ -314,7 +308,7 @@
                                 android:id="@+id/db_weight_prev_unit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.weight.unit}"
+                                android:text="@{viewModel.weightData.unit}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_weight_prev"
                                 app:layout_constraintEnd_toEndOf="@+id/db_weight_latest_unit"
@@ -337,9 +331,9 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@{viewModel.weight.recent}"
+                                android:text="@{viewModel.weightData.recent}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
-                                android:textColor="@{viewModel.weight.recentPlus ? @color/blue : @color/pink}"
+                                android:textColor="@{viewModel.weightData.plusRecent ? @color/blue : @color/pink}"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_weight_recent_title"
                                 app:layout_constraintEnd_toStartOf="@+id/db_weight_recent_unit"
                                 app:layout_constraintStart_toEndOf="@+id/db_weight_recent_title"
@@ -350,7 +344,7 @@
                                 android:id="@+id/db_weight_recent_unit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.weight.unit}"
+                                android:text="@{viewModel.weightData.unit}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_weight_recent"
                                 app:layout_constraintEnd_toEndOf="@+id/db_weight_latest_unit"
@@ -372,7 +366,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:gravity="end"
-                                android:text="@{viewModel.weight.date}"
+                                android:text="@{viewModel.weightData.date}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 android:textSize="12sp"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -402,7 +396,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
-                        android:onClick="@{() -> viewModel.onCall(call.LENGTH_CONTAINER)}"
+                        android:onClick="@{() -> viewModel.onClick(where.LENGTH)}"
                         app:cardElevation="6dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -430,7 +424,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:gravity="center"
-                                android:text="@{viewModel.length.latest}"
+                                android:text="@{viewModel.lengthData.latest}"
                                 android:textAppearance="@style/Deglog.Dashboard.Main1"
                                 app:layout_constraintEnd_toStartOf="@+id/db_length_latest_unit"
                                 app:layout_constraintStart_toStartOf="@+id/db_length_title"
@@ -442,7 +436,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@{viewModel.length.unit}"
+                                android:text="@{viewModel.lengthData.unit}"
                                 android:textAppearance="@style/Deglog.Dashboard.Main2"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_length_latest"
                                 app:layout_constraintEnd_toEndOf="@+id/db_length_title"
@@ -463,9 +457,9 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@{viewModel.length.prev}"
+                                android:text="@{viewModel.lengthData.prev}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
-                                android:textColor="@{viewModel.length.prevPlus ? @color/blue : @color/pink}"
+                                android:textColor="@{viewModel.lengthData.plusPrev ? @color/blue : @color/pink}"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_length_prev_title"
                                 app:layout_constraintEnd_toStartOf="@+id/db_length_prev_unit"
                                 app:layout_constraintStart_toEndOf="@+id/db_length_prev_title"
@@ -477,7 +471,7 @@
                                 android:id="@+id/db_length_prev_unit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.length.unit}"
+                                android:text="@{viewModel.lengthData.unit}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_length_prev"
                                 app:layout_constraintEnd_toEndOf="@+id/db_length_latest_unit"
@@ -500,9 +494,9 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@{viewModel.length.recent}"
+                                android:text="@{viewModel.lengthData.recent}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
-                                android:textColor="@{viewModel.length.recentPlus ? @color/blue : @color/pink}"
+                                android:textColor="@{viewModel.lengthData.plusRecent ? @color/blue : @color/pink}"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_length_recent_title"
                                 app:layout_constraintEnd_toStartOf="@+id/db_length_recent_unit"
                                 app:layout_constraintStart_toEndOf="@+id/db_length_recent_title"
@@ -513,7 +507,7 @@
                                 android:id="@+id/db_length_recent_unit"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.length.unit}"
+                                android:text="@{viewModel.lengthData.unit}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 app:layout_constraintBottom_toBottomOf="@+id/db_length_recent"
                                 app:layout_constraintEnd_toEndOf="@+id/db_length_latest_unit"
@@ -535,7 +529,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:gravity="end"
-                                android:text="@{viewModel.length.date}"
+                                android:text="@{viewModel.lengthData.date}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 android:textSize="12sp"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -581,7 +575,7 @@
                                 style="@style/DashboardIcon"
                                 android:layout_marginEnd="16dp"
                                 android:contentDescription="@string/icon_of_todo"
-                                android:onClick="@{() -> viewModel.onCall(call.TODO_CONTAINER)}"
+                                android:onClick="@{() -> viewModel.onClick(where.TODO)}"
                                 android:src="@drawable/ic_todo"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toStartOf="@+id/db_todo_guideline"
@@ -605,7 +599,6 @@
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <TextView
-                                isGone="@{viewModel.hasTodo}"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
@@ -613,6 +606,7 @@
                                 android:gravity="center"
                                 android:text="@string/nothing_todo"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
+                                app:isGone="@{viewModel.hasTodoList}"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="@id/db_todo_guideline"
@@ -620,9 +614,9 @@
 
                             <androidx.recyclerview.widget.RecyclerView
                                 android:id="@+id/db_todo_recycler_view"
-                                isGone="@{!viewModel.hasTodo}"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                app:isGone="@{!viewModel.hasTodoList}"
                                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="@+id/db_todo_title"

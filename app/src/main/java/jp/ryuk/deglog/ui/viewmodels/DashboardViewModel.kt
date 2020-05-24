@@ -1,219 +1,140 @@
 package jp.ryuk.deglog.ui.viewmodels
 
-import android.graphics.Color
-import android.util.Log
-import androidx.lifecycle.*
-import com.github.mikephil.charting.charts.LineChart
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
+import android.content.Context
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import jp.ryuk.deglog.database.*
 import jp.ryuk.deglog.ui.data.Dashboard
-import jp.ryuk.deglog.ui.data.Todo
-import jp.ryuk.deglog.utilities.*
-import kotlinx.coroutines.Dispatchers
+import jp.ryuk.deglog.utilities.Converter
+import jp.ryuk.deglog.utilities.Utils
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.util.*
 import kotlin.math.absoluteValue
+import kotlin.math.min
 
-class DashboardViewModel(
-    private val diaryRepository: DiaryRepository,
+class DashboardViewModel internal constructor(
+    diaryRepository: DiaryRepository,
     profileRepository: ProfileRepository,
-    todoRepository: TodoRepository
+    private val todoRepository: TodoRepository
 ) : ViewModel() {
 
-    val diaries: LiveData<List<Diary>> = diaryRepository.getAllDiary()
-    val names: LiveData<List<String>> = diaryRepository.getNames()
-    val profiles: LiveData<List<Profile>> = profileRepository.getAllProfile()
-    var selected = MediatorLiveData<String?>()
-    var type = MutableLiveData<String?>()
+    val allDiary: LiveData<List<Diary>> = diaryRepository.getAllDiary()
+    val allProfile: LiveData<List<Profile>> = profileRepository.getAllProfile()
+    val allTodo: LiveData<List<Todo>> = todoRepository.getAllTodo()
+    val nameList: List<String> get() = allDiary.value?.map(Diary::name)?.distinct() ?: listOf()
+    var selected = ""
 
-    var allLoaded = MutableLiveData<Boolean>()
-    var diariesLoaded = MutableLiveData<Boolean>()
-    var profilesLoaded = MutableLiveData<Boolean>()
-    var namesLoaded = MutableLiveData<Boolean>()
+    /*
+     * onClick
+     */
+    val clicked = MutableLiveData<Int?>()
+    fun onClick(w: Int) { clicked.value = w }
+    fun doneClick() { clicked.value = null }
 
-    fun sectionLoaded() {
-        if (diariesLoaded.value == true
-            && profilesLoaded.value == true
-            && namesLoaded.value == true
-        ) {
-            allLoaded.value = true
-            changeDashboard()
-        }
+    /*
+     * TodoList
+     */
+    val todoList = MutableLiveData<List<Todo>>()
+    val hasTodoList = MutableLiveData<Boolean>()
+
+    fun setTodoList() {
+        val newTodoList = allTodo.value?.filter { it.name == selected && !it.done }
+        todoList.value = newTodoList
+        hasTodoList.value = !newTodoList.isNullOrEmpty()
     }
 
-    // onClick
-    private var _call = MutableLiveData<Int?>()
-    val call: LiveData<Int?> get() = _call
-    fun onCall(key: Int) {
-        _call.value = key
-    }
-
-    fun doneCall() {
-        _call.value = null
-    }
-
-    // Display Data
-    var weight = MediatorLiveData<Dashboard>()
-    var length = MediatorLiveData<Dashboard>()
-    var age = MediatorLiveData<String>()
-
-    var todoList = MediatorLiveData<List<Todo>>()
-    var hasTodo = MutableLiveData<Boolean>()
-    var hasNotify = MutableLiveData<Boolean>()
-
-    lateinit var chartWeight: LineChart
-    lateinit var chartLength: LineChart
-
-    fun changeDashboard() {
-        todoList.value = listOf()
-        hasTodo.value = false
-        hasNotify.value = false
-
-        if (!selected.value.isNullOrEmpty()) {
-            val filtered = diaries.value!!.filter { it.name == selected.value }
-            val profile = profiles.value!!.find { it.name == selected.value }
-
-            var weights = filtered.filter { it.weight != null }
-            if (weights.size >= 7) weights = weights.subList(0, 7)
-            var lengths = filtered.filter { it.length != null }
-            if (lengths.size >= 7) lengths = lengths.subList(0, 7)
-
-            val todos = filtered.filter { it.todo != null && it.success == false }
-            if (todos.isNotEmpty()) {
-                val list = mutableListOf<Todo>()
-                todos.forEach {
-                    val alert = it.success == false && hasAlert(it.date)
-                    hasNotify.value = alert
-
-                    val newTodo = Todo(
-                        id = it.id,
-                        time = convertLongToDateStringRelative(it.date),
-                        todo = it.todo!!,
-                        success = it.success!!,
-                        alert = alert
-                    )
-                    list.add(newTodo)
-                }
-                hasTodo.value = true
-                todoList.value = list
-            }
-
-            val newWeight = Dashboard()
-            if (weights.isNotEmpty()) {
-                val weightList = weights.mapNotNull(Diary::weight)
-                newWeight.unit = profile!!.weightUnit
-                newWeight.latest = latest(weightList, newWeight.unit)
-                newWeight.prev = diff(weightList, newWeight.unit, "prev")
-                newWeight.prevPlus = sign(weightList, "prev")
-                newWeight.recent = diff(weightList, newWeight.unit, "recent")
-                newWeight.recentPlus = sign(weightList, "recent")
-                newWeight.date = date(weights[0].date)
-            }
-
-            val newLength = Dashboard()
-            if (lengths.isNotEmpty()) {
-                val lengthList = lengths.mapNotNull(Diary::length)
-                newLength.unit = profile!!.lengthUnit
-                newLength.latest = latest(lengthList, newLength.unit)
-                newLength.prev = diff(lengthList, newLength.unit, "prev")
-                newLength.prevPlus = sign(lengthList, "prev")
-                newLength.recent = diff(lengthList, newLength.unit, "recent")
-                newLength.recentPlus = sign(lengthList, "recent")
-                newLength.date = date(lengths[0].date)
-            }
-
-            age.value = profile!!.getAge(Calendar.getInstance().timeInMillis)
-            weight.value = newWeight
-            length.value = newLength
-            type.value = profile.type
-            createLineChart(chartWeight, weights.mapNotNull(Diary::weight).reversed())
-            createLineChart(chartLength, lengths.mapNotNull(Diary::length).reversed())
-        }
-    }
-
-    private fun latest(dataList: List<Float>, suffix: String): String =
-        convertUnit(dataList[0], suffix, false)
-
-    private fun diff(list: List<Float>, suffix: String, mode: String): String {
-        val diff = when (mode) {
-            "prev" -> if (list.size < 2) list[0] - list.last() else list[0] - list[1]
-            "recent" -> list[0] - list.last()
-            else -> 0f
-        }
-        return when {
-            diff > 0 -> "+ ${convertUnit(diff.absoluteValue, suffix, false)}"
-            diff < 0 -> "- ${convertUnit(diff.absoluteValue, suffix, false)}"
-            else -> convertUnit(diff.absoluteValue, suffix, false)
-        }
-    }
-
-    private fun sign(list: List<Float>, mode: String): Boolean {
-        val diff = when (mode) {
-            "prev" -> if (list.size < 2) list[0] - list.last() else list[0] - list[1]
-            "recent" -> list[0] - list.last()
-            else -> 0f
-        }
-        return diff >= 0
-    }
-
-    private fun date(date: Long?): String {
-        if (date == null) return "記録なし"
-        return convertLongToDateString(date)
-    }
-
-    private fun createLineChart(chart: LineChart, data: List<Float>) {
-        chart.description.text = ""
-
-        val values = arrayListOf<Entry>()
-        data.forEachIndexed { index, value ->
-            val entry = Entry(index.toFloat(), value)
-            values.add(entry)
-        }
-        val valuesSet = LineDataSet(values, "")
-
-        // 描画
-        chart.data = LineData(valuesSet)
-        chart.invalidate()
-
-        // チャートの設定
-        valuesSet.apply {
-            lineWidth = 4f
-            setDrawValues(false)
-            circleRadius = 6f
-            color = Color.parseColor("#c6aa80")
-            setCircleColor(Color.parseColor("#c6aa80"))
-        }
-
-        chart.apply {
-            isEnabled = true
-            isDoubleTapToZoomEnabled = false
-            setTouchEnabled(false)
-            setDrawBorders(false)
-            animateX(0)
-            legend.isEnabled = false
-
-            // 軸の非表示
-            xAxis.isEnabled = false
-            axisLeft.isEnabled = false
-            axisRight.isEnabled = false
-        }
-    }
-
-    fun newTodo(text: String) {
-        val newDiary = Diary(
-            name = selected.value!!,
+    fun createTodo(name: String, text: String) {
+        val newTodo = Todo(
+            date = Calendar.getInstance().timeInMillis,
+            name = name,
             todo = text,
-            success = false
+            done = false
         )
-        Log.d(deg, "insert ToDo: $newDiary")
-        viewModelScope.launch { diaryRepository.insert(newDiary) }
+        viewModelScope.launch { todoRepository.insert(newTodo) }
     }
 
-    fun deleteTodo(id: Long) {
-        viewModelScope.launch { diaryRepository.success(id, true) }
+    fun doneTodo(id: Long) {
+        viewModelScope.launch { todoRepository.done(id, true) }
     }
+
+    /*
+     * Profile
+     */
+    var age = MutableLiveData<String>()
+    var icon = MutableLiveData<Int>()
+
+    fun setProfile(context: Context) {
+        val profile = allProfile.value?.find { it.name == selected } ?: Profile(name = "")
+        age.value = profile.getAge(Calendar.getInstance().timeInMillis)
+        icon.value = Utils.iconSelector(context, profile.type)
+    }
+
+    /*
+     * Diary
+     */
+    val weightData = MutableLiveData<Dashboard>()
+    val lengthData = MutableLiveData<Dashboard>()
+    val weightDataList = MutableLiveData<List<Float>>()
+    val lengthDataList = MutableLiveData<List<Float>>()
+
+    fun setDiary() {
+        if (selected.isEmpty() || !nameList.contains(selected))
+            selected = nameList.first()
+
+        val diaryList = allDiary.value!!.filter { it.name == selected }
+
+        val wList = diaryList.mapNotNull(Diary::weight)
+        val wSubList = wList.subList(0, min(7, wList.size))
+
+        weightDataList.value = wSubList
+        weightData.value = if (wSubList.isNotEmpty()) {
+            Dashboard(
+                date = Converter.longToDateString(diaryList.first { it.weight != null }.date),
+                latest = wSubList.first().toString(),
+                prev = prev(wSubList),
+                isPlusPrev = isPlusPrev(wSubList),
+                recent = recent(wSubList),
+                isPlusRecent = isPlusRecent(wSubList),
+                unit = "g"
+            )
+        } else {
+            Dashboard()
+        }
+
+        val lList = diaryList.mapNotNull(Diary::length)
+        val lSubList = lList.subList(0, min(7, lList.size))
+
+        lengthDataList.value = lSubList
+        lengthData.value = if (lSubList.isNotEmpty()) {
+            Dashboard(
+                date = Converter.longToDateString(diaryList.first { it.length != null }.date),
+                latest = lSubList.first().toString(),
+                prev = prev(lSubList),
+                isPlusPrev = isPlusPrev(lSubList),
+                recent = recent(lSubList),
+                isPlusRecent = isPlusRecent(lSubList),
+                unit = "mm"
+            )
+        } else {
+            Dashboard()
+        }
+    }
+
+    private fun prev(values: List<Float>): String =
+        if (values.size <= 1) "0" else onSign(values[0] - values[1])
+
+    private fun isPlusPrev(values: List<Float>): Boolean =
+        if (values.size <= 1) true else (values[0] - values[1] >= 0)
+
+    private fun recent(values: List<Float>): String =
+        onSign(values[0] - values.last())
+
+    private fun isPlusRecent(values: List<Float>): Boolean =
+        values[0] - values.last() >= 0
+
+    private fun onSign(num: Float): String =
+        if (num >= 0) "+ ${num.absoluteValue}" else "- ${num.absoluteValue}"
 
 }

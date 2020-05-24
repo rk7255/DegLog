@@ -7,6 +7,40 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
+object Converter {
+    @SuppressLint("SimpleDateFormat")
+    fun longToDateString(systemTime: Long): String {
+        return SimpleDateFormat("yyyy/MM/dd")
+            .format(systemTime).toString()
+    }
+
+    fun longToRelativeDateString(systemTime: Long): String {
+        val diff = Calendar.getInstance().timeInMillis - systemTime
+        val second = 1000
+        val minute = second * 60
+        val hour = minute * 60
+        val day = 24 * 60 * 60 * 1000
+        val days = day * 2
+
+        return when {
+            diff < 0 -> "0秒前"
+            diff < minute -> "${diff % minute / second}秒前"
+            diff < hour -> "${diff / minute}分前"
+            diff < day -> "${diff / hour}時間前"
+            diff < days -> "昨日"
+            else -> "${diff / day}日前"
+        }
+    }
+}
+
+
+fun convertWeightUnit(weight: Float?, unit: String, onSuffix: Boolean): String =
+    if (weight == null) "" else convertUnit(weight, unit, onSuffix)
+
+fun convertLengthUnit(length: Float?, unit: String, onSuffix: Boolean): String =
+    if (length == null) "" else convertUnit(length, unit, onSuffix)
+
+
 /**
  * 日付変換
  */

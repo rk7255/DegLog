@@ -29,7 +29,7 @@ class DetailListAdapter(
         fun bind(item: Diary, clickListener: DiaryListListener) {
             with(binding) {
                 diary = item
-                hasMemo = !item.memo.isNullOrEmpty()
+                hasMemo = !item.note.isNullOrEmpty()
                 this.clickListener = clickListener
                 executePendingBindings()
             }

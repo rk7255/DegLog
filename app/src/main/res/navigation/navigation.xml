@@ -3,30 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/diaryFragment"
+    app:startDestination="@id/dashboardFragment"
     tools:ignore="UnusedNavigation">
 
     <fragment
-        android:id="@+id/diaryFragment"
+        android:id="@+id/dashboardFragment"
         android:name="jp.ryuk.deglog.ui.fragments.DashboardFragment"
         android:label="fragment_diary"
         tools:layout="@layout/fragment_dashboard">
         <action
-            android:id="@+id/action_diaryFragment_to_newDiaryFragment"
+            android:id="@+id/to_newDiaryFragment"
             app:destination="@id/newDiaryFragment"
             app:enterAnim="@anim/spread_in"
             app:exitAnim="@anim/spread_out"
             app:popEnterAnim="@anim/spread_pop_out"
             app:popExitAnim="@anim/spread_pop_in" />
         <action
-            android:id="@+id/action_diaryFragment_to_diaryDetailFragment"
+            android:id="@+id/to_diaryListFragment"
             app:destination="@id/diaryListFragment"
             app:enterAnim="@anim/spread_in"
             app:exitAnim="@anim/spread_out"
             app:popEnterAnim="@anim/spread_pop_out"
             app:popExitAnim="@anim/spread_pop_in" />
         <action
-            android:id="@+id/action_diaryFragment_to_newProfileFragment"
+            android:id="@+id/to_newProfileFragment"
             app:destination="@id/newProfileFragment"
             app:enterAnim="@anim/spread_in"
             app:exitAnim="@anim/spread_out"
@@ -40,7 +40,7 @@
         tools:layout="@layout/fragment_new_diary">
         <argument
             android:name="mode"
-            app:argType="string" />
+            app:argType="integer" />
         <argument
             android:name="id"
             app:argType="long" />
@@ -49,12 +49,12 @@
             app:argType="string" />
         <action
             android:id="@+id/action_newDiaryFragment_to_diaryFragment"
-            app:destination="@id/diaryFragment"
+            app:destination="@id/dashboardFragment"
             app:enterAnim="@anim/spread_pop_out"
             app:exitAnim="@anim/spread_pop_in"
             app:popEnterAnim="@anim/spread_in"
             app:popExitAnim="@anim/spread_out"
-            app:popUpTo="@id/diaryFragment"
+            app:popUpTo="@id/dashboardFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_newDiaryFragment_pop"
@@ -150,7 +150,7 @@
         android:label="NewProfileFragment">
         <argument
             android:name="mode"
-            app:argType="string" />
+            app:argType="integer" />
         <argument
             android:name="name"
             app:argType="string" />
@@ -169,6 +169,6 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_newProfileFragment_to_diaryFragment"
-            app:destination="@id/diaryFragment" />
+            app:destination="@id/dashboardFragment" />
     </fragment>
 </navigation>

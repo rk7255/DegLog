@@ -47,7 +47,7 @@ class NewProfileFragment : Fragment() {
         binding.apply {
             newProfileTitle.text =
                 when (args.mode) {
-                    "new" -> getString(R.string.title_new_profile)
+                    NavMode.NEW -> getString(R.string.title_new_profile)
                     else -> getString(R.string.title_edit_profile)
                 }
 
@@ -104,7 +104,7 @@ class NewProfileFragment : Fragment() {
 
             submit.observe(viewLifecycleOwner, Observer {
                 if (it == true) {
-                    if (viewModel.isNameChanged && args.mode == "dashboard") {
+                    if (viewModel.isNameChanged && args.mode == NavMode.DASHBOARD) {
                         backToDashboard()
                     } else {
                         pop()

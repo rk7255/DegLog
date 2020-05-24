@@ -13,6 +13,7 @@ import jp.ryuk.deglog.adapters.ProfileListener
 import jp.ryuk.deglog.databinding.FragmentProfilesBinding
 import jp.ryuk.deglog.ui.viewmodels.ProfilesViewModel
 import jp.ryuk.deglog.utilities.InjectorUtil
+import jp.ryuk.deglog.utilities.NavMode
 
 
 class ProfilesFragment : Fragment() {
@@ -56,7 +57,7 @@ class ProfilesFragment : Fragment() {
     private fun navigate(name: String) {
         this.findNavController().navigate(
             ProfilesFragmentDirections.actionProfileFragmentToNewProfileFragment(
-                "edit",
+                NavMode.EDIT,
                 name
             )
         )
@@ -73,7 +74,7 @@ class ProfilesFragment : Fragment() {
             R.id.toolbar_add -> {
                 this.findNavController().navigate(
                     ProfilesFragmentDirections.actionProfileFragmentToNewProfileFragment(
-                        "new",
+                        NavMode.NEW,
                         ""
                     )
                 )

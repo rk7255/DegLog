@@ -62,7 +62,7 @@ class NewDiaryViewModel(
         diary.value?.let { diary ->
             diary.weight?.let { weight.value = convertUnit(it, weightUnit.value ?: "g", false) }
             diary.length?.let { length.value = convertUnit(it, lengthUnit.value ?: "mm", false) }
-            diary.memo?.let { memo.value = it }
+            diary.note?.let { memo.value = it }
         }
     }
 
@@ -118,7 +118,7 @@ class NewDiaryViewModel(
                 name = name.value!!,
                 weight = convertStringToFloat(weight.value, weightUnit.value ?: "g"),
                 length = convertStringToFloat(length.value, lengthUnit.value ?: "mm"),
-                memo = if (memo.value.isNullOrEmpty()) null else memo.value
+                note = if (memo.value.isNullOrEmpty()) null else memo.value
             )
             if (isNew) {
                 if (!names.value!!.contains(diary.name)) {

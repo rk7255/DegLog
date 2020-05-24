@@ -21,6 +21,7 @@ import jp.ryuk.deglog.databinding.FragmentDiaryDetailBinding
 import jp.ryuk.deglog.ui.viewmodels.DiaryDetailViewModel
 import jp.ryuk.deglog.utilities.FlickListener
 import jp.ryuk.deglog.utilities.InjectorUtil
+import jp.ryuk.deglog.utilities.NavMode
 import jp.ryuk.deglog.utilities.convertLongToDateStringOutYear
 
 class DiaryDetailFragment : Fragment() {
@@ -151,7 +152,7 @@ class DiaryDetailFragment : Fragment() {
             R.id.toolbar_edit -> {
                 this.findNavController().navigate(
                     DiaryDetailFragmentDirections.actionDiaryDetailFragmentToNewDiaryFragment(
-                        "edit", viewModel.editDiary(getTabPos()), args.name
+                        NavMode.EDIT, viewModel.editDiary(getTabPos()), args.name
                     )
                 )
             }

@@ -48,14 +48,14 @@ class DiaryDetailViewModel(
 
     private fun setDetails() {
         val detailList = mutableListOf<Detail>()
-        diaries.value!!.filter { it.todo == null }.forEach {
+        diaries.value!!.forEach {
             val detail = Detail(
                 id = it.id,
                 date = it.date,
                 name = it.name,
-                weight = it.convertWeightUnit(profile.value?.weightUnit ?: "g", true),
-                length = it.convertLengthUnit(profile.value?.lengthUnit ?: "mm", true),
-                memo = it.memo,
+//                weight = it.convertWeightUnit(profile.value?.weightUnit ?: "g", true),
+//                length = it.convertLengthUnit(profile.value?.lengthUnit ?: "mm", true),
+//                memo = it.memo,
                 age = profile.value?.getAge(it.date) ?: ""
             )
             detailList.add(detail)
