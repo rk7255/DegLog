@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="jp.ryuk.deglog.ui.diarylist.DiaryListViewModel" />
+            type="jp.ryuk.deglog.ui.viewmodels.DiaryListViewModel" />
 
         <variable
             name="hasData"

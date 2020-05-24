@@ -6,7 +6,7 @@
     <data>
         <variable
             name="todo"
-            type="jp.ryuk.deglog.ui.dashboard.Todo" />
+            type="jp.ryuk.deglog.ui.data.Todo" />
 
         <variable
             name="clickListener"

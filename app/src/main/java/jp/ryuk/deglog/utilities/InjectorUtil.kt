@@ -1,32 +1,45 @@
 package jp.ryuk.deglog.utilities
 
 import android.content.Context
-import jp.ryuk.deglog.data.DiaryDao
-import jp.ryuk.deglog.data.DiaryRepository
-import jp.ryuk.deglog.data.ProfileDao
-import jp.ryuk.deglog.data.ProfileRepository
-import jp.ryuk.deglog.ui.chart.ChartViewModelFactory
-import jp.ryuk.deglog.ui.dashboard.DashboardViewModelFactory
-import jp.ryuk.deglog.ui.diarydetail.DiaryDetailViewModelFactory
-import jp.ryuk.deglog.ui.diarylist.DiaryListViewModelFactory
-import jp.ryuk.deglog.ui.newdiary.NewDiaryViewModelFactory
-import jp.ryuk.deglog.ui.profile.newprofile.NewProfileViewModelFactory
-import jp.ryuk.deglog.ui.profile.profiles.ProfilesViewModelFactory
+import jp.ryuk.deglog.database.*
+import jp.ryuk.deglog.ui.viewmodels.ChartViewModelFactory
+import jp.ryuk.deglog.ui.viewmodels.DashboardViewModelFactory
+import jp.ryuk.deglog.ui.viewmodels.DiaryDetailViewModelFactory
+import jp.ryuk.deglog.ui.viewmodels.DiaryListViewModelFactory
+import jp.ryuk.deglog.ui.viewmodels.NewDiaryViewModelFactory
+import jp.ryuk.deglog.ui.viewmodels.NewProfileViewModelFactory
+import jp.ryuk.deglog.ui.viewmodels.ProfilesViewModelFactory
 
 object InjectorUtil {
 
-    private fun getDiaryDao(context: Context): DiaryDao {
-        return DiaryRepository.getInstance(context).diaryDao
+    private fun getDiaryRepository(context: Context): DiaryRepository {
+        return DiaryRepository.getInstance(
+            AppDatabase.getInstance(context.applicationContext).diaryDao()
+        )
     }
 
-    private fun getProfileDao(context: Context): ProfileDao {
-        return ProfileRepository.getInstance(context).profileDao
+    private fun getProfileRepository(context: Context): ProfileRepository {
+        return ProfileRepository.getInstance(
+            AppDatabase.getInstance(context.applicationContext).profileDao()
+        )
+    }
+
+    private fun getTodoRepository(context: Context): TodoRepository {
+        return TodoRepository.getInstance(
+            AppDatabase.getInstance(context.applicationContext).todoDao()
+        )
     }
 
     fun provideDashboardViewModelFactory(context: Context): DashboardViewModelFactory {
-        val diaryDao = getDiaryDao(context)
-        val profileDao = getProfileDao(context)
-        return DashboardViewModelFactory(diaryDao, profileDao)
+        val diaryRepository = getDiaryRepository(context)
+        val profileRepository = getProfileRepository(context)
+        val todoRepository = getTodoRepository(context)
+
+        return DashboardViewModelFactory(
+            diaryRepository,
+            profileRepository,
+            todoRepository
+        )
     }
 
     fun provideDiaryDetailViewModelFactory(
@@ -34,18 +47,27 @@ object InjectorUtil {
         id: Long,
         name: String
     ): DiaryDetailViewModelFactory {
-        val diaryDao = getDiaryDao(context)
-        val profileDao = getProfileDao(context)
-        return DiaryDetailViewModelFactory(id, name, diaryDao, profileDao)
+        val diaryRepository = getDiaryRepository(context)
+        val profileRepository = getProfileRepository(context)
+        return DiaryDetailViewModelFactory(
+            id,
+            name,
+            diaryRepository,
+            profileRepository
+        )
     }
 
     fun provideDiaryListViewModelFactory(
         context: Context,
         name: String
     ): DiaryListViewModelFactory {
-        val diaryDao = getDiaryDao(context)
-        val profileDao = getProfileDao(context)
-        return DiaryListViewModelFactory(name, diaryDao, profileDao)
+        val diaryRepository = getDiaryRepository(context)
+        val profileRepository = getProfileRepository(context)
+        return DiaryListViewModelFactory(
+            name,
+            diaryRepository,
+            profileRepository
+        )
     }
 
     fun provideNewDiaryViewModelFactory(
@@ -53,28 +75,42 @@ object InjectorUtil {
         id: Long,
         name: String
     ): NewDiaryViewModelFactory {
-        val diaryDao = getDiaryDao(context)
-        val profileDao = getProfileDao(context)
-        return NewDiaryViewModelFactory(id, name, diaryDao, profileDao)
+        val diaryRepository = getDiaryRepository(context)
+        val profileRepository = getProfileRepository(context)
+        return NewDiaryViewModelFactory(
+            id,
+            name,
+            diaryRepository,
+            profileRepository
+        )
     }
 
     fun provideNewProfileViewModelFactory(
         context: Context,
         name: String
     ): NewProfileViewModelFactory {
-        val diaryDao = getDiaryDao(context)
-        val profileDao = getProfileDao(context)
-        return NewProfileViewModelFactory(name, diaryDao, profileDao)
+        val diaryRepository = getDiaryRepository(context)
+        val profileRepository = getProfileRepository(context)
+        return NewProfileViewModelFactory(
+            name,
+            diaryRepository,
+            profileRepository
+        )
     }
 
     fun provideProfilesViewModelFactory(context: Context): ProfilesViewModelFactory {
-        val profileDao = getProfileDao(context)
-        return ProfilesViewModelFactory(profileDao)
+        val profileRepository = getProfileRepository(context)
+        return ProfilesViewModelFactory(
+            profileRepository
+        )
     }
 
     fun provideChartViewModelFactory(context: Context): ChartViewModelFactory {
-        val diaryDao = getDiaryDao(context)
-        val profileDao = getProfileDao(context)
-        return ChartViewModelFactory(diaryDao, profileDao)
+        val diaryRepository = getDiaryRepository(context)
+        val profileRepository = getProfileRepository(context)
+        return ChartViewModelFactory(
+            diaryRepository,
+            profileRepository
+        )
     }
 }

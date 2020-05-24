@@ -7,7 +7,7 @@
 
         <variable
             name="profile"
-            type="jp.ryuk.deglog.data.Profile" />
+            type="jp.ryuk.deglog.database.Profile" />
 
         <variable
             name="ageAndBirthday"

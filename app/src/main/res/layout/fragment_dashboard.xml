@@ -7,15 +7,15 @@
 
         <variable
             name="viewModel"
-            type="jp.ryuk.deglog.ui.dashboard.DashboardViewModel" />
+            type="jp.ryuk.deglog.ui.viewmodels.DashboardViewModel" />
 
         <variable
             name="key"
-            type="jp.ryuk.deglog.ui.diarylist.ListKey" />
+            type="jp.ryuk.deglog.ui.data.ListKey" />
 
         <variable
             name="call"
-            type="jp.ryuk.deglog.ui.dashboard.OnCallKey" />
+            type="jp.ryuk.deglog.ui.data.OnCallKey" />
 
     </data>
 

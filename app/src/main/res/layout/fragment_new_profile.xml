@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="jp.ryuk.deglog.ui.profile.newprofile.NewProfileViewModel" />
+            type="jp.ryuk.deglog.ui.viewmodels.NewProfileViewModel" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.databinding.ItemTodoBinding
-import jp.ryuk.deglog.ui.dashboard.Todo
+import jp.ryuk.deglog.ui.data.Todo
 
 class TodoAdapter(private val clickListener: TodoListener)
     : androidx.recyclerview.widget.ListAdapter<Todo, TodoAdapter.ViewHolder>(TodoDiffCallback()) {

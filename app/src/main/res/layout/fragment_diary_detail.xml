@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="jp.ryuk.deglog.ui.diarydetail.DiaryDetailViewModel" />
+            type="jp.ryuk.deglog.ui.viewmodels.DiaryDetailViewModel" />
 
         <variable
             name="hasMemo"

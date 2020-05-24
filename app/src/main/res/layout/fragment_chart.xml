@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="jp.ryuk.deglog.ui.chart.ChartViewModel" />
+            type="jp.ryuk.deglog.ui.viewmodels.ChartViewModel" />
 
         <variable
             name="hasDiaries"

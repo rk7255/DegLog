@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/diaryFragment"
-        android:name="jp.ryuk.deglog.ui.dashboard.DashboardFragment"
+        android:name="jp.ryuk.deglog.ui.fragments.DashboardFragment"
         android:label="fragment_diary"
         tools:layout="@layout/fragment_dashboard">
         <action
@@ -35,7 +35,7 @@
     </fragment>
     <fragment
         android:id="@+id/newDiaryFragment"
-        android:name="jp.ryuk.deglog.ui.newdiary.NewDiaryFragment"
+        android:name="jp.ryuk.deglog.ui.fragments.NewDiaryFragment"
         android:label="fragment_new_diary"
         tools:layout="@layout/fragment_new_diary">
         <argument
@@ -72,7 +72,7 @@
     </fragment>
     <fragment
         android:id="@+id/diaryListFragment"
-        android:name="jp.ryuk.deglog.ui.diarylist.DiaryListFragment"
+        android:name="jp.ryuk.deglog.ui.fragments.DiaryListFragment"
         android:label="DiaryListFragment"
         tools:layout="@layout/fragment_diary_list">
         <argument
@@ -92,7 +92,7 @@
     </fragment>
     <fragment
         android:id="@+id/diaryDetailFragment"
-        android:name="jp.ryuk.deglog.ui.diarydetail.DiaryDetailFragment"
+        android:name="jp.ryuk.deglog.ui.fragments.DiaryDetailFragment"
         android:label="DiaryDetailFragment"
         tools:layout="@layout/fragment_diary_detail">
         <argument
@@ -126,14 +126,14 @@
 
     <fragment
         android:id="@+id/chartFragment"
-        android:name="jp.ryuk.deglog.ui.chart.ChartFragment"
+        android:name="jp.ryuk.deglog.ui.fragments.ChartFragment"
         android:label="fragment_chart"
         tools:layout="@layout/fragment_chart" />
 
 
     <fragment
         android:id="@+id/profilesFragment"
-        android:name="jp.ryuk.deglog.ui.profile.profiles.ProfilesFragment"
+        android:name="jp.ryuk.deglog.ui.fragments.ProfilesFragment"
         android:label="fragment_profiles"
         tools:layout="@layout/fragment_profiles">
         <action
@@ -146,7 +146,7 @@
     </fragment>
     <fragment
         android:id="@+id/newProfileFragment"
-        android:name="jp.ryuk.deglog.ui.profile.newprofile.NewProfileFragment"
+        android:name="jp.ryuk.deglog.ui.fragments.NewProfileFragment"
         android:label="NewProfileFragment">
         <argument
             android:name="mode"

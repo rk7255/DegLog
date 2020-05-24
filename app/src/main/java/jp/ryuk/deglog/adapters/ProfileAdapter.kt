@@ -1,20 +1,14 @@
 package jp.ryuk.deglog.adapters
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import jp.ryuk.deglog.R
-import jp.ryuk.deglog.data.Profile
+import jp.ryuk.deglog.database.Profile
 import jp.ryuk.deglog.databinding.ItemProfilesBinding
-import jp.ryuk.deglog.utilities.colorSelector
-import jp.ryuk.deglog.utilities.deg
-import jp.ryuk.deglog.utilities.getColorMap
-import jp.ryuk.deglog.utilities.iconSelector
+import jp.ryuk.deglog.utilities.Utils
 
 class ProfileAdapter(
     private val context: Context,
@@ -34,9 +28,9 @@ class ProfileAdapter(
             binding.profile = profile
             binding.ageAndBirthday = profile.getAgeAndBirthday()
             binding.clickListener = clickListener
-            binding.profileIcon.setImageResource(iconSelector(context, profile.type))
+            binding.profileIcon.setImageResource(Utils.iconSelector(context, profile.type))
 
-            val colorMap = getColorMap(context)
+            val colorMap = Utils.getColorMap(context)
 
             val colorGender = when (profile.gender) {
                 "オス" -> colorMap["blue"]
@@ -45,7 +39,7 @@ class ProfileAdapter(
             }
             binding.profileGender.setTextColor(colorGender!!)
 
-            val colorKey = colorSelector(profile.color)
+            val colorKey = Utils.colorSelector(profile.color)
             val colorLabel = colorMap[colorKey]
             binding.profileViewColor.setBackgroundColor(colorLabel!!)
 

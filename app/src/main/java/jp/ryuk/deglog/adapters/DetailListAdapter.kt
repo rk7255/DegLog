@@ -5,9 +5,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import jp.ryuk.deglog.data.Diary
+import jp.ryuk.deglog.database.Diary
 import jp.ryuk.deglog.databinding.ItemDetailListBinding
-import jp.ryuk.deglog.ui.diarylist.DetailList
 
 
 class DetailListAdapter(

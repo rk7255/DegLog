@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.databinding.ItemDetailBinding
-import jp.ryuk.deglog.ui.diarydetail.Detail
+import jp.ryuk.deglog.ui.data.Detail
 
 class DiaryDetailPagerAdapter : ListAdapter<Detail, DiaryDetailPagerAdapter.ViewHolder>(DetailDiffCallback()) {
 

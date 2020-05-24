@@ -12,8 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.R
-import jp.ryuk.deglog.data.Diary
-import jp.ryuk.deglog.ui.diarylist.DetailList
+import jp.ryuk.deglog.database.Diary
 import jp.ryuk.deglog.utilities.getMonth
 import kotlin.math.min
 
