@@ -15,6 +15,7 @@ import jp.ryuk.deglog.adapters.TodoAdapter
 import jp.ryuk.deglog.adapters.TodoListener
 import jp.ryuk.deglog.databinding.FragmentDashboardBinding
 import jp.ryuk.deglog.ui.data.ChartCreator
+import jp.ryuk.deglog.ui.data.DialogBuilder
 import jp.ryuk.deglog.ui.viewmodels.DashboardViewModel
 import jp.ryuk.deglog.utilities.*
 

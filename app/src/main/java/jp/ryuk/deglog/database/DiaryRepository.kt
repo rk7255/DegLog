@@ -5,7 +5,6 @@ class DiaryRepository private constructor(private val diaryDao: DiaryDao) {
     fun getDiary(id: Long) = diaryDao.getDiary(id)
     fun getDiaries(name: String) = diaryDao.getDiaries(name)
     fun getAllDiary() = diaryDao.getAllDiary()
-    fun getNames() = diaryDao.getNames()
     fun changeName(old: String, new: String) = diaryDao.changeName(old, new)
 
     suspend fun insert(diary: Diary) = diaryDao.insert(diary)

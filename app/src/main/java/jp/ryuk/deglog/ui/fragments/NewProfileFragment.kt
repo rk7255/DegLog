@@ -190,7 +190,7 @@ class NewProfileFragment : Fragment() {
             .apply {
                 addOnPositiveButtonClickListener { date ->
                     selected.set(date.getYear(), date.getMonth() - 1, date.getDayOfMonth(), 0, 0, 0)
-                    editText.setText(convertLongToDateString(selected.timeInMillis))
+                    editText.setText(Converter.longToDateString(selected.timeInMillis))
                     viewModel.doneOnDateClick(selected.timeInMillis)
                 }
             }.show(fm, getString(R.string.dialog_tag))

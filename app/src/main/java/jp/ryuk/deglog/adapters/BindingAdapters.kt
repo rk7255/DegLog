@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import jp.ryuk.deglog.utilities.convertLongToDateString
-import jp.ryuk.deglog.utilities.convertUnit
+import jp.ryuk.deglog.utilities.Converter
+import jp.ryuk.deglog.utilities.Converter.convertUnit
 
 @BindingAdapter("isGone")
 fun bindIsGone(view: View, isGone: Boolean?) {
@@ -29,12 +29,12 @@ fun bindIsVisible(view: View, isVisible: Boolean?) {
 
 @BindingAdapter("number", "suffix")
 fun TextView.setDetailList(number: Float?, suffix: String) {
-    text = if (number == null) "" else convertUnit(number, suffix, true)
+    text = if (number == null) "" else Converter.convertUnit(number, suffix, true)
 }
 
 @BindingAdapter("date")
 fun TextView.bindDate(date: Long) {
-    text = convertLongToDateString(date)
+    text = Converter.longToDateString(date)
 }
 
 @SuppressLint("SetTextI18n")

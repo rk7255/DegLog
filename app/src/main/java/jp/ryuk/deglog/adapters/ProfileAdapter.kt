@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.database.Profile
 import jp.ryuk.deglog.databinding.ItemProfilesBinding
 import jp.ryuk.deglog.utilities.Utils
+import jp.ryuk.deglog.utilities.getAgeAndBirthday
 
 class ProfileAdapter(
     private val context: Context,

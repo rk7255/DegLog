@@ -19,10 +19,10 @@ import jp.ryuk.deglog.R
 import jp.ryuk.deglog.adapters.DiaryDetailPagerAdapter
 import jp.ryuk.deglog.databinding.FragmentDiaryDetailBinding
 import jp.ryuk.deglog.ui.viewmodels.DiaryDetailViewModel
-import jp.ryuk.deglog.utilities.FlickListener
+import jp.ryuk.deglog.utilities.Converter
+import jp.ryuk.deglog.ui.data.FlickListener
 import jp.ryuk.deglog.utilities.InjectorUtil
 import jp.ryuk.deglog.utilities.NavMode
-import jp.ryuk.deglog.utilities.convertLongToDateStringOutYear
 
 class DiaryDetailFragment : Fragment() {
 
@@ -108,9 +108,21 @@ class DiaryDetailFragment : Fragment() {
             binding.hasMemo = !it.isNullOrEmpty()
         })
 
-        binding.detailDateContainer.setOnTouchListener(FlickListener(flickListenerForDate))
-        binding.detailWeightContainer.setOnTouchListener(FlickListener(flickListenerForWeight))
-        binding.detailLengthContainer.setOnTouchListener(FlickListener(flickListenerForLength))
+        binding.detailDateContainer.setOnTouchListener(
+            FlickListener(
+                flickListenerForDate
+            )
+        )
+        binding.detailWeightContainer.setOnTouchListener(
+            FlickListener(
+                flickListenerForWeight
+            )
+        )
+        binding.detailLengthContainer.setOnTouchListener(
+            FlickListener(
+                flickListenerForLength
+            )
+        )
 
         return binding.root
     }
@@ -183,7 +195,7 @@ class DiaryDetailFragment : Fragment() {
 
     private fun getTitle(position: Int): String? {
         return viewModel.details.value?.get(position)?.date?.let {
-            convertLongToDateStringOutYear(it)
+            Converter.longToDateShortString(it)
         }
     }
 }

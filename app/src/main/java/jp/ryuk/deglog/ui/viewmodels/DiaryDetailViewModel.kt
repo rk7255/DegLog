@@ -8,12 +8,13 @@ import jp.ryuk.deglog.database.DiaryRepository
 import jp.ryuk.deglog.database.ProfileRepository
 import jp.ryuk.deglog.ui.data.Dashboard
 import jp.ryuk.deglog.ui.data.Detail
-import jp.ryuk.deglog.utilities.convertLongToDateStringInTime
+import jp.ryuk.deglog.utilities.Converter
+import jp.ryuk.deglog.utilities.getAge
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class DiaryDetailViewModel(
+class DiaryDetailViewModel internal constructor(
     private val diaryId: Long,
     selectedName: String,
     private val diaryRepository: DiaryRepository,
@@ -101,7 +102,7 @@ class DiaryDetailViewModel(
             recent = lengthNext
         )
 
-        date.value = convertLongToDateStringInTime(detailSelected.date)
+        date.value = Converter.longToDateAndTimeString(detailSelected.date)
         age.value = detailSelected.age
         memo.value = detailSelected.memo
     }

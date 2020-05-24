@@ -11,12 +11,6 @@ interface TodoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(todo: Todo)
 
-    @Query("SELECT * FROM todo_table WHERE id = :id")
-    fun getTodo(id: Long): Todo
-
-    @Query("SELECT * FROM todo_table WHERE name = :name")
-    fun getTodoList(name: String): LiveData<List<Todo>>
-
     @Query("SELECT * FROM todo_table")
     fun getAllTodo(): LiveData<List<Todo>>
 

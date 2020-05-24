@@ -2,13 +2,12 @@ package jp.ryuk.deglog.ui.viewmodels
 
 import androidx.lifecycle.*
 import jp.ryuk.deglog.database.*
-import jp.ryuk.deglog.utilities.convertLongToDateString
-import jp.ryuk.deglog.utilities.convertLongToDateStringInTime
+import jp.ryuk.deglog.utilities.Converter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class NewProfileViewModel(
+class NewProfileViewModel internal constructor(
     private val selectedName: String,
     private val diaryRepository: DiaryRepository,
     private val profileRepository: ProfileRepository
@@ -37,7 +36,7 @@ class NewProfileViewModel(
     val onDateCLick: LiveData<Boolean> get() = _onDateClick
     fun doneOnDateClick(time: Long) {
         birthday = time
-        birthdayString.value = convertLongToDateString(birthday!!)
+        birthdayString.value = Converter.longToDateString(birthday!!)
         _onDateClick.value = false
     }
 
@@ -56,7 +55,7 @@ class NewProfileViewModel(
     fun setValues() {
         isNew = false
         birthday = profile.value?.birthday
-        birthday?.let { birthdayString.value = convertLongToDateStringInTime(it) }
+        birthday?.let { birthdayString.value = Converter.longToDateAndTimeString(it) }
         gender.value = profile.value?.gender ?: "不明"
         type.value = profile.value?.type
         weightUnit.value = profile.value!!.weightUnit

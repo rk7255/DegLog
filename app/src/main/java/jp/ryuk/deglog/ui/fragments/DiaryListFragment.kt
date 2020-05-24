@@ -15,8 +15,8 @@ import jp.ryuk.deglog.adapters.DiaryListListener
 import jp.ryuk.deglog.adapters.DiaryStickerDecoration
 import jp.ryuk.deglog.databinding.FragmentDiaryListBinding
 import jp.ryuk.deglog.ui.viewmodels.DiaryListViewModel
-import jp.ryuk.deglog.ui.data.ListKey
 import jp.ryuk.deglog.utilities.InjectorUtil
+import jp.ryuk.deglog.utilities.NavMode
 
 class DiaryListFragment : Fragment() {
 
@@ -39,8 +39,8 @@ class DiaryListFragment : Fragment() {
         binding.viewModel = viewModel
 
         when (args.from) {
-            ListKey.FROM_WEIGHT -> viewModel.checkedWeight.value = true
-            ListKey.FROM_LENGTH -> viewModel.checkedLength.value = true
+            NavMode.FROM_WEIGHT -> viewModel.checkedWeight.value = true
+            NavMode.FROM_LENGTH -> viewModel.checkedLength.value = true
         }
 
         binding.detailListCheckWeight.isChecked = viewModel.checkedWeight.value ?: false

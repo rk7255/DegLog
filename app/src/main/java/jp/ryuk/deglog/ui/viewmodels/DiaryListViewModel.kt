@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.ryuk.deglog.database.*
 
-class DiaryListViewModel(
+class DiaryListViewModel internal constructor(
     selectedName: String,
     diaryRepository: DiaryRepository,
     profileRepository: ProfileRepository

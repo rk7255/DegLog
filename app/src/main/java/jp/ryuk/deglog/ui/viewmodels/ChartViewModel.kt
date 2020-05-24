@@ -18,7 +18,7 @@ import jp.ryuk.deglog.database.ProfileRepository
 import jp.ryuk.deglog.ui.data.MyValueFormatter
 import jp.ryuk.deglog.utilities.Utils
 
-class ChartViewModel(
+class ChartViewModel internal constructor(
     diaryRepository: DiaryRepository,
     profileRepository: ProfileRepository
 ) : ViewModel() {

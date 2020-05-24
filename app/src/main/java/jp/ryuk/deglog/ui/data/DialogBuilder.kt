@@ -1,4 +1,4 @@
-package jp.ryuk.deglog.utilities
+package jp.ryuk.deglog.ui.data
 
 import android.annotation.SuppressLint
 import android.content.Context

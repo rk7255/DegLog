@@ -5,8 +5,6 @@ class TodoRepository private constructor(private val todoDao: TodoDao) {
     suspend fun insert(todo: Todo) = todoDao.insert(todo)
     suspend fun done(id: Long, done: Boolean) = todoDao.done(id, done)
 
-    fun getTodo(id: Long) = todoDao.getTodo(id)
-    fun getTodoList(name: String) = todoDao.getTodoList(name)
     fun getAllTodo() = todoDao.getAllTodo()
 
     companion object {

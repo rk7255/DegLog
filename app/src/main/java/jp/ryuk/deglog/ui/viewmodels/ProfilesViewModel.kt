@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import jp.ryuk.deglog.database.ProfileRepository
 
-class ProfilesViewModel(
+class ProfilesViewModel internal constructor(
     profileRepository: ProfileRepository
 ) : ViewModel() {
 

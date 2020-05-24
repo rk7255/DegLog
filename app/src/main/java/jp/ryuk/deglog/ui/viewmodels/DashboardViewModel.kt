@@ -9,6 +9,7 @@ import jp.ryuk.deglog.database.*
 import jp.ryuk.deglog.ui.data.Dashboard
 import jp.ryuk.deglog.utilities.Converter
 import jp.ryuk.deglog.utilities.Utils
+import jp.ryuk.deglog.utilities.getAge
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.absoluteValue

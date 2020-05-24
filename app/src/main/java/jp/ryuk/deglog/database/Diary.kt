@@ -3,7 +3,7 @@ package jp.ryuk.deglog.database
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import jp.ryuk.deglog.utilities.DIARY_TABLE
-import jp.ryuk.deglog.utilities.convertUnit
+import jp.ryuk.deglog.utilities.Converter.convertUnit
 import java.util.*
 
 @Entity(tableName = DIARY_TABLE)

@@ -2,8 +2,8 @@ package jp.ryuk.deglog.ui.viewmodels
 
 import androidx.lifecycle.*
 import jp.ryuk.deglog.database.*
-import jp.ryuk.deglog.utilities.convertLongToDateStringInTime
-import jp.ryuk.deglog.utilities.convertUnit
+import jp.ryuk.deglog.utilities.Converter
+import jp.ryuk.deglog.utilities.Converter.convertUnit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -11,7 +11,7 @@ import java.util.*
 import kotlin.random.Random
 
 
-class NewDiaryViewModel(
+class NewDiaryViewModel internal constructor(
     private val diaryId: Long,
     selectedName: String,
     private val diaryRepository: DiaryRepository,
@@ -43,13 +43,13 @@ class NewDiaryViewModel(
 
     fun doneOnDateClick(time: Long) {
         date = time
-        dateOfString.value = convertLongToDateStringInTime(date)
+        dateOfString.value = Converter.longToDateAndTimeString(date)
         _onDateClick.value = false
     }
 
     init {
         name.value = selectedName
-        dateOfString.value = convertLongToDateStringInTime(date)
+        dateOfString.value = Converter.longToDateAndTimeString(date)
         weightUnit.value = "g"
         lengthUnit.value = "mm"
     }
@@ -57,11 +57,11 @@ class NewDiaryViewModel(
     fun setValues() {
         isNew = false
         date = diary.value?.date ?: Calendar.getInstance().timeInMillis
-        dateOfString.value = convertLongToDateStringInTime(date)
+        dateOfString.value = Converter.longToDateAndTimeString(date)
 
         diary.value?.let { diary ->
-            diary.weight?.let { weight.value = convertUnit(it, weightUnit.value ?: "g", false) }
-            diary.length?.let { length.value = convertUnit(it, lengthUnit.value ?: "mm", false) }
+            diary.weight?.let { weight.value = Converter.convertUnit(it, weightUnit.value ?: "g", false) }
+            diary.length?.let { length.value = Converter.convertUnit(it, lengthUnit.value ?: "mm", false) }
             diary.note?.let { memo.value = it }
         }
     }
