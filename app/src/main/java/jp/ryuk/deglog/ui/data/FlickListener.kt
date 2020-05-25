@@ -4,13 +4,11 @@ import android.annotation.SuppressLint
 import android.view.MotionEvent
 import android.view.View
 
-class FlickListener(
+class FlickListener constructor(
     private val listener: Listener
 ) : View.OnTouchListener {
 
     interface Listener {
-        fun onButtonPressed()
-        fun onButtonReleased()
         fun onFlickToLeft()
         fun onFlickToRight()
     }
@@ -33,7 +31,6 @@ class FlickListener(
     private fun touchDown(event: MotionEvent) {
         startX = event.x
         startY = event.y
-        listener.onButtonPressed()
     }
 
     private fun touchOff(event: MotionEvent) {
@@ -42,7 +39,6 @@ class FlickListener(
         when {
             leftScope() -> listener.onFlickToLeft()
             rightScope() -> listener.onFlickToRight()
-            else -> listener.onButtonReleased()
         }
     }
 

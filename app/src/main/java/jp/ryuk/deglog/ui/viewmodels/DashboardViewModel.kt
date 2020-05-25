@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import jp.ryuk.deglog.database.*
-import jp.ryuk.deglog.ui.data.Dashboard
+import jp.ryuk.deglog.ui.data.DisplayData
 import jp.ryuk.deglog.utilities.Converter
 import jp.ryuk.deglog.utilities.Utils
 import jp.ryuk.deglog.utilities.getAge
@@ -75,8 +75,8 @@ class DashboardViewModel internal constructor(
     /*
      * Diary
      */
-    val weightData = MutableLiveData<Dashboard>()
-    val lengthData = MutableLiveData<Dashboard>()
+    val weightData = MutableLiveData<DisplayData>()
+    val lengthData = MutableLiveData<DisplayData>()
     val weightDataList = MutableLiveData<List<Float>>()
     val lengthDataList = MutableLiveData<List<Float>>()
 
@@ -91,7 +91,7 @@ class DashboardViewModel internal constructor(
 
         weightDataList.value = wSubList
         weightData.value = if (wSubList.isNotEmpty()) {
-            Dashboard(
+            DisplayData(
                 date = Converter.longToDateString(diaryList.first { it.weight != null }.date),
                 latest = wSubList.first().toString(),
                 prev = prev(wSubList),
@@ -101,7 +101,7 @@ class DashboardViewModel internal constructor(
                 unit = "g"
             )
         } else {
-            Dashboard()
+            DisplayData()
         }
 
         val lList = diaryList.mapNotNull(Diary::length)
@@ -109,7 +109,7 @@ class DashboardViewModel internal constructor(
 
         lengthDataList.value = lSubList
         lengthData.value = if (lSubList.isNotEmpty()) {
-            Dashboard(
+            DisplayData(
                 date = Converter.longToDateString(diaryList.first { it.length != null }.date),
                 latest = lSubList.first().toString(),
                 prev = prev(lSubList),
@@ -119,7 +119,7 @@ class DashboardViewModel internal constructor(
                 unit = "mm"
             )
         } else {
-            Dashboard()
+            DisplayData()
         }
     }
 

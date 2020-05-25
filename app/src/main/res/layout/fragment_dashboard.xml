@@ -35,47 +35,6 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <!--        &lt;!&ndash; Section Loading &ndash;&gt;-->
-        <!--        <LinearLayout-->
-        <!--            isGone="@{viewModel.allLoaded}"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent"-->
-        <!--            android:background="@color/colorBackground"-->
-        <!--            android:elevation="4dp"-->
-        <!--            android:fitsSystemWindows="true"-->
-        <!--            android:gravity="center"-->
-        <!--            android:orientation="vertical"-->
-        <!--            app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
-        <!--            tools:visibility="gone">-->
-
-        <!--            <ProgressBar-->
-        <!--                android:id="@+id/db_progress"-->
-        <!--                style="?android:attr/progressBarStyle"-->
-        <!--                isGone="@{viewModel.allLoaded}"-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:layout_margin="16dp" />-->
-
-        <!--            <TextView-->
-        <!--                style="@style/LoadingText"-->
-        <!--                isGone="@{viewModel.diariesLoaded}"-->
-        <!--                android:text="@string/load_diaries"-->
-        <!--                android:textAppearance="@style/Deglog.Dashboard.Body" />-->
-
-        <!--            <TextView-->
-        <!--                style="@style/LoadingText"-->
-        <!--                isGone="@{viewModel.profilesLoaded}"-->
-        <!--                android:text="@string/load_profiles"-->
-        <!--                android:textAppearance="@style/Deglog.Dashboard.Body" />-->
-
-        <!--            <TextView-->
-        <!--                style="@style/LoadingText"-->
-        <!--                isGone="@{viewModel.namesLoaded}"-->
-        <!--                android:text="@string/load_names"-->
-        <!--                android:textAppearance="@style/Deglog.Dashboard.Body" />-->
-
-        <!--        </LinearLayout>-->
-
         <!-- Section Dashboard -->
         <LinearLayout
             android:layout_width="match_parent"

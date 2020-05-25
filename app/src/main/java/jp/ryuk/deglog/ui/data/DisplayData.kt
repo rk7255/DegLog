@@ -1,6 +1,6 @@
 package jp.ryuk.deglog.ui.data
 
-data class Dashboard(
+data class DisplayData(
     var date: String = "no data",
     var latest: String = "",
     var prev: String = "",

@@ -14,6 +14,17 @@ import jp.ryuk.deglog.database.Todo
 
 object DialogBuilder {
 
+    fun createDeleteDiaryDialog(context: Context, func: () -> Unit): AlertDialog {
+        return MaterialAlertDialogBuilder(context)
+            .setTitle(context.getString(R.string.dialog_delete_title))
+            .setMessage(context.getString(R.string.dialog_delete_message))
+            .setNeutralButton(context.getString(R.string.dialog_cancel)) { _, _ -> }
+            .setPositiveButton(context.getString(R.string.dialog_yes)) { _, _ ->
+                func()
+            }.create()
+    }
+
+
     @SuppressLint("InflateParams")
     fun createTodoDialog(context: Context, func: (String) -> Unit): AlertDialog {
         val view = LayoutInflater.from(context).inflate(R.layout.dialog_todo, null)

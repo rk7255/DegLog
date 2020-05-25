@@ -1,27 +1,21 @@
 package jp.ryuk.deglog.ui.fragments
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import androidx.viewpager2.widget.ViewPager2
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import jp.ryuk.deglog.R
-import jp.ryuk.deglog.adapters.DiaryDetailPagerAdapter
 import jp.ryuk.deglog.databinding.FragmentDiaryDetailBinding
-import jp.ryuk.deglog.ui.viewmodels.DiaryDetailViewModel
-import jp.ryuk.deglog.utilities.Converter
+import jp.ryuk.deglog.ui.data.DialogBuilder
 import jp.ryuk.deglog.ui.data.FlickListener
+import jp.ryuk.deglog.ui.viewmodels.DiaryDetailViewModel
 import jp.ryuk.deglog.utilities.InjectorUtil
 import jp.ryuk.deglog.utilities.NavMode
 
@@ -34,7 +28,6 @@ class DiaryDetailFragment : Fragment() {
     private val viewModel: DiaryDetailViewModel by viewModels {
         InjectorUtil.provideDiaryDetailViewModelFactory(requireContext(), args.id, args.name)
     }
-    private lateinit var tabLayout: TabLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,84 +46,63 @@ class DiaryDetailFragment : Fragment() {
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
 
-        binding.appBarDiaryDetail.title = args.name + getString(R.string.title_diary_detail_at_name)
+        with(binding) {
+            appBarDiaryDetail.title = args.name + getString(R.string.title_diary_detail_at_name)
 
-        viewModel.diaries.observe(viewLifecycleOwner, Observer {
-            if (!it.isNullOrEmpty()) {
-                viewModel.diariesLoaded.value = true
-                viewModel.sectionLoaded()
+            detailDateImageNext.setOnClickListener { moveDiary("d", "next") }
+            detailDateImageBackView.setOnClickListener { moveDiary("d", "back") }
+            detailWeightImageNextView.setOnClickListener { moveDiary("w", "next") }
+            detailWeightImageBackView.setOnClickListener { moveDiary("w", "back") }
+            detailLengthImageNextView.setOnClickListener { moveDiary("l", "next") }
+            detailLengthImageBackView.setOnClickListener { moveDiary("l", "back") }
+
+            detailDateContainer.setOnTouchListener(FlickListener(flickListenerForDate))
+            detailWeightContainer.setOnTouchListener(FlickListener(flickListenerForWeight))
+            detailLengthContainer.setOnTouchListener(FlickListener(flickListenerForLength))
+        }
+
+        with(viewModel) {
+            allDiary.observe(viewLifecycleOwner) {
+                initDiary()
             }
-        })
 
-        viewModel.profile.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                viewModel.profileLoaded.value = true
-                viewModel.sectionLoaded()
+            animTrigger.observe(viewLifecycleOwner) {
+                if (it != null) showAnimation(it)
             }
-        })
-
-        val viewPager = binding.diaryListViewPager
-        tabLayout = binding.diaryDetailTab
-        val adapter = DiaryDetailPagerAdapter()
-        viewPager.adapter = adapter
-        viewPager.setCurrentItem(viewModel.position, false)
-
-        viewPager.registerOnPageChangeCallback(object :
-            ViewPager2.OnPageChangeCallback() {
-            override fun onPageSelected(position: Int) {
-                super.onPageSelected(position)
-                if (position != viewModel.diaryPosition.value) {
-                    viewModel.diaryPosition.value = position
-                }
-            }
-        })
-
-        viewModel.detailsLoaded.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(viewModel.details.value)
-
-            val pos = viewModel.diaryPosition.value ?: 1
-            viewPager.setCurrentItem(pos, false)
-            viewModel.position = pos
-
-            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-                tab.text = getTitle(position)
-            }.attach()
-        })
-
-        viewModel.diaryPosition.observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                viewPager.setCurrentItem(it, true)
-                viewModel.getDetail()
-                viewModel.position = it
-            }
-        })
-
-        viewModel.memo.observe(viewLifecycleOwner, Observer {
-            binding.hasMemo = !it.isNullOrEmpty()
-        })
-
-        binding.detailDateContainer.setOnTouchListener(
-            FlickListener(
-                flickListenerForDate
-            )
-        )
-        binding.detailWeightContainer.setOnTouchListener(
-            FlickListener(
-                flickListenerForWeight
-            )
-        )
-        binding.detailLengthContainer.setOnTouchListener(
-            FlickListener(
-                flickListenerForLength
-            )
-        )
+        }
 
         return binding.root
     }
 
-    private fun createViewModel(context: Context, id: Long, name: String): DiaryDetailViewModel {
-        val viewModelFactory = InjectorUtil.provideDiaryDetailViewModelFactory(context, id, name)
-        return ViewModelProvider(this, viewModelFactory).get(DiaryDetailViewModel::class.java)
+    private fun showAnimation(moveTo: String) {
+        val anim = when (moveTo) {
+            "next" -> AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_right)
+            "back" -> AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_left)
+            else -> return
+        }
+        with (binding) {
+            detailWeightLatest.startAnimation(anim)
+            detailLengthLatest.startAnimation(anim)
+        }
+    }
+
+    private fun moveDiary(which: String, moveTo: String) {
+        viewModel.setDiary(which, moveTo)
+    }
+
+    private val flickListenerForDate = object : FlickListener.Listener {
+        override fun onFlickToLeft() { moveDiary("d", "next") }
+        override fun onFlickToRight() { moveDiary("d", "back") }
+    }
+
+    private val flickListenerForWeight = object : FlickListener.Listener {
+        override fun onFlickToLeft() { moveDiary("w", "next") }
+        override fun onFlickToRight() { moveDiary("w", "back") }
+    }
+
+    private val flickListenerForLength = object : FlickListener.Listener {
+        override fun onFlickToLeft() { moveDiary("l", "next") }
+        override fun onFlickToRight() { moveDiary("l", "back") }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -138,65 +110,42 @@ class DiaryDetailFragment : Fragment() {
         super.onCreateOptionsMenu(menu, menuInflater)
     }
 
-    private fun getTabPos(): Int = tabLayout.selectedTabPosition
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.toolbar_delete -> {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle(getString(R.string.dialog_delete_title))
-                    .setMessage(getString(R.string.dialog_delete_message))
-                    .setNeutralButton(getString(R.string.dialog_cancel)) { _, _ -> }
-                    .setPositiveButton(getString(R.string.dialog_yes)) { _, _ ->
-                        viewModel.deleteDiary(getTabPos())
-                        this.findNavController().navigate(
-                            DiaryDetailFragmentDirections.actionDiaryDetailFragmentPop()
-                        )
-                        Snackbar.make(
-                            requireView().rootView,
-                            getString(R.string.dialog_delete_success),
-                            Snackbar.LENGTH_SHORT
-                        )
-                            .setAnchorView(R.id.bottom_navigation_bar)
-                            .show()
-                    }
-                    .show()
+                val dialog =
+                    DialogBuilder.createDeleteDiaryDialog(requireContext()) { deleteDiaryCallback() }
+                dialog.show()
             }
-            R.id.toolbar_edit -> {
-                this.findNavController().navigate(
-                    DiaryDetailFragmentDirections.actionDiaryDetailFragmentToNewDiaryFragment(
-                        NavMode.EDIT, viewModel.editDiary(getTabPos()), args.name
-                    )
-                )
-            }
+            R.id.toolbar_edit -> navigateToNewDiary(viewModel.id, args.name)
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private val flickListenerForDate = object : FlickListener.Listener {
-        override fun onButtonPressed() {}
-        override fun onButtonReleased() {}
-        override fun onFlickToLeft() { viewModel.onDateNext() }
-        override fun onFlickToRight() { viewModel.onDateBack() }
+    private fun deleteDiaryCallback() {
+        viewModel.deleteDiary()
+        navigatePop()
+        Snackbar.make(
+            requireView().rootView,
+            getString(R.string.dialog_delete_success),
+            Snackbar.LENGTH_SHORT
+        )
+            .setAnchorView(R.id.bottom_navigation_bar)
+            .show()
     }
 
-    private val flickListenerForWeight = object : FlickListener.Listener {
-        override fun onButtonPressed() {}
-        override fun onButtonReleased() {}
-        override fun onFlickToLeft() { viewModel.onWeightNext() }
-        override fun onFlickToRight() { viewModel.onWeightBack() }
+    private fun navigatePop() {
+        this.findNavController().navigate(
+            DiaryDetailFragmentDirections.actionPop()
+        )
     }
 
-    private val flickListenerForLength = object : FlickListener.Listener {
-        override fun onButtonPressed() {}
-        override fun onButtonReleased() {}
-        override fun onFlickToLeft() { viewModel.onLengthNext() }
-        override fun onFlickToRight() { viewModel.onLengthBack() }
-    }
-
-    private fun getTitle(position: Int): String? {
-        return viewModel.details.value?.get(position)?.date?.let {
-            Converter.longToDateShortString(it)
-        }
+    private fun navigateToNewDiary(id: Long, name: String) {
+        this.findNavController().navigate(
+            DiaryDetailFragmentDirections.toNewDiaryFragment(NavMode.EDIT, id, name)
+        )
     }
 }
+
+
+

@@ -102,7 +102,7 @@
             android:name="name"
             app:argType="string" />
         <action
-            android:id="@+id/action_diaryDetailFragment_to_diaryListFragment"
+            android:id="@+id/to_diaryListFragment"
             app:destination="@id/diaryListFragment"
             app:enterAnim="@anim/spread_pop_out"
             app:exitAnim="@anim/spread_pop_in"
@@ -111,14 +111,14 @@
             app:popUpTo="@id/diaryListFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_diaryDetailFragment_to_newDiaryFragment"
+            android:id="@+id/to_newDiaryFragment"
             app:destination="@id/newDiaryFragment"
             app:enterAnim="@anim/spread_in"
             app:exitAnim="@anim/spread_out"
             app:popEnterAnim="@anim/spread_pop_out"
             app:popExitAnim="@anim/spread_pop_in" />
         <action
-            android:id="@+id/action_diaryDetailFragment_pop"
+            android:id="@+id/action_pop"
             app:popUpTo="@id/diaryDetailFragment"
             app:popUpToInclusive="true" />
     </fragment>

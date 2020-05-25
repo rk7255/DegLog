@@ -8,16 +8,13 @@
         <variable
             name="viewModel"
             type="jp.ryuk.deglog.ui.viewmodels.DiaryDetailViewModel" />
-
-        <variable
-            name="hasMemo"
-            type="Boolean" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBackground"
+        android:background="@color/primaryColor"
+        android:elevation="0dp"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -32,35 +29,14 @@
                 app:layout_scrollFlags="noScroll"
                 app:title="@string/title_diary_detail" />
 
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/diary_detail_tab"
-                style="@style/Widget.MaterialComponents.TabLayout.Colored"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/toolbar_height"
-                app:layout_scrollFlags="noScroll"
-                app:tabGravity="center"
-                app:tabIndicatorColor="@color/primaryTextColor"
-                app:tabIndicatorFullWidth="true"
-                app:tabMode="scrollable"
-                app:tabPaddingEnd="@dimen/margin_xl"
-                app:tabPaddingStart="@dimen/margin_xl"
-                app:tabTextColor="@color/primaryTextColor" />
-
         </com.google.android.material.appbar.AppBarLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/primaryColor"
             android:elevation="4dp"
             android:fitsSystemWindows="true"
-            android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/diary_list_view_pager"
-                android:layout_width="match_parent"
-                android:layout_height="0dp" />
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -69,6 +45,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:background="@color/primaryColor"
                     android:orientation="vertical">
 
                     <com.google.android.material.card.MaterialCardView
@@ -97,9 +74,9 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@{viewModel.date}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 android:textSize="18sp"
+                                app:dateLong="@{viewModel.date}"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent"
@@ -111,12 +88,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:gravity="center"
-                                android:text="@{viewModel.age}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 android:textSize="18sp"
+                                app:dateForAge="@{viewModel.date}"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/detail_date"
+                                app:profileForAge="@{viewModel.profile}"
                                 tools:text="1歳2ヶ月3日" />
 
                             <ImageView
@@ -134,7 +112,6 @@
                                 android:id="@+id/detail_date_image_back_view"
                                 android:layout_width="60dp"
                                 android:layout_height="60dp"
-                                android:onClick="@{() -> viewModel.onDateBack()}"
                                 app:layout_constraintBottom_toBottomOf="@+id/detail_date_image_back"
                                 app:layout_constraintEnd_toEndOf="@+id/detail_date_image_back"
                                 app:layout_constraintStart_toStartOf="@+id/detail_date_image_back"
@@ -155,7 +132,6 @@
                                 android:id="@+id/detail_date_image_next_view"
                                 android:layout_width="60dp"
                                 android:layout_height="60dp"
-                                android:onClick="@{() -> viewModel.onDateNext()}"
                                 app:layout_constraintBottom_toBottomOf="@+id/detail_date_image_next"
                                 app:layout_constraintEnd_toEndOf="@+id/detail_date_image_next"
                                 app:layout_constraintStart_toStartOf="@+id/detail_date_image_next"
@@ -198,7 +174,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:gravity="center"
-                                android:text="@{viewModel.weight.latest}"
+                                android:text="@{viewModel.weightData.latest}"
                                 android:textAppearance="@style/Deglog.Dashboard.Main1"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintHorizontal_chainStyle="packed"
@@ -221,7 +197,6 @@
                                 android:id="@+id/detail_weight_image_back_view"
                                 android:layout_width="60dp"
                                 android:layout_height="60dp"
-                                android:onClick="@{() -> viewModel.onWeightBack()}"
                                 app:layout_constraintBottom_toBottomOf="@+id/detail_weight_image_back"
                                 app:layout_constraintEnd_toEndOf="@+id/detail_weight_image_back"
                                 app:layout_constraintStart_toStartOf="@+id/detail_weight_image_back"
@@ -242,7 +217,6 @@
                                 android:id="@+id/detail_weight_image_next_view"
                                 android:layout_width="60dp"
                                 android:layout_height="60dp"
-                                android:onClick="@{() -> viewModel.onWeightNext()}"
                                 app:layout_constraintBottom_toBottomOf="@+id/detail_weight_image_next"
                                 app:layout_constraintEnd_toEndOf="@+id/detail_weight_image_next"
                                 app:layout_constraintStart_toStartOf="@+id/detail_weight_image_next"
@@ -263,7 +237,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@{viewModel.weight.prev}"
+                                android:text="@{viewModel.weightData.prev}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 app:layout_constraintBottom_toBottomOf="@+id/detail_weight_prev_title"
                                 app:layout_constraintEnd_toStartOf="@+id/guideline"
@@ -288,7 +262,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@{viewModel.weight.recent}"
+                                android:text="@{viewModel.weightData.recent}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 app:layout_constraintBottom_toBottomOf="@+id/detail_weight_recent_title"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -342,7 +316,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:gravity="center"
-                                android:text="@{viewModel.length.latest}"
+                                android:text="@{viewModel.lengthData.latest}"
                                 android:textAppearance="@style/Deglog.Dashboard.Main1"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintHorizontal_chainStyle="packed"
@@ -365,7 +339,6 @@
                                 android:id="@+id/detail_length_image_back_view"
                                 android:layout_width="60dp"
                                 android:layout_height="60dp"
-                                android:onClick="@{() -> viewModel.onLengthBack()}"
                                 app:layout_constraintBottom_toBottomOf="@+id/detail_length_image_back"
                                 app:layout_constraintEnd_toEndOf="@+id/detail_length_image_back"
                                 app:layout_constraintStart_toStartOf="@+id/detail_length_image_back"
@@ -386,7 +359,6 @@
                                 android:id="@+id/detail_length_image_next_view"
                                 android:layout_width="60dp"
                                 android:layout_height="60dp"
-                                android:onClick="@{() -> viewModel.onLengthNext()}"
                                 app:layout_constraintBottom_toBottomOf="@+id/detail_length_image_next"
                                 app:layout_constraintEnd_toEndOf="@+id/detail_length_image_next"
                                 app:layout_constraintStart_toStartOf="@+id/detail_length_image_next"
@@ -407,7 +379,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@{viewModel.length.prev}"
+                                android:text="@{viewModel.lengthData.prev}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 app:layout_constraintBottom_toBottomOf="@+id/detail_length_prev_title"
                                 app:layout_constraintEnd_toStartOf="@+id/guideline_length"
@@ -432,7 +404,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="@{viewModel.length.recent}"
+                                android:text="@{viewModel.lengthData.recent}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 app:layout_constraintBottom_toBottomOf="@+id/detail_length_recent_title"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -455,7 +427,7 @@
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:layout_marginStart="16dp"
                         android:layout_marginEnd="16dp"
                         android:layout_marginBottom="16dp"
@@ -464,7 +436,7 @@
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:id="@+id/detail_memo_container"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:background="@color/colorBackground"
                             android:padding="16dp"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -481,7 +453,7 @@
 
                             <TextView
                                 android:id="@+id/detail_memo_nothing"
-                                isGone="@{hasMemo}"
+                                isGone="@{viewModel.hasNote}"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
@@ -497,12 +469,12 @@
 
                             <TextView
                                 android:id="@+id/detail_memo"
-                                isGone="@{!hasMemo}"
+                                isGone="@{!viewModel.hasNote}"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="8dp"
                                 android:gravity="center"
-                                android:text="@{viewModel.memo}"
+                                android:text="@{viewModel.note}"
                                 android:textAppearance="@style/Deglog.Dashboard.Body"
                                 android:visibility="gone"
                                 app:layout_constraintEnd_toEndOf="parent"
@@ -516,11 +488,8 @@
                     </com.google.android.material.card.MaterialCardView>
 
                 </LinearLayout>
-
             </androidx.core.widget.NestedScrollView>
-
-        </LinearLayout>
-
+        </FrameLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>
