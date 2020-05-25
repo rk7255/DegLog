@@ -15,7 +15,7 @@ import jp.ryuk.deglog.database.Todo
 object DialogBuilder {
 
     @SuppressLint("InflateParams")
-    fun createTodoDialog(context: Context, unit: (String) -> Unit): AlertDialog {
+    fun createTodoDialog(context: Context, func: (String) -> Unit): AlertDialog {
         val view = LayoutInflater.from(context).inflate(R.layout.dialog_todo, null)
         val titleText = view.findViewById<TextView>(R.id.dialog_todo_title)
         val editText = view.findViewById<EditText>(R.id.dialog_todo_text)
@@ -25,7 +25,7 @@ object DialogBuilder {
         val dialog = MaterialAlertDialogBuilder(context)
             .setView(view)
             .setPositiveButton(context.getString(R.string.add)) { _, _ ->
-                unit(editText.text.toString())
+                func(editText.text.toString())
             }
             .setNeutralButton(context.getString(R.string.dialog_cancel), null)
             .create()
@@ -42,24 +42,24 @@ object DialogBuilder {
     }
 
     fun deleteTodoDialogBuilder(
-        context: Context, todo: Todo, unit: () -> Unit
+        context: Context, todo: Todo, func: () -> Unit
     ): AlertDialog {
         return MaterialAlertDialogBuilder(context)
             .setMessage("選択したToDoを完了します\n\"${todo.todo}\"")
             .setNeutralButton(context.getString(R.string.dialog_cancel), null)
             .setPositiveButton(context.getString(R.string.dialog_success)) { _, _ ->
-                unit()
+                func()
             }
             .create()
     }
 
     fun selectDashboardDialogBuilder(
-        context: Context, list: Array<String>, unit: (String) -> Unit
+        context: Context, list: Array<String>, func: (String) -> Unit
     ): AlertDialog {
         return MaterialAlertDialogBuilder(context)
             .setTitle(context.getString(R.string.choice_pet))
             .setItems(list) { _, which ->
-                unit(list[which])
+                func(list[which])
             }
             .create()
     }

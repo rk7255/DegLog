@@ -37,16 +37,23 @@ fun TextView.bindDate(date: Long) {
     text = Converter.longToDateString(date)
 }
 
+@BindingAdapter("dateShort")
+fun TextView.bindDateShort(date: Long) {
+    text = Converter.longToDateShortString(date)
+}
+
+
+
 @SuppressLint("SetTextI18n")
 @BindingAdapter("weight")
 fun TextView.bindWeight(weight: Float) {
-    text = "${weight.toInt()} g"
+    text = if (weight == 0f) "-" else "${weight.toInt()} g"
 }
 
 @SuppressLint("SetTextI18n")
 @BindingAdapter("length")
 fun TextView.bindLength(length: Float) {
-    text = "${length.toInt()} mm"
+    text = if (length == 0f) "-" else "${length.toInt()} mm"
 }
 
 

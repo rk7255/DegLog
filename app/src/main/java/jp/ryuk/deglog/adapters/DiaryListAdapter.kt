@@ -9,9 +9,9 @@ import jp.ryuk.deglog.database.Diary
 import jp.ryuk.deglog.databinding.ItemDetailListBinding
 
 
-class DetailListAdapter(
+class DiaryListAdapter(
     private val clickListener: DiaryListListener
-) : ListAdapter<Diary, DetailListAdapter.ViewHolder>(DiaryDiffCallback()) {
+) : ListAdapter<Diary, DiaryListAdapter.ViewHolder>(DiaryDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)

@@ -82,7 +82,7 @@
             android:name="name"
             app:argType="string" />
         <action
-            android:id="@+id/action_diaryListFragment_to_diaryDetailFragment"
+            android:id="@+id/to_diaryDetailFragment"
             app:destination="@id/diaryDetailFragment"
             app:enterAnim="@anim/spread_in"
             app:exitAnim="@anim/spread_out"

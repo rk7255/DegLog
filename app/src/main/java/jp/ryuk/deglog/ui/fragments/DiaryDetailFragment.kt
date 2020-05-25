@@ -7,6 +7,7 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -27,8 +28,12 @@ import jp.ryuk.deglog.utilities.NavMode
 class DiaryDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentDiaryDetailBinding
-    private lateinit var viewModel: DiaryDetailViewModel
-    private lateinit var args: DiaryDetailFragmentArgs
+    private val args: DiaryDetailFragmentArgs by lazy {
+        DiaryDetailFragmentArgs.fromBundle(requireArguments())
+    }
+    private val viewModel: DiaryDetailViewModel by viewModels {
+        InjectorUtil.provideDiaryDetailViewModelFactory(requireContext(), args.id, args.name)
+    }
     private lateinit var tabLayout: TabLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,13 +50,9 @@ class DiaryDetailFragment : Fragment() {
             inflater, R.layout.fragment_diary_detail, container, false
         )
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarDiaryDetail)
-        args = DiaryDetailFragmentArgs.fromBundle(
-            requireArguments()
-        )
-
-        viewModel = createViewModel(requireContext(), args.id, args.name)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
+
         binding.appBarDiaryDetail.title = args.name + getString(R.string.title_diary_detail_at_name)
 
         viewModel.diaries.observe(viewLifecycleOwner, Observer {

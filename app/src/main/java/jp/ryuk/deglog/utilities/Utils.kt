@@ -4,11 +4,31 @@ import android.app.Activity
 import android.content.Context
 import android.view.MotionEvent
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
+import com.google.android.material.chip.Chip
 import jp.ryuk.deglog.R
 
 object Utils {
+
+    fun <T : View> findViewsWithType(root: View, type: Class<T>): List<T> {
+        val views = ArrayList<T>()
+        findViewsWithType(root, type, views)
+        return views
+    }
+
+    private fun <T : View> findViewsWithType(view: View, type: Class<T>, views: MutableList<T>) {
+        if (type.isInstance(view)) {
+            type.cast(view)?.let { views.add(it) }
+        }
+
+        if (view is ViewGroup) {
+            for (i in 0 until view.childCount) {
+                findViewsWithType(view.getChildAt(i), type, views)
+            }
+        }
+    }
 
     fun hideKeyboard(activity: Activity, view: View, event: MotionEvent?): Boolean {
         val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
