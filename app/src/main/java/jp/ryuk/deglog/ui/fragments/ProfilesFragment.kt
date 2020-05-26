@@ -43,9 +43,14 @@ class ProfilesFragment : Fragment() {
             })
         recyclerView.adapter = adapter
 
+        binding.msgNothingProfile.setOnClickListener {
+            navigateToNewProfile()
+        }
+
         with(viewModel) {
             profiles.observe(viewLifecycleOwner) {
                 adapter.submitList(it)
+                binding.hasProfile = !it.isNullOrEmpty()
             }
 
             navigateToNewProfile.observe(viewLifecycleOwner) {

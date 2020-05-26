@@ -58,8 +58,6 @@ class NewProfileViewModel internal constructor(
         birthday?.let { birthdayString.value = Converter.longToDateAndTimeString(it) }
         gender.value = profile.value?.gender ?: "不明"
         type.value = profile.value?.type
-        weightUnit.value = profile.value!!.weightUnit
-        lengthUnit.value = profile.value!!.lengthUnit
         selectedColor.value = profile.value!!.color
     }
 
@@ -70,8 +68,6 @@ class NewProfileViewModel internal constructor(
                 type = type.value,
                 gender = gender.value ?: "不明",
                 birthday = birthday,
-                weightUnit = weightUnit.value ?: "g",
-                lengthUnit = lengthUnit.value ?: "mm",
                 color = selectedColor.value
             )
             if (isNew) {

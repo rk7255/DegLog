@@ -3,10 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="hasProfile"
+            type="Boolean" />
+    </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/primaryColor"
+        android:elevation="0dp"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -25,18 +33,41 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
             android:fitsSystemWindows="true"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+            <com.google.android.material.card.MaterialCardView
+                isGone="@{hasProfile}"
+                android:layout_width="wrap_content"
+                android:id="@+id/msg_nothing_profile"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="6dp">
+
+                <TextView
+                    android:layout_width="300dp"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:paddingStart="32dp"
+                    android:paddingTop="16dp"
+                    android:paddingEnd="32dp"
+                    android:paddingBottom="16dp"
+                    android:text="@string/register_profile"
+                    android:textAppearance="@style/Deglog.Dashboard.Body" />
+
+            </com.google.android.material.card.MaterialCardView>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/profiles_recycler_view"
+                isGone="@{!hasProfile}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
                 android:clipToPadding="false"
+                android:orientation="vertical"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_profiles" />
 

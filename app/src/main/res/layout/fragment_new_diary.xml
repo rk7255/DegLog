@@ -86,7 +86,7 @@
                     app:endIconDrawable="@drawable/ic_picker"
                     app:endIconMode="custom"
                     app:errorEnabled="true"
-                    app:startIconDrawable="@drawable/nav_ic_diary">
+                    app:startIconDrawable="@drawable/ic_pets">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/new_diary_edit_name_text"
@@ -214,13 +214,15 @@
                     android:layout_marginTop="80dp"
                     android:layout_height="wrap_content"
                     android:onClick="@{() -> viewModel.onAddDebug()}"
-                    android:text="データ100追加"/>
+                    android:text="データ100追加"
+                    tools:ignore="HardcodedText" />
 
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="@{() -> viewModel.onDeleteDebug()}"
-                    android:text="データ削除"/>
+                    android:text="データ削除"
+                    tools:ignore="HardcodedText" />
 
             </LinearLayout>
 

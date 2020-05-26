@@ -44,7 +44,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/nav_ic_diary" />
+                    app:srcCompat="@drawable/ic_pets" />
 
                 <TextView
                     android:id="@+id/profile_name"
@@ -91,30 +91,6 @@
                     app:layout_constraintBottom_toBottomOf="@+id/profile_icon"
                     app:layout_constraintStart_toEndOf="@+id/profile_icon"
                     tools:text="2020/01/01生（1歳2ヶ月3日）" />
-
-                <TextView
-                    android:id="@+id/profile_unit_weight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{profile.weightUnit}"
-                    android:textAppearance="@style/Deglog.Dashboard.Body"
-                    android:textColor="@color/gray"
-                    app:layout_constraintBottom_toBottomOf="@+id/profile_type"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/profile_type"
-                    tools:text="kg" />
-
-                <TextView
-                    android:id="@+id/profile_unit_length"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{profile.lengthUnit}"
-                    android:textAppearance="@style/Deglog.Dashboard.Body"
-                    android:textColor="@color/gray"
-                    app:layout_constraintBottom_toBottomOf="@+id/profile_age_and_birthday"
-                    app:layout_constraintEnd_toEndOf="@+id/profile_unit_weight"
-                    app:layout_constraintTop_toTopOf="@+id/profile_age_and_birthday"
-                    tools:text="mm" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

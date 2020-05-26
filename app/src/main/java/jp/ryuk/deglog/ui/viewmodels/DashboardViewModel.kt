@@ -80,9 +80,12 @@ class DashboardViewModel internal constructor(
     val lengthData = MutableLiveData<DisplayData>()
     val weightDataList = MutableLiveData<List<ChartData>>()
     val lengthDataList = MutableLiveData<List<ChartData>>()
+    val hasDiary = MutableLiveData<Boolean>()
 
     fun setDiary() {
+        hasDiary.value = !allDiary.value.isNullOrEmpty()
         if (allDiary.value.isNullOrEmpty()) return
+
         if (selected.isEmpty() || !nameList.contains(selected))
             selected = nameList.first()
 
@@ -108,7 +111,7 @@ class DashboardViewModel internal constructor(
         weightData.value = if (wSubList.isNotEmpty()) {
             DisplayData(
                 date = Converter.longToDateString(diaryList.first { it.weight != null }.date),
-                latest = wSubList.first().toString(),
+                latest = wSubList.first().toInt().toString(),
                 prev = prev(wSubList),
                 isPlusPrev = isPlusPrev(wSubList),
                 recent = recent(wSubList),
@@ -140,7 +143,7 @@ class DashboardViewModel internal constructor(
         lengthData.value = if (lSubList.isNotEmpty()) {
             DisplayData(
                 date = Converter.longToDateString(diaryList.first { it.length != null }.date),
-                latest = lSubList.first().toString(),
+                latest = lSubList.first().toInt().toString(),
                 prev = prev(lSubList),
                 isPlusPrev = isPlusPrev(lSubList),
                 recent = recent(lSubList),
@@ -165,6 +168,6 @@ class DashboardViewModel internal constructor(
         values[0] - values.last() >= 0
 
     private fun onSign(num: Float): String =
-        if (num >= 0) "+ ${num.absoluteValue}" else "- ${num.absoluteValue}"
+        if (num >= 0) "+ ${num.absoluteValue.toInt()}" else "- ${num.absoluteValue.toInt()}"
 
 }

@@ -19,6 +19,8 @@
     <string name="birthday">誕生日</string>
     <string name="apply">適用</string>
     <string name="filter">フィルタ</string>
+    <string name="label">ラベル</string>
+    <string name="dot">・</string>
 
     <!-- ナビゲーション -->
     <string name="bottom_nav_diary">日誌</string>
@@ -45,6 +47,7 @@
     <string name="load_names">名前リストの取得中…</string>
     <string name="notify_todo">未確認のTODOがあります</string>
     <string name="add_new_todo">ToDoの追加</string>
+    <string name="add_new_diary">新しい日誌の追加</string>
 
     <!-- 日誌詳細 -->
     <string name="exclude_blank">空白を除く</string>
@@ -54,13 +57,22 @@
     <string name="title_edit_title">日誌の編集</string>
     <string name="hint_name">名前*</string>
 
+    <!-- グラフ -->
+    <string name="select_chart">グラフ切替</string>
+    <string name="select_axis">横軸切替</string>
+    <string name="select_pets">表示するペット</string>
+    <string name="time">時間</string>
+    <string name="age">年齢</string>
+    <string name="recorded">記録順</string>
+
     <!-- プロフィール追加 -->
     <string name="title_new_profile">情報の登録</string>
     <string name="title_edit_profile">情報の更新</string>
     <string name="hint_weight_unit">体重の単位</string>
     <string name="hint_length_unit">体長の単位</string>
+    <string name="register_profile">プロフィールの登録</string>
 
-    <!-- エラーメッセージ -->
+    <!-- メッセージ -->
     <string name="name_empty_error_string">名前は入力必須項目です</string>
     <string name="dashboard_empty">データがありません\n右上の＋マークから追加できます！</string>
     <string name="nothing_todo">Todoはありません</string>
@@ -125,13 +137,6 @@
     <string name="animal_hachurui">爬虫類</string>
     <string name="animal_gyorui">魚類</string>
     <string name="animal_konchu">昆虫</string>
-    <string name="time">時間</string>
-    <string name="age">年齢</string>
-    <string name="recorded">記録順</string>
-    <string name="dot">・</string>
-    <string name="select_chart">グラフ切替</string>
-    <string name="select_axis">横軸切替</string>
-    <string name="select_pets">表示するペット</string>
 
     <string-array name="types">
         <item>@string/type_small</item>

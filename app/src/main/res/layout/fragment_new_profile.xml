@@ -23,12 +23,12 @@
 
             <View
                 android:id="@+id/view_color"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                tools:background="@color/pink"
-                android:layout_marginStart="-50dp"
-                android:layout_marginTop="-50dp"
-                android:rotation="45" />
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginStart="-30dp"
+                android:layout_marginTop="-30dp"
+                android:rotation="45"
+                tools:background="@color/pink" />
 
             <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
@@ -59,7 +59,7 @@
                         android:layout_width="@dimen/edit_text_width"
                         android:layout_height="wrap_content"
                         app:errorEnabled="true"
-                        app:startIconDrawable="@drawable/nav_ic_diary">
+                        app:startIconDrawable="@drawable/ic_pets">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/new_profile_edit_name_text"
@@ -116,7 +116,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="ラベル"
+                        android:text="@string/label"
                         android:textSize="14sp" />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -293,7 +293,7 @@
                         android:hint="@string/type"
                         app:endIconDrawable="@drawable/ic_picker"
                         app:endIconMode="custom"
-                        app:startIconDrawable="@drawable/nav_ic_diary">
+                        app:startIconDrawable="@drawable/ic_pets">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/new_profile_edit_type_text"
@@ -337,81 +337,6 @@
 
                     </FrameLayout>
 
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:layout_width="@dimen/edit_text_width"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin_l">
-
-                        <TextView
-                            android:id="@+id/unit_weight"
-                            android:layout_width="@dimen/edit_text_width_half"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:text="@string/hint_weight_unit"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/unit_length"
-                            android:layout_width="@dimen/edit_text_width_half"
-                            android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
-                            android:text="@string/hint_length_unit"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/new_profile_edit_weight_unit"
-                            style="@style/Widget.Deglog.EditText"
-                            android:layout_width="@dimen/edit_text_width_half"
-                            android:layout_height="wrap_content"
-                            app:endIconDrawable="@drawable/ic_picker"
-                            app:endIconMode="custom"
-                            app:layout_constraintEnd_toEndOf="@id/unit_weight"
-                            app:layout_constraintStart_toStartOf="@id/unit_weight"
-                            app:layout_constraintTop_toBottomOf="@+id/unit_weight">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/new_profile_edit_weight_unit_text"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:focusable="false"
-                                android:focusableInTouchMode="false"
-                                android:gravity="center_horizontal"
-                                android:inputType="none"
-                                android:singleLine="true"
-                                android:text="@={viewModel.weightUnit}" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/new_profile_edit_length_unit"
-                            style="@style/Widget.Deglog.EditText"
-                            android:layout_width="@dimen/edit_text_width_half"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/margin_l"
-                            app:endIconDrawable="@drawable/ic_picker"
-                            app:endIconMode="custom"
-                            app:layout_constraintEnd_toEndOf="@id/unit_length"
-                            app:layout_constraintStart_toStartOf="@id/unit_length"
-                            app:layout_constraintTop_toBottomOf="@id/unit_length">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/new_profile_edit_length_unit_text"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:focusable="false"
-                                android:focusableInTouchMode="false"
-                                android:gravity="center_horizontal"
-                                android:inputType="none"
-                                android:singleLine="true"
-                                android:text="@={viewModel.lengthUnit}" />
-
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -440,6 +365,7 @@
                 </LinearLayout>
 
             </androidx.core.widget.NestedScrollView>
+
         </FrameLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

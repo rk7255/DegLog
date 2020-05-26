@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
-import com.google.android.material.chip.Chip
 import jp.ryuk.deglog.R
 
 object Utils {
@@ -67,7 +66,7 @@ object Utils {
 
     fun iconSelector(context: Context, type: String?): Int {
         return when (type) {
-            null -> R.drawable.nav_ic_diary
+            null -> R.drawable.ic_pets
             // 大型
             context.getString(R.string.animal_ushi) -> R.drawable.img_big_ushi
             context.getString(R.string.animal_uma) -> R.drawable.img_big_uma
@@ -98,7 +97,7 @@ object Utils {
             context.getString(R.string.animal_gyorui) -> R.drawable.img_etc_gyorui
             context.getString(R.string.animal_konchu) -> R.drawable.img_etc_konchu
 
-            else -> R.drawable.nav_ic_diary
+            else -> R.drawable.ic_pets
         }
     }
 }

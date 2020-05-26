@@ -66,22 +66,6 @@ class NewProfileFragment : Fragment() {
                 typeDialogBuilder(requireContext(), binding.newProfileEditTypeText).show()
             }
 
-            newProfileEditWeightUnit.setEndIconOnClickListener {
-                unitDialogBuilder(
-                    requireContext(),
-                    binding.newProfileEditWeightUnitText,
-                    resources.getStringArray(R.array.weight_unit)
-                ).show()
-            }
-
-            newProfileEditLengthUnit.setEndIconOnClickListener {
-                unitDialogBuilder(
-                    requireContext(),
-                    binding.newProfileEditLengthUnitText,
-                    resources.getStringArray(R.array.length_unit)
-                ).show()
-            }
-
         }
 
         binding.newProfileToggleGroupGender.addOnButtonCheckedListener { group, checkedId, isChecked ->
@@ -163,18 +147,6 @@ class NewProfileFragment : Fragment() {
             .setNeutralButton(getString(R.string.dialog_cancel), null)
             .setPositiveButton(getString(R.string.dialog_ok)) { _, _ ->
                 viewModel.updateAndChange(profile)
-            }
-    }
-
-    private fun unitDialogBuilder(
-        context: Context,
-        editText: EditText,
-        units: Array<String>
-    ): MaterialAlertDialogBuilder {
-        return MaterialAlertDialogBuilder(context)
-            .setTitle(getString(R.string.choice_unit))
-            .setItems(units) { _, i ->
-                editText.setText(units[i])
             }
     }
 

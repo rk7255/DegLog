@@ -52,6 +52,10 @@ class DashboardFragment : Fragment() {
         })
         recyclerView.adapter = adapter
 
+        binding.msgNothingDiary.setOnClickListener {
+            navigateToNewDiary()
+        }
+
         with(viewModel) {
 
             allDiary.observe(viewLifecycleOwner) { setDiary() }
