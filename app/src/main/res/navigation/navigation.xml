@@ -137,7 +137,7 @@
         android:label="fragment_profiles"
         tools:layout="@layout/fragment_profiles">
         <action
-            android:id="@+id/action_profileFragment_to_newProfileFragment"
+            android:id="@+id/to_newProfileFragment"
             app:destination="@id/newProfileFragment"
             app:enterAnim="@anim/spread_in"
             app:exitAnim="@anim/spread_out"

@@ -9,15 +9,10 @@ class ProfilesViewModel internal constructor(
     profileRepository: ProfileRepository
 ) : ViewModel() {
 
-    var profiles = profileRepository.getAllProfile()
+    val profiles = profileRepository.getAllProfile()
 
-    fun onClickProfile(name: String) {
-        _navigateToNewProfile.value = name
-    }
-
-    private var _navigateToNewProfile = MutableLiveData<String?>()
+    private val _navigateToNewProfile = MutableLiveData<String?>()
     val navigateToNewProfile: LiveData<String?> get() = _navigateToNewProfile
-    fun doneNavigateToNewProfile() {
-        _navigateToNewProfile.value = null
-    }
+    fun doneNavigateToNewProfile() { _navigateToNewProfile.value = null }
+    fun onClickProfile(name: String) { _navigateToNewProfile.value = name }
 }

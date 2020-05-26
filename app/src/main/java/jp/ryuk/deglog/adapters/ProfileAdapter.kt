@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import jp.ryuk.deglog.R
 import jp.ryuk.deglog.database.Profile
 import jp.ryuk.deglog.databinding.ItemProfilesBinding
 import jp.ryuk.deglog.utilities.Utils
@@ -26,26 +27,26 @@ class ProfileAdapter(
 
     class ViewHolder private constructor(private val binding: ItemProfilesBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(profile: Profile, clickListener: ProfileListener, context: Context) {
-            binding.profile = profile
-            binding.ageAndBirthday = profile.getAgeAndBirthday()
-            binding.clickListener = clickListener
-            binding.profileIcon.setImageResource(Utils.iconSelector(context, profile.type))
-
             val colorMap = Utils.getColorMap(context)
-
             val colorGender = when (profile.gender) {
-                "オス" -> colorMap["blue"]
-                "メス" -> colorMap["red"]
+                context.getString(R.string.gender_male) -> colorMap["blue"]
+                context.getString(R.string.gender_female) -> colorMap["red"]
                 else -> colorMap["gray"]
             }
-            binding.profileGender.setTextColor(colorGender!!)
-
             val colorKey = Utils.colorSelector(profile.color)
             val colorLabel = colorMap[colorKey]
-            binding.profileViewColor.setBackgroundColor(colorLabel!!)
 
-            binding.executePendingBindings()
+            with(binding) {
+                this.profile = profile
+                this.clickListener = clickListener
+                ageAndBirthday = profile.getAgeAndBirthday()
+                binding.profileIcon.setImageResource(Utils.iconSelector(context, profile.type))
+                profileGender.setTextColor(colorGender!!)
+                profileViewColor.setBackgroundColor(colorLabel!!)
+                executePendingBindings()
+            }
         }
+
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
