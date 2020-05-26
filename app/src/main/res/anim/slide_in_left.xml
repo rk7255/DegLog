@@ -10,7 +10,7 @@
 
     <translate
         android:fromYDelta="1"
-        android:fromXDelta="-20%"
+        android:fromXDelta="-10%"
         android:toYDelta="1"
         android:toXDelta="1"/>
 </set>

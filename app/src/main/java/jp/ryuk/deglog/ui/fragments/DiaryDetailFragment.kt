@@ -80,6 +80,7 @@ class DiaryDetailFragment : Fragment() {
             "back" -> AnimationUtils.loadAnimation(requireContext(), R.anim.slide_in_left)
             else -> return
         }
+
         with (binding) {
             detailWeightLatest.startAnimation(anim)
             detailLengthLatest.startAnimation(anim)
