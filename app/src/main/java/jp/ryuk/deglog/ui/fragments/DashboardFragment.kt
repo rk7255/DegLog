@@ -15,6 +15,7 @@ import jp.ryuk.deglog.adapters.TodoAdapter
 import jp.ryuk.deglog.adapters.TodoListener
 import jp.ryuk.deglog.databinding.FragmentDashboardBinding
 import jp.ryuk.deglog.ui.data.ChartCreator
+import jp.ryuk.deglog.ui.data.ChartData
 import jp.ryuk.deglog.ui.data.DialogBuilder
 import jp.ryuk.deglog.ui.viewmodels.DashboardViewModel
 import jp.ryuk.deglog.utilities.*
@@ -68,11 +69,11 @@ class DashboardFragment : Fragment() {
             }
 
             weightDataList.observe(viewLifecycleOwner) {
-                createLineChart(binding.dbWeightChart, it)
+                createLineChart(binding.dbWeightChart, it, listOf(selected))
             }
 
             lengthDataList.observe(viewLifecycleOwner) {
-                createLineChart(binding.dbLengthChart, it)
+                createLineChart(binding.dbLengthChart, it, listOf(selected))
             }
 
             clicked.observe(viewLifecycleOwner) { where ->
@@ -125,8 +126,9 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun createLineChart(lineChart: LineChart, dataList: List<Float>) {
-        ChartCreator.createLineChartByIndex(lineChart, dataList)
+    private fun createLineChart(lineChart: LineChart, chartData: List<ChartData>, nameList: List<String>) {
+        ChartCreator.createLineChartByIndex(lineChart, chartData, nameList, Deco.DASHBOARD)
+
     }
 
     private fun saveSharedPreferences(selected: String) {

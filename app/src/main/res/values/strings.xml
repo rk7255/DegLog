@@ -17,6 +17,8 @@
     <string name="gender_female">メス</string>
     <string name="gender_unknown">不明</string>
     <string name="birthday">誕生日</string>
+    <string name="apply">適用</string>
+    <string name="filter">フィルタ</string>
 
     <!-- ナビゲーション -->
     <string name="bottom_nav_diary">日誌</string>
@@ -71,6 +73,7 @@
     <string name="icon_of_previous">前回</string>
     <string name="icon_of_next">次回</string>
     <string name="icon_of_has_memo">メモあり</string>
+    <string name="icon_of_filter_open">フィルターを開く</string>
 
     <!-- ダイアログ関係 -->
     <string name="dialog_tag">dialogTag</string>
@@ -126,6 +129,9 @@
     <string name="age">年齢</string>
     <string name="recorded">記録順</string>
     <string name="dot">・</string>
+    <string name="select_chart">グラフ切替</string>
+    <string name="select_axis">横軸切替</string>
+    <string name="select_pets">表示するペット</string>
 
     <string-array name="types">
         <item>@string/type_small</item>

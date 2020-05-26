@@ -3,15 +3,21 @@ package jp.ryuk.deglog.ui.fragments
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
+import androidx.lifecycle.observe
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import jp.ryuk.deglog.R
+import jp.ryuk.deglog.database.Diary
 import jp.ryuk.deglog.databinding.FragmentChartBinding
+import jp.ryuk.deglog.ui.data.ChartCreator
+import jp.ryuk.deglog.ui.data.ChartData
 import jp.ryuk.deglog.ui.viewmodels.ChartViewModel
 import jp.ryuk.deglog.utilities.*
 import org.json.JSONArray
@@ -28,171 +34,176 @@ class ChartFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentChartBinding.inflate(inflater, container, false)
-
-        val colorMap = Utils.getColorMap(requireContext())
-        viewModel.colorMap = colorMap
-
+        binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        viewModel.chart = binding.chartChart
 
-        binding.apply {
-            chartFilterOpen.setOnClickListener { showFilters() }
-            chartFilterBg.setOnClickListener { showFilters() }
-            chartButtonSubmit.setOnClickListener { onSubmit() }
+        val colorMap = mutableMapOf<String, Int>()
+        var dReady = false
+        var pReady = false
 
+        with(binding) {
             chartChart.setNoDataText("")
+            chartFilterOpen.setOnClickListener { showFilters(binding) }
+            chartFilterBg.setOnClickListener { showFilters(binding) }
+
+            chartButtonSubmit.setOnClickListener {
+                if (dReady && pReady) createChart(colorMap)
+                saveSharedPreferences(binding)
+            }
         }
 
-        viewModel.apply {
-            diaries.observe(viewLifecycleOwner, Observer {
-                if (!it.isNullOrEmpty()) {
-                    diariesLoaded.value = true
-                    sectionLoaded()
+        with(viewModel) {
+            allDiary.observe(viewLifecycleOwner) {
+                createNameChips(requireContext(), binding.chipGroupNames, nameList)
+                loadSharedPreferences(binding)
+                dReady = true
+                if (dReady && pReady) createChart(colorMap)
+            }
+
+            allProfile.observe(viewLifecycleOwner) {
+                val colors = Utils.getColorMap(requireContext())
+                it.forEach { profile ->
+                    val c = Utils.colorSelector(profile.color)
+                    colorMap[profile.name] = colors[c]
+                        ?: ContextCompat.getColor(requireContext(), R.color.primaryTextColor)
                 }
-            })
-
-            profiles.observe(viewLifecycleOwner, Observer {
-                if (!it.isNullOrEmpty()) {
-                    profilesLoaded.value = true
-                    sectionLoaded()
-                }
-            })
-
-            allLoaded.observe(viewLifecycleOwner, Observer {
-                if (it == true) {
-                    createChips(requireContext(), binding.chipGroupNames, names)
-                    val chips = getChips()
-                    val checked = loadSharedPreferences()
-                    chips.forEach { chip ->
-                        chip.isChecked = checked.contains(chip.text.toString())
-                    }
-                    onSubmit()
-                }
-            })
-
-            hasDiaries.observe(viewLifecycleOwner, Observer {
-                binding.hasDiaries = it == true
-            })
-
-            filterString.observe(viewLifecycleOwner, Observer {
-                binding.chartFilterText.text = it
-            })
-
+                pReady = true
+                if (dReady && pReady) createChart(colorMap)
+            }
         }
 
         return binding.root
     }
 
-    private fun createChips(context: Context, chipGroup: ChipGroup, names: List<String>) {
+    private fun createChart(colorMap: Map<String, Int>) {
+        val cId = binding.chipGroupChart.checkedChipId
+        val whichChart = binding.chipGroupChart.findViewById<Chip>(cId).text.toString()
+
+        val aId = binding.chipGroupAxis.checkedChipId
+        val whichAxis = binding.chipGroupAxis.findViewById<Chip>(aId).text.toString()
+
+        val nameChips = Utils.findViewsWithType(binding.chipGroupNames, Chip::class.java)
+        val checked = mutableListOf<String>().apply {
+            nameChips.forEach { if (it.isChecked) add(it.text.toString()) }
+        }
+
+        var diaries = viewModel.allDiary.value!!
+        diaries = diaries.filter { checked.contains(it.name) }
+        diaries = when (whichChart) {
+            "体重" -> diaries.filter { it.weight != null }
+            else -> diaries.filter { it.length != null }
+        }
+        val chartData = convertDiaryToChartData(diaries, whichChart)
+
+        val filterStr = StringBuilder().apply {
+            append("$whichChart> ")
+            append("$whichAxis> ")
+            checked.forEachIndexed { index, s ->
+                if (index > 0) append(", ")
+                append(s)
+            }
+        }
+        binding.chartFilterText.text = filterStr.toString()
+
+        if (chartData.isNotEmpty()) {
+            binding.hasDiaries = true
+            when (whichAxis) {
+                "時間" -> ChartCreator.createLineChartByDate(
+                    binding.chartChart,
+                    chartData,
+                    checked,
+                    Deco.CHART,
+                    colorMap
+                )
+                else -> ChartCreator.createLineChartByIndex(
+                    binding.chartChart,
+                    chartData,
+                    checked,
+                    Deco.CHART,
+                    colorMap
+                )
+            }
+        } else {
+            binding.hasDiaries = false
+        }
+    }
+
+    private fun convertDiaryToChartData(list: List<Diary>, which: String): List<ChartData> {
+        return mutableListOf<ChartData>().apply {
+            list.forEach {
+                add(
+                    ChartData(
+                        name = it.name,
+                        date = it.date,
+                        data = if (which == "体重") it.weight!! else it.length!!
+                    )
+                )
+            }
+        }
+    }
+
+    @SuppressLint("InflateParams")
+    private fun createNameChips(context: Context, chipGroup: ChipGroup, names: List<String>) {
         if (names.isNotEmpty()) {
             val inflater = LayoutInflater.from(context)
 
-            names.sorted().forEach { item ->
-                @SuppressLint("InflateParams")
+            names.sorted().forEach { name ->
                 val chip = inflater.inflate(R.layout.item_chip, null, false) as Chip
                 chip.apply {
                     id = View.generateViewId()
-                    text = item
-                    setOnCheckedChangeListener { buttonView, isChecked ->
-                        if (isChecked) {
-                            viewModel.checked.add(buttonView.text.toString())
-                        } else {
-                            viewModel.checked.remove(buttonView.text.toString())
-                        }
-                    }
+                    text = name
                 }
                 chipGroup.addView(chip)
             }
         }
     }
 
-    private fun getChips(): ArrayList<Chip> {
-        val views = binding.chartFilterContainer
-        val chips = ArrayList<Chip>()
-        findChips(views, chips)
-        return chips
-    }
-
-    private fun findChips(view: View, chips: ArrayList<Chip>) {
-        if (Chip::class.java.isInstance(view)) {
-            chips.add(view as Chip)
-        }
-
-        if (view is ViewGroup) {
-            for (i in 0 until view.childCount) {
-                findChips(view.getChildAt(i), chips)
-            }
-        }
-    }
-
-    private fun saveSharedPreferences() {
-        val sharedPreferences = requireContext().getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
+    private fun saveSharedPreferences(binding: FragmentChartBinding) {
+        val sharedPreferences =
+            requireContext().getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
         val editor = sharedPreferences.edit()
 
-        val chips = getChips()
-        val checked = arrayListOf<String>()
-        chips.forEach { chip ->
-            if (chip.isChecked)
-                checked.add(chip.text.toString())
-        }
+        val cId = binding.chipGroupChart.checkedChipId
+        val cText = binding.chipGroupChart.findViewById<Chip>(cId).text.toString()
 
-        val jsonArray = JSONArray(checked)
-        editor.putString(KEY_CHECKED, jsonArray.toString())
+        val aId = binding.chipGroupAxis.checkedChipId
+        val aText = binding.chipGroupAxis.findViewById<Chip>(aId).text.toString()
+
+        val nameChips = Utils.findViewsWithType(binding.chipGroupNames, Chip::class.java)
+        val nTexts = mutableListOf<String>().apply {
+            nameChips.forEach { if (it.isChecked) add(it.text.toString()) }
+        }
+        val nTextsToJson = JSONArray(nTexts).toString()
+
+        editor.putString(KEY_CHECKED_CHART, cText)
+        editor.putString(KEY_CHECKED_AXIS, aText)
+        editor.putString(KEY_CHECKED_NAME, nTextsToJson)
         editor.apply()
     }
 
-    private fun loadSharedPreferences(): ArrayList<String> {
-        val sharedPreferences = requireContext().getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
-        val jsonArray = JSONArray(sharedPreferences.getString(KEY_CHECKED, "[]"))
-        val array = arrayListOf<String>()
-        for (i in 0 until jsonArray.length()) {
-            array.add(jsonArray.get(i).toString())
+    private fun loadSharedPreferences(binding: FragmentChartBinding) {
+        val sharedPreferences =
+            requireContext().getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
+
+        val c = sharedPreferences.getString(KEY_CHECKED_CHART, "体重")
+        val cChips = Utils.findViewsWithType(binding.chipGroupChart, Chip::class.java)
+        cChips.forEach { it.isChecked = it.text.toString() == c }
+
+        val a = sharedPreferences.getString(KEY_CHECKED_AXIS, "時間")
+        val aChips = Utils.findViewsWithType(binding.chipGroupAxis, Chip::class.java)
+        aChips.forEach { it.isChecked = it.text.toString() == a }
+
+        val jsonArray = JSONArray(sharedPreferences.getString(KEY_CHECKED_NAME, "[]"))
+        val nList = mutableListOf<String>().apply {
+            for (i in 0 until jsonArray.length()) {
+                add(jsonArray.get(i).toString())
+            }
         }
-        return array
+        val nChips = Utils.findViewsWithType(binding.chipGroupNames, Chip::class.java)
+        nChips.forEach { it.isChecked = nList.contains(it.text.toString()) }
     }
 
-    private fun onSubmit() {
-        saveSharedPreferences()
-
-        val chips = getChips()
-        val checked = arrayListOf<String>()
-        chips.forEach {
-            if (it.isChecked) checked.add(it.text.toString())
-        }
-        val whichChart: String
-        val whichAxis: String
-
-        when {
-            checked.contains(getString(R.string.weight)) -> {
-                whichChart = getString(R.string.weight)
-                checked.remove(getString(R.string.weight))
-            }
-            checked.contains(getString(R.string.length)) -> {
-                whichChart = getString(R.string.length)
-                checked.remove(getString(R.string.length))
-            }
-            else -> {
-                whichChart = getString(R.string.weight)
-            }
-        }
-        when {
-            checked.contains(getString(R.string.time)) -> {
-                whichAxis = getString(R.string.time)
-                checked.remove(getString(R.string.time))
-            }
-            checked.contains(getString(R.string.recorded)) -> {
-                whichAxis = getString(R.string.recorded)
-                checked.remove(getString(R.string.recorded))
-            }
-            else -> {
-                whichAxis = getString(R.string.time)
-            }
-        }
-
-        viewModel.refreshChart(whichChart, whichAxis, checked)
-    }
-
-    private fun showFilters() {
+    private fun showFilters(binding: FragmentChartBinding) {
         val container = binding.chartFilterContainer
         val bg = binding.chartFilterBg
         val icon = binding.chartFilterIcon
@@ -226,3 +237,5 @@ class ChartFragment : Fragment() {
         }
     }
 }
+
+

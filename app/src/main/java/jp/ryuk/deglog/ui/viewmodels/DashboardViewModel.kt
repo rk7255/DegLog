@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import jp.ryuk.deglog.database.*
+import jp.ryuk.deglog.ui.data.ChartData
 import jp.ryuk.deglog.ui.data.DisplayData
 import jp.ryuk.deglog.utilities.Converter
 import jp.ryuk.deglog.utilities.Utils
@@ -77,19 +78,33 @@ class DashboardViewModel internal constructor(
      */
     val weightData = MutableLiveData<DisplayData>()
     val lengthData = MutableLiveData<DisplayData>()
-    val weightDataList = MutableLiveData<List<Float>>()
-    val lengthDataList = MutableLiveData<List<Float>>()
+    val weightDataList = MutableLiveData<List<ChartData>>()
+    val lengthDataList = MutableLiveData<List<ChartData>>()
 
     fun setDiary() {
+        if (allDiary.value.isNullOrEmpty()) return
         if (selected.isEmpty() || !nameList.contains(selected))
             selected = nameList.first()
 
         val diaryList = allDiary.value!!.filter { it.name == selected }
 
+        // 体重
+        val wChartData = mutableListOf<ChartData>().apply {
+            val l = diaryList.filter { it.weight != null }
+            val cData = l.subList(0, min(7, l.size))
+            cData.forEach {
+                add(ChartData(
+                    name = it.name,
+                    date = it.date,
+                    data = it.weight!!
+                ))
+            }
+        }
+        weightDataList.value = wChartData
+
         val wList = diaryList.mapNotNull(Diary::weight)
         val wSubList = wList.subList(0, min(7, wList.size))
 
-        weightDataList.value = wSubList
         weightData.value = if (wSubList.isNotEmpty()) {
             DisplayData(
                 date = Converter.longToDateString(diaryList.first { it.weight != null }.date),
@@ -104,10 +119,24 @@ class DashboardViewModel internal constructor(
             DisplayData()
         }
 
+        // 体長
+
+        val lChartData = mutableListOf<ChartData>().apply {
+            val l = diaryList.filter { it.length != null }
+            val cData = l.subList(0, min(7, l.size))
+            cData.forEach {
+                add(ChartData(
+                    name = it.name,
+                    date = it.date,
+                    data = it.length!!
+                ))
+            }
+        }
+        lengthDataList.value = lChartData
+
         val lList = diaryList.mapNotNull(Diary::length)
         val lSubList = lList.subList(0, min(7, lList.size))
 
-        lengthDataList.value = lSubList
         lengthData.value = if (lSubList.isNotEmpty()) {
             DisplayData(
                 date = Converter.longToDateString(diaryList.first { it.length != null }.date),

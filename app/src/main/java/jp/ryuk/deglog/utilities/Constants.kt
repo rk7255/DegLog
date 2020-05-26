@@ -5,9 +5,12 @@ const val PROFILE_TABLE = "profile_table"
 const val TODO_TABLE = "todo_table"
 const val DATABASE_NAME = "app_database"
 
+// Shared Preferences
 const val SHARED_PREF_KEY = "shared_pref"
 const val KEY_DASHBOARD = "dashboard"
-const val KEY_CHECKED = "checked"
+const val KEY_CHECKED_NAME = "checked_name"
+const val KEY_CHECKED_CHART = "checked_chart"
+const val KEY_CHECKED_AXIS = "checked_axis"
 
 const val deg = "DEGLOG_DEBUG"
 
@@ -31,5 +34,12 @@ class NavMode {
 
         const val FROM_WEIGHT = 0
         const val FROM_LENGTH = 1
+    }
+}
+
+class Deco {
+    companion object {
+        const val DASHBOARD = 0
+        const val CHART = 1
     }
 }
