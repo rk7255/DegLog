@@ -99,6 +99,10 @@ class NewDiaryFragment : Fragment() {
                         isEnabled = false
                         helperText = getString(R.string.name_do_not_edit)
                     }
+                    binding.ndNameText.apply {
+                        setTextColor(requireContext().getColor(R.color.grayThin))
+                        setBackgroundColor(requireContext().getColor(R.color.bgEditTextThin))
+                    }
                 }
             }
 
@@ -121,6 +125,7 @@ class NewDiaryFragment : Fragment() {
             submit.observe(viewLifecycleOwner) {
                 val msg = when (it) {
                     MessageCode.NAME_UNREGISTERED -> getString(R.string.registered_diary_and_profile)
+                    MessageCode.EDIT -> getString(R.string.edited_diary)
                     else -> getString(R.string.registered_diary)
                 }
                 showSnackbar(msg)

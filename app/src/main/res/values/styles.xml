@@ -18,6 +18,10 @@
         <item name="popupTheme">@style/ThemeOverlay.AppCompat.Light</item>
         <item name="titleTextAppearance">@style/TextAppearance.Deglog.Toolbar</item>
     </style>
+    
+    <style name="Widget.Deglog.ToggleButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:tint">@color/blue</item>
+    </style>
 
     <style name="TextAppearance.Deglog.Toolbar" parent="TextAppearance.MaterialComponents.Button">
         <item name="android:textSize">18sp</item>
@@ -46,11 +50,17 @@
     </style>
 
 
-    <!--  Dashboard  -->
     <style name="circleImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">49%</item>
     </style>
+
+    <style name="cubeImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20%</item>
+    </style>
+
+
 
     <style name="Deglog.Dashboard.Title" parent="TextAppearance.MaterialComponents.Subtitle1">
         <item name="fontFamily">monospace</item>

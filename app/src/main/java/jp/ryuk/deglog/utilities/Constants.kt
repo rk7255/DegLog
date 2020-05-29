@@ -17,10 +17,12 @@ const val TAG = "DEGLOG_DEBUG"
 
 class MessageCode {
     companion object {
-        const val ALL_COLLECT = 0
+        const val COLLECT = 0
         const val NAME_EMPTY = 1
         const val NAME_UNREGISTERED = 2
-        const val NUMBER_EMPTY = 3
+        const val NAME_REGISTERED = 3
+        const val NUMBER_EMPTY = 4
+        const val EDIT = 5
     }
 }
 

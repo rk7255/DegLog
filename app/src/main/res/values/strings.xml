@@ -64,8 +64,10 @@
     <string name="record">記録</string>
     <string name="name_do_not_edit">*名前は編集できません</string>
     <string name="enter_name">名前を入力してください</string>
+    <string name="registered_name">登録済みの名前です</string>
     <string name="enter_number_up_one">１項目以上入力してください</string>
     <string name="registered_diary">日誌を登録しました</string>
+    <string name="edited_diary">日誌を更新しました</string>
     <string name="registered_diary_and_profile">日誌とプロフィールを登録しました</string>
 
     <!-- グラフ -->
@@ -77,11 +79,13 @@
     <string name="recorded">記録順</string>
 
     <!-- プロフィール追加 -->
-    <string name="title_new_profile">情報の登録</string>
-    <string name="title_edit_profile">情報の更新</string>
+    <string name="title_new_profile">- New Profile -</string>
+    <string name="title_edit_profile">- Edit Profile -</string>
     <string name="hint_weight_unit">体重の単位</string>
     <string name="hint_length_unit">体長の単位</string>
     <string name="register_profile">プロフィールの登録</string>
+    <string name="registered_profile">プロフィールを登録しました</string>
+    <string name="edited_prodile">プロフィールを更新しました</string>
 
     <!-- メッセージ -->
     <string name="name_empty_error_string">名前は入力必須項目です</string>
@@ -103,7 +107,7 @@
     <string name="dialog_yes">はい</string>
     <string name="dialog_no">いいえ</string>
     <string name="dialog_ok">OK</string>
-    <string name="dialog_submit">登録</string>
+    <string name="dialog_registered">登録</string>
     <string name="dialog_success">完了</string>
     <string name="dialog_cancel">キャンセル</string>
     <string name="dialog_delete_title">削除しますか？</string>
@@ -195,6 +199,34 @@
         <item>@string/animal_gyorui</item>
         <item>@string/animal_konchu</item>
     </string-array>
+
+    <string-array name="all_types">
+        <item>@string/animal_ushi</item>
+        <item>@string/animal_uma</item>
+        <item>@string/animal_buta</item>
+        <item>@string/animal_hitsuji</item>
+        <item>@string/animal_yagi</item>
+        <item>@string/animal_inu</item>
+        <item>@string/animal_neko</item>
+        <item>@string/animal_kitsune</item>
+        <item>@string/animal_tanuki</item>
+        <item>@string/animal_usagi</item>
+        <item>@string/animal_degu</item>
+        <item>@string/animal_chinchira</item>
+        <item>@string/animal_hamster</item>
+        <item>@string/animal_harinezumi</item>
+        <item>@string/animal_nezumi</item>
+        <item>@string/animal_marmot</item>
+        <item>@string/animal_risu</item>
+        <item>@string/animal_momonga</item>
+        <item>@string/animal_inko</item>
+        <item>@string/animal_finchi</item>
+        <item>@string/animal_moukin</item>
+        <item>@string/animal_hachurui</item>
+        <item>@string/animal_gyorui</item>
+        <item>@string/animal_konchu</item>
+    </string-array>
+
 
     <string-array name="weight_unit">
         <item>g</item>

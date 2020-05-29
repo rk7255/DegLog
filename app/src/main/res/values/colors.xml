@@ -3,22 +3,26 @@
     <color name="primaryColor">#c6aa80</color>
     <color name="primaryLightColor">#fadcb0</color>
     <color name="primaryDarkColor">#947b53</color>
-    <color name="secondaryColor">#eaeea2</color>
-    <color name="secondaryLightColor">#ffffd4</color>
-    <color name="secondaryDarkColor">#b7bc73</color>
+    <color name="secondaryColor">#ffae28</color>
+    <color name="secondaryLightColor">#ffe05d</color>
+    <color name="secondaryDarkColor">#c77f00</color>
     <color name="primaryTextColor">#3d332a</color>
     <color name="secondaryTextColor">#fadcb0</color>
     <color name="colorBackground">#ffffff</color>
 
     <color name="gray">#aeaeae</color>
+
     <color name="pink">#F08279</color>
-    <color name="blue">#3AB6EF</color>
-    <color name="green">#9AFF6E</color>
-    <color name="yellow">#FFFE77</color>
-    <color name="purple">#D768E8</color>
     <color name="orange">#FFBF5B</color>
+    <color name="yellow">#F4E91A</color>
+    <color name="green">#7be051</color>
+    <color name="blue">#3AB6EF</color>
+    <color name="purple">#D768E8</color>
+
 
     <color name="bgBlack">#55000000</color>
     <color name="bgEditText">#22c6aa80</color>
+    <color name="bgEditTextThin">#11c6aa80</color>
+    <color name="grayThin">#88aeaeae</color>
 
 </resources>

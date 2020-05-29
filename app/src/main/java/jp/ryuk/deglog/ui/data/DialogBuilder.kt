@@ -17,6 +17,56 @@ import jp.ryuk.deglog.utilities.*
 
 object DialogBuilder {
 
+
+    fun typeDialogBuilder(
+        context: Context,
+        editText: EditText
+    ): MaterialAlertDialogBuilder {
+        val types = context.resources.getStringArray(R.array.types)
+        val typesBig = context.resources.getStringArray(R.array.types_big)
+        val typesMedium = context.resources.getStringArray(R.array.types_medium)
+        val typesSmall = context.resources.getStringArray(R.array.types_small)
+        val typesBird = context.resources.getStringArray(R.array.types_bird)
+        val typesEtc = context.resources.getStringArray(R.array.types_etc)
+
+        return MaterialAlertDialogBuilder(context)
+            .setTitle(context.getString(R.string.choice_type))
+            .setItems(types) { _, size ->
+                when (size) {
+                    0 -> {
+                        MaterialAlertDialogBuilder(context)
+                            .setTitle(R.string.type_small)
+                            .setItems(typesSmall) { _, type -> editText.setText(typesSmall[type]) }
+                            .show()
+                    }
+                    1 -> {
+                        MaterialAlertDialogBuilder(context)
+                            .setTitle(R.string.type_medium)
+                            .setItems(typesMedium) { _, type -> editText.setText(typesMedium[type]) }
+                            .show()
+                    }
+                    2 -> {
+                        MaterialAlertDialogBuilder(context)
+                            .setTitle(R.string.type_big)
+                            .setItems(typesBig) { _, type -> editText.setText(typesBig[type]) }
+                            .show()
+                    }
+                    3 -> {
+                        MaterialAlertDialogBuilder(context)
+                            .setTitle(R.string.type_bird)
+                            .setItems(typesBird) { _, type -> editText.setText(typesBird[type]) }
+                            .show()
+                    }
+                    4 -> {
+                        MaterialAlertDialogBuilder(context)
+                            .setTitle(R.string.type_etc)
+                            .setItems(typesEtc) { _, type -> editText.setText(typesEtc[type]) }
+                            .show()
+                    }
+                }
+            }
+    }
+
     fun datePickerDialogBuilder(context: Context, date: Long, unit: (Int, Int, Int) -> Unit): DatePickerDialog {
         return DatePickerDialog(
             context,

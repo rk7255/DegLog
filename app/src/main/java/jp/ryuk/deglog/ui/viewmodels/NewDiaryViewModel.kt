@@ -106,7 +106,8 @@ class NewDiaryViewModel internal constructor(
         return when {
             name.isEmpty() -> MessageCode.NAME_EMPTY
             !nameList.contains(name) -> MessageCode.NAME_UNREGISTERED
-            else -> MessageCode.ALL_COLLECT
+            !isNew -> MessageCode.EDIT
+            else -> MessageCode.COLLECT
         }
     }
 

@@ -13,124 +13,269 @@
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorBackground"
+        android:background="@color/primaryColor"
         android:fitsSystemWindows="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <FrameLayout
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:padding="16dp">
 
-            <View
-                android:id="@+id/view_color"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginStart="-30dp"
-                android:layout_marginTop="-30dp"
-                android:rotation="45"
-                tools:background="@color/pink" />
-
-            <androidx.core.widget.NestedScrollView
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/materialCardView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content"
+                android:elevation="2dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
 
-                <LinearLayout
-                    android:id="@+id/new_profile_container"
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/np_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fitsSystemWindows="true"
-                    android:focusable="true"
                     android:focusableInTouchMode="true"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:padding="32dp">
 
                     <TextView
-                        android:id="@+id/new_profile_title"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/np_title"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_xl"
-                        android:layout_marginBottom="@dimen/margin_xl"
+                        android:fontFamily="@font/chango"
+                        android:gravity="center"
                         android:text="@string/title_new_profile"
-                        android:textAppearance="@style/Deglog.PageTitle" />
+                        android:textColor="@color/primaryDarkColor"
+                        android:textSize="24sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/np_icon"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="24dp"
+                        android:background="@color/colorBackground"
+                        android:elevation="4dp"
+                        android:padding="4dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/np_title"
+                        app:shapeAppearanceOverlay="@style/cubeImageView"
+                        app:srcCompat="@drawable/ic_pets" />
+
+                    <TextView
+                        android:id="@+id/np_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:gravity="center"
+                        android:text="@string/name"
+                        android:textSize="16sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/np_icon"
+                        app:layout_constraintTop_toTopOf="@+id/np_icon" />
+
 
                     <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/new_profile_edit_name"
-                        style="@style/Widget.Deglog.EditText"
-                        android:layout_width="@dimen/edit_text_width"
+                        android:id="@+id/np_name_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="8dp"
+                        app:endIconMode="none"
                         app:errorEnabled="true"
-                        app:startIconDrawable="@drawable/ic_pets">
+                        app:errorIconDrawable="@drawable/ic_none"
+                        app:hintEnabled="false"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/np_icon"
+                        app:layout_constraintTop_toBottomOf="@id/np_name">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/new_profile_edit_name_text"
+                            android:id="@+id/np_name_text"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@color/bgEditText"
                             android:hint="@string/hint_name"
-                            android:inputType="none"
-                            android:singleLine="true"
-                            android:text="@={viewModel.name}" />
+                            android:inputType="text"
+                            android:paddingTop="14dp"
+                            android:text="@={viewModel.nameString}" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+
+                    <TextView
+                        android:id="@+id/np_gender"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/gender"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/np_gender_group"
+                        app:layout_constraintStart_toStartOf="@id/np_icon"
+                        app:layout_constraintTop_toTopOf="@+id/np_gender_group" />
+
+                    <RadioGroup
+                        android:id="@+id/np_gender_group"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:checkedButton="@id/np_gender_unknown"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/np_gender"
+                        app:layout_constraintTop_toBottomOf="@+id/np_name_layout">
+
+                        <RadioButton
+                            android:id="@+id/np_gender_male"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/gender_male"
+                            app:useMaterialThemeColors="false" />
+
+                        <RadioButton
+                            android:id="@+id/np_gender_female"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/gender_female"
+                            app:useMaterialThemeColors="false" />
+
+                        <RadioButton
+                            android:id="@+id/np_gender_unknown"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="@string/gender_unknown"
+                            app:useMaterialThemeColors="false" />
+
+                    </RadioGroup>
+
+                    <TextView
+                        android:id="@+id/np_type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="@string/type"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@id/np_type_layout"
+                        app:layout_constraintStart_toStartOf="@+id/np_icon"
+                        app:layout_constraintTop_toTopOf="@id/np_type_layout" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/np_type_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="8dp"
+                        app:endIconDrawable="@drawable/ic_more"
+                        app:endIconMode="custom"
+                        app:errorEnabled="true"
+                        app:hintEnabled="false"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/np_gender"
+                        app:layout_constraintTop_toBottomOf="@id/np_gender_group">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/np_type_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@color/bgEditText"
+                            android:hint="@string/type"
+                            android:inputType="text"
+                            android:paddingTop="14dp"
+                            android:text="@={viewModel.typeString}" />
+
                     </com.google.android.material.textfield.TextInputLayout>
 
                     <TextView
+                        android:id="@+id/np_birthday"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/gender"
-                        android:textSize="14sp" />
+                        android:layout_marginStart="8dp"
+                        android:text="@string/birthday"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/np_birthday_layout"
+                        app:layout_constraintStart_toStartOf="@+id/np_icon"
+                        app:layout_constraintTop_toTopOf="@+id/np_birthday_layout" />
 
-                    <com.google.android.material.button.MaterialButtonToggleGroup
-                        android:id="@+id/new_profile_toggle_group_gender"
-                        android:layout_width="@dimen/edit_text_width"
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/np_birthday_layout"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin_l"
-                        android:gravity="center"
-                        app:checkedButton="@id/gender_unknown"
-                        app:selectionRequired="true"
-                        app:singleSelection="true">
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="8dp"
+                        app:errorEnabled="true"
+                        app:hintEnabled="false"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/np_gender"
+                        app:layout_constraintTop_toBottomOf="@id/np_type_layout">
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/gender_male"
-                            style="?attr/materialButtonOutlinedStyle"
-                            android:layout_width="0dp"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/np_birthday_text"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/gender_male" />
+                            android:background="@color/bgEditText"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:hint="@string/birthday"
+                            android:inputType="date"
+                            android:paddingTop="14dp"
+                            android:text="@={viewModel.birthdayString}" />
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/gender_female"
-                            style="?attr/materialButtonOutlinedStyle"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/gender_female" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/gender_unknown"
-                            style="?attr/materialButtonOutlinedStyle"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="@string/gender_unknown" />
-
-                    </com.google.android.material.button.MaterialButtonToggleGroup>
 
                     <TextView
+                        android:id="@+id/np_label"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
                         android:text="@string/label"
-                        android:textSize="14sp" />
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toTopOf="@+id/np_label_select"
+                        app:layout_constraintStart_toStartOf="@+id/np_icon"
+                        app:layout_constraintTop_toTopOf="@+id/np_label_container"
+                        app:layout_constraintVertical_chainStyle="spread" />
+
+
+                    <TextView
+                        android:id="@+id/np_label_select"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="-"
+                        android:textAllCaps="true"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/np_label_container"
+                        app:layout_constraintEnd_toEndOf="@+id/np_label"
+                        app:layout_constraintStart_toStartOf="@+id/np_label"
+                        app:layout_constraintTop_toBottomOf="@+id/np_label" />
+
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/label_color_container"
-                        android:layout_width="300dp"
+                        android:id="@+id/np_label_container"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp">
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/np_gender"
+                        app:layout_constraintTop_toBottomOf="@id/np_birthday_layout">
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/label_color_red"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_marginTop="16dp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginStart="8dp"
                             android:insetLeft="0dp"
                             android:insetTop="0dp"
                             android:insetRight="0dp"
@@ -140,6 +285,7 @@
                             app:backgroundTint="@color/pink"
                             app:layout_constraintEnd_toStartOf="@+id/label_color_blue"
                             app:layout_constraintHorizontal_bias="0.5"
+                            app:layout_constraintHorizontal_chainStyle="spread_inside"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:shapeAppearanceOverlay="@style/circleImageView"
@@ -148,87 +294,88 @@
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/label_color_blue"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
                             android:insetLeft="0dp"
                             android:insetTop="0dp"
                             android:insetRight="0dp"
                             android:insetBottom="0dp"
                             android:onClick="@{() -> viewModel.onSelectColor(1)}"
                             android:padding="0dp"
-                            app:backgroundTint="@color/blue"
+                            app:backgroundTint="@color/orange"
                             app:layout_constraintEnd_toStartOf="@+id/label_color_green"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toEndOf="@+id/label_color_red"
                             app:layout_constraintTop_toTopOf="@+id/label_color_red"
                             app:shapeAppearanceOverlay="@style/circleImageView"
-                            tools:background="@color/blue" />
+                            tools:background="@color/orange" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/label_color_green"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
                             android:insetLeft="0dp"
                             android:insetTop="0dp"
                             android:insetRight="0dp"
                             android:insetBottom="0dp"
                             android:onClick="@{() -> viewModel.onSelectColor(2)}"
                             android:padding="0dp"
-                            app:backgroundTint="@color/green"
+                            app:backgroundTint="@color/yellow"
                             app:layout_constraintEnd_toStartOf="@+id/label_color_yellow"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toEndOf="@+id/label_color_blue"
                             app:layout_constraintTop_toTopOf="@+id/label_color_blue"
                             app:shapeAppearanceOverlay="@style/circleImageView"
-                            tools:background="@color/green" />
+                            tools:background="@color/yellow" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/label_color_yellow"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_marginEnd="8dp"
                             android:insetLeft="0dp"
                             android:insetTop="0dp"
                             android:insetRight="0dp"
                             android:insetBottom="0dp"
                             android:onClick="@{() -> viewModel.onSelectColor(3)}"
                             android:padding="0dp"
-                            app:backgroundTint="@color/yellow"
+                            app:backgroundTint="@color/green"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toEndOf="@+id/label_color_green"
                             app:layout_constraintTop_toTopOf="@+id/label_color_green"
                             app:shapeAppearanceOverlay="@style/circleImageView"
-                            tools:background="@color/yellow" />
+                            tools:background="@color/green" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/label_color_orange"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
                             android:layout_marginTop="16dp"
-                            android:layout_marginBottom="16dp"
                             android:insetLeft="0dp"
                             android:insetTop="0dp"
                             android:insetRight="0dp"
                             android:insetBottom="0dp"
                             android:onClick="@{() -> viewModel.onSelectColor(4)}"
                             android:padding="0dp"
-                            app:backgroundTint="@color/orange"
+                            app:backgroundTint="@color/blue"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toStartOf="@+id/label_color_purple"
                             app:layout_constraintHorizontal_bias="0.5"
-                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintHorizontal_chainStyle="spread_inside"
+                            app:layout_constraintStart_toStartOf="@+id/label_color_red"
                             app:layout_constraintTop_toBottomOf="@+id/label_color_red"
                             app:shapeAppearanceOverlay="@style/circleImageView"
-                            tools:background="@color/orange" />
+                            tools:background="@color/blue" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/label_color_purple"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
                             android:insetLeft="0dp"
                             android:insetTop="0dp"
                             android:insetRight="0dp"
@@ -246,127 +393,70 @@
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/label_color_brown"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
                             android:insetLeft="0dp"
                             android:insetTop="0dp"
                             android:insetRight="0dp"
                             android:insetBottom="0dp"
                             android:onClick="@{() -> viewModel.onSelectColor(6)}"
                             android:padding="0dp"
-                            app:backgroundTint="@color/primaryColor"
+                            app:backgroundTint="@color/gray"
                             app:layout_constraintEnd_toStartOf="@+id/label_color_gray"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toEndOf="@+id/label_color_purple"
                             app:layout_constraintTop_toTopOf="@+id/label_color_purple"
                             app:shapeAppearanceOverlay="@style/circleImageView"
-                            tools:background="@color/primaryColor" />
+                            tools:background="@color/gray" />
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/label_color_gray"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
                             android:insetLeft="0dp"
                             android:insetTop="0dp"
                             android:insetRight="0dp"
                             android:insetBottom="0dp"
                             android:onClick="@{() -> viewModel.onSelectColor(7)}"
                             android:padding="0dp"
-                            app:backgroundTint="@color/gray"
-                            app:layout_constraintEnd_toEndOf="parent"
+                            app:backgroundTint="@color/colorBackground"
+                            app:layout_constraintEnd_toEndOf="@+id/label_color_yellow"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintStart_toEndOf="@+id/label_color_brown"
                             app:layout_constraintTop_toTopOf="@+id/label_color_brown"
                             app:shapeAppearanceOverlay="@style/circleImageView"
-                            tools:background="@color/gray" />
+                            tools:background="@color/colorBackground" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/new_profile_edit_type"
-                        style="@style/Widget.Deglog.EditText"
-                        android:layout_width="@dimen/edit_text_width"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/margin_l"
-                        android:hint="@string/type"
-                        app:endIconDrawable="@drawable/ic_picker"
-                        app:endIconMode="custom"
-                        app:startIconDrawable="@drawable/ic_pets">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/new_profile_edit_type_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="none"
-                            android:singleLine="true"
-                            android:text="@={viewModel.type}" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <FrameLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <com.google.android.material.textfield.TextInputLayout
-                            android:id="@+id/new_profile_edit_birthday"
-                            style="@style/Widget.Deglog.EditText"
-                            android:layout_width="@dimen/edit_text_width"
-                            android:layout_height="@dimen/edit_text_height"
-                            android:layout_marginBottom="@dimen/margin_l"
-                            app:errorEnabled="true"
-                            app:hintAnimationEnabled="false"
-                            app:startIconDrawable="@drawable/ic_birthday">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/new_profile_edit_birthday_text"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:focusable="false"
-                                android:focusableInTouchMode="false"
-                                android:hint="@string/birthday"
-                                android:inputType="datetime"
-                                android:text="@={viewModel.birthdayString}" />
-                        </com.google.android.material.textfield.TextInputLayout>
-
-                        <View
-                            android:layout_width="300dp"
-                            android:layout_height="60dp"
-                            android:onClick="@{() -> viewModel.onBirthday()}" />
-
-                    </FrameLayout>
-
-                    <LinearLayout
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/np_button_cancel"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/margin_m"
-                        android:gravity="center_horizontal"
-                        android:orientation="horizontal">
+                        android:layout_marginTop="32dp"
+                        android:text="@string/dialog_cancel"
+                        app:layout_constraintEnd_toStartOf="@+id/np_button_submit"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/np_label_container" />
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/new_profile_cancel_button"
-                            style="@style/Widget.MaterialComponents.Button.TextButton"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/margin_l"
-                            android:onClick="@{() -> viewModel.onCancel()}"
-                            android:text="@string/dialog_cancel" />
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/np_button_submit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dialog_registered"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toEndOf="@+id/np_button_cancel"
+                        app:layout_constraintTop_toTopOf="@id/np_button_cancel" />
 
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/new_profile_submit_button"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/margin_l"
-                            android:onClick="@{() -> viewModel.onSubmit()}"
-                            android:text="@string/dialog_submit" />
-                    </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
-            </androidx.core.widget.NestedScrollView>
-
-        </FrameLayout>
+        </ScrollView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

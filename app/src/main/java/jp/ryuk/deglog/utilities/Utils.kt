@@ -46,20 +46,19 @@ object Utils {
         colorMap["purple"] = ContextCompat.getColor(context, R.color.purple)
         colorMap["brown"] = ContextCompat.getColor(context, R.color.primaryColor)
         colorMap["gray"] = ContextCompat.getColor(context, R.color.gray)
-        colorMap["none"] = ContextCompat.getColor(context, R.color.primaryTextColor)
+        colorMap["none"] = ContextCompat.getColor(context, R.color.primaryDarkColor)
         return colorMap
     }
 
     fun colorSelector(color: Int?): String {
         return when (color) {
             0 -> "red"
-            1 -> "blue"
-            2 -> "green"
-            3 -> "yellow"
-            4 -> "orange"
+            1 -> "orange"
+            2 -> "yellow"
+            3 -> "green"
+            4 -> "blue"
             5 -> "purple"
-            6 -> "brown"
-            7 -> "gray"
+            6 -> "gray"
             else -> "none"
         }
     }
