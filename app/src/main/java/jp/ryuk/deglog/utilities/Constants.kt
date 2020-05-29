@@ -13,6 +13,16 @@ const val KEY_CHECKED_CHART = "checked_chart"
 const val KEY_CHECKED_AXIS = "checked_axis"
 
 const val deg = "DEGLOG_DEBUG"
+const val TAG = "DEGLOG_DEBUG"
+
+class MessageCode {
+    companion object {
+        const val ALL_COLLECT = 0
+        const val NAME_EMPTY = 1
+        const val NAME_UNREGISTERED = 2
+        const val NUMBER_EMPTY = 3
+    }
+}
 
 class WhereClicked {
     companion object {

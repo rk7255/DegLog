@@ -1,36 +1,35 @@
 package jp.ryuk.deglog.ui.fragments
 
 import android.annotation.SuppressLint
-import android.app.TimePickerDialog
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
-import androidx.databinding.DataBindingUtil
+import android.view.animation.AnimationUtils
+import android.widget.ArrayAdapter
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.databinding.FragmentNewDiaryBinding
+import jp.ryuk.deglog.ui.data.DialogBuilder
 import jp.ryuk.deglog.ui.viewmodels.NewDiaryViewModel
-import jp.ryuk.deglog.utilities.*
+import jp.ryuk.deglog.utilities.InjectorUtil
+import jp.ryuk.deglog.utilities.MessageCode
+import jp.ryuk.deglog.utilities.NavMode
+import jp.ryuk.deglog.utilities.Utils
 import java.util.*
 
 class NewDiaryFragment : Fragment() {
     private lateinit var binding: FragmentNewDiaryBinding
-    private lateinit var viewModel: NewDiaryViewModel
-    private lateinit var args: NewDiaryFragmentArgs
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(false)
+    private val args: NewDiaryFragmentArgs by lazy {
+        NewDiaryFragmentArgs.fromBundle(requireArguments())
+    }
+    private val viewModel: NewDiaryViewModel by viewModels {
+        InjectorUtil.provideNewDiaryViewModelFactory(requireContext(), args.id, args.name)
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -38,72 +37,130 @@ class NewDiaryFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_new_diary, container, false)
-
-        args = NewDiaryFragmentArgs.fromBundle(
-            requireArguments()
-        )
-
-        when (args.mode) {
-            NavMode.EDIT -> {
-                binding.newDiaryTitle.text = getString(R.string.title_edit_title)
-                binding.newDiaryEditName.isEnabled = false
-            }
-            else -> {
-                binding.newDiaryTitle.text = getString(R.string.title_new_diary)
-                binding.newDiaryEditName.isEnabled = true
-            }
-        }
-
-        viewModel = createViewModel(requireContext(), args.id, args.name)
-        binding.viewModel = viewModel
+        binding = FragmentNewDiaryBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
+        binding.viewModel = viewModel
 
-        binding.newDiaryContainer.setOnTouchListener { view, event ->
-            Utils.hideKeyboard(requireActivity(), view, event)
-            binding.newDiaryEditName.error = null
-            false
+        var date = Calendar.getInstance().timeInMillis
+
+        with(binding) {
+
+            ndTitle.text = when (args.mode) {
+                NavMode.NEW -> getString(R.string.title_new_diary)
+                NavMode.EDIT -> getString(R.string.title_edit_diary)
+                else -> getString(R.string.title_new_diary)
+            }
+
+            ndContainer.setOnTouchListener { v, event ->
+                Utils.hideKeyboard(requireActivity(), v, event)
+            }
+
+            ndDate.setOnClickListener {
+                val dialog =
+                    DialogBuilder.datePickerDialogBuilder(
+                        requireContext(),
+                        date
+                    ) { year, month, dayOfMonth ->
+                        setDate(year, month, dayOfMonth)
+                        val anim = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+                        anim.duration = 600
+                        ndDate.startAnimation(anim)
+                    }
+                dialog.show()
+            }
+
+            ndTime.setOnClickListener {
+                val dialog =
+                    DialogBuilder.timePickerDialogBuilder(requireContext(), date) { hour, minute ->
+                        setTime(hour, minute)
+                        val anim = AnimationUtils.loadAnimation(requireContext(), R.anim.fade_in)
+                        anim.duration = 600
+                        ndTime.startAnimation(anim)
+                    }
+                dialog.show()
+            }
+
+            ndNameText.addTextChangedListener { ndNameLayout.error = null }
+            ndWeightText.addTextChangedListener { numberError(binding, false) }
+            ndLengthText.addTextChangedListener { numberError(binding, false) }
+            ndNoteText.addTextChangedListener { numberError(binding, false) }
+
+            ndButtonCancel.setOnClickListener { pop() }
+            ndButtonSubmit.setOnClickListener { submit() }
         }
 
-        viewModel.names.observe(viewLifecycleOwner, Observer {
-            if (!it.isNullOrEmpty()) {
-                val names = it.toTypedArray()
-                binding.newDiaryEditName.setEndIconOnClickListener {
-                    dialogNameSelectBuilder(
-                        requireContext(),
-                        binding.newDiaryEditNameText,
-                        names
-                    ).show()
+        with(viewModel) {
+
+            diary.observe(viewLifecycleOwner) {
+                if (it != null) {
+                    setDiary(it)
+                    date = it.date
+                    binding.ndNameLayout.apply {
+                        isEnabled = false
+                        helperText = getString(R.string.name_do_not_edit)
+                    }
                 }
             }
-        })
 
-        viewModel.diary.observe(viewLifecycleOwner, Observer {
-            if (it != null) viewModel.setValues()
-        })
-
-        viewModel.submit.observe(viewLifecycleOwner, Observer {
-            if (it == true) pop()
-        })
-
-        viewModel.submitError.observe(viewLifecycleOwner, Observer {
-            if (it == true) {
-                binding.newDiaryEditName.error = getString(R.string.name_empty_error_string)
-            } else {
-                binding.newDiaryEditName.error = null
+            nameList.observe(viewLifecycleOwner) {
+                val adapter = ArrayAdapter(requireContext(), R.layout.item_name_list, it)
+                binding.ndNameText.setAdapter(adapter)
             }
-        })
 
-        binding.newDiaryEditNameText.setOnKeyListener { _, _, _ ->
-            binding.newDiaryEditName.error = null
-            false
+            submitError.observe(viewLifecycleOwner) {
+                when (it) {
+                    MessageCode.NAME_EMPTY -> binding.ndNameLayout.error =
+                        getString(R.string.enter_name)
+                    MessageCode.NUMBER_EMPTY -> {
+                        numberError(binding, true)
+                        showSnackbar(getString(R.string.enter_number_up_one))
+                    }
+                }
+            }
+
+            submit.observe(viewLifecycleOwner) {
+                val msg = when (it) {
+                    MessageCode.NAME_UNREGISTERED -> getString(R.string.registered_diary_and_profile)
+                    else -> getString(R.string.registered_diary)
+                }
+                showSnackbar(msg)
+                pop()
+            }
         }
 
-        viewModel.onDateCLick.observe(viewLifecycleOwner, Observer {
-            if (it == true) showDialogCalendar(requireContext(), parentFragmentManager)
-        })
-
         return binding.root
+    }
+
+    private fun numberError(binding: FragmentNewDiaryBinding, enable: Boolean) {
+        with(binding) {
+            if (enable) {
+                ndWeightLayout.error = getString(R.string.asterisk)
+                ndLengthLayout.error = getString(R.string.asterisk)
+                ndNoteLayout.error = getString(R.string.asterisk)
+            } else {
+                ndWeightLayout.error = null
+                ndLengthLayout.error = null
+                ndNoteLayout.error = null
+            }
+        }
+    }
+
+    private fun showSnackbar(text: String) {
+        Snackbar.make(requireView().rootView, text, Snackbar.LENGTH_LONG)
+            .setAnchorView(R.id.bottom_navigation_bar)
+            .show()
+    }
+
+    private fun setDate(year: Int, month: Int, day: Int) {
+        viewModel.setDate(year, month, day)
+    }
+
+    private fun setTime(hour: Int, minute: Int) {
+        viewModel.setTime(hour, minute)
+    }
+
+    private fun submit() {
+        viewModel.submit()
     }
 
     private fun pop() {
@@ -111,56 +168,5 @@ class NewDiaryFragment : Fragment() {
             NewDiaryFragmentDirections.actionNewDiaryFragmentPop()
         )
     }
-
-    private fun dialogNameSelectBuilder(
-        context: Context,
-        editText: EditText,
-        names: Array<String>
-    ): AlertDialog {
-        return MaterialAlertDialogBuilder(context)
-            .setTitle(getString(R.string.choice_pet))
-            .setItems(names) { _, i ->
-                editText.setText(names[i])
-            }
-            .create()
-    }
-
-    private fun showDialogCalendar(context: Context, fm: FragmentManager) {
-        val today = Calendar.getInstance()
-
-        MaterialDatePicker.Builder.datePicker()
-            .setSelection(today.timeInMillis)
-            .setTitleText(getString(R.string.choice_date))
-            .setInputMode(MaterialDatePicker.INPUT_MODE_CALENDAR)
-            .build()
-            .apply {
-                addOnPositiveButtonClickListener {
-                    val selected = Calendar.getInstance()
-                    TimePickerDialog(
-                        context,
-                        TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
-                            selected.set(
-                                it.getYear(),
-                                it.getMonth() - 1,
-                                it.getDayOfMonth(),
-                                hourOfDay,
-                                minute
-                            )
-                            viewModel.doneOnDateClick(selected.timeInMillis)
-                        },
-                        today.get(Calendar.HOUR_OF_DAY),
-                        today.get(Calendar.MINUTE),
-                        true
-                    ).show()
-                }
-            }
-            .show(fm, "dialogDateAndTimePickerTag")
-    }
-
-    private fun createViewModel(context: Context, id: Long, name: String): NewDiaryViewModel {
-        val viewModelFactory = InjectorUtil.provideNewDiaryViewModelFactory(context, id, name)
-        return ViewModelProvider(this, viewModelFactory).get(NewDiaryViewModel::class.java)
-    }
-
 
 }

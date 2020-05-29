@@ -19,5 +19,6 @@
     <color name="orange">#FFBF5B</color>
 
     <color name="bgBlack">#55000000</color>
+    <color name="bgEditText">#22c6aa80</color>
 
 </resources>

@@ -49,12 +49,12 @@ class DiaryListFragment : Fragment() {
         val switches =
             Utils.findViewsWithType(binding.diaryListSwitches, SwitchMaterial::class.java)
 
-        initSwitches(switches) { viewModel.applyFilter(it) }
+        initSwitches(switches) { viewModel.applyFilter(requireContext(), it) }
 
         with(viewModel) {
             allDiary.observe(viewLifecycleOwner) {
                 val checked = getCheckedSwitches(switches)
-                applyFilter(checked)
+                applyFilter(requireContext(), checked)
             }
 
             diaries.observe(viewLifecycleOwner) {

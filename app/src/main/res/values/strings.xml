@@ -3,9 +3,10 @@
 
     <!-- 単語 -->
     <string name="date">日付</string>
+    <string name="name">名前</string>
     <string name="weight">体重</string>
     <string name="length">体長</string>
-    <string name="memo">メモ</string>
+    <string name="note">ノート</string>
     <string name="todo">ToDo</string>
     <string name="previous">前回</string>
     <string name="next">次回</string>
@@ -21,6 +22,9 @@
     <string name="filter">フィルタ</string>
     <string name="label">ラベル</string>
     <string name="dot">・</string>
+    <string name="asterisk">*</string>
+    <string name="g">g</string>
+    <string name="mm">mm</string>
 
     <!-- ナビゲーション -->
     <string name="bottom_nav_diary">日誌</string>
@@ -38,7 +42,7 @@
     <string name="title_profiles">ペット情報</string>
     <string name="title_weight">― 体重 ―</string>
     <string name="title_length">― 体長 ―</string>
-    <string name="title_memo">― メモ ―</string>
+    <string name="title_note">― ノート ―</string>
     <string name="title_todo">― ToDo ―</string>
 
     <!-- ダッシュボード -->
@@ -53,9 +57,16 @@
     <string name="exclude_blank">空白を除く</string>
 
     <!-- 日誌追加 -->
-    <string name="title_new_diary">日誌の追加</string>
-    <string name="title_edit_title">日誌の編集</string>
+    <string name="title_new_diary">- New Diary -</string>
+    <string name="title_edit_diary">- Edit Diary -</string>
     <string name="hint_name">名前*</string>
+    <string name="hint_number">0.0</string>
+    <string name="record">記録</string>
+    <string name="name_do_not_edit">*名前は編集できません</string>
+    <string name="enter_name">名前を入力してください</string>
+    <string name="enter_number_up_one">１項目以上入力してください</string>
+    <string name="registered_diary">日誌を登録しました</string>
+    <string name="registered_diary_and_profile">日誌とプロフィールを登録しました</string>
 
     <!-- グラフ -->
     <string name="select_chart">グラフ切替</string>

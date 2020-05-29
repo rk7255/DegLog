@@ -446,7 +446,7 @@
                             <TextView
                                 android:id="@+id/detail_memo_title"
                                 style="@style/DashboardTitle"
-                                android:text="@string/title_memo"
+                                android:text="@string/title_note"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />

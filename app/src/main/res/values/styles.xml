@@ -6,7 +6,8 @@
         <item name="colorSecondary">@color/secondaryColor</item>
         <item name="android:textColorPrimary">@color/primaryTextColor</item>
         <item name="android:textColorSecondary">@color/secondaryTextColor</item>
-        <item name="android:timePickerDialogTheme">@style/MyTimePickerDialogStyle</item>
+        <item name="android:timePickerDialogTheme">@style/MyPickerDialogStyle</item>
+        <item name="android:datePickerDialogTheme">@style/MyPickerDialogStyle</item>
     </style>
 
     <style name="Widget.Deglog.Toolbar" parent="Widget.AppCompat.Toolbar">
@@ -22,11 +23,13 @@
         <item name="android:textSize">18sp</item>
     </style>
 
-    <style name="Widget.Deglog.EditText" parent='Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense' />
+    <style name="Widget.Deglog.EditText" parent='Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense'>
+        <item name="errorEnabled">true</item>
+    </style>
 
     <style name="Widget.Deglog.EditText_DropDown" parent='Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu' />
 
-    <style name="MyTimePickerDialogStyle" parent="@style/ThemeOverlay.MaterialComponents.MaterialCalendar">
+    <style name="MyPickerDialogStyle" parent="@style/ThemeOverlay.MaterialComponents.MaterialCalendar">
         <item name="colorControlActivated">@color/primaryColor</item>
         <item name="colorAccent">@color/primaryColor</item>
         <item name="android:textColorPrimary">@color/primaryTextColor</item>

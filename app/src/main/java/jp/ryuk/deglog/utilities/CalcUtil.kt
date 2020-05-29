@@ -49,3 +49,19 @@ fun Long.getMonth(): Int = SimpleDateFormat("M").format(this).toInt()
 
 @SuppressLint("SimpleDateFormat")
 fun Long.getDayOfMonth(): Int = SimpleDateFormat("d").format(this).toInt()
+
+@SuppressLint("SimpleDateFormat")
+fun Long.getHour(): Int = SimpleDateFormat("HH").format(this).toInt()
+
+@SuppressLint("SimpleDateFormat")
+fun Long.getMinute(): Int = SimpleDateFormat("mm").format(this).toInt()
+
+
+
+
+
+
+
+
+
+

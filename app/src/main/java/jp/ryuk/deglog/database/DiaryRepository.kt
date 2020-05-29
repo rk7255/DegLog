@@ -8,7 +8,7 @@ class DiaryRepository private constructor(private val diaryDao: DiaryDao) {
     fun changeName(old: String, new: String) = diaryDao.changeName(old, new)
 
     suspend fun insert(diary: Diary) = diaryDao.insert(diary)
-    suspend fun deleteAll(name: String) = diaryDao.deleteAll(name)
+//    suspend fun deleteAll(name: String) = diaryDao.deleteAll(name)
     suspend fun deleteById(id: Long) = diaryDao.deleteById(id)
 
     companion object {

@@ -48,26 +48,8 @@
             android:name="name"
             app:argType="string" />
         <action
-            android:id="@+id/action_newDiaryFragment_to_diaryFragment"
-            app:destination="@id/dashboardFragment"
-            app:enterAnim="@anim/spread_pop_out"
-            app:exitAnim="@anim/spread_pop_in"
-            app:popEnterAnim="@anim/spread_in"
-            app:popExitAnim="@anim/spread_out"
-            app:popUpTo="@id/dashboardFragment"
-            app:popUpToInclusive="true" />
-        <action
             android:id="@+id/action_newDiaryFragment_pop"
             app:popUpTo="@id/newDiaryFragment"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_newDiaryFragment_to_diaryListFragment"
-            app:destination="@id/diaryListFragment"
-            app:enterAnim="@anim/spread_in"
-            app:exitAnim="@anim/spread_out"
-            app:popEnterAnim="@anim/spread_pop_out"
-            app:popExitAnim="@anim/spread_pop_in"
-            app:popUpTo="@id/diaryListFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment

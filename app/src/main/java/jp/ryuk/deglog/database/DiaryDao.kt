@@ -7,7 +7,7 @@ import androidx.room.*
 interface DiaryDao {
 
     @Query("SELECT * FROM diary_table WHERE id = :id")
-    fun getDiary(id: Long): LiveData<Diary>
+    fun getDiary(id: Long): LiveData<Diary?>
 
     @Query("SELECT * FROM diary_table WHERE name = :name ORDER BY date DESC")
     fun getDiaries(name: String): LiveData<List<Diary>>

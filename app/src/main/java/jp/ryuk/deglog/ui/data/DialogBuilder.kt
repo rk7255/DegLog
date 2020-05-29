@@ -1,6 +1,8 @@
 package jp.ryuk.deglog.ui.data
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,22 +13,48 @@ import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.database.Todo
+import jp.ryuk.deglog.utilities.*
 
 object DialogBuilder {
 
-    fun createDeleteDiaryDialog(context: Context, func: () -> Unit): AlertDialog {
+    fun datePickerDialogBuilder(context: Context, date: Long, unit: (Int, Int, Int) -> Unit): DatePickerDialog {
+        return DatePickerDialog(
+            context,
+            DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                unit(year, month, dayOfMonth)
+            },
+            date.getYear(),
+            date.getMonth(),
+            date.getDayOfMonth()
+        )
+    }
+
+    fun timePickerDialogBuilder(context: Context, date: Long, unit: (Int, Int) -> Unit): TimePickerDialog {
+        return TimePickerDialog(
+            context,
+            TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+                unit(hourOfDay, minute)
+            },
+            date.getHour(),
+            date.getMinute(),
+            true
+        )
+    }
+
+    fun createDeleteDiaryDialog(context: Context, unit: () -> Unit): AlertDialog {
         return MaterialAlertDialogBuilder(context)
             .setTitle(context.getString(R.string.dialog_delete_title))
             .setMessage(context.getString(R.string.dialog_delete_message))
             .setNeutralButton(context.getString(R.string.dialog_cancel)) { _, _ -> }
             .setPositiveButton(context.getString(R.string.dialog_yes)) { _, _ ->
-                func()
+                unit()
             }.create()
     }
 
 
+
     @SuppressLint("InflateParams")
-    fun createTodoDialog(context: Context, func: (String) -> Unit): AlertDialog {
+    fun createTodoDialog(context: Context, unit: (String) -> Unit): AlertDialog {
         val view = LayoutInflater.from(context).inflate(R.layout.dialog_todo, null)
         val titleText = view.findViewById<TextView>(R.id.dialog_todo_title)
         val editText = view.findViewById<EditText>(R.id.dialog_todo_text)
@@ -36,7 +64,7 @@ object DialogBuilder {
         val dialog = MaterialAlertDialogBuilder(context)
             .setView(view)
             .setPositiveButton(context.getString(R.string.add)) { _, _ ->
-                func(editText.text.toString())
+                unit(editText.text.toString())
             }
             .setNeutralButton(context.getString(R.string.dialog_cancel), null)
             .create()
@@ -53,24 +81,24 @@ object DialogBuilder {
     }
 
     fun deleteTodoDialogBuilder(
-        context: Context, todo: Todo, func: () -> Unit
+        context: Context, todo: Todo, unit: () -> Unit
     ): AlertDialog {
         return MaterialAlertDialogBuilder(context)
             .setMessage("選択したToDoを完了します\n\"${todo.todo}\"")
             .setNeutralButton(context.getString(R.string.dialog_cancel), null)
             .setPositiveButton(context.getString(R.string.dialog_success)) { _, _ ->
-                func()
+                unit()
             }
             .create()
     }
 
     fun selectDashboardDialogBuilder(
-        context: Context, list: Array<String>, func: (String) -> Unit
+        context: Context, list: Array<String>, unit: (String) -> Unit
     ): AlertDialog {
         return MaterialAlertDialogBuilder(context)
             .setTitle(context.getString(R.string.choice_pet))
             .setItems(list) { _, which ->
-                func(list[which])
+                unit(list[which])
             }
             .create()
     }

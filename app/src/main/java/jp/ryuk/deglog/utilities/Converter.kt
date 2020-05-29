@@ -1,8 +1,6 @@
 package jp.ryuk.deglog.utilities
 
 import android.annotation.SuppressLint
-import java.math.BigDecimal
-import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -16,6 +14,13 @@ object Converter {
             .format(systemTime).toString()
     }
 
+    fun longToDateStringJp(systemTime: Long): String {
+        return SimpleDateFormat("yyyy 年 M 月 d 日")
+            .format(systemTime).toString()
+    }
+
+
+
     fun longToDateAndTimeString(systemTime: Long): String {
         return SimpleDateFormat("yyyy/MM/dd HH:mm")
             .format(systemTime).toString()
@@ -25,6 +30,17 @@ object Converter {
         return SimpleDateFormat("dd日 HH:mm")
             .format(systemTime).toString()
     }
+
+//    fun longToTimeString(systemTime: Long): String {
+//        return SimpleDateFormat("HH:mm")
+//            .format(systemTime).toString()
+//    }
+        fun longToTimeStringJp(systemTime: Long): String {
+        return SimpleDateFormat("H 時 m 分")
+            .format(systemTime).toString()
+    }
+
+
 
     fun longToRelativeDateString(systemTime: Long): String {
         val diff = Calendar.getInstance().timeInMillis - systemTime
@@ -47,39 +63,39 @@ object Converter {
     /**
      * 単位変換
      */
-    fun Converter.convertUnit(number: Float, unit: String, onSuffix: Boolean): String {
-        val result = StringBuilder()
-        when (unit) {
-            "g" -> result.append("${roundInt(number)}")
-            "kg" -> result.append("${roundFloatInM(number)}")
-            "mm" -> result.append("${roundInt(number)}")
-            "cm" -> result.append("${roundFloatInCm(number)}")
-            "m" -> result.append("${roundFloatInM(number)}")
-            else -> return "単位不明"
-        }
-
-        if (onSuffix) result.append(" $unit")
-        return result.toString()
-    }
-
-    private fun roundInt(number: Float): BigDecimal =
-        BigDecimal(number.toString()).setScale(0, RoundingMode.HALF_UP)
-
-    private fun roundFloatInCm(number: Float): BigDecimal {
-        val scale = when (number / 10) {
-            in 0.0..99.0 -> 1
-            in 99.0..999.0 -> 0
-            else -> 0
-        }
-        return BigDecimal((number / 10).toString()).setScale(scale, RoundingMode.HALF_UP)
-    }
-
-    private fun roundFloatInM(number: Float): BigDecimal {
-        val scale = when (number / 1000) {
-            in 0.0..99.0 -> 2
-            in 99.0..999.0 -> 1
-            else -> 0
-        }
-        return BigDecimal((number / 1000).toString()).setScale(scale, RoundingMode.HALF_UP)
-    }
+//    fun Converter.convertUnit(number: Float, unit: String, onSuffix: Boolean): String {
+//        val result = StringBuilder()
+//        when (unit) {
+//            "g" -> result.append("${roundInt(number)}")
+//            "kg" -> result.append("${roundFloatInM(number)}")
+//            "mm" -> result.append("${roundInt(number)}")
+//            "cm" -> result.append("${roundFloatInCm(number)}")
+//            "m" -> result.append("${roundFloatInM(number)}")
+//            else -> return "単位不明"
+//        }
+//
+//        if (onSuffix) result.append(" $unit")
+//        return result.toString()
+//    }
+//
+//    private fun roundInt(number: Float): BigDecimal =
+//        BigDecimal(number.toString()).setScale(0, RoundingMode.HALF_UP)
+//
+//    private fun roundFloatInCm(number: Float): BigDecimal {
+//        val scale = when (number / 10) {
+//            in 0.0..99.0 -> 1
+//            in 99.0..999.0 -> 0
+//            else -> 0
+//        }
+//        return BigDecimal((number / 10).toString()).setScale(scale, RoundingMode.HALF_UP)
+//    }
+//
+//    private fun roundFloatInM(number: Float): BigDecimal {
+//        val scale = when (number / 1000) {
+//            in 0.0..99.0 -> 2
+//            in 99.0..999.0 -> 1
+//            else -> 0
+//        }
+//        return BigDecimal((number / 1000).toString()).setScale(scale, RoundingMode.HALF_UP)
+//    }
 }

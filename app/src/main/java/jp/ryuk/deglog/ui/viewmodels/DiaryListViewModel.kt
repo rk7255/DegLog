@@ -1,7 +1,9 @@
 package jp.ryuk.deglog.ui.viewmodels
 
+import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import jp.ryuk.deglog.R
 import jp.ryuk.deglog.database.Diary
 import jp.ryuk.deglog.database.DiaryRepository
 import jp.ryuk.deglog.database.ProfileRepository
@@ -17,13 +19,13 @@ class DiaryListViewModel internal constructor(
 
     val diaries = MutableLiveData<List<Diary>>()
 
-    fun applyFilter(checked: List<String>) {
+    fun applyFilter(context: Context, checked: List<String>) {
         var newDiaries = allDiary.value!!
         checked.forEach { c ->
             when (c) {
-                "体重" -> newDiaries = newDiaries.filter { it.weight != null }
-                "体長" -> newDiaries = newDiaries.filter { it.length != null }
-                "メモ" -> newDiaries = newDiaries.filter { it.note != null }
+                context.getString(R.string.weight) -> newDiaries = newDiaries.filter { it.weight != null }
+                context.getString(R.string.length) -> newDiaries = newDiaries.filter { it.length != null }
+                context.getString(R.string.note) -> newDiaries = newDiaries.filter { it.note != null }
             }
         }
         diaries.value = newDiaries
