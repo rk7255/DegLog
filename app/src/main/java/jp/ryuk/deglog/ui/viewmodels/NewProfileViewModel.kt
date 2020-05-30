@@ -20,7 +20,7 @@ class NewProfileViewModel internal constructor(
     val nameString = MutableLiveData<String>()
     val typeString = MutableLiveData<String>()
     private val genderString = MutableLiveData<String>()
-    var uriString: String? = null
+    var iconJsonString: String? = null
 
     private val isNew = selectedName.isEmpty()
     val submit = MutableLiveData<Int?>()
@@ -43,7 +43,7 @@ class NewProfileViewModel internal constructor(
             gender = genderString.value,
             birthday = birthday,
             color = selectedColor.value,
-            uri = uriString
+            icon = iconJsonString
         )
 
         val msg = when {
@@ -87,10 +87,13 @@ class NewProfileViewModel internal constructor(
         birthday = profile.birthday
         birthday?.let { birthdayString.value = Converter.longToDateStringJp(it) }
         typeString.value = profile.type
-        uriString = profile.uri
+        iconJsonString = profile.icon
         genderString.value = profile.gender
     }
 
+    fun setJsonString(jsonString: String) {
+        iconJsonString = jsonString
+    }
     fun setGender(gender: String) {
         genderString.value = gender
     }

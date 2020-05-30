@@ -1,27 +1,16 @@
 package jp.ryuk.deglog.ui.fragments
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.ImageView
 import android.widget.RadioButton
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -32,13 +21,10 @@ import jp.ryuk.deglog.R
 import jp.ryuk.deglog.databinding.FragmentNewProfileBinding
 import jp.ryuk.deglog.ui.data.DialogBuilder
 import jp.ryuk.deglog.ui.viewmodels.NewProfileViewModel
+import jp.ryuk.deglog.utilities.BitmapUtils
 import jp.ryuk.deglog.utilities.InjectorUtil
 import jp.ryuk.deglog.utilities.MessageCode
-import jp.ryuk.deglog.utilities.TAG
 import jp.ryuk.deglog.utilities.Utils
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
 import java.util.*
 
 
@@ -71,10 +57,6 @@ class NewProfileFragment : Fragment() {
                 Utils.hideKeyboard(requireActivity(), v, event)
             }
 
-            npIcon.setOnClickListener {
-                getUriFromGallery { setBitmap(npIcon, it) }
-            }
-
             npTypeLayout.setEndIconOnClickListener {
                 val dialog = DialogBuilder.typeDialogBuilder(requireContext(), npTypeText)
                 dialog.show()
@@ -98,6 +80,15 @@ class NewProfileFragment : Fragment() {
                 setGender(text)
             }
 
+            npIcon.setOnClickListener {
+                getUriFromGallery { uri ->
+                    val bitmap = BitmapUtils.createBitmap(requireContext(), uri)
+                    npIcon.setImageBitmap(bitmap)
+                    val jsonString = BitmapUtils.convertBitmapToJsonString(bitmap)
+                    setJsonString(jsonString)
+                }
+            }
+
             npNameText.addTextChangedListener { npNameLayout.error = null }
 
             npButtonCancel.setOnClickListener { pop() }
@@ -110,16 +101,19 @@ class NewProfileFragment : Fragment() {
             profile.observe(viewLifecycleOwner) {
                 if (it != null) {
                     setProfile(it)
+
                     with(binding) {
                         when (it.gender) {
                             getString(R.string.gender_male) -> npGenderMale.isChecked = true
                             getString(R.string.gender_female) -> npGenderFemale.isChecked = true
                             else -> npGenderUnknown.isChecked = true
                         }
-                        if (!it.uri.isNullOrEmpty()) {
-                            val uri = Uri.parse(it.uri)
-                            setBitmap(npIcon, uri)
+
+                        it.icon?.let { jsonString ->
+                            val bitmap = BitmapUtils.convertJsonToBitmap(jsonString)
+                            npIcon.setImageBitmap(bitmap)
                         }
+
                     }
                 }
             }
@@ -165,6 +159,10 @@ class NewProfileFragment : Fragment() {
             .show()
     }
 
+    private fun setJsonString(jsonString: String) {
+        viewModel.setJsonString(jsonString)
+    }
+
     private fun setGender(gender: String) {
         viewModel.setGender(gender)
     }
@@ -173,33 +171,7 @@ class NewProfileFragment : Fragment() {
         viewModel.setDate(year, month, day)
     }
 
-    private fun setBitmap(imageView: ImageView, uri: Uri) {
-
-        /*
-
-        再起動すると権限切れてエラーでる
-
-        java.lang.SecurityException:
-        Permission Denial: opening provider com.android.providers.media.MediaDocumentsProvider
-        from ProcessRecord{eb7d035 22546:jp.ryuk.deglog/u0a155} (pid=22546, uid=10155)
-        requires that you obtain access using ACTION_OPEN_DOCUMENT or related APIs
-
-         */
-
-//        val bitmap = when {
-//            Build.VERSION.SDK_INT >= Build.VERSION_CODES.P -> {
-//                val source = ImageDecoder.createSource(requireContext().contentResolver, uri)
-//                ImageDecoder.decodeBitmap(source)
-//            }
-//            else -> {
-//                @Suppress("DEPRECATION")
-//                MediaStore.Images.Media.getBitmap(requireContext().contentResolver, uri)
-//            }
-//        }
-//        imageView.setImageBitmap(bitmap)
-//        viewModel.uriString = uri.toString()
-    }
-
+    // ギャラリーからURI取得
     private fun getUriFromGallery(unit: (Uri) -> Unit) {
         val intent = Intent(Intent.ACTION_GET_CONTENT).apply {
             type = "image/*"

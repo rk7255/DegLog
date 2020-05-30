@@ -12,5 +12,5 @@ data class Profile (
     var gender: String? = null,
     var birthday: Long? = null,
     var color: Int? = null,
-    var uri: String? = null
+    var icon: String? = null
 )
