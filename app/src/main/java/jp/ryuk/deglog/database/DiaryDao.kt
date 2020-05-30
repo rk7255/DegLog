@@ -25,6 +25,6 @@ interface DiaryDao {
     suspend fun deleteAll(name: String)
 
     @Query("UPDATE diary_table SET name = :new WHERE name = :old")
-    fun changeName(old: String, new: String)
+    suspend fun changeName(old: String, new: String)
 
 }

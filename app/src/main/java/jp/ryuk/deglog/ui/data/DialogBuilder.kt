@@ -17,7 +17,6 @@ import jp.ryuk.deglog.utilities.*
 
 object DialogBuilder {
 
-
     fun typeDialogBuilder(
         context: Context,
         editText: EditText
@@ -67,7 +66,11 @@ object DialogBuilder {
             }
     }
 
-    fun datePickerDialogBuilder(context: Context, date: Long, unit: (Int, Int, Int) -> Unit): DatePickerDialog {
+    fun datePickerDialogBuilder(
+        context: Context,
+        date: Long,
+        unit: (Int, Int, Int) -> Unit
+    ): DatePickerDialog {
         return DatePickerDialog(
             context,
             DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
@@ -79,7 +82,11 @@ object DialogBuilder {
         )
     }
 
-    fun timePickerDialogBuilder(context: Context, date: Long, unit: (Int, Int) -> Unit): TimePickerDialog {
+    fun timePickerDialogBuilder(
+        context: Context,
+        date: Long,
+        unit: (Int, Int) -> Unit
+    ): TimePickerDialog {
         return TimePickerDialog(
             context,
             TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
@@ -101,6 +108,15 @@ object DialogBuilder {
             }.create()
     }
 
+    fun changeNameDialogBuilder(context: Context, unit: () -> Unit): AlertDialog {
+        return MaterialAlertDialogBuilder(context)
+            .setTitle("変更確認")
+            .setMessage("名前が変更されています\n日誌データにも反映されます")
+            .setNeutralButton(context.getString(R.string.dialog_cancel)) { _, _ -> }
+            .setPositiveButton(context.getString(R.string.dialog_ok)) { _, _ ->
+                unit()
+            }.create()
+    }
 
 
     @SuppressLint("InflateParams")

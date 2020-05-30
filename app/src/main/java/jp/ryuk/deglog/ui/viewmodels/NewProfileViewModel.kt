@@ -1,14 +1,20 @@
 package jp.ryuk.deglog.ui.viewmodels
 
-import androidx.lifecycle.*
-import jp.ryuk.deglog.database.*
-import jp.ryuk.deglog.utilities.*
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import jp.ryuk.deglog.database.DiaryRepository
+import jp.ryuk.deglog.database.Profile
+import jp.ryuk.deglog.database.ProfileRepository
+import jp.ryuk.deglog.utilities.Converter
+import jp.ryuk.deglog.utilities.MessageCode
 import kotlinx.coroutines.launch
 import java.util.*
 
 class NewProfileViewModel internal constructor(
     private val selectedName: String,
-    diaryRepository: DiaryRepository,
+    private val diaryRepository: DiaryRepository,
     private val profileRepository: ProfileRepository
 ) : ViewModel() {
 
@@ -20,11 +26,12 @@ class NewProfileViewModel internal constructor(
     val nameString = MutableLiveData<String>()
     val typeString = MutableLiveData<String>()
     private val genderString = MutableLiveData<String>()
-    var iconJsonString: String? = null
+    private var iconJsonString: String? = null
 
     private val isNew = selectedName.isEmpty()
     val submit = MutableLiveData<Int?>()
     val submitError = MutableLiveData<Int?>()
+    val submitMassage = MutableLiveData<Profile>()
 
     val selectedColor = MediatorLiveData<Int?>()
     fun onSelectColor(select: Int) { selectedColor.value = select }
@@ -46,17 +53,18 @@ class NewProfileViewModel internal constructor(
             icon = iconJsonString
         )
 
-        val msg = when {
-            !isNew && selectedName != nameString.value -> {
-                updateProfile(newProfile)
-                MessageCode.EDIT
-            }
-            else -> {
-                insertProfile(newProfile)
-                MessageCode.COLLECT
-            }
+        if (!isNew && selectedName != nameString.value) {
+            submitMassage.value = newProfile
+            return
         }
-        submit.value = msg
+
+        insertProfile(newProfile)
+        submit.value = MessageCode.COLLECT
+    }
+
+    fun changeName(profile: Profile) {
+        updateProfile(profile)
+        submit.value = MessageCode.EDIT
     }
 
     private fun isValid(): Int? {
@@ -73,8 +81,7 @@ class NewProfileViewModel internal constructor(
     }
 
     private fun updateProfile(profile: Profile) {
-        insert(profile)
-        delete(selectedName)
+        changeDbName(selectedName, profile)
     }
 
     private fun insertProfile(profile: Profile) {
@@ -109,128 +116,12 @@ class NewProfileViewModel internal constructor(
         viewModelScope.launch { profileRepository.insert(profile) }
     }
 
-    private fun delete(name: String) {
-        viewModelScope.launch { profileRepository.deleteByName(name) }
+    private fun changeDbName(oldName: String, profile: Profile) {
+        viewModelScope.launch {
+            profileRepository.insert(profile)
+            profileRepository.deleteByName(oldName)
+            diaryRepository.changeName(oldName, profile.name)
+        }
     }
 
-
 }
-//
-//
-//    val profile = profileRepository.getProfile(selectedName)
-//
-//    private var isNew = true
-//    var isNameChanged = false
-//
-//    var name = MediatorLiveData<String>()
-//    var gender = MediatorLiveData<String>()
-//    var type = MediatorLiveData<String>()
-//    var birthday: Long? = null
-//    var birthdayString = MediatorLiveData<String>()
-//    var weightUnit = MediatorLiveData<String>()
-//    var lengthUnit = MediatorLiveData<String>()
-//
-//    private var _submit = MutableLiveData<Boolean>()
-//    val submit: LiveData<Boolean> get() = _submit
-//
-//    private var _submitError = MutableLiveData<Boolean>()
-//    val submitError: LiveData<Boolean> get() = _submitError
-//
-//    private var _onDateClick = MutableLiveData<Boolean>()
-//    val onDateCLick: LiveData<Boolean> get() = _onDateClick
-//    fun doneOnDateClick(time: Long) {
-//        birthday = time
-//        birthdayString.value = Converter.longToDateString(birthday!!)
-//        _onDateClick.value = false
-//    }
-//
-//    val selectedColor = MediatorLiveData<Int?>()
-//    fun onSelectColor(select: Int) { selectedColor.value = select }
-//
-//    private var _confirmUpdate = MutableLiveData<Profile?>()
-//    val confirmUpdate: LiveData<Profile?> get() = _confirmUpdate
-//
-//    init {
-//        name.value = selectedName
-//        weightUnit.value = "g"
-//        lengthUnit.value = "mm"
-//    }
-//
-//    fun setValues() {
-//        isNew = false
-//        birthday = profile.value?.birthday
-//        birthday?.let { birthdayString.value = Converter.longToDateAndTimeString(it) }
-//        gender.value = profile.value?.gender ?: "不明"
-//        type.value = profile.value?.type
-//        selectedColor.value = profile.value!!.color
-//    }
-//
-//    fun onSubmit() {
-//        if (isValid()) {
-//            val profile = Profile(
-//                name = name.value!!,
-//                type = type.value,
-//                gender = gender.value ?: "不明",
-//                birthday = birthday,
-//                color = selectedColor.value
-//            )
-//            if (isNew) {
-//                insertProfile(profile)
-//                _submit.value = true
-//            } else {
-//                if (name.value == selectedName) {
-//                    updateProfile(profile)
-//                    _submit.value = true
-//                } else {
-//                    _confirmUpdate.value = profile
-//                }
-//            }
-//        } else {
-//            _submitError.value = true
-//        }
-//    }
-//
-//    fun updateAndChange(profile: Profile) {
-//        insertProfile(profile)
-//        changeProfile(selectedName, profile.name)
-//        isNameChanged = true
-//        _submit.value = true
-//    }
-//
-//    private fun isValid(): Boolean = !name.value.isNullOrEmpty()
-//
-//    fun onCancel() {
-//        _submit.value = true
-//    }
-//
-//    fun onBirthday() {
-//        _onDateClick.value = true
-//    }
-//
-//    private suspend fun insert(profile: Profile) {
-//        withContext(Dispatchers.IO) {
-//            profileRepository.insert(profile)
-//        }
-//    }
-//
-//    private fun insertProfile(profile: Profile) {
-//        viewModelScope.launch { insert(profile) }
-//    }
-//
-//    private suspend fun update(profile: Profile) {
-//        withContext(Dispatchers.IO) {
-//            profileRepository.insert(profile)
-//        }
-//    }
-//
-//    private fun updateProfile(profile: Profile) {
-//        viewModelScope.launch { update(profile) }
-//    }
-//
-//    private fun changeProfile(oldName: String, newName: String) {
-//        viewModelScope.launch {
-//            diaryRepository.changeName(oldName, newName)
-//            profileRepository.deleteByName(oldName)
-//        }
-//    }
-//}
