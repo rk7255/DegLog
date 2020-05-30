@@ -29,7 +29,7 @@ class NewProfileViewModel internal constructor(
     private var iconJsonString: String? = null
 
     private val isNew = selectedName.isEmpty()
-    val submit = MutableLiveData<Int?>()
+    val submit = MutableLiveData<Boolean>()
     val submitError = MutableLiveData<Int?>()
     val submitMassage = MutableLiveData<Profile>()
 
@@ -59,12 +59,12 @@ class NewProfileViewModel internal constructor(
         }
 
         insertProfile(newProfile)
-        submit.value = MessageCode.COLLECT
+        submit.value = true
     }
 
     fun changeName(profile: Profile) {
         updateProfile(profile)
-        submit.value = MessageCode.EDIT
+        submit.value = true
     }
 
     private fun isValid(): Int? {
@@ -88,7 +88,6 @@ class NewProfileViewModel internal constructor(
         insert(profile)
     }
 
-
     fun setProfile(profile: Profile) {
         nameString.value = profile.name
         birthday = profile.birthday
@@ -96,6 +95,10 @@ class NewProfileViewModel internal constructor(
         typeString.value = profile.type
         iconJsonString = profile.icon
         genderString.value = profile.gender
+    }
+
+    fun deleteJsonString() {
+        iconJsonString = null
     }
 
     fun setJsonString(jsonString: String) {

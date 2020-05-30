@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.database.Profile
 import jp.ryuk.deglog.databinding.ItemProfilesBinding
+import jp.ryuk.deglog.utilities.BitmapUtils
 import jp.ryuk.deglog.utilities.Utils
 import jp.ryuk.deglog.utilities.getAgeAndBirthday
 
@@ -40,9 +41,18 @@ class ProfileAdapter(
                 this.profile = profile
                 this.clickListener = clickListener
                 ageAndBirthday = profile.getAgeAndBirthday()
-                binding.profileIcon.setImageResource(Utils.iconSelector(context, profile.type))
                 profileGender.setTextColor(colorGender!!)
                 profileViewColor.setBackgroundColor(colorLabel!!)
+
+                val icon = profile.icon
+                if (icon == null) {
+                    profileIcon.setImageResource(Utils.iconSelector(context, profile.type))
+                } else {
+                    val bitmap = BitmapUtils.convertJsonToBitmap(icon)
+                    profileIcon.setImageBitmap(bitmap)
+                }
+
+
                 executePendingBindings()
             }
         }

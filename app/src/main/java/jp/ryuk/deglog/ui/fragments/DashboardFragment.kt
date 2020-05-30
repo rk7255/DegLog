@@ -41,7 +41,7 @@ class DashboardFragment : Fragment() {
         (activity as AppCompatActivity).setSupportActionBar(binding.dbAppBar)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        viewModel.selected = loadSharedPreferences()
+        viewModel.selected.value = loadSharedPreferences()
 
         val recyclerView = binding.dbTodoRecyclerView
         val adapter = TodoAdapter(TodoListener {
@@ -66,6 +66,13 @@ class DashboardFragment : Fragment() {
                 binding.dbPersonalIcon.setImageResource(it)
             }
 
+            iconJsonString.observe(viewLifecycleOwner) {
+                it?.let { jsonString ->
+                    val bitmap = BitmapUtils.convertJsonToBitmap(jsonString)
+                    binding.dbPersonalIcon.setImageBitmap(bitmap)
+                }
+            }
+
             todoList.observe(viewLifecycleOwner) {
                 if (!it.isNullOrEmpty()) {
                     adapter.submitList(it)
@@ -73,11 +80,11 @@ class DashboardFragment : Fragment() {
             }
 
             weightDataList.observe(viewLifecycleOwner) {
-                createLineChart(binding.dbWeightChart, it, listOf(selected))
+                createLineChart(binding.dbWeightChart, it, listOf(selected.value ?: ""))
             }
 
             lengthDataList.observe(viewLifecycleOwner) {
-                createLineChart(binding.dbLengthChart, it, listOf(selected))
+                createLineChart(binding.dbLengthChart, it, listOf(selected.value ?: ""))
             }
 
             clicked.observe(viewLifecycleOwner) { where ->
@@ -85,7 +92,7 @@ class DashboardFragment : Fragment() {
                     with(WhereClicked) {
                         when (where) {
                             ICON -> navigateToNewProfile()
-                            NAME -> selectDashboard(nameList.toTypedArray())
+                            NAME -> selectDashboard(nameListInDiary.toTypedArray())
                             NOTIFY -> ""
                             WEIGHT -> navigateToDiaryList(NavMode.FROM_WEIGHT)
                             LENGTH -> navigateToDiaryList(NavMode.FROM_LENGTH)
@@ -109,7 +116,7 @@ class DashboardFragment : Fragment() {
 
     private fun selectDashboardCallback(name: String) {
         with(viewModel) {
-            selected = name
+            selected.value = name
             setDiary()
             setProfile(requireContext())
             setTodoList()
@@ -126,7 +133,7 @@ class DashboardFragment : Fragment() {
 
     private fun createTodoCallback(text: String) {
         with(viewModel) {
-            createTodo(selected, text)
+            createTodo(selected.value ?: "", text)
         }
     }
 
@@ -151,7 +158,7 @@ class DashboardFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        saveSharedPreferences(viewModel.selected)
+        saveSharedPreferences(viewModel.selected.value ?: "")
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -169,20 +176,20 @@ class DashboardFragment : Fragment() {
 
     private fun navigateToNewDiary() {
         this.findNavController().navigate(
-            DashboardFragmentDirections.toNewDiaryFragment(NavMode.NEW, -1, viewModel.selected)
+            DashboardFragmentDirections.toNewDiaryFragment(NavMode.NEW, -1, viewModel.selected.value ?: "")
         )
     }
 
     private fun navigateToDiaryList(key: Int) {
         this.findNavController().navigate(
             DashboardFragmentDirections.toDiaryListFragment(
-                key, viewModel.selected)
+                key, viewModel.selected.value ?: "")
         )
     }
 
     private fun navigateToNewProfile() {
         this.findNavController().navigate(
-            DashboardFragmentDirections.toNewProfileFragment(NavMode.DASHBOARD, viewModel.selected)
+            DashboardFragmentDirections.toNewProfileFragment(NavMode.DASHBOARD, viewModel.selected.value ?: "")
         )
     }
 }

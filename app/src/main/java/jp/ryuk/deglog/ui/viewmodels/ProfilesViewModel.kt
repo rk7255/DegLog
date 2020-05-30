@@ -11,8 +11,8 @@ class ProfilesViewModel internal constructor(
 
     val profiles = profileRepository.getAllProfile()
 
-    private val _navigateToNewProfile = MutableLiveData<String?>()
-    val navigateToNewProfile: LiveData<String?> get() = _navigateToNewProfile
-    fun doneNavigateToNewProfile() { _navigateToNewProfile.value = null }
-    fun onClickProfile(name: String) { _navigateToNewProfile.value = name }
+    private val _navigateToEditProfile = MutableLiveData<String?>()
+    val navigateToEditProfile: LiveData<String?> get() = _navigateToEditProfile
+    fun doneNavigateToNewProfile() { _navigateToEditProfile.value = null }
+    fun onClickProfile(name: String) { _navigateToEditProfile.value = name }
 }

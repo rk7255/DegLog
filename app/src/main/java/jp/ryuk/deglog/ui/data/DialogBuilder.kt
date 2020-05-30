@@ -17,6 +17,20 @@ import jp.ryuk.deglog.utilities.*
 
 object DialogBuilder {
 
+    fun iconSelectDialogBuilder(context: Context, unit: (Int) -> Unit): AlertDialog {
+        val items = arrayOf("アイコンを削除", "ギャラリーから選択")
+
+        return MaterialAlertDialogBuilder(context)
+            .setTitle("アイコン設定")
+            .setItems(items) { _, which ->
+                when (which) {
+                    0 -> unit(0)
+                    else -> unit(1)
+                }
+            }
+            .create()
+    }
+
     fun typeDialogBuilder(
         context: Context,
         editText: EditText
@@ -77,7 +91,7 @@ object DialogBuilder {
                 unit(year, month, dayOfMonth)
             },
             date.getYear(),
-            date.getMonth(),
+            date.getMonth() - 1,
             date.getDayOfMonth()
         )
     }

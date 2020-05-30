@@ -92,6 +92,7 @@
                     android:id="@+id/db_personal_icon"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
+                    android:scaleType="centerCrop"
                     android:layout_marginStart="16dp"
                     android:background="@color/colorBackground"
                     android:elevation="4dp"

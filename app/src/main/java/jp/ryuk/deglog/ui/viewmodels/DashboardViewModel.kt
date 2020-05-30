@@ -1,7 +1,6 @@
 package jp.ryuk.deglog.ui.viewmodels
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,11 +21,13 @@ class DashboardViewModel internal constructor(
     private val todoRepository: TodoRepository
 ) : ViewModel() {
 
-    val allDiary: LiveData<List<Diary>> = diaryRepository.getAllDiary()
-    val allProfile: LiveData<List<Profile>> = profileRepository.getAllProfile()
-    val allTodo: LiveData<List<Todo>> = todoRepository.getAllTodo()
-    val nameList: List<String> get() = allDiary.value?.map(Diary::name)?.distinct() ?: listOf()
-    var selected = ""
+    val allDiary = diaryRepository.getAllDiary()
+    val allProfile = profileRepository.getAllProfile()
+    val allTodo = todoRepository.getAllTodo()
+
+    val nameListInDiary: List<String> get() = allDiary.value?.map(Diary::name)?.distinct() ?: listOf()
+    private val nameListInProfile: List<String> get() = allProfile.value?.map(Profile::name)?.distinct() ?: listOf()
+    var selected = MutableLiveData<String>()
 
     /*
      * onClick
@@ -42,7 +43,7 @@ class DashboardViewModel internal constructor(
     val hasTodoList = MutableLiveData<Boolean>()
 
     fun setTodoList() {
-        val newTodoList = allTodo.value?.filter { it.name == selected && !it.done }
+        val newTodoList = allTodo.value?.filter { it.name == selected.value && !it.done }
         todoList.value = newTodoList
         hasTodoList.value = !newTodoList.isNullOrEmpty()
     }
@@ -66,11 +67,23 @@ class DashboardViewModel internal constructor(
      */
     var age = MutableLiveData<String>()
     var icon = MutableLiveData<Int>()
+    val iconJsonString = MutableLiveData<String>()
 
     fun setProfile(context: Context) {
-        val profile = allProfile.value?.find { it.name == selected } ?: Profile(name = "")
+        if (allProfile.value.isNullOrEmpty()) return
+
+        if (selected.value.isNullOrEmpty() || !nameListInDiary.contains(selected.value ?: ""))
+            selected.value = nameListInProfile.first()
+
+        val profile = allProfile.value?.find { it.name == selected.value } ?: Profile(name = "")
         age.value = profile.getAge(Calendar.getInstance().timeInMillis)
-        icon.value = Utils.iconSelector(context, profile.type)
+
+        val ic = profile.icon
+        if (ic == null) {
+            icon.value = Utils.iconSelector(context, profile.type)
+        } else {
+            iconJsonString.value = ic
+        }
     }
 
     /*
@@ -86,10 +99,10 @@ class DashboardViewModel internal constructor(
         hasDiary.value = !allDiary.value.isNullOrEmpty()
         if (allDiary.value.isNullOrEmpty()) return
 
-        if (selected.isEmpty() || !nameList.contains(selected))
-            selected = nameList.first()
+        if (selected.value.isNullOrEmpty() || !nameListInDiary.contains(selected.value ?: ""))
+            selected.value = nameListInDiary.first()
 
-        val diaryList = allDiary.value!!.filter { it.name == selected }
+        val diaryList = allDiary.value!!.filter { it.name == selected.value }
 
         // 体重
         val wChartData = mutableListOf<ChartData>().apply {

@@ -53,7 +53,7 @@ class ProfilesFragment : Fragment() {
                 binding.hasProfile = !it.isNullOrEmpty()
             }
 
-            navigateToNewProfile.observe(viewLifecycleOwner) {
+            navigateToEditProfile.observe(viewLifecycleOwner) {
                 if (it != null) navigateToEditProfile(it)
             }
         }

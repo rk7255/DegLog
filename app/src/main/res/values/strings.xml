@@ -152,6 +152,7 @@
     <string name="animal_hachurui">爬虫類</string>
     <string name="animal_gyorui">魚類</string>
     <string name="animal_konchu">昆虫</string>
+    <string name="hyphen">-</string>
 
     <string-array name="types">
         <item>@string/type_small</item>
@@ -226,7 +227,6 @@
         <item>@string/animal_gyorui</item>
         <item>@string/animal_konchu</item>
     </string-array>
-
 
     <string-array name="weight_unit">
         <item>g</item>

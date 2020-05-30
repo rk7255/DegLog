@@ -21,10 +21,7 @@ import jp.ryuk.deglog.R
 import jp.ryuk.deglog.databinding.FragmentNewProfileBinding
 import jp.ryuk.deglog.ui.data.DialogBuilder
 import jp.ryuk.deglog.ui.viewmodels.NewProfileViewModel
-import jp.ryuk.deglog.utilities.BitmapUtils
-import jp.ryuk.deglog.utilities.InjectorUtil
-import jp.ryuk.deglog.utilities.MessageCode
-import jp.ryuk.deglog.utilities.Utils
+import jp.ryuk.deglog.utilities.*
 import java.util.*
 
 
@@ -47,11 +44,16 @@ class NewProfileFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
-
         val allTypes = resources.getStringArray(R.array.all_types)
         val adapter = ArrayAdapter(requireContext(), R.layout.item_name_list, allTypes)
 
         with(binding) {
+
+            npTitle.text = when (args.mode) {
+                NavMode.NEW -> getString(R.string.title_new_profile)
+                NavMode.EDIT -> getString(R.string.title_edit_profile)
+                else -> getString(R.string.title_new_profile)
+            }
 
             npContainer.setOnTouchListener { v, event ->
                 Utils.hideKeyboard(requireActivity(), v, event)
@@ -81,12 +83,24 @@ class NewProfileFragment : Fragment() {
             }
 
             npIcon.setOnClickListener {
-                getUriFromGallery { uri ->
-                    val bitmap = BitmapUtils.createBitmap(requireContext(), uri)
-                    npIcon.setImageBitmap(bitmap)
-                    val jsonString = BitmapUtils.convertBitmapToJsonString(bitmap)
-                    setJsonString(jsonString)
+                val dialog = DialogBuilder.iconSelectDialogBuilder(requireContext()) {
+                    when (it) {
+                        0 -> {
+                            deleteIcon()
+                            npIcon.setImageResource(R.drawable.ic_pets)
+                        }
+                        else -> {
+                            getUriFromGallery { uri ->
+                                val bitmap = BitmapUtils.createBitmap(requireContext(), uri)
+                                npIcon.setImageBitmap(bitmap)
+                                val jsonString = BitmapUtils.convertBitmapToJsonString(bitmap)
+                                setJsonString(jsonString)
+                            }
+                        }
+
+                    }
                 }
+                dialog.show()
             }
 
             npNameText.addTextChangedListener { npNameLayout.error = null }
@@ -152,12 +166,10 @@ class NewProfileFragment : Fragment() {
             }
 
             submit.observe(viewLifecycleOwner) {
-                it?.let {
-                    when (it) {
-                        MessageCode.COLLECT ->
-                            showSnackbar(getString(R.string.registered_profile))
-                        MessageCode.EDIT ->
-                            showSnackbar(getString(R.string.edited_prodile))
+                if (it == true) {
+                    when (args.mode) {
+                        NavMode.NEW -> showSnackbar(getString(R.string.registered_profile))
+                        NavMode.EDIT -> showSnackbar(getString(R.string.edited_prodile))
                     }
                     pop()
                 }
@@ -172,6 +184,10 @@ class NewProfileFragment : Fragment() {
         Snackbar.make(requireView().rootView, text, Snackbar.LENGTH_LONG)
             .setAnchorView(R.id.bottom_navigation_bar)
             .show()
+    }
+
+    private fun deleteIcon() {
+        viewModel.deleteJsonString()
     }
 
     private fun setJsonString(jsonString: String) {
