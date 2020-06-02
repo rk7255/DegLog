@@ -10,6 +10,9 @@
     <color name="secondaryTextColor">#fadcb0</color>
     <color name="colorBackground">#ffffff</color>
 
+    <color name="brown">#dec196</color>
+    <color name="liteBrown">#fef3e4</color>
+
     <color name="gray">#aeaeae</color>
 
     <color name="pink">#F08279</color>

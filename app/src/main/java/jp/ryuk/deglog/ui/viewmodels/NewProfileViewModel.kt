@@ -95,6 +95,7 @@ class NewProfileViewModel internal constructor(
         typeString.value = profile.type
         iconJsonString = profile.icon
         genderString.value = profile.gender
+        selectedColor.value = profile.color
     }
 
     fun deleteJsonString() {

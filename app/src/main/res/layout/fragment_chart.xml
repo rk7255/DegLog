@@ -72,19 +72,19 @@
                 android:id="@+id/chart_filter_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:elevation="4dp">
+                android:elevation="4dp"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/secondaryLightColor"
+                    android:background="@color/liteBrown"
                     android:clickable="true"
                     android:orientation="vertical"
                     android:paddingStart="16dp"
                     android:paddingTop="56dp"
-                    android:paddingBottom="8dp"
-                    android:paddingEnd="16dp">
+                    android:paddingEnd="16dp"
+                    android:paddingBottom="8dp">
 
                     <TextView
                         android:id="@+id/textView8"
@@ -96,8 +96,8 @@
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/chip_group_chart"
                         android:layout_width="match_parent"
-                        app:selectionRequired="true"
                         android:layout_height="wrap_content"
+                        app:selectionRequired="true"
                         app:singleSelection="true">
 
                         <com.google.android.material.chip.Chip
@@ -105,14 +105,22 @@
                             style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/weight" />
+                            android:text="@string/weight"
+                            android:textColor="@color/text_chip_state"
+                            app:chipBackgroundColor="@color/bg_chip_state"
+                            app:chipStrokeColor="@color/primaryDarkColor"
+                            app:chipStrokeWidth="1dp" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chip_length"
                             style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/length" />
+                            android:text="@string/length"
+                            android:textColor="@color/text_chip_state"
+                            app:chipBackgroundColor="@color/bg_chip_state"
+                            app:chipStrokeColor="@color/primaryDarkColor"
+                            app:chipStrokeWidth="1dp" />
 
                     </com.google.android.material.chip.ChipGroup>
 
@@ -126,8 +134,8 @@
                     <com.google.android.material.chip.ChipGroup
                         android:id="@+id/chip_group_axis"
                         android:layout_width="match_parent"
-                        app:selectionRequired="true"
                         android:layout_height="wrap_content"
+                        app:selectionRequired="true"
                         app:singleSelection="true">
 
                         <com.google.android.material.chip.Chip
@@ -135,14 +143,22 @@
                             style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/time" />
+                            android:text="@string/time"
+                            android:textColor="@color/text_chip_state"
+                            app:chipBackgroundColor="@color/bg_chip_state"
+                            app:chipStrokeColor="@color/primaryDarkColor"
+                            app:chipStrokeWidth="1dp" />
 
                         <com.google.android.material.chip.Chip
                             android:id="@+id/chip_record"
                             style="@style/Widget.MaterialComponents.Chip.Choice"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/recorded" />
+                            android:text="@string/recorded"
+                            android:textColor="@color/text_chip_state"
+                            app:chipBackgroundColor="@color/bg_chip_state"
+                            app:chipStrokeColor="@color/primaryDarkColor"
+                            app:chipStrokeWidth="1dp" />
 
                     </com.google.android.material.chip.ChipGroup>
 
@@ -162,8 +178,8 @@
                     </com.google.android.material.chip.ChipGroup>
 
                     <com.google.android.material.button.MaterialButton
-                        android:layout_width="wrap_content"
                         android:id="@+id/chart_button_submit"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="@string/apply" />
@@ -176,7 +192,7 @@
                 android:id="@+id/chart_filter_open"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:background="@color/secondaryColor"
+                android:background="@color/brown"
                 android:elevation="6dp"
                 android:gravity="center"
                 android:orientation="horizontal"
@@ -196,8 +212,8 @@
                     android:id="@+id/chart_filter_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_more"
-                    android:contentDescription="@string/icon_of_filter_open" />
+                    android:contentDescription="@string/icon_of_filter_open"
+                    android:src="@drawable/ic_more" />
 
             </LinearLayout>
 

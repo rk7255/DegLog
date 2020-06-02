@@ -1,6 +1,7 @@
 package jp.ryuk.deglog.ui.data
 
 import android.graphics.Color
+import android.util.Log
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Description
@@ -10,7 +11,7 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
-import jp.ryuk.deglog.utilities.Deco
+import jp.ryuk.deglog.utilities.*
 
 object ChartCreator {
 

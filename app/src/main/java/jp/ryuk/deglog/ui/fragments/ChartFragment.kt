@@ -103,6 +103,7 @@ class ChartFragment : Fragment() {
                 append(s)
             }
         }
+
         binding.chartFilterText.text = filterStr.toString()
 
         if (chartData.isNotEmpty()) {

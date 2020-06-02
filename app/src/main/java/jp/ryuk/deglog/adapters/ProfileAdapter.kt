@@ -35,7 +35,10 @@ class ProfileAdapter(
                 else -> colorMap["gray"]
             }
             val colorKey = Utils.colorSelector(profile.color)
-            val colorLabel = colorMap[colorKey]
+
+            val colorLabel =
+                if (colorKey == "none") context.getColor(R.color.colorBackground)
+                else colorMap[colorKey]
 
             with(binding) {
                 this.profile = profile
@@ -51,7 +54,6 @@ class ProfileAdapter(
                     val bitmap = BitmapUtils.convertJsonToBitmap(icon)
                     profileIcon.setImageBitmap(bitmap)
                 }
-
 
                 executePendingBindings()
             }

@@ -71,8 +71,8 @@
     <string name="registered_diary_and_profile">日誌とプロフィールを登録しました</string>
 
     <!-- グラフ -->
-    <string name="select_chart">グラフ切替</string>
-    <string name="select_axis">横軸切替</string>
+    <string name="select_chart">縦軸</string>
+    <string name="select_axis">横軸</string>
     <string name="select_pets">表示するペット</string>
     <string name="time">時間</string>
     <string name="age">年齢</string>
