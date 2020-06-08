@@ -1,5 +1,6 @@
 package jp.ryuk.deglog.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,9 +15,7 @@ import jp.ryuk.deglog.adapters.DiaryListListener
 import jp.ryuk.deglog.adapters.DiaryStickerDecoration
 import jp.ryuk.deglog.databinding.FragmentDiaryListBinding
 import jp.ryuk.deglog.ui.viewmodels.DiaryListViewModel
-import jp.ryuk.deglog.utilities.InjectorUtil
-import jp.ryuk.deglog.utilities.NavMode
-import jp.ryuk.deglog.utilities.Utils
+import jp.ryuk.deglog.utilities.*
 
 class DiaryListFragment : Fragment() {
 
@@ -36,15 +35,13 @@ class DiaryListFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
+        loadSharedPreferences()
+
         with(binding) {
             detailListCheckWeight.isChecked = args.from == NavMode.FROM_WEIGHT
             detailListCheckLength.isChecked = args.from == NavMode.FROM_LENGTH
             detailListCheckNote.isChecked = false
         }
-
-        val recyclerView = binding.detailListRecyclerView
-        val adapter = DiaryListAdapter(DiaryListListener { onClick(it) })
-        recyclerView.adapter = adapter
 
         val switches =
             Utils.findViewsWithType(binding.diaryListSwitches, SwitchMaterial::class.java)
@@ -52,6 +49,12 @@ class DiaryListFragment : Fragment() {
         initSwitches(switches) { viewModel.applyFilter(requireContext(), it) }
 
         with(viewModel) {
+
+            val recyclerView = binding.detailListRecyclerView
+            val adapter = DiaryListAdapter(
+                unitWeight, unitLength, DiaryListListener { onClick(it) })
+            recyclerView.adapter = adapter
+
             allDiary.observe(viewLifecycleOwner) {
                 val checked = getCheckedSwitches(switches)
                 applyFilter(requireContext(), checked)
@@ -94,6 +97,18 @@ class DiaryListFragment : Fragment() {
     private fun getCheckedSwitches(switches: List<SwitchMaterial>): List<String> {
         return mutableListOf<String>().apply {
             switches.forEach { if (it.isChecked) add(it.text.toString()) }
+        }
+    }
+
+    private fun loadSharedPreferences() {
+        val sharedPreferences =
+            requireContext().getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
+
+        val w = sharedPreferences.getString(KEY_UNIT_WEIGHT, "g") ?: "g"
+        val l = sharedPreferences.getString(KEY_UNIT_LENGTH, "mm") ?: "mm"
+        viewModel.apply {
+            unitWeight = w
+            unitLength = l
         }
     }
 }

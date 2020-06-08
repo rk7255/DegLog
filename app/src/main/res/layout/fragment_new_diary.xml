@@ -279,12 +279,12 @@
 
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/nd_button_cancel"
+                        android:id="@+id/nd_button_back"
                         style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
-                        android:text="@string/dialog_cancel"
+                        android:text="@string/dialog_back"
                         app:layout_constraintEnd_toStartOf="@+id/nd_button_submit"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
@@ -297,8 +297,8 @@
                         android:text="@string/record"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/nd_button_cancel"
-                        app:layout_constraintTop_toTopOf="@id/nd_button_cancel" />
+                        app:layout_constraintStart_toEndOf="@+id/nd_button_back"
+                        app:layout_constraintTop_toTopOf="@id/nd_button_back" />
 
 
 

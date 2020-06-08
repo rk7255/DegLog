@@ -10,6 +10,8 @@ import jp.ryuk.deglog.databinding.ItemDetailListBinding
 
 
 class DiaryListAdapter(
+    private val unitWeight: String,
+    private val unitLength: String,
     private val clickListener: DiaryListListener
 ) : ListAdapter<Diary, DiaryListAdapter.ViewHolder>(DiaryDiffCallback()) {
 
@@ -19,18 +21,20 @@ class DiaryListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position) ?: return
-        holder.bind(item, clickListener)
+        holder.bind(item, unitWeight, unitLength, clickListener)
     }
 
     class ViewHolder private constructor(
         private val binding: ItemDetailListBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Diary, clickListener: DiaryListListener) {
+        fun bind(item: Diary, unitWeight: String, unitLength: String, clickListener: DiaryListListener) {
             with(binding) {
                 diary = item
-                hasMemo = !item.note.isNullOrEmpty()
+                this.unitWeight = unitWeight
+                this.unitLength = unitLength
                 this.clickListener = clickListener
+                hasMemo = !item.note.isNullOrEmpty()
                 executePendingBindings()
             }
         }

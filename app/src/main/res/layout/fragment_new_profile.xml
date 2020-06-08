@@ -233,6 +233,54 @@
 
                     </com.google.android.material.textfield.TextInputLayout>
 
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/np_death_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/np_icon"
+                        app:layout_constraintTop_toBottomOf="@id/np_birthday_layout">
+
+                        <TextView
+                            android:id="@+id/np_death"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/death_day"
+                            android:textSize="16sp"
+                            app:layout_constraintBottom_toBottomOf="@+id/np_death_layout"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/np_death_layout" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/np_death_layout"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="32dp"
+                            android:layout_marginTop="8dp"
+                            app:errorEnabled="true"
+                            app:hintEnabled="false"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toEndOf="@+id/np_death"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/np_death_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@color/bgEditText"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:hint="@string/death_day"
+                                android:inputType="date"
+                                android:paddingTop="14dp"
+                                android:text="" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <TextView
                         android:id="@+id/np_label"
@@ -260,16 +308,15 @@
                         app:layout_constraintStart_toStartOf="@+id/np_label"
                         app:layout_constraintTop_toBottomOf="@+id/np_label" />
 
-
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/np_label_container"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="32dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/np_gender"
-                        app:layout_constraintTop_toBottomOf="@id/np_birthday_layout">
+                        app:layout_constraintTop_toBottomOf="@id/np_death_container">
 
                         <com.google.android.material.button.MaterialButton
                             android:id="@+id/label_color_red"
@@ -432,12 +479,12 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <com.google.android.material.button.MaterialButton
-                        android:id="@+id/np_button_cancel"
+                        android:id="@+id/np_button_back"
                         style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="32dp"
-                        android:text="@string/dialog_cancel"
+                        android:text="@string/dialog_back"
                         app:layout_constraintEnd_toStartOf="@+id/np_button_submit"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
@@ -450,8 +497,9 @@
                         android:text="@string/dialog_registered"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/np_button_cancel"
-                        app:layout_constraintTop_toTopOf="@id/np_button_cancel" />
+                        app:layout_constraintStart_toEndOf="@+id/np_button_back"
+                        app:layout_constraintTop_toTopOf="@id/np_button_back" />
+
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

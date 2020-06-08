@@ -41,11 +41,11 @@ class DashboardFragment : Fragment() {
         (activity as AppCompatActivity).setSupportActionBar(binding.dbAppBar)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        viewModel.selected.value = loadSharedPreferences()
+        loadSharedPreferences()
 
         val recyclerView = binding.dbTodoRecyclerView
         val adapter = TodoAdapter(TodoListener {
-            DialogBuilder.deleteTodoDialogBuilder(
+            DialogBuilder.confirmDeleteTodoDialogBuilder(
                 requireContext(), it
             ) { viewModel.doneTodo(it.id) }
                 .show()
@@ -150,10 +150,18 @@ class DashboardFragment : Fragment() {
         editor.apply()
     }
 
-    private fun loadSharedPreferences(): String {
+    private fun loadSharedPreferences() {
         val sharedPreferences =
             requireContext().getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
-        return sharedPreferences.getString(KEY_DASHBOARD, "") ?: ""
+
+        val s = sharedPreferences.getString(KEY_DASHBOARD, "") ?: ""
+        val w = sharedPreferences.getString(KEY_UNIT_WEIGHT, "g") ?: "g"
+        val l = sharedPreferences.getString(KEY_UNIT_LENGTH, "mm") ?: "mm"
+        viewModel.apply {
+            selected.value = s
+            unitWeight.value = w
+            unitLength.value = l
+        }
     }
 
     override fun onPause() {

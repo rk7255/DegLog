@@ -17,6 +17,42 @@ import jp.ryuk.deglog.utilities.*
 
 object DialogBuilder {
 
+    /**
+     * 選択ダイアログ
+     */
+    private fun simpleSelectDialog(
+        context: Context,
+        array: Array<String>,
+        unit: (String) -> Unit
+    ): MaterialAlertDialogBuilder {
+        return MaterialAlertDialogBuilder(context)
+            .setItems(array) { _, which ->
+                unit(array[which])
+            }
+    }
+
+    fun selectUnitWeightDialogBuilder(context: Context, unit: (String) -> Unit): AlertDialog {
+        val items = context.resources.getStringArray(R.array.weight_unit)
+        return simpleSelectDialog(context, items, unit)
+            .setTitle("体重の単位")
+            .create()
+    }
+
+    fun selectUnitLengthDialogBuilder(context: Context, unit: (String) -> Unit): AlertDialog {
+        val items = context.resources.getStringArray(R.array.length_unit)
+        return simpleSelectDialog(context, items, unit)
+            .setTitle("体長の単位")
+            .create()
+    }
+
+    fun selectDashboardDialogBuilder(
+        context: Context, array: Array<String>, unit: (String) -> Unit
+    ): AlertDialog {
+        return simpleSelectDialog(context, array, unit)
+            .setTitle(context.getString(R.string.choice_pet))
+            .create()
+    }
+
     fun iconSelectDialogBuilder(context: Context, unit: (Int) -> Unit): AlertDialog {
         val items = arrayOf("アイコンを削除", "ギャラリーから選択")
 
@@ -30,6 +66,45 @@ object DialogBuilder {
             }
             .create()
     }
+
+    /**
+     * 確認ダイアログ
+     */
+    fun confirmDeleteDiaryDialogBuilder(context: Context, unit: () -> Unit): AlertDialog {
+        return MaterialAlertDialogBuilder(context)
+            .setTitle(context.getString(R.string.dialog_delete_title))
+            .setMessage(context.getString(R.string.dialog_delete_message))
+            .setNeutralButton(context.getString(R.string.dialog_cancel)) { _, _ -> }
+            .setPositiveButton(context.getString(R.string.dialog_yes)) { _, _ ->
+                unit()
+            }.create()
+    }
+
+    fun confirmChangeNameDialogBuilder(context: Context, unit: () -> Unit): AlertDialog {
+        return MaterialAlertDialogBuilder(context)
+            .setTitle("変更確認")
+            .setMessage("名前が変更されています\n日誌データにも反映されます")
+            .setNeutralButton(context.getString(R.string.dialog_cancel)) { _, _ -> }
+            .setPositiveButton(context.getString(R.string.dialog_ok)) { _, _ ->
+                unit()
+            }.create()
+    }
+
+    fun confirmDeleteTodoDialogBuilder(
+        context: Context, todo: Todo, unit: () -> Unit
+    ): AlertDialog {
+        return MaterialAlertDialogBuilder(context)
+            .setMessage("選択したToDoを完了します\n\"${todo.todo}\"")
+            .setNeutralButton(context.getString(R.string.dialog_cancel), null)
+            .setPositiveButton(context.getString(R.string.dialog_success)) { _, _ ->
+                unit()
+            }.create()
+    }
+
+    /**
+     * その他ユニーク
+     */
+
 
     fun typeDialogBuilder(
         context: Context,
@@ -112,26 +187,6 @@ object DialogBuilder {
         )
     }
 
-    fun createDeleteDiaryDialog(context: Context, unit: () -> Unit): AlertDialog {
-        return MaterialAlertDialogBuilder(context)
-            .setTitle(context.getString(R.string.dialog_delete_title))
-            .setMessage(context.getString(R.string.dialog_delete_message))
-            .setNeutralButton(context.getString(R.string.dialog_cancel)) { _, _ -> }
-            .setPositiveButton(context.getString(R.string.dialog_yes)) { _, _ ->
-                unit()
-            }.create()
-    }
-
-    fun changeNameDialogBuilder(context: Context, unit: () -> Unit): AlertDialog {
-        return MaterialAlertDialogBuilder(context)
-            .setTitle("変更確認")
-            .setMessage("名前が変更されています\n日誌データにも反映されます")
-            .setNeutralButton(context.getString(R.string.dialog_cancel)) { _, _ -> }
-            .setPositiveButton(context.getString(R.string.dialog_ok)) { _, _ ->
-                unit()
-            }.create()
-    }
-
 
     @SuppressLint("InflateParams")
     fun createTodoDialog(context: Context, unit: (String) -> Unit): AlertDialog {
@@ -160,27 +215,5 @@ object DialogBuilder {
         return dialog
     }
 
-    fun deleteTodoDialogBuilder(
-        context: Context, todo: Todo, unit: () -> Unit
-    ): AlertDialog {
-        return MaterialAlertDialogBuilder(context)
-            .setMessage("選択したToDoを完了します\n\"${todo.todo}\"")
-            .setNeutralButton(context.getString(R.string.dialog_cancel), null)
-            .setPositiveButton(context.getString(R.string.dialog_success)) { _, _ ->
-                unit()
-            }
-            .create()
-    }
-
-    fun selectDashboardDialogBuilder(
-        context: Context, list: Array<String>, unit: (String) -> Unit
-    ): AlertDialog {
-        return MaterialAlertDialogBuilder(context)
-            .setTitle(context.getString(R.string.choice_pet))
-            .setItems(list) { _, which ->
-                unit(list[which])
-            }
-            .create()
-    }
 
 }

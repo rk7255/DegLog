@@ -62,13 +62,14 @@ class ProfilesFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater) {
-        menuInflater.inflate(R.menu.toolbar_menu, menu)
+        menuInflater.inflate(R.menu.toolbar_menu_profiles, menu)
         super.onCreateOptionsMenu(menu, menuInflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.toolbar_add -> navigateToNewProfile()
+            R.id.toolbar_settings -> navigateToSettings()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -83,5 +84,11 @@ class ProfilesFragment : Fragment() {
             ProfilesFragmentDirections.toNewProfileFragment(NavMode.EDIT, name)
         )
         viewModel.doneNavigateToNewProfile()
+    }
+
+    private fun navigateToSettings() {
+        this.findNavController().navigate(
+            ProfilesFragmentDirections.toSettingsFragment()
+        )
     }
 }

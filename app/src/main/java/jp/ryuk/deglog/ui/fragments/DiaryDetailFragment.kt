@@ -1,6 +1,7 @@
 package jp.ryuk.deglog.ui.fragments
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.*
 import android.view.animation.AnimationUtils
@@ -16,8 +17,7 @@ import jp.ryuk.deglog.databinding.FragmentDiaryDetailBinding
 import jp.ryuk.deglog.ui.data.DialogBuilder
 import jp.ryuk.deglog.ui.data.FlickListener
 import jp.ryuk.deglog.ui.viewmodels.DiaryDetailViewModel
-import jp.ryuk.deglog.utilities.InjectorUtil
-import jp.ryuk.deglog.utilities.NavMode
+import jp.ryuk.deglog.utilities.*
 
 class DiaryDetailFragment : Fragment() {
 
@@ -45,6 +45,7 @@ class DiaryDetailFragment : Fragment() {
         (activity as AppCompatActivity).setSupportActionBar(binding.appBarDiaryDetail)
         binding.viewModel = viewModel
         binding.lifecycleOwner = this
+        loadSharedPreferences()
 
         with(binding) {
             appBarDiaryDetail.title = args.name + getString(R.string.title_diary_detail_at_name)
@@ -115,7 +116,7 @@ class DiaryDetailFragment : Fragment() {
         when (item.itemId) {
             R.id.toolbar_delete -> {
                 val dialog =
-                    DialogBuilder.createDeleteDiaryDialog(requireContext()) { deleteDiaryCallback() }
+                    DialogBuilder.confirmDeleteDiaryDialogBuilder(requireContext()) { deleteDiaryCallback() }
                 dialog.show()
             }
             R.id.toolbar_edit -> navigateToNewDiary(viewModel.id, args.name)
@@ -133,6 +134,18 @@ class DiaryDetailFragment : Fragment() {
         )
             .setAnchorView(R.id.bottom_navigation_bar)
             .show()
+    }
+
+    private fun loadSharedPreferences() {
+        val sharedPreferences =
+            requireContext().getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
+
+        val w = sharedPreferences.getString(KEY_UNIT_WEIGHT, "g") ?: "g"
+        val l = sharedPreferences.getString(KEY_UNIT_LENGTH, "mm") ?: "mm"
+        viewModel.apply {
+            unitWeight = w
+            unitLength = l
+        }
     }
 
     private fun navigatePop() {

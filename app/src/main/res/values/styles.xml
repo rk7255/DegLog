@@ -113,4 +113,10 @@
         <item name="android:tint">@color/primaryDarkColor</item>
     </style>
 
+
+    <style name="EditText.Style" parent="Base.Widget.AppCompat.EditText">
+        <item name="boxBackgroundColor">@color/colorBackground</item>
+    </style>
+
+
 </resources>

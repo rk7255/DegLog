@@ -7,9 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
 import jp.ryuk.deglog.R
 
 object Utils {
+
+    fun showSnackbar(rootView: View, text: String) {
+        Snackbar.make(rootView, text, Snackbar.LENGTH_LONG)
+            .setAnchorView(R.id.bottom_navigation_bar)
+            .show()
+    }
 
     fun <T : View> findViewsWithType(root: View, type: Class<T>): List<T> {
         val views = ArrayList<T>()

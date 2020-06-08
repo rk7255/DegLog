@@ -23,8 +23,6 @@
     <string name="label">ラベル</string>
     <string name="dot">・</string>
     <string name="asterisk">*</string>
-    <string name="g">g</string>
-    <string name="mm">mm</string>
 
     <!-- ナビゲーション -->
     <string name="bottom_nav_diary">日誌</string>
@@ -110,6 +108,7 @@
     <string name="dialog_registered">登録</string>
     <string name="dialog_success">完了</string>
     <string name="dialog_cancel">キャンセル</string>
+    <string name="dialog_back">戻る</string>
     <string name="dialog_delete_title">削除しますか？</string>
     <string name="dialog_delete_message">この操作は取り消せません</string>
     <string name="dialog_delete_success">削除しました</string>
@@ -228,15 +227,28 @@
         <item>@string/animal_konchu</item>
     </string-array>
 
+    <string name="g">g</string>
+    <string name="kg">kg</string>
+    <string name="mm">mm</string>
+    <string name="cm">cm</string>
+    <string name="m">m</string>
+
     <string-array name="weight_unit">
-        <item>g</item>
-        <item>kg</item>
+        <item>@string/g</item>
+        <item>@string/kg</item>
     </string-array>
 
     <string-array name="length_unit">
-        <item>mm</item>
-        <item>cm</item>
-        <item>m</item>
+        <item>@string/mm</item>
+        <item>@string/cm</item>
+        <item>@string/m</item>
     </string-array>
+
+    <string name="death_day">命日</string>
+    <string name="unit">単位</string>
+    <string name="title_settings">- Settings -</string>
+    <string name="unit_of_length">体長の単位</string>
+    <string name="unit_of_weight">体重の単位</string>
+    <string name="save">保存</string>
 
 </resources>

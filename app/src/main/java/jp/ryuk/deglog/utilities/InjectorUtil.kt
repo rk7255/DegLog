@@ -1,14 +1,11 @@
 package jp.ryuk.deglog.utilities
 
 import android.content.Context
-import jp.ryuk.deglog.database.*
-import jp.ryuk.deglog.ui.viewmodels.ChartViewModelFactory
-import jp.ryuk.deglog.ui.viewmodels.DashboardViewModelFactory
-import jp.ryuk.deglog.ui.viewmodels.DiaryDetailViewModelFactory
-import jp.ryuk.deglog.ui.viewmodels.DiaryListViewModelFactory
-import jp.ryuk.deglog.ui.viewmodels.NewDiaryViewModelFactory
-import jp.ryuk.deglog.ui.viewmodels.NewProfileViewModelFactory
-import jp.ryuk.deglog.ui.viewmodels.ProfilesViewModelFactory
+import jp.ryuk.deglog.database.AppDatabase
+import jp.ryuk.deglog.database.DiaryRepository
+import jp.ryuk.deglog.database.ProfileRepository
+import jp.ryuk.deglog.database.TodoRepository
+import jp.ryuk.deglog.ui.viewmodels.*
 
 object InjectorUtil {
 
@@ -112,5 +109,9 @@ object InjectorUtil {
             diaryRepository,
             profileRepository
         )
+    }
+
+    fun provideSettingsViewModelFactory(): SettingsViewModelFactory {
+        return SettingsViewModelFactory()
     }
 }

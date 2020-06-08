@@ -11,6 +11,8 @@ const val KEY_DASHBOARD = "dashboard"
 const val KEY_CHECKED_NAME = "checked_name"
 const val KEY_CHECKED_CHART = "checked_chart"
 const val KEY_CHECKED_AXIS = "checked_axis"
+const val KEY_UNIT_WEIGHT = "unit_weight"
+const val KEY_UNIT_LENGTH = "unit_length"
 
 const val deg = "DEGLOG_DEBUG"
 const val TAG = "DEGLOG_DEBUG"

@@ -17,6 +17,9 @@ class DiaryListViewModel internal constructor(
     val allDiary = diaryRepository.getDiaries(selectedName)
     val profile = profileRepository.getProfile(selectedName)
 
+    var unitWeight = "g"
+    var unitLength = "mm"
+
     val diaries = MutableLiveData<List<Diary>>()
 
     fun applyFilter(context: Context, checked: List<String>) {

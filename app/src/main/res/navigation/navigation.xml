@@ -125,6 +125,13 @@
             app:exitAnim="@anim/spread_out"
             app:popEnterAnim="@anim/spread_pop_out"
             app:popExitAnim="@anim/spread_pop_in" />
+        <action
+            android:id="@+id/to_settingsFragment"
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/spread_in"
+            app:exitAnim="@anim/spread_out"
+            app:popEnterAnim="@anim/spread_pop_out"
+            app:popExitAnim="@anim/spread_pop_in" />
     </fragment>
     <fragment
         android:id="@+id/newProfileFragment"
@@ -143,5 +150,15 @@
         <action
             android:id="@+id/action_newProfileFragment_to_diaryFragment"
             app:destination="@id/dashboardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="jp.ryuk.deglog.ui.fragments.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_pop"
+            app:popUpTo="@id/settingsFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

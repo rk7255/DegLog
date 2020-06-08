@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.databinding.FragmentNewDiaryBinding
 import jp.ryuk.deglog.ui.data.DialogBuilder
@@ -85,7 +84,7 @@ class NewDiaryFragment : Fragment() {
             ndLengthText.addTextChangedListener { numberError(binding, false) }
             ndNoteText.addTextChangedListener { numberError(binding, false) }
 
-            ndButtonCancel.setOnClickListener { pop() }
+            ndButtonBack.setOnClickListener { pop() }
             ndButtonSubmit.setOnClickListener { submit() }
         }
 
@@ -117,7 +116,7 @@ class NewDiaryFragment : Fragment() {
                         getString(R.string.enter_name)
                     MessageCode.NUMBER_EMPTY -> {
                         numberError(binding, true)
-                        showSnackbar(getString(R.string.enter_number_up_one))
+                        Utils.showSnackbar(requireView().rootView, getString(R.string.enter_number_up_one))
                     }
                 }
             }
@@ -128,7 +127,7 @@ class NewDiaryFragment : Fragment() {
                     MessageCode.EDIT -> getString(R.string.edited_diary)
                     else -> getString(R.string.registered_diary)
                 }
-                showSnackbar(msg)
+                Utils.showSnackbar(requireView().rootView, msg)
                 pop()
             }
         }
@@ -148,12 +147,6 @@ class NewDiaryFragment : Fragment() {
                 ndNoteLayout.error = null
             }
         }
-    }
-
-    private fun showSnackbar(text: String) {
-        Snackbar.make(requireView().rootView, text, Snackbar.LENGTH_LONG)
-            .setAnchorView(R.id.bottom_navigation_bar)
-            .show()
     }
 
     private fun setDate(year: Int, month: Int, day: Int) {

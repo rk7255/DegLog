@@ -13,7 +13,7 @@ class FlickListener constructor(
         fun onFlickToRight()
     }
 
-    private val play = 50f
+    private val play = 80f
     private var startX: Float = 0f
     private var startY: Float = 0f
     private var endX: Float = 0f

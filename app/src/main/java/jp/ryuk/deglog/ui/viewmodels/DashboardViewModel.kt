@@ -12,7 +12,6 @@ import jp.ryuk.deglog.utilities.Utils
 import jp.ryuk.deglog.utilities.getAge
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.math.absoluteValue
 import kotlin.math.min
 
 class DashboardViewModel internal constructor(
@@ -28,6 +27,9 @@ class DashboardViewModel internal constructor(
     val nameListInDiary: List<String> get() = allDiary.value?.map(Diary::name)?.distinct() ?: listOf()
     private val nameListInProfile: List<String> get() = allProfile.value?.map(Profile::name)?.distinct() ?: listOf()
     var selected = MutableLiveData<String>()
+
+    val unitWeight = MutableLiveData<String>()
+    val unitLength = MutableLiveData<String>()
 
     /*
      * onClick
@@ -124,12 +126,12 @@ class DashboardViewModel internal constructor(
         weightData.value = if (wSubList.isNotEmpty()) {
             DisplayData(
                 date = Converter.longToDateString(diaryList.first { it.weight != null }.date),
-                latest = wSubList.first().toInt().toString(),
-                prev = prev(wSubList),
+                latest = wSubList.first().excWgt(),
+                prev = prev(wSubList, unitWeight.value ?: "g"),
                 isPlusPrev = isPlusPrev(wSubList),
-                recent = recent(wSubList),
+                recent = recent(wSubList, unitWeight.value ?: "g"),
                 isPlusRecent = isPlusRecent(wSubList),
-                unit = "g"
+                unit = unitWeight.value ?: "g"
             )
         } else {
             DisplayData()
@@ -156,31 +158,57 @@ class DashboardViewModel internal constructor(
         lengthData.value = if (lSubList.isNotEmpty()) {
             DisplayData(
                 date = Converter.longToDateString(diaryList.first { it.length != null }.date),
-                latest = lSubList.first().toInt().toString(),
-                prev = prev(lSubList),
+                latest = lSubList.first().excLen(),
+                prev = prev(lSubList, unitLength.value ?: "mm"),
                 isPlusPrev = isPlusPrev(lSubList),
-                recent = recent(lSubList),
+                recent = recent(lSubList, unitLength.value ?: "mm"),
                 isPlusRecent = isPlusRecent(lSubList),
-                unit = "mm"
+                unit = unitLength.value ?: "mm"
             )
         } else {
             DisplayData()
         }
     }
 
-    private fun prev(values: List<Float>): String =
-        if (values.size <= 1) "0" else onSign(values[0] - values[1])
+    private fun Float.excWgt(): String {
+        return when (unitWeight.value) {
+            "kg" -> Converter.convertUnit(this, "kg", false)
+            else -> Converter.convertUnit(this, "g", false)
+        }
+    }
+    private fun Float.excLen(): String {
+        return when (unitLength.value) {
+            "cm" -> Converter.convertUnit(this, "cm", false)
+            "m" -> Converter.convertUnit(this, "m", false)
+            else -> Converter.convertUnit(this, "g", false)
+        }
+    }
+
+
+    private fun prev(values: List<Float>, unit: String): String =
+        if (values.size <= 1) onSign(0f, unit) else onSign(values[0] - values[1], unit)
 
     private fun isPlusPrev(values: List<Float>): Boolean =
         if (values.size <= 1) true else (values[0] - values[1] >= 0)
 
-    private fun recent(values: List<Float>): String =
-        onSign(values[0] - values.last())
+    private fun recent(values: List<Float>, unit: String): String =
+        onSign(values[0] - values.last(), unit)
 
     private fun isPlusRecent(values: List<Float>): Boolean =
         values[0] - values.last() >= 0
 
-    private fun onSign(num: Float): String =
-        if (num >= 0) "+ ${num.absoluteValue.toInt()}" else "- ${num.absoluteValue.toInt()}"
+    private fun onSign(num: Float, unit: String): String {
+        val n = when (unit) {
+            "g" -> Converter.convertUnit(num, "g", false)
+            "kg" -> Converter.convertUnit(num, "kg", false)
+            "mm"-> Converter.convertUnit(num, "mm", false)
+            "cm" -> Converter.convertUnit(num, "cm", false)
+            "m" -> Converter.convertUnit(num, "m", false)
+            else -> Converter.convertUnit(num, "g", false)
+        }
+        return if (num >= 0) "+ $n" else "- $n"
+    }
+
+
 
 }

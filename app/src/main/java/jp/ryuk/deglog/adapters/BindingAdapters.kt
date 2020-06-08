@@ -1,15 +1,11 @@
 package jp.ryuk.deglog.adapters
 
 import android.annotation.SuppressLint
-import android.provider.ContactsContract
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import jp.ryuk.deglog.database.Profile
 import jp.ryuk.deglog.utilities.Converter
-import jp.ryuk.deglog.utilities.Converter.convertUnit
-import jp.ryuk.deglog.utilities.deg
 import jp.ryuk.deglog.utilities.getAge
 
 @BindingAdapter("isGone")
@@ -58,15 +54,15 @@ fun TextView.bindDateLong(date: Long) {
 }
 
 @SuppressLint("SetTextI18n")
-@BindingAdapter("weight")
-fun TextView.bindWeight(weight: Float) {
-    text = if (weight == 0f) "-" else "${weight.toInt()} g"
+@BindingAdapter("weight", "unit")
+fun TextView.bindWeight(weight: Float, unit: String) {
+    text = if (weight == 0f) "-" else Converter.convertUnit(weight, unit, true)
 }
 
 @SuppressLint("SetTextI18n")
-@BindingAdapter("length")
-fun TextView.bindLength(length: Float) {
-    text = if (length == 0f) "-" else "${length.toInt()} mm"
+@BindingAdapter("length", "unit")
+fun TextView.bindLength(length: Float, unit: String) {
+    text = if (length == 0f) "-" else Converter.convertUnit(length, unit, true)
 }
 
 

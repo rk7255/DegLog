@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.snackbar.Snackbar
 import jp.ryuk.deglog.R
 import jp.ryuk.deglog.databinding.FragmentNewProfileBinding
 import jp.ryuk.deglog.ui.data.DialogBuilder
@@ -105,7 +104,7 @@ class NewProfileFragment : Fragment() {
 
             npNameText.addTextChangedListener { npNameLayout.error = null }
 
-            npButtonCancel.setOnClickListener { pop() }
+            npButtonBack.setOnClickListener { pop() }
             npButtonSubmit.setOnClickListener { submit() }
         }
 
@@ -152,13 +151,13 @@ class NewProfileFragment : Fragment() {
                     MessageCode.NAME_EMPTY ->
                         binding.npNameLayout.error = getString(R.string.enter_name)
                     MessageCode.NAME_REGISTERED ->
-                        showSnackbar(getString(R.string.registered_name))
+                        Utils.showSnackbar(requireView().rootView, getString(R.string.registered_name))
                 }
             }
 
             submitMassage.observe(viewLifecycleOwner) {
                 it?.let {  profile ->
-                    val dialog = DialogBuilder.changeNameDialogBuilder(requireContext()) {
+                    val dialog = DialogBuilder.confirmChangeNameDialogBuilder(requireContext()) {
                         changeName(profile)
                     }
                     dialog.show()
@@ -168,8 +167,8 @@ class NewProfileFragment : Fragment() {
             submit.observe(viewLifecycleOwner) {
                 if (it == true) {
                     when (args.mode) {
-                        NavMode.NEW -> showSnackbar(getString(R.string.registered_profile))
-                        NavMode.EDIT -> showSnackbar(getString(R.string.edited_prodile))
+                        NavMode.NEW -> Utils.showSnackbar(requireView().rootView, getString(R.string.registered_profile))
+                        NavMode.EDIT -> Utils.showSnackbar(requireView().rootView, getString(R.string.edited_prodile))
                     }
                     pop()
                 }
@@ -178,12 +177,6 @@ class NewProfileFragment : Fragment() {
 
 
         return binding.root
-    }
-
-    private fun showSnackbar(text: String) {
-        Snackbar.make(requireView().rootView, text, Snackbar.LENGTH_LONG)
-            .setAnchorView(R.id.bottom_navigation_bar)
-            .show()
     }
 
     private fun deleteIcon() {

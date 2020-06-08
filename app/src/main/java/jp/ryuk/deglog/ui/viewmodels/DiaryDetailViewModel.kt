@@ -8,6 +8,7 @@ import jp.ryuk.deglog.database.Diary
 import jp.ryuk.deglog.database.DiaryRepository
 import jp.ryuk.deglog.database.ProfileRepository
 import jp.ryuk.deglog.ui.data.DisplayData
+import jp.ryuk.deglog.utilities.Converter
 import kotlinx.coroutines.launch
 import kotlin.math.max
 import kotlin.math.min
@@ -24,6 +25,9 @@ class DiaryDetailViewModel internal constructor(
 
     var id = diaryId
     var pos = 0
+
+    var unitWeight = "g"
+    var unitLength = "mm"
 
     val weightData = MutableLiveData<DisplayData>()
     val lengthData = MutableLiveData<DisplayData>()
@@ -98,15 +102,15 @@ class DiaryDetailViewModel internal constructor(
         val lNext = before.mapNotNull(Diary::length).lastOrNull()
 
         weightData.value = DisplayData(
-            latest = if (wLatest == null) "-" else "${wLatest.toInt()} g",
-            prev = if (wPrev == null) "-" else "${wPrev.toInt()} g",
-            recent = if (wNext == null) "-" else "${wNext.toInt()} g"
+            latest = if (wLatest == null) "-" else Converter.convertUnit(wLatest, unitWeight, true),
+            prev = if (wPrev == null) "-" else Converter.convertUnit(wPrev, unitWeight, true),
+            recent = if (wNext == null) "-" else Converter.convertUnit(wNext, unitWeight, true)
         )
 
         lengthData.value = DisplayData(
-            latest = if (lLatest == null) "-" else "${lLatest.toInt()} mm",
-            prev = if (lPrev == null) "-" else "${lPrev.toInt()} mm",
-            recent = if (lNext == null) "-" else "${lNext.toInt()} mm"
+            latest = if (lLatest == null) "-" else Converter.convertUnit(lLatest, unitLength, true),
+            prev = if (lPrev == null) "-" else Converter.convertUnit(lPrev, unitLength, true),
+            recent = if (lNext == null) "-" else Converter.convertUnit(lNext, unitLength, true)
         )
 
         id = now.id

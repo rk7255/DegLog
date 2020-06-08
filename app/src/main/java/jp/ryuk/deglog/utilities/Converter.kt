@@ -65,7 +65,7 @@ object Converter {
     /**
      * 単位変換
      */
-    fun Converter.convertUnit(number: Float, unit: String, onSuffix: Boolean): String {
+    fun convertUnit(number: Float, unit: String, onSuffix: Boolean): String {
         val result = StringBuilder()
         when (unit) {
             "g" -> result.append("${roundInt(number)}")
