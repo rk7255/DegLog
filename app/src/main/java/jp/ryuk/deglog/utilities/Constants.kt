@@ -13,6 +13,13 @@ const val KEY_CHECKED_CHART = "checked_chart"
 const val KEY_CHECKED_AXIS = "checked_axis"
 const val KEY_UNIT_WEIGHT = "unit_weight"
 const val KEY_UNIT_LENGTH = "unit_length"
+const val KEY_DEATH_DAY = "death_day"
+const val KEY_DB1_ENABLED = "db1_enabled"
+const val KEY_DB1_NAME = "db1_name"
+const val KEY_DB1_UNIT = "db1_unit"
+const val KEY_DB2_ENABLED = "db2_enabled"
+const val KEY_DB2_NAME = "db2_name"
+const val KEY_DB2_UNIT = "db2_unit"
 
 const val deg = "DEGLOG_DEBUG"
 const val TAG = "DEGLOG_DEBUG"
@@ -37,6 +44,8 @@ class WhereClicked {
         const val WEIGHT = 4
         const val LENGTH = 5
         const val TODO = 6
+        const val FREE1 = 7
+        const val FREE2 = 8
     }
 }
 

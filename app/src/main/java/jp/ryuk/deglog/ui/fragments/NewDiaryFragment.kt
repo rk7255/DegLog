@@ -1,6 +1,7 @@
 package jp.ryuk.deglog.ui.fragments
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,10 +17,7 @@ import jp.ryuk.deglog.R
 import jp.ryuk.deglog.databinding.FragmentNewDiaryBinding
 import jp.ryuk.deglog.ui.data.DialogBuilder
 import jp.ryuk.deglog.ui.viewmodels.NewDiaryViewModel
-import jp.ryuk.deglog.utilities.InjectorUtil
-import jp.ryuk.deglog.utilities.MessageCode
-import jp.ryuk.deglog.utilities.NavMode
-import jp.ryuk.deglog.utilities.Utils
+import jp.ryuk.deglog.utilities.*
 import java.util.*
 
 class NewDiaryFragment : Fragment() {
@@ -39,6 +37,7 @@ class NewDiaryFragment : Fragment() {
         binding = FragmentNewDiaryBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        loadSharedPreferences()
 
         var date = Calendar.getInstance().timeInMillis
 
@@ -89,6 +88,10 @@ class NewDiaryFragment : Fragment() {
         }
 
         with(viewModel) {
+            with(binding) {
+                ndFree1Container.visibility = if (isEnabledDb1) View.VISIBLE else View.GONE
+                ndFree2Container.visibility = if (isEnabledDb2) View.VISIBLE else View.GONE
+            }
 
             diary.observe(viewLifecycleOwner) {
                 if (it != null) {
@@ -116,7 +119,10 @@ class NewDiaryFragment : Fragment() {
                         getString(R.string.enter_name)
                     MessageCode.NUMBER_EMPTY -> {
                         numberError(binding, true)
-                        Utils.showSnackbar(requireView().rootView, getString(R.string.enter_number_up_one))
+                        Utils.showSnackbar(
+                            requireView().rootView,
+                            getString(R.string.enter_number_up_one)
+                        )
                     }
                 }
             }
@@ -167,4 +173,13 @@ class NewDiaryFragment : Fragment() {
         )
     }
 
+    private fun loadSharedPreferences() {
+        val sharedPreferences =
+            requireContext().getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
+
+        viewModel.apply {
+            isEnabledDb1 = sharedPreferences.getBoolean(KEY_DB1_ENABLED, false)
+            isEnabledDb2 = sharedPreferences.getBoolean(KEY_DB2_ENABLED, false)
+        }
+    }
 }

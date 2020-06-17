@@ -7,8 +7,10 @@ import android.content.Context
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.EditText
-import android.widget.TextView
+import android.widget.LinearLayout
+import android.widget.Switch
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import jp.ryuk.deglog.R
@@ -34,14 +36,14 @@ object DialogBuilder {
     fun selectUnitWeightDialogBuilder(context: Context, unit: (String) -> Unit): AlertDialog {
         val items = context.resources.getStringArray(R.array.weight_unit)
         return simpleSelectDialog(context, items, unit)
-            .setTitle("体重の単位")
+            .setTitle(context.getString(R.string.unit_of_weight))
             .create()
     }
 
     fun selectUnitLengthDialogBuilder(context: Context, unit: (String) -> Unit): AlertDialog {
         val items = context.resources.getStringArray(R.array.length_unit)
         return simpleSelectDialog(context, items, unit)
-            .setTitle("体長の単位")
+            .setTitle(context.getString(R.string.unit_of_length))
             .create()
     }
 
@@ -53,17 +55,10 @@ object DialogBuilder {
             .create()
     }
 
-    fun iconSelectDialogBuilder(context: Context, unit: (Int) -> Unit): AlertDialog {
-        val items = arrayOf("アイコンを削除", "ギャラリーから選択")
-
-        return MaterialAlertDialogBuilder(context)
-            .setTitle("アイコン設定")
-            .setItems(items) { _, which ->
-                when (which) {
-                    0 -> unit(0)
-                    else -> unit(1)
-                }
-            }
+    fun selectIconDialogBuilder(context: Context, unit: (String) -> Unit): AlertDialog {
+        val array = context.resources.getStringArray(R.array.icon_select_array)
+        return simpleSelectDialog(context, array, unit)
+            .setTitle(context.getString(R.string.icon_select))
             .create()
     }
 
@@ -82,8 +77,8 @@ object DialogBuilder {
 
     fun confirmChangeNameDialogBuilder(context: Context, unit: () -> Unit): AlertDialog {
         return MaterialAlertDialogBuilder(context)
-            .setTitle("変更確認")
-            .setMessage("名前が変更されています\n日誌データにも反映されます")
+            .setTitle(context.getString(R.string.confirm_change_name))
+            .setMessage(context.getString(R.string.confirm_change_name_message))
             .setNeutralButton(context.getString(R.string.dialog_cancel)) { _, _ -> }
             .setPositiveButton(context.getString(R.string.dialog_ok)) { _, _ ->
                 unit()
@@ -94,7 +89,8 @@ object DialogBuilder {
         context: Context, todo: Todo, unit: () -> Unit
     ): AlertDialog {
         return MaterialAlertDialogBuilder(context)
-            .setMessage("選択したToDoを完了します\n\"${todo.todo}\"")
+            .setTitle(context.getString(R.string.delete_select_todo))
+            .setMessage(todo.todo)
             .setNeutralButton(context.getString(R.string.dialog_cancel), null)
             .setPositiveButton(context.getString(R.string.dialog_success)) { _, _ ->
                 unit()
@@ -191,12 +187,10 @@ object DialogBuilder {
     @SuppressLint("InflateParams")
     fun createTodoDialog(context: Context, unit: (String) -> Unit): AlertDialog {
         val view = LayoutInflater.from(context).inflate(R.layout.dialog_todo, null)
-        val titleText = view.findViewById<TextView>(R.id.dialog_todo_title)
         val editText = view.findViewById<EditText>(R.id.dialog_todo_text)
-        titleText.text = context.getString(R.string.add_new_todo)
-        editText.hint = context.getString(R.string.todo)
 
         val dialog = MaterialAlertDialogBuilder(context)
+            .setTitle(context.getString(R.string.add_new_todo))
             .setView(view)
             .setPositiveButton(context.getString(R.string.add)) { _, _ ->
                 unit(editText.text.toString())
@@ -209,6 +203,69 @@ object DialogBuilder {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = !s.isNullOrBlank()
+            }
+        })
+
+        return dialog
+    }
+
+
+    fun settingFreeDbDialog(
+        context: Context,
+        isEnable: Boolean,
+        itemName: String?,
+        unitName: String?,
+        unit: (Boolean, String, String) -> Unit
+    ): AlertDialog {
+        val view = LayoutInflater.from(context).inflate(R.layout.dialog_setting_free_db, null)
+        val switch = view.findViewById<Switch>(R.id.dialog_st_switch)
+        val container = view.findViewById<LinearLayout>(R.id.dialog_st_container)
+        val itemNameText = view.findViewById<EditText>(R.id.dialog_st_content_text)
+        val unitNameText = view.findViewById<EditText>(R.id.dialog_st_unit_text)
+
+        switch.isChecked = isEnable
+        container.visibility = if (isEnable) View.VISIBLE else View.GONE
+        itemNameText.setText(itemName)
+        unitNameText.setText(unitName)
+
+        val dialog =  MaterialAlertDialogBuilder(context)
+            .setTitle("データベース設定")
+            .setView(view)
+            .setPositiveButton("登録") { _, _ ->
+                unit(switch.isChecked, itemNameText.text.toString(), unitNameText.text.toString())
+            }
+            .setNeutralButton(context.getString(R.string.dialog_cancel), null)
+            .create()
+
+        var i = !itemName.isNullOrEmpty()
+        var u = !unitName.isNullOrEmpty()
+
+        switch.setOnCheckedChangeListener { _, isChecked ->
+            container.visibility = if (isChecked) View.VISIBLE else View.GONE
+
+            if (isChecked){
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = i && u
+            } else {
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = true
+            }
+
+        }
+
+        itemNameText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                i = !s.isNullOrBlank()
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = i && u
+            }
+        })
+
+        unitNameText.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                u = !s.isNullOrBlank()
+                dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = i && u
             }
         })
 

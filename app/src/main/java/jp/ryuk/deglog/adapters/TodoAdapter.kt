@@ -1,6 +1,5 @@
 package jp.ryuk.deglog.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -8,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import jp.ryuk.deglog.database.Todo
 import jp.ryuk.deglog.databinding.ItemTodoBinding
 import jp.ryuk.deglog.utilities.Converter
-import jp.ryuk.deglog.utilities.deg
 
 class TodoAdapter(private val clickListener: TodoListener)
     : androidx.recyclerview.widget.ListAdapter<Todo, TodoAdapter.ViewHolder>(TodoDiffCallback()) {

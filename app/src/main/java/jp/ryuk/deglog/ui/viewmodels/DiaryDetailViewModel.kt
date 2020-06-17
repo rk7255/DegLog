@@ -24,7 +24,7 @@ class DiaryDetailViewModel internal constructor(
     val profile = profileRepository.getProfile(selectedName)
 
     var id = diaryId
-    var pos = 0
+    private var pos = 0
 
     var unitWeight = "g"
     var unitLength = "mm"

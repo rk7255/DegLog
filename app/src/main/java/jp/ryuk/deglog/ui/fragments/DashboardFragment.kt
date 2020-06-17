@@ -41,31 +41,21 @@ class DashboardFragment : Fragment() {
         (activity as AppCompatActivity).setSupportActionBar(binding.dbAppBar)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
-        loadSharedPreferences()
 
-        val recyclerView = binding.dbTodoRecyclerView
-        val adapter = TodoAdapter(TodoListener {
-            DialogBuilder.confirmDeleteTodoDialogBuilder(
-                requireContext(), it
-            ) { viewModel.doneTodo(it.id) }
-                .show()
-        })
-        recyclerView.adapter = adapter
+        // 初期化
+        loadSharedPreferences(viewModel)
+        initDashboard(binding, viewModel)
 
-        binding.msgNothingDiary.setOnClickListener {
-            navigateToNewDiary()
-        }
-
-        with(viewModel) {
+        viewModel.apply {
 
             allDiary.observe(viewLifecycleOwner) { setDiary() }
             allProfile.observe(viewLifecycleOwner) { setProfile(requireContext()) }
             allTodo.observe(viewLifecycleOwner) { setTodoList() }
 
+            // アイコン ViewModel上で択一処理
             icon.observe(viewLifecycleOwner) {
                 binding.dbPersonalIcon.setImageResource(it)
             }
-
             iconJsonString.observe(viewLifecycleOwner) {
                 it?.let { jsonString ->
                     val bitmap = BitmapUtils.convertJsonToBitmap(jsonString)
@@ -73,20 +63,46 @@ class DashboardFragment : Fragment() {
                 }
             }
 
+            // データの更新
+            binding.apply {
+                weightData.observe(viewLifecycleOwner) { dbIncludeWeight.displayData = it }
+                lengthData.observe(viewLifecycleOwner) { dbIncludeLength.displayData = it }
+                free1Data.observe(viewLifecycleOwner) { dbIncludeFree1.displayData = it }
+                free2Data.observe(viewLifecycleOwner) { dbIncludeFree2.displayData = it }
+            }
+
+            // グラフの更新
+            binding.apply {
+                weightChartData.observe(viewLifecycleOwner) {
+                    createLineChart(dbIncludeWeight.partDbChart, it, listOf(selected.value ?: ""))
+                }
+                lengthChartData.observe(viewLifecycleOwner) {
+                    createLineChart(dbIncludeLength.partDbChart, it, listOf(selected.value ?: ""))
+                }
+                free1ChartData.observe(viewLifecycleOwner) {
+                    createLineChart(dbIncludeFree1.partDbChart, it, listOf(selected.value ?: ""))
+                }
+                free2ChartData.observe(viewLifecycleOwner) {
+                    createLineChart(dbIncludeFree2.partDbChart, it, listOf(selected.value ?: ""))
+                }
+            }
+
+            // ToDoの処理
+            val recyclerView = binding.dbTodoRecyclerView
+            val adapter = TodoAdapter(TodoListener {
+                DialogBuilder.confirmDeleteTodoDialogBuilder(
+                    requireContext(),
+                    it
+                ) { viewModel.doneTodo(it.id) }.show()
+            })
+            recyclerView.adapter = adapter
             todoList.observe(viewLifecycleOwner) {
                 if (!it.isNullOrEmpty()) {
                     adapter.submitList(it)
                 }
             }
 
-            weightDataList.observe(viewLifecycleOwner) {
-                createLineChart(binding.dbWeightChart, it, listOf(selected.value ?: ""))
-            }
-
-            lengthDataList.observe(viewLifecycleOwner) {
-                createLineChart(binding.dbLengthChart, it, listOf(selected.value ?: ""))
-            }
-
+            // クリックリスナー
             clicked.observe(viewLifecycleOwner) { where ->
                 if (where != null) {
                     with(WhereClicked) {
@@ -97,6 +113,8 @@ class DashboardFragment : Fragment() {
                             WEIGHT -> navigateToDiaryList(NavMode.FROM_WEIGHT)
                             LENGTH -> navigateToDiaryList(NavMode.FROM_LENGTH)
                             TODO -> createTodo(requireContext())
+                            FREE1 -> ""
+                            FREE2 -> ""
                             else -> ""
                         }
                     }
@@ -108,9 +126,34 @@ class DashboardFragment : Fragment() {
         return binding.root
     }
 
+    private fun initDashboard(binding: FragmentDashboardBinding, viewModel: DashboardViewModel) {
+        viewModel.apply {
+            binding.apply {
+                dbIncludeWeight.partDbTitle.text = getString(R.string.title_weight)
+                dbIncludeLength.partDbTitle.text = getString(R.string.title_length)
+                dbIncludeFree1.partDbTitle.text = free1Title
+                dbIncludeFree2.partDbTitle.text = free2Title
+
+                msgNothingDiary.setOnClickListener { navigateToNewDiary() }
+                dbButtonSettings.setOnClickListener { navigateToSettings() }
+
+                dbIncludeFree1.partDbContainer.visibility =
+                    if (free1Enabled) View.VISIBLE else View.GONE
+                dbIncludeFree2.partDbContainer.visibility =
+                    if (free2Enabled) View.VISIBLE else View.GONE
+
+                dbIncludeWeight.partDbContainer.setOnClickListener { onClick(WhereClicked.WEIGHT) }
+                dbIncludeLength.partDbContainer.setOnClickListener { onClick(WhereClicked.LENGTH) }
+                dbIncludeFree1.partDbContainer.setOnClickListener { onClick(WhereClicked.FREE1) }
+                dbIncludeFree2.partDbContainer.setOnClickListener { onClick(WhereClicked.FREE2) }
+            }
+        }
+    }
+
     private fun selectDashboard(array: Array<String>) {
         val dialog = DialogBuilder.selectDashboardDialogBuilder(
-            requireContext(), array) { selectDashboardCallback(it) }
+            requireContext(), array
+        ) { selectDashboardCallback(it) }
         dialog.show()
     }
 
@@ -137,7 +180,11 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun createLineChart(lineChart: LineChart, chartData: List<ChartData>, nameList: List<String>) {
+    private fun createLineChart(
+        lineChart: LineChart,
+        chartData: List<ChartData>,
+        nameList: List<String>
+    ) {
         ChartCreator.createLineChartByIndex(lineChart, chartData, nameList, Deco.DASHBOARD)
 
     }
@@ -150,17 +197,21 @@ class DashboardFragment : Fragment() {
         editor.apply()
     }
 
-    private fun loadSharedPreferences() {
+    private fun loadSharedPreferences(viewModel: DashboardViewModel) {
         val sharedPreferences =
             requireContext().getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
 
-        val s = sharedPreferences.getString(KEY_DASHBOARD, "") ?: ""
-        val w = sharedPreferences.getString(KEY_UNIT_WEIGHT, "g") ?: "g"
-        val l = sharedPreferences.getString(KEY_UNIT_LENGTH, "mm") ?: "mm"
         viewModel.apply {
-            selected.value = s
-            unitWeight.value = w
-            unitLength.value = l
+            selected.value = sharedPreferences.getString(KEY_DASHBOARD, "") ?: ""
+            unitWeight.value = sharedPreferences.getString(KEY_UNIT_WEIGHT, "g") ?: "g"
+            unitLength.value = sharedPreferences.getString(KEY_UNIT_LENGTH, "mm") ?: "mm"
+
+            free1Enabled = sharedPreferences.getBoolean(KEY_DB1_ENABLED, false)
+            free2Enabled = sharedPreferences.getBoolean(KEY_DB2_ENABLED, false)
+            free1Title = sharedPreferences.getString(KEY_DB1_NAME, "- Free1 -") ?: "- Free1 -"
+            free2Title = sharedPreferences.getString(KEY_DB2_NAME, "- Free2 -") ?: "- Free2 -"
+            free2Unit = sharedPreferences.getString(KEY_DB1_UNIT, "") ?: ""
+            free2Unit = sharedPreferences.getString(KEY_DB2_UNIT, "") ?: ""
         }
     }
 
@@ -184,20 +235,34 @@ class DashboardFragment : Fragment() {
 
     private fun navigateToNewDiary() {
         this.findNavController().navigate(
-            DashboardFragmentDirections.toNewDiaryFragment(NavMode.NEW, -1, viewModel.selected.value ?: "")
+            DashboardFragmentDirections.toNewDiaryFragment(
+                NavMode.NEW,
+                -1,
+                viewModel.selected.value ?: ""
+            )
         )
     }
 
     private fun navigateToDiaryList(key: Int) {
         this.findNavController().navigate(
             DashboardFragmentDirections.toDiaryListFragment(
-                key, viewModel.selected.value ?: "")
+                key, viewModel.selected.value ?: ""
+            )
         )
     }
 
     private fun navigateToNewProfile() {
         this.findNavController().navigate(
-            DashboardFragmentDirections.toNewProfileFragment(NavMode.DASHBOARD, viewModel.selected.value ?: "")
+            DashboardFragmentDirections.toNewProfileFragment(
+                NavMode.DASHBOARD,
+                viewModel.selected.value ?: ""
+            )
+        )
+    }
+
+    private fun navigateToSettings() {
+        this.findNavController().navigate(
+            DashboardFragmentDirections.toSettingsFragment()
         )
     }
 }

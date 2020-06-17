@@ -244,11 +244,34 @@
         <item>@string/m</item>
     </string-array>
 
+    <string name="icon_select">アイコン設定</string>
+    <string name="icon_select_delete">アイコンを削除</string>
+    <string name="icon_select_gallery">ギャラリーから選択</string>
+    <string-array name="icon_select_array">
+        <item>@string/icon_select_delete</item>
+        <item>@string/icon_select_gallery</item>
+    </string-array>
+
     <string name="death_day">命日</string>
     <string name="unit">単位</string>
     <string name="title_settings">- Settings -</string>
     <string name="unit_of_length">体長の単位</string>
     <string name="unit_of_weight">体重の単位</string>
     <string name="save">保存</string>
+    <string name="delete_select_todo">選択したToDoを完了します</string>
+    <string name="confirm_change_name">変更確認</string>
+    <string name="confirm_change_name_message">名前が変更されています\n日誌データにも反映されます</string>
+
+    <string name="setting_of_content">項目の設定</string>
+    <string name="enabling_database">データベースを有効にする</string>
+    <string name="content_name">項目名</string>
+    <string name="database">データベース</string>
+    <string name="setting_of_free1">フリー項目１の設定</string>
+    <string name="disable">無効</string>
+    <string name="setting_of_free2">フリー項目２の設定</string>
+    <string name="display">表示</string>
+    <string name="enable_death_day">命日を有効にする</string>
+    <string name="display_death_day">命日の設定を表示します</string>
+    <string name="free1">フリー１</string>
 
 </resources>

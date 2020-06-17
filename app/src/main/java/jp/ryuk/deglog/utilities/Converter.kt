@@ -17,7 +17,7 @@ object Converter {
     }
 
     fun longToDateStringJp(systemTime: Long): String {
-        return SimpleDateFormat("yyyy 年 M 月 d 日")
+        return SimpleDateFormat("yyyy年 M月 d日")
             .format(systemTime).toString()
     }
 
@@ -38,7 +38,7 @@ object Converter {
 //            .format(systemTime).toString()
 //    }
         fun longToTimeStringJp(systemTime: Long): String {
-        return SimpleDateFormat("H 時 m 分")
+        return SimpleDateFormat("H時 m分")
             .format(systemTime).toString()
     }
 
@@ -73,6 +73,7 @@ object Converter {
             "mm" -> result.append("${roundInt(number)}")
             "cm" -> result.append("${roundFloatInCm(number)}")
             "m" -> result.append("${roundFloatInM(number)}")
+            "f" -> result.append("${roundInt(number)}")
             else -> return "単位不明"
         }
 

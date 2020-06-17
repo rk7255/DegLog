@@ -2,6 +2,7 @@ package jp.ryuk.deglog.ui.fragments
 
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -42,6 +43,7 @@ class NewProfileFragment : Fragment() {
         binding = FragmentNewProfileBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
+        loadSharedPreferences()
 
         val allTypes = resources.getStringArray(R.array.all_types)
         val adapter = ArrayAdapter(requireContext(), R.layout.item_name_list, allTypes)
@@ -82,9 +84,9 @@ class NewProfileFragment : Fragment() {
             }
 
             npIcon.setOnClickListener {
-                val dialog = DialogBuilder.iconSelectDialogBuilder(requireContext()) {
+                val dialog = DialogBuilder.selectIconDialogBuilder(requireContext()) {
                     when (it) {
-                        0 -> {
+                        getString(R.string.icon_select_delete) -> {
                             deleteIcon()
                             npIcon.setImageResource(R.drawable.ic_pets)
                         }
@@ -225,4 +227,12 @@ class NewProfileFragment : Fragment() {
         viewModel.submit()
     }
 
+    private fun loadSharedPreferences() {
+        val sharedPreferences =
+            requireContext().getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
+
+        val isVisible = sharedPreferences.getBoolean(KEY_DEATH_DAY, false)
+        binding.npDeathContainer.visibility = if (isVisible) View.VISIBLE else View.GONE
+
+    }
 }

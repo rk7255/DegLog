@@ -21,6 +21,9 @@ class NewDiaryViewModel internal constructor(
     val diary = diaryRepository.getDiary(diaryId)
     val nameList = profileRepository.getNames()
 
+    var isEnabledDb1 = false
+    var isEnabledDb2 = false
+
     var date = 0L
     val dateString = MutableLiveData<String>()
     val timeString = MutableLiveData<String>()

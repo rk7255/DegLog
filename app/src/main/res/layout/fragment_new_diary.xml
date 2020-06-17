@@ -53,14 +53,14 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/nd_date"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
-                        android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:gravity="center"
-                        android:padding="8dp"
+                        android:padding="0dp"
                         android:text="@{viewModel.dateString}"
                         android:textColor="@color/primaryTextColor"
                         android:textSize="18sp"
@@ -68,16 +68,16 @@
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/nd_title"
-                        tools:text="2020 年 3 月 30 日" />
+                        tools:text="2020年 3月 30日" />
 
-                    <TextView
+                    <com.google.android.material.button.MaterialButton
                         android:id="@+id/nd_time"
+                        style="@style/Widget.MaterialComponents.Button.TextButton"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
                         android:layout_marginStart="8dp"
-                        android:layout_marginEnd="16dp"
                         android:gravity="center"
-                        android:padding="8dp"
+                        android:padding="0dp"
                         android:text="@{viewModel.timeString}"
                         android:textColor="@color/primaryTextColor"
                         android:textSize="18sp"
@@ -86,7 +86,7 @@
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toEndOf="@+id/nd_date"
                         app:layout_constraintTop_toTopOf="@+id/nd_date"
-                        tools:text="12 時 30 分" />
+                        tools:text="12時 30分" />
 
                     <View
                         android:id="@+id/nd_border"
@@ -97,210 +97,371 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@id/nd_date" />
 
-                    <TextView
-                        android:id="@+id/nd_name_title"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/name"
-                        android:textColor="@color/primaryTextColor"
-                        app:layout_constraintBottom_toBottomOf="@+id/nd_name_layout"
-                        app:layout_constraintEnd_toEndOf="@+id/nd_note_title"
-                        app:layout_constraintStart_toStartOf="@+id/nd_note_title"
-                        app:layout_constraintTop_toTopOf="@+id/nd_name_layout" />
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/nd_name_layout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        app:hintEnabled="false"
                         android:layout_marginTop="24dp"
-                        android:layout_marginEnd="16dp"
-                        app:errorEnabled="true"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/nd_name_title"
-                        app:layout_constraintTop_toBottomOf="@+id/nd_border">
-
-                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                            android:id="@+id/nd_name_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingTop="14dp"
-                            android:text="@={viewModel.nameString}"
-                            android:hint="@string/hint_name"
-                            android:background="@color/bgEditText"
-                            android:inputType="text" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <TextView
-                        android:id="@+id/nd_weight_title"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/weight"
-                        android:textColor="@color/primaryTextColor"
-                        app:layout_constraintBottom_toBottomOf="@+id/nd_weight_layout"
-                        app:layout_constraintEnd_toEndOf="@+id/nd_note_title"
-                        app:layout_constraintStart_toStartOf="@+id/nd_note_title"
-                        app:layout_constraintTop_toTopOf="@+id/nd_weight_layout" />
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/nd_weight_layout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        app:errorIconDrawable="@drawable/ic_none"
-                        app:endIconMode="none"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="64dp"
-                        app:hintEnabled="false"
-                        app:errorEnabled="true"
-                        app:layout_constraintEnd_toEndOf="@+id/nd_name_layout"
-                        app:layout_constraintStart_toEndOf="@id/nd_weight_title"
-                        app:layout_constraintTop_toBottomOf="@id/nd_name_layout">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/nd_weight_text"
-                            android:layout_width="match_parent"
-                            android:paddingTop="14dp"
-                            android:hint="@string/hint_number"
-                            android:text="@={viewModel.weightString}"
-                            android:layout_height="wrap_content"
-                            android:background="@color/bgEditText"
-                            android:inputType="numberDecimal" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <TextView
-                        android:id="@+id/nd_weight_unit"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:fontFamily="monospace"
-                        android:gravity="start"
-                        android:text="@string/g"
-                        android:textColor="@color/primaryTextColor"
-                        app:layout_constraintBottom_toBottomOf="@+id/nd_weight_layout"
-                        app:layout_constraintEnd_toEndOf="@+id/nd_name_layout"
-                        app:layout_constraintStart_toEndOf="@+id/nd_weight_layout"
-                        app:layout_constraintTop_toTopOf="@+id/nd_weight_layout" />
-
-                    <TextView
-                        android:id="@+id/nd_length_title"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:text="@string/length"
-                        android:textColor="@color/primaryTextColor"
-                        app:layout_constraintBottom_toBottomOf="@+id/nd_length_layout"
-                        app:layout_constraintEnd_toEndOf="@+id/nd_note_title"
-                        app:layout_constraintStart_toStartOf="@+id/nd_note_title"
-                        app:layout_constraintTop_toTopOf="@+id/nd_length_layout" />
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/nd_length_layout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        app:errorIconDrawable="@drawable/ic_none"
-                        app:hintEnabled="false"
-                        android:layout_marginTop="8dp"
-                        app:helperTextTextColor="@color/orange"
-                        app:errorEnabled="true"
-                        app:layout_constraintEnd_toEndOf="@+id/nd_weight_layout"
-                        app:layout_constraintStart_toEndOf="@id/nd_length_title"
-                        app:layout_constraintTop_toBottomOf="@id/nd_weight_layout">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/nd_length_text"
-                            android:layout_width="match_parent"
-                            android:text="@={viewModel.lengthString}"
-                            android:layout_height="wrap_content"
-                            android:hint="@string/hint_number"
-                            android:paddingTop="14dp"
-                            android:background="@color/bgEditText"
-                            android:inputType="numberDecimal" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <TextView
-                        android:id="@+id/nd_length_unit"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:fontFamily="monospace"
-                        android:gravity="start"
-                        android:text="@string/mm"
-                        android:textColor="@color/primaryTextColor"
-                        app:layout_constraintBottom_toBottomOf="@+id/nd_length_layout"
-                        app:layout_constraintEnd_toEndOf="@+id/nd_name_layout"
-                        app:layout_constraintStart_toEndOf="@+id/nd_length_layout"
-                        app:layout_constraintTop_toTopOf="@+id/nd_length_layout" />
-
-                    <TextView
-                        android:id="@+id/nd_note_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="@string/note"
-                        android:textColor="@color/primaryTextColor"
-                        app:layout_constraintBottom_toBottomOf="@+id/nd_note_layout"
+                        android:orientation="vertical"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/nd_note_layout" />
+                        app:layout_constraintTop_toBottomOf="@+id/nd_date">
 
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/nd_note_layout"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginTop="8dp"
-                        app:errorIconDrawable="@drawable/ic_none"
-                        app:helperTextTextColor="@color/orange"
-                        app:hintEnabled="false"
-                        app:errorEnabled="true"
-                        app:layout_constraintEnd_toEndOf="@+id/nd_name_layout"
-                        app:layout_constraintStart_toEndOf="@id/nd_note_title"
-                        app:layout_constraintTop_toBottomOf="@id/nd_length_layout">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/nd_note_text"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:hint="@string/note"
-                            android:text="@={viewModel.noteString}"
-                            android:paddingTop="14dp"
                             android:layout_height="wrap_content"
-                            android:background="@color/bgEditText"
-                            android:inputType="textMultiLine" />
+                            android:orientation="horizontal">
 
-                    </com.google.android.material.textfield.TextInputLayout>
+                            <TextView
+                                android:id="@+id/nd_name_title"
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:text="@string/name"
+                                android:textColor="@color/primaryTextColor" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/nd_name_layout"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_weight="1"
+                                app:errorEnabled="true"
+                                app:hintEnabled="false">
+
+                                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                                    android:id="@+id/nd_name_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/bgEditText"
+                                    android:hint="@string/hint_name"
+                                    android:inputType="text"
+                                    android:paddingTop="14dp"
+                                    android:text="@={viewModel.nameString}" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/nd_weight_title"
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:text="@string/weight"
+                                android:textColor="@color/primaryTextColor" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/nd_weight_layout"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_weight="3"
+                                app:endIconMode="none"
+                                app:errorEnabled="true"
+                                app:errorIconDrawable="@drawable/ic_none"
+                                app:hintEnabled="false">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/nd_weight_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/bgEditText"
+                                    android:hint="@string/hint_number"
+                                    android:inputType="numberDecimal"
+                                    android:paddingTop="14dp"
+                                    android:text="@={viewModel.weightString}" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView
+                                android:id="@+id/nd_weight_unit"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="16dp"
+                                android:layout_weight="1"
+                                android:fontFamily="monospace"
+                                android:gravity="start"
+                                android:text="@string/g"
+                                android:textColor="@color/primaryTextColor" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/nd_length_title"
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:text="@string/length"
+                                android:textColor="@color/primaryTextColor"
+                                app:layout_constraintBottom_toBottomOf="@+id/nd_length_layout"
+                                app:layout_constraintEnd_toEndOf="@+id/nd_note_title"
+                                app:layout_constraintStart_toStartOf="@+id/nd_note_title"
+                                app:layout_constraintTop_toTopOf="@+id/nd_length_layout" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/nd_length_layout"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_weight="3"
+                                app:errorEnabled="true"
+                                app:errorIconDrawable="@drawable/ic_none"
+                                app:helperTextTextColor="@color/orange"
+                                app:hintEnabled="false"
+                                app:layout_constraintEnd_toEndOf="@+id/nd_weight_layout"
+                                app:layout_constraintStart_toEndOf="@id/nd_length_title"
+                                app:layout_constraintTop_toBottomOf="@id/nd_weight_layout">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/nd_length_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/bgEditText"
+                                    android:hint="@string/hint_number"
+                                    android:inputType="numberDecimal"
+                                    android:paddingTop="14dp"
+                                    android:text="@={viewModel.lengthString}" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView
+                                android:id="@+id/nd_length_unit"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="16dp"
+                                android:layout_weight="1"
+                                android:fontFamily="monospace"
+                                android:gravity="start"
+                                android:text="@string/mm"
+                                android:textColor="@color/primaryTextColor"
+                                app:layout_constraintBottom_toBottomOf="@+id/nd_length_layout"
+                                app:layout_constraintEnd_toEndOf="@+id/nd_name_layout"
+                                app:layout_constraintStart_toEndOf="@+id/nd_length_layout"
+                                app:layout_constraintTop_toTopOf="@+id/nd_length_layout" />
+
+                        </LinearLayout>
 
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/nd_button_back"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:text="@string/dialog_back"
-                        app:layout_constraintEnd_toStartOf="@+id/nd_button_submit"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/nd_note_layout" />
+                        <LinearLayout
+                            android:id="@+id/nd_free1_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/nd_button_submit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/record"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/nd_button_back"
-                        app:layout_constraintTop_toTopOf="@id/nd_button_back" />
+                            <TextView
+                                android:id="@+id/nd_free1_title"
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                tools:text="フリー１"
+                                android:textColor="@color/primaryTextColor"
+                                app:layout_constraintBottom_toBottomOf="@+id/nd_free1_layout"
+                                app:layout_constraintEnd_toEndOf="@+id/nd_note_title"
+                                app:layout_constraintStart_toStartOf="@+id/nd_note_title"
+                                app:layout_constraintTop_toTopOf="@+id/nd_free1_layout" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/nd_free1_layout"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_weight="3"
+                                app:errorEnabled="true"
+                                app:errorIconDrawable="@drawable/ic_none"
+                                app:helperTextTextColor="@color/orange"
+                                app:hintEnabled="false"
+                                app:layout_constraintEnd_toEndOf="@+id/nd_weight_layout"
+                                app:layout_constraintStart_toEndOf="@id/nd_free1_title"
+                                app:layout_constraintTop_toBottomOf="@id/nd_weight_layout">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/nd_free1_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/bgEditText"
+                                    android:hint="@string/hint_number"
+                                    android:inputType="numberDecimal"
+                                    android:paddingTop="14dp" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView
+                                android:id="@+id/nd_free1_unit"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="16dp"
+                                android:layout_weight="1"
+                                android:fontFamily="monospace"
+                                android:gravity="start"
+                                tools:text="個"
+                                android:textColor="@color/primaryTextColor"
+                                app:layout_constraintBottom_toBottomOf="@+id/nd_free1_layout"
+                                app:layout_constraintEnd_toEndOf="@+id/nd_name_layout"
+                                app:layout_constraintStart_toEndOf="@+id/nd_free1_layout"
+                                app:layout_constraintTop_toTopOf="@+id/nd_free1_layout" />
+
+                        </LinearLayout>
 
 
+                        <LinearLayout
+                            android:id="@+id/nd_free2_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/nd_free2_title"
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                tools:text="フリー２"
+                                android:textColor="@color/primaryTextColor"
+                                app:layout_constraintBottom_toBottomOf="@+id/nd_free2_layout"
+                                app:layout_constraintEnd_toEndOf="@+id/nd_note_title"
+                                app:layout_constraintStart_toStartOf="@+id/nd_note_title"
+                                app:layout_constraintTop_toTopOf="@+id/nd_free2_layout" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/nd_free2_layout"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_weight="3"
+                                app:errorEnabled="true"
+                                app:errorIconDrawable="@drawable/ic_none"
+                                app:helperTextTextColor="@color/orange"
+                                app:hintEnabled="false"
+                                app:layout_constraintEnd_toEndOf="@+id/nd_weight_layout"
+                                app:layout_constraintStart_toEndOf="@id/nd_free2_title"
+                                app:layout_constraintTop_toBottomOf="@id/nd_weight_layout">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/nd_free2_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/bgEditText"
+                                    android:hint="@string/hint_number"
+                                    android:inputType="numberDecimal"
+                                    android:paddingTop="14dp" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <TextView
+                                android:id="@+id/nd_free2_unit"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="16dp"
+                                android:layout_weight="1"
+                                android:fontFamily="monospace"
+                                android:gravity="start"
+                                tools:text="個"
+                                android:textColor="@color/primaryTextColor"
+                                app:layout_constraintBottom_toBottomOf="@+id/nd_free2_layout"
+                                app:layout_constraintEnd_toEndOf="@+id/nd_name_layout"
+                                app:layout_constraintStart_toEndOf="@+id/nd_free2_layout"
+                                app:layout_constraintTop_toTopOf="@+id/nd_free2_layout" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/nd_note_title"
+                                android:layout_width="60dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:text="@string/note"
+                                android:textColor="@color/primaryTextColor" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/nd_note_layout"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_weight="1"
+                                app:errorEnabled="true"
+                                app:errorIconDrawable="@drawable/ic_none"
+                                app:helperTextTextColor="@color/orange"
+                                app:hintEnabled="false">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/nd_note_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/bgEditText"
+                                    android:hint="@string/note"
+                                    android:inputType="textMultiLine"
+                                    android:paddingTop="14dp"
+                                    android:text="@={viewModel.noteString}" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="fill_horizontal"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/nd_button_back"
+                                style="@style/Widget.MaterialComponents.Button.TextButton"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/dialog_back"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/nd_button_submit"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/nd_button_submit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/record"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.5"
+                                app:layout_constraintStart_toEndOf="@+id/nd_button_back"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+                    </LinearLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -311,3 +472,196 @@
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>
+
+
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/nd_name_title"-->
+    <!--                        android:layout_width="0dp"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        android:text="@string/name"-->
+    <!--                        android:textColor="@color/primaryTextColor"-->
+    <!--                        app:layout_constraintBottom_toBottomOf="@+id/nd_name_layout"-->
+    <!--                        app:layout_constraintEnd_toEndOf="@+id/nd_note_title"-->
+    <!--                        app:layout_constraintStart_toStartOf="@+id/nd_note_title"-->
+    <!--                        app:layout_constraintTop_toTopOf="@+id/nd_name_layout" />-->
+
+    <!--                    <com.google.android.material.textfield.TextInputLayout-->
+    <!--                        android:id="@+id/nd_name_layout"-->
+    <!--                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"-->
+    <!--                        android:layout_width="0dp"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        android:layout_marginStart="16dp"-->
+    <!--                        android:layout_marginTop="24dp"-->
+    <!--                        android:layout_marginEnd="16dp"-->
+    <!--                        app:errorEnabled="true"-->
+    <!--                        app:hintEnabled="false"-->
+    <!--                        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--                        app:layout_constraintStart_toEndOf="@id/nd_name_title"-->
+    <!--                        app:layout_constraintTop_toBottomOf="@+id/nd_border">-->
+
+    <!--                        <com.google.android.material.textfield.MaterialAutoCompleteTextView-->
+    <!--                            android:id="@+id/nd_name_text"-->
+    <!--                            android:layout_width="match_parent"-->
+    <!--                            android:layout_height="wrap_content"-->
+    <!--                            android:background="@color/bgEditText"-->
+    <!--                            android:hint="@string/hint_name"-->
+    <!--                            android:inputType="text"-->
+    <!--                            android:paddingTop="14dp"-->
+    <!--                            android:text="@={viewModel.nameString}" />-->
+
+    <!--                    </com.google.android.material.textfield.TextInputLayout>-->
+
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/nd_weight_title"-->
+    <!--                        android:layout_width="0dp"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        android:text="@string/weight"-->
+    <!--                        android:textColor="@color/primaryTextColor"-->
+    <!--                        app:layout_constraintBottom_toBottomOf="@+id/nd_weight_layout"-->
+    <!--                        app:layout_constraintEnd_toEndOf="@+id/nd_note_title"-->
+    <!--                        app:layout_constraintStart_toStartOf="@+id/nd_note_title"-->
+    <!--                        app:layout_constraintTop_toTopOf="@+id/nd_weight_layout" />-->
+
+    <!--                    <com.google.android.material.textfield.TextInputLayout-->
+    <!--                        android:id="@+id/nd_weight_layout"-->
+    <!--                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"-->
+    <!--                        android:layout_width="0dp"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        android:layout_marginStart="16dp"-->
+    <!--                        android:layout_marginTop="8dp"-->
+    <!--                        android:layout_marginEnd="64dp"-->
+    <!--                        app:endIconMode="none"-->
+    <!--                        app:errorEnabled="true"-->
+    <!--                        app:errorIconDrawable="@drawable/ic_none"-->
+    <!--                        app:hintEnabled="false"-->
+    <!--                        app:layout_constraintEnd_toEndOf="@+id/nd_name_layout"-->
+    <!--                        app:layout_constraintStart_toEndOf="@id/nd_weight_title"-->
+    <!--                        app:layout_constraintTop_toBottomOf="@id/nd_name_layout">-->
+
+    <!--                        <com.google.android.material.textfield.TextInputEditText-->
+    <!--                            android:id="@+id/nd_weight_text"-->
+    <!--                            android:layout_width="match_parent"-->
+    <!--                            android:layout_height="wrap_content"-->
+    <!--                            android:background="@color/bgEditText"-->
+    <!--                            android:hint="@string/hint_number"-->
+    <!--                            android:inputType="numberDecimal"-->
+    <!--                            android:paddingTop="14dp"-->
+    <!--                            android:text="@={viewModel.weightString}" />-->
+
+    <!--                    </com.google.android.material.textfield.TextInputLayout>-->
+
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/nd_weight_unit"-->
+    <!--                        android:layout_width="0dp"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        android:layout_marginStart="16dp"-->
+    <!--                        android:fontFamily="monospace"-->
+    <!--                        android:gravity="start"-->
+    <!--                        android:text="@string/g"-->
+    <!--                        android:textColor="@color/primaryTextColor"-->
+    <!--                        app:layout_constraintBottom_toBottomOf="@+id/nd_weight_layout"-->
+    <!--                        app:layout_constraintEnd_toEndOf="@+id/nd_name_layout"-->
+    <!--                        app:layout_constraintStart_toEndOf="@+id/nd_weight_layout"-->
+    <!--                        app:layout_constraintTop_toTopOf="@+id/nd_weight_layout" />-->
+
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/nd_length_title"-->
+    <!--                        android:layout_width="0dp"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        android:text="@string/length"-->
+    <!--                        android:textColor="@color/primaryTextColor"-->
+    <!--                        app:layout_constraintBottom_toBottomOf="@+id/nd_length_layout"-->
+    <!--                        app:layout_constraintEnd_toEndOf="@+id/nd_note_title"-->
+    <!--                        app:layout_constraintStart_toStartOf="@+id/nd_note_title"-->
+    <!--                        app:layout_constraintTop_toTopOf="@+id/nd_length_layout" />-->
+
+    <!--                    <com.google.android.material.textfield.TextInputLayout-->
+    <!--                        android:id="@+id/nd_length_layout"-->
+    <!--                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"-->
+    <!--                        android:layout_width="0dp"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        android:layout_marginStart="16dp"-->
+    <!--                        android:layout_marginTop="8dp"-->
+    <!--                        app:errorEnabled="true"-->
+    <!--                        app:errorIconDrawable="@drawable/ic_none"-->
+    <!--                        app:helperTextTextColor="@color/orange"-->
+    <!--                        app:hintEnabled="false"-->
+    <!--                        app:layout_constraintEnd_toEndOf="@+id/nd_weight_layout"-->
+    <!--                        app:layout_constraintStart_toEndOf="@id/nd_length_title"-->
+    <!--                        app:layout_constraintTop_toBottomOf="@id/nd_weight_layout">-->
+
+    <!--                        <com.google.android.material.textfield.TextInputEditText-->
+    <!--                            android:id="@+id/nd_length_text"-->
+    <!--                            android:layout_width="match_parent"-->
+    <!--                            android:layout_height="wrap_content"-->
+    <!--                            android:background="@color/bgEditText"-->
+    <!--                            android:hint="@string/hint_number"-->
+    <!--                            android:inputType="numberDecimal"-->
+    <!--                            android:paddingTop="14dp"-->
+    <!--                            android:text="@={viewModel.lengthString}" />-->
+
+    <!--                    </com.google.android.material.textfield.TextInputLayout>-->
+
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/nd_length_unit"-->
+    <!--                        android:layout_width="0dp"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        android:layout_marginStart="16dp"-->
+    <!--                        android:fontFamily="monospace"-->
+    <!--                        android:gravity="start"-->
+    <!--                        android:text="@string/mm"-->
+    <!--                        android:textColor="@color/primaryTextColor"-->
+    <!--                        app:layout_constraintBottom_toBottomOf="@+id/nd_length_layout"-->
+    <!--                        app:layout_constraintEnd_toEndOf="@+id/nd_name_layout"-->
+    <!--                        app:layout_constraintStart_toEndOf="@+id/nd_length_layout"-->
+    <!--                        app:layout_constraintTop_toTopOf="@+id/nd_length_layout" />-->
+
+
+    <!--                    <TextView-->
+    <!--                        android:id="@+id/nd_note_title"-->
+    <!--                        android:layout_width="wrap_content"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        android:layout_marginStart="8dp"-->
+    <!--                        android:text="@string/note"-->
+    <!--                        android:textColor="@color/primaryTextColor"-->
+    <!--                        app:layout_constraintBottom_toBottomOf="@+id/nd_note_layout"-->
+    <!--                        app:layout_constraintStart_toStartOf="parent"-->
+    <!--                        app:layout_constraintTop_toTopOf="@+id/nd_note_layout" />-->
+
+    <!--                    <com.google.android.material.textfield.TextInputLayout-->
+    <!--                        android:id="@+id/nd_note_layout"-->
+    <!--                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"-->
+    <!--                        android:layout_width="0dp"-->
+    <!--                        android:layout_height="wrap_content"-->
+    <!--                        android:layout_marginStart="16dp"-->
+    <!--                        android:layout_marginTop="8dp"-->
+    <!--                        app:errorEnabled="true"-->
+    <!--                        app:errorIconDrawable="@drawable/ic_none"-->
+    <!--                        app:helperTextTextColor="@color/orange"-->
+    <!--                        app:hintEnabled="false"-->
+    <!--                        app:layout_constraintEnd_toEndOf="@+id/nd_name_layout"-->
+    <!--                        app:layout_constraintStart_toEndOf="@id/nd_note_title"-->
+    <!--                        app:layout_constraintTop_toBottomOf="@id/nd_length_layout">-->
+
+    <!--                        <com.google.android.material.textfield.TextInputEditText-->
+    <!--                            android:id="@+id/nd_note_text"-->
+    <!--                            android:layout_width="match_parent"-->
+    <!--                            android:layout_height="wrap_content"-->
+    <!--                            android:background="@color/bgEditText"-->
+    <!--                            android:hint="@string/note"-->
+    <!--                            android:inputType="textMultiLine"-->
+    <!--                            android:paddingTop="14dp"-->
+    <!--                            android:text="@={viewModel.noteString}" />-->
+
+    <!--                    </com.google.android.material.textfield.TextInputLayout>-->
+
+
+    <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
+
+    <!--        </com.google.android.material.card.MaterialCardView>-->
+
+    <!--    </ScrollView>-->
+
+    <!--</androidx.coordinatorlayout.widget.CoordinatorLayout>-->
+
+    <!--    </layout>-->
