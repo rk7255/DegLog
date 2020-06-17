@@ -29,6 +29,11 @@ class ChartFragment : Fragment() {
         InjectorUtil.provideChartViewModelFactory(requireContext())
     }
 
+    private var free1Enabled = false
+    private var free2Enabled = false
+    private var free1Title = "フリー１"
+    private var free2Title = "フリー２"
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,14 +42,27 @@ class ChartFragment : Fragment() {
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
 
+        loadInitSharedPreferences()
+
         val colorMap = mutableMapOf<String, Int>()
         var dReady = false
         var pReady = false
 
         with(binding) {
+            chipFree1.apply {
+                text = free1Title
+                visibility = if (free1Enabled) View.VISIBLE else View.GONE
+            }
+            chipFree2.apply {
+                text = free2Title
+                visibility = if (free2Enabled) View.VISIBLE else View.GONE
+            }
+
+
             chartChart.setNoDataText("")
             chartFilterOpen.setOnClickListener { showFilters(binding) }
             chartFilterBg.setOnClickListener { showFilters(binding) }
+
 
             chartButtonSubmit.setOnClickListener {
                 if (dReady && pReady) createChart(colorMap)
@@ -91,7 +109,10 @@ class ChartFragment : Fragment() {
         diaries = diaries.filter { checked.contains(it.name) }
         diaries = when (whichChart) {
             "体重" -> diaries.filter { it.weight != null }
-            else -> diaries.filter { it.length != null }
+            "体長" -> diaries.filter { it.length != null }
+            free1Title -> diaries.filter { it.free1 != null }
+            free2Title -> diaries.filter { it.free2 != null }
+            else -> diaries.filter { it.weight != null }
         }
         val chartData = convertDiaryToChartData(diaries, whichChart)
 
@@ -136,7 +157,13 @@ class ChartFragment : Fragment() {
                     ChartData(
                         name = it.name,
                         date = it.date,
-                        data = if (which == "体重") it.weight!! else it.length!!
+                        data = when (which) {
+                            "体重" -> it.weight
+                            "体長" -> it.length
+                            free1Title -> it.free1
+                            free2Title -> it.free2
+                            else -> it.weight
+                        } ?: 0f
                     )
                 )
             }
@@ -182,6 +209,16 @@ class ChartFragment : Fragment() {
         editor.apply()
     }
 
+    private fun loadInitSharedPreferences() {
+        val sharedPreferences =
+            requireContext().getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
+
+        free1Enabled = sharedPreferences.getBoolean(KEY_DB1_ENABLED, false)
+        free2Enabled = sharedPreferences.getBoolean(KEY_DB2_ENABLED, false)
+        free1Title = sharedPreferences.getString(KEY_DB1_NAME, "フリー１") ?: "フリー１"
+        free2Title = sharedPreferences.getString(KEY_DB2_NAME, "フリー２") ?: "フリー２"
+    }
+
     private fun loadSharedPreferences(binding: FragmentChartBinding) {
         val sharedPreferences =
             requireContext().getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
@@ -189,6 +226,9 @@ class ChartFragment : Fragment() {
         val c = sharedPreferences.getString(KEY_CHECKED_CHART, "体重")
         val cChips = Utils.findViewsWithType(binding.chipGroupChart, Chip::class.java)
         cChips.forEach { it.isChecked = it.text.toString() == c }
+        if (binding.chipGroupChart.checkedChipId == -1) {
+            binding.chipWeight.isChecked = true
+        }
 
         val a = sharedPreferences.getString(KEY_CHECKED_AXIS, "時間")
         val aChips = Utils.findViewsWithType(binding.chipGroupAxis, Chip::class.java)

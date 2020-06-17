@@ -122,6 +122,28 @@
                             app:chipStrokeColor="@color/primaryDarkColor"
                             app:chipStrokeWidth="1dp" />
 
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_free1"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/free1"
+                            android:textColor="@color/text_chip_state"
+                            app:chipBackgroundColor="@color/bg_chip_state"
+                            app:chipStrokeColor="@color/primaryDarkColor"
+                            app:chipStrokeWidth="1dp" />
+
+                        <com.google.android.material.chip.Chip
+                            android:id="@+id/chip_free2"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/free2"
+                            android:textColor="@color/text_chip_state"
+                            app:chipBackgroundColor="@color/bg_chip_state"
+                            app:chipStrokeColor="@color/primaryDarkColor"
+                            app:chipStrokeWidth="1dp" />
+
                     </com.google.android.material.chip.ChipGroup>
 
                     <TextView

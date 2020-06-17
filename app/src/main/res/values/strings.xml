@@ -273,5 +273,6 @@
     <string name="enable_death_day">命日を有効にする</string>
     <string name="display_death_day">命日の設定を表示します</string>
     <string name="free1">フリー１</string>
+    <string name="free2">フリー２</string>
 
 </resources>
