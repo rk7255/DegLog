@@ -21,8 +21,12 @@ class NewDiaryViewModel internal constructor(
     val diary = diaryRepository.getDiary(diaryId)
     val nameList = profileRepository.getNames()
 
-    var isEnabledDb1 = false
-    var isEnabledDb2 = false
+    var free1Enabled = false
+    var free2Enabled = false
+    var free1Title = "フリー１"
+    var free2Title = "フリー２"
+    var free1Unit = ""
+    var free2Unit = ""
 
     var date = 0L
     val dateString = MutableLiveData<String>()
@@ -31,6 +35,8 @@ class NewDiaryViewModel internal constructor(
     val noteString = MutableLiveData<String>()
     val weightString = MutableLiveData<String>()
     val lengthString = MutableLiveData<String>()
+    val free1String = MutableLiveData<String>()
+    val free2String = MutableLiveData<String>()
 
     private val isNew = diaryId == -1L
     val submit = MutableLiveData<Int?>()
@@ -53,6 +59,8 @@ class NewDiaryViewModel internal constructor(
         nameString.value = diary.name
         weightString.value = diary.weight?.toString()
         lengthString.value = diary.length?.toString()
+        free1String.value = diary.free1?.toString()
+        free2String.value = diary.free2?.toString()
         noteString.value = diary.note
     }
 
@@ -64,7 +72,9 @@ class NewDiaryViewModel internal constructor(
         } else {
             if (weightString.value.isNullOrEmpty() &&
                 lengthString.value.isNullOrEmpty() &&
-                noteString.value.isNullOrEmpty()) {
+                noteString.value.isNullOrEmpty() &&
+                free1String.value.isNullOrEmpty() &&
+                free2String.value.isNullOrEmpty()) {
                 submitError.value = MessageCode.NUMBER_EMPTY
             } else {
                 if (msg == MessageCode.NAME_UNREGISTERED) profileRegister()
@@ -80,6 +90,8 @@ class NewDiaryViewModel internal constructor(
             date = date,
             weight = stringToFloat(weightString.value),
             length = stringToFloat(lengthString.value),
+            free1 = stringToFloat(free1String.value),
+            free2 = stringToFloat(free2String.value),
             note = noteString.value
         )
         if (!isNew) newDiary.id = diaryId

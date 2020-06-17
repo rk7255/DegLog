@@ -73,8 +73,7 @@ object Converter {
             "mm" -> result.append("${roundInt(number)}")
             "cm" -> result.append("${roundFloatInCm(number)}")
             "m" -> result.append("${roundFloatInM(number)}")
-            "f" -> result.append("${roundInt(number)}")
-            else -> return "単位不明"
+            else -> result.append("${roundInt(number)}")
         }
 
         if (onSuffix) result.append(" $unit")

@@ -269,6 +269,7 @@
                                 android:layout_width="60dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
+                                android:text="@{viewModel.free1Title}"
                                 tools:text="フリー１"
                                 android:textColor="@color/primaryTextColor"
                                 app:layout_constraintBottom_toBottomOf="@+id/nd_free1_layout"
@@ -298,6 +299,7 @@
                                     android:layout_height="wrap_content"
                                     android:background="@color/bgEditText"
                                     android:hint="@string/hint_number"
+                                    android:text="@={viewModel.free1String}"
                                     android:inputType="numberDecimal"
                                     android:paddingTop="14dp" />
 
@@ -312,6 +314,7 @@
                                 android:layout_weight="1"
                                 android:fontFamily="monospace"
                                 android:gravity="start"
+                                android:text="@{viewModel.free1Unit}"
                                 tools:text="個"
                                 android:textColor="@color/primaryTextColor"
                                 app:layout_constraintBottom_toBottomOf="@+id/nd_free1_layout"
@@ -333,6 +336,7 @@
                                 android:layout_width="60dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center_vertical"
+                                android:text="@{viewModel.free2Title}"
                                 tools:text="フリー２"
                                 android:textColor="@color/primaryTextColor"
                                 app:layout_constraintBottom_toBottomOf="@+id/nd_free2_layout"
@@ -362,6 +366,7 @@
                                     android:layout_height="wrap_content"
                                     android:background="@color/bgEditText"
                                     android:hint="@string/hint_number"
+                                    android:text="@={viewModel.free2String}"
                                     android:inputType="numberDecimal"
                                     android:paddingTop="14dp" />
 
@@ -376,6 +381,7 @@
                                 android:layout_weight="1"
                                 android:fontFamily="monospace"
                                 android:gravity="start"
+                                android:text="@{viewModel.free2Unit}"
                                 tools:text="個"
                                 android:textColor="@color/primaryTextColor"
                                 app:layout_constraintBottom_toBottomOf="@+id/nd_free2_layout"

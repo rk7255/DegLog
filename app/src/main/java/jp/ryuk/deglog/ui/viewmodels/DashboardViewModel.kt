@@ -154,10 +154,10 @@ class DashboardViewModel internal constructor(
             val dateOfLatestFree1 =
                 if (free1List.isEmpty()) ""
                 else Converter.longToDateString(diaryList.first { it.free1 != null }.date)
-            free1Data.value = createDisplayData(free1SubList, dateOfLatestFree1, "f")
+            free1Data.value = createDisplayData(free1SubList, dateOfLatestFree1, "f1")
 
             val hasFree1DiaryList = diaryList.filter { it.free1 != null }
-            free1ChartData.value = createChartData(hasFree1DiaryList, "f")
+            free1ChartData.value = createChartData(hasFree1DiaryList, "f1")
         }
 
         // FREE2
@@ -167,10 +167,10 @@ class DashboardViewModel internal constructor(
             val dateOfLatestFree2 =
                 if (free2List.isEmpty()) ""
                 else Converter.longToDateString(diaryList.first { it.free2 != null }.date)
-            free2Data.value = createDisplayData(free2SubList, dateOfLatestFree2, "f")
+            free2Data.value = createDisplayData(free2SubList, dateOfLatestFree2, "f2")
 
             val hasFree2DiaryList = diaryList.filter { it.free2 != null }
-            free2ChartData.value = createChartData(hasFree2DiaryList, "f")
+            free2ChartData.value = createChartData(hasFree2DiaryList, "f2")
         }
 
     }
@@ -179,7 +179,9 @@ class DashboardViewModel internal constructor(
         val unit = when (which) {
             "w" -> unitWeight.value ?: "g"
             "l" -> unitLength.value ?: "mm"
-            else -> "f"
+            "f1" -> free1Unit
+            "f2" -> free2Unit
+            else -> ""
         }
 
         return if (subList.isNotEmpty()) {

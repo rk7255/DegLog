@@ -210,7 +210,7 @@ class DashboardFragment : Fragment() {
             free2Enabled = sharedPreferences.getBoolean(KEY_DB2_ENABLED, false)
             free1Title = sharedPreferences.getString(KEY_DB1_NAME, "- Free1 -") ?: "- Free1 -"
             free2Title = sharedPreferences.getString(KEY_DB2_NAME, "- Free2 -") ?: "- Free2 -"
-            free2Unit = sharedPreferences.getString(KEY_DB1_UNIT, "") ?: ""
+            free1Unit = sharedPreferences.getString(KEY_DB1_UNIT, "") ?: ""
             free2Unit = sharedPreferences.getString(KEY_DB2_UNIT, "") ?: ""
         }
     }

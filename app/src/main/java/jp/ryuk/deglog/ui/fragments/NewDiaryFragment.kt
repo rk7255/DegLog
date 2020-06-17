@@ -81,6 +81,8 @@ class NewDiaryFragment : Fragment() {
             ndNameText.addTextChangedListener { ndNameLayout.error = null }
             ndWeightText.addTextChangedListener { numberError(binding, false) }
             ndLengthText.addTextChangedListener { numberError(binding, false) }
+            ndFree1Text.addTextChangedListener { numberError(binding, false) }
+            ndFree2Text.addTextChangedListener { numberError(binding, false) }
             ndNoteText.addTextChangedListener { numberError(binding, false) }
 
             ndButtonBack.setOnClickListener { pop() }
@@ -89,8 +91,8 @@ class NewDiaryFragment : Fragment() {
 
         with(viewModel) {
             with(binding) {
-                ndFree1Container.visibility = if (isEnabledDb1) View.VISIBLE else View.GONE
-                ndFree2Container.visibility = if (isEnabledDb2) View.VISIBLE else View.GONE
+                ndFree1Container.visibility = if (free1Enabled) View.VISIBLE else View.GONE
+                ndFree2Container.visibility = if (free2Enabled) View.VISIBLE else View.GONE
             }
 
             diary.observe(viewLifecycleOwner) {
@@ -146,10 +148,14 @@ class NewDiaryFragment : Fragment() {
             if (enable) {
                 ndWeightLayout.error = getString(R.string.asterisk)
                 ndLengthLayout.error = getString(R.string.asterisk)
+                ndFree1Layout.error = getString(R.string.asterisk)
+                ndFree2Layout.error = getString(R.string.asterisk)
                 ndNoteLayout.error = getString(R.string.asterisk)
             } else {
                 ndWeightLayout.error = null
                 ndLengthLayout.error = null
+                ndFree1Layout.error = null
+                ndFree2Layout.error = null
                 ndNoteLayout.error = null
             }
         }
@@ -178,8 +184,12 @@ class NewDiaryFragment : Fragment() {
             requireContext().getSharedPreferences(SHARED_PREF_KEY, Context.MODE_PRIVATE)
 
         viewModel.apply {
-            isEnabledDb1 = sharedPreferences.getBoolean(KEY_DB1_ENABLED, false)
-            isEnabledDb2 = sharedPreferences.getBoolean(KEY_DB2_ENABLED, false)
+            free1Enabled = sharedPreferences.getBoolean(KEY_DB1_ENABLED, false)
+            free2Enabled = sharedPreferences.getBoolean(KEY_DB2_ENABLED, false)
+            free1Title = sharedPreferences.getString(KEY_DB1_NAME, "フリー１") ?: "フリー１"
+            free2Title = sharedPreferences.getString(KEY_DB2_NAME, "フリー２") ?: "フリー２"
+            free1Unit = sharedPreferences.getString(KEY_DB1_UNIT, "") ?: ""
+            free2Unit = sharedPreferences.getString(KEY_DB2_UNIT, "") ?: ""
         }
     }
 }
